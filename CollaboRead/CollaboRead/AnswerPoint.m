@@ -2,6 +2,8 @@
 //  AnswerPoint.m
 //  CollaboRead
 //
+//  Holds a point in a line of an answer drawing.
+//
 //  Created by Hannah Clark on 10/11/14.
 //  Copyright (c) 2014 CollaboRead. All rights reserved.
 //

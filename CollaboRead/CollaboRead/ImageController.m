@@ -2,6 +2,9 @@
 //  ImageController.m
 //  CollaboRead
 //
+//  Allows drawing a path in red over a preloaded image. Image should be loaded using loadAndScaleImage:
+//  only.
+//
 //  Created by Andrew Dempsey on 10/8/14.
 //  Copyright (c) 2014 CollaboRead. All rights reserved.
 //
@@ -33,6 +36,7 @@
 -(void)clearImage:(UIButton *)clear;
 -(void)eraserSelected:(UIButton *)eraser;
 -(void)undoEdit:(UIButton *)undo;
+-(void)drawLineFrom:(AnswerPoint *)beg to:(AnswerPoint *)fin;
 
 @end
 
@@ -73,6 +77,7 @@
         [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
         
         //Set up to draw lines
+        //Could use drawLineFrom:to:, but is much slower
         CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
         CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
         CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
@@ -83,6 +88,7 @@
                 AnswerPoint *fin = [drawingGuide objectAtIndex:i + 1];
                 CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
                 CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
+                [self drawLineFrom:beg to:fin];
             }
         }
         CGContextStrokePath(UIGraphicsGetCurrentContext());
@@ -216,24 +222,7 @@
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.penButton.selected) {
         AnswerPoint *currentPoint = [[AnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
-        
-        //Make region drawable
-        UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
-        [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
-        
-        //Set up to draw line
-        CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
-        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
-        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.coordinate.x, lastPoint.coordinate.y);
-        CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), currentPoint.coordinate.x, currentPoint.coordinate.y);
-        
-        //Add line to image and draw
-        CGContextStrokePath(UIGraphicsGetCurrentContext());
-        self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
-        [self.drawView setAlpha:1.0];
-        UIGraphicsEndImageContext();
-        
+        [self drawLineFrom:lastPoint to:currentPoint];
         [[self.undoStack objectAtIndex:0] addObject:currentPoint];
         lastPoint = currentPoint;
     }
@@ -242,27 +231,29 @@
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.penButton.selected) {
         AnswerPoint *currentPoint = [[AnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
-        
-        //Make region drawable
-        UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
-        [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
-        
-        //Set up to draw line
-        CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
-        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
-        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.coordinate.x, lastPoint.coordinate.y);
-        CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), currentPoint.coordinate.x, currentPoint.coordinate.y);
-
-        
-        //Add line to image and draw
-        CGContextStrokePath(UIGraphicsGetCurrentContext());
-        self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
-        [self.drawView setAlpha:1.0];
-        UIGraphicsEndImageContext();
-        
+        [self drawLineFrom:lastPoint to:currentPoint];
         [[self.undoStack objectAtIndex:0] addObject:currentPoint];
     }
+}
+
+-(void)drawLineFrom:(AnswerPoint *)beg to:(AnswerPoint *)fin {
+    //Make region drawable
+    UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
+    [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
+    
+    //Set up to draw line
+    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
+    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
+    CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
+    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
+    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
+    
+    
+    //Add line to image and draw
+    CGContextStrokePath(UIGraphicsGetCurrentContext());
+    self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
+    [self.drawView setAlpha:1.0];
+    UIGraphicsEndImageContext();
 }
 
 - (void)didReceiveMemoryWarning {
