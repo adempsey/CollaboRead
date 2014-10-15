@@ -14,7 +14,9 @@
 
 @interface ImageController : UIViewController
 
+@property (nonatomic, strong) NSDictionary *caseChosen;
 //Loads the image to be drawn over into the view and scales it to fit the screen.
+
 -(void)loadAndScaleImage:(UIImage *)img;
 
 @end

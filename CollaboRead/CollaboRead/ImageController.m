@@ -1,5 +1,5 @@
 //
-//  ImageController.m
+//  StudentImageController.m
 //  CollaboRead
 //
 //  Allows drawing a path in red over a preloaded image. Image should be loaded using loadAndScaleImage:
@@ -11,6 +11,7 @@
 
 #import "ImageController.h"
 #import "AnswerPoint.h"
+#import "CaseKeys.h"
 
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
@@ -102,6 +103,8 @@
 }
 
 //Loads the image to be drawn over into the image view and scales it to fit the screen.
+//Necessary while this all is done programmatically, use "Mode: Aspect Fit" instead setting up with
+//storyboard
 -(void)loadAndScaleImage:(UIImage *)img
 {
     self.caseImage = [[UIImageView alloc] initWithImage:img];
@@ -140,20 +143,22 @@
     }
     
     [self.caseImage setFrame:newFrame];
+    self.drawView = [[UIImageView alloc] initWithFrame:self.caseImage.frame];
 }
 
 -(void)loadView {
     [super loadView];
-    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
     //Most likely will be done by a transitioning view
-    NSData *imgData = [[NSData alloc] initWithContentsOfFile:@"/Users/hannah/Desktop/CompSci/Capstone/Collaboread/CollaboRead/CollaboRead/CollaboRead/background.jpg"];//could change to URL or other form
-    UIImage *img = [[UIImage alloc] initWithData:imgData];
+    UIImage *img = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[self.caseChosen objectForKey:IMAGE] objectAtIndex: 0]]]];
+    self.navigationItem.title = [self.caseChosen objectForKey:C_NAME];
     [self loadAndScaleImage:img];
-    
     self.undoStack = [[NSMutableArray alloc] init];
     
     [self.view addSubview:self.caseImage];
-    self.drawView = [[UIImageView alloc] initWithFrame:self.caseImage.frame];
     [self.view addSubview:self.drawView];
     
     
@@ -196,12 +201,7 @@
     red = 255;
     blue = 0;
     green = 0;
-    
-}
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
