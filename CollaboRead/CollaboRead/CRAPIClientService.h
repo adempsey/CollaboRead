@@ -12,5 +12,6 @@
 
 + (CRAPIClientService*)sharedInstance;
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*))block;
+- (void)retrieveLecturersWithBlock:(void (^)(NSArray*))block;
 
 @end

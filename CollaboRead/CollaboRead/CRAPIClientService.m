@@ -11,6 +11,7 @@
 
 #define kCR_API_ADDRESS @"http://collaboread.herokuapp.com/"
 #define kCR_API_ENDPOINT_USERS @"users"
+#define kCR_API_ENDPOINT_LECTURERS @"lecturers"
 
 @implementation CRAPIClientService
 
@@ -26,6 +27,16 @@
 
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*))block
 {
+	[self retrieveItemList:kCR_API_ENDPOINT_USERS withBlock:block];
+}
+
+- (void)retrieveLecturersWithBlock:(void (^)(NSArray*))block
+{
+	[self retrieveItemList:kCR_API_ENDPOINT_LECTURERS withBlock:block];
+}
+
+- (void)retrieveItemList:(NSString*)itemList withBlock:(void (^)(NSArray*))block
+{
 	void (^completionBlock)(NSData*, NSURLResponse*, NSError*) = ^void(NSData *data, NSURLResponse *response, NSError *error) {
 		if (!error) {
 			NSArray *users = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -33,7 +44,7 @@
 		}
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_USERS];
+	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:itemList];
 
 	[[CRNetworkingService sharedInstance] performGETRequestForResource:resource withParams:nil completionBlock:completionBlock];
 }
