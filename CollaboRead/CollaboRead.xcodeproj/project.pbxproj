@@ -14,7 +14,6 @@
 		8DA5DE2D19E6064B002EA706 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2C19E6064B002EA706 /* Images.xcassets */; };
 		8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2E19E6064B002EA706 /* LaunchScreen.xib */; };
 		8DA5DE3C19E6064B002EA706 /* CollaboReadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */; };
-		BB0632AE19E9792A0075FB17 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BB0632AD19E9792A0075FB17 /* background.jpg */; };
 		BB913F6419E989B6006C3EEC /* AnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* AnswerPoint.m */; };
 		BBA2EBCF19EEC2EF0093044E /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBCE19EEC2EF0093044E /* LoginViewController.m */; };
 		BBA2EBD419EED5F80093044E /* LecturerCasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD319EED5F80093044E /* LecturerCasesViewController.m */; };
@@ -45,7 +44,6 @@
 		8DA5DE3519E6064B002EA706 /* CollaboReadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CollaboReadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA5DE3A19E6064B002EA706 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollaboReadTests.m; sourceTree = "<group>"; };
-		BB0632AD19E9792A0075FB17 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		BB913F6219E989B6006C3EEC /* AnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnswerPoint.h; sourceTree = "<group>"; };
 		BB913F6319E989B6006C3EEC /* AnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnswerPoint.m; sourceTree = "<group>"; };
 		BBA2EBCD19EEC2EF0093044E /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -114,7 +112,6 @@
 		8DA5DE1F19E6064A002EA706 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				BB0632AD19E9792A0075FB17 /* background.jpg */,
 				8DA5DE2019E6064A002EA706 /* Info.plist */,
 				8DA5DE2119E6064B002EA706 /* main.m */,
 			);
@@ -235,7 +232,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DA5DE2B19E6064B002EA706 /* Main.storyboard in Resources */,
-				BB0632AE19E9792A0075FB17 /* background.jpg in Resources */,
 				8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */,
 				8DA5DE2D19E6064B002EA706 /* Images.xcassets in Resources */,
 			);
