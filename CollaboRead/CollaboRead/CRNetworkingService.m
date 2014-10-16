@@ -20,7 +20,7 @@
 	return sharedInstance;
 }
 
-- (void)performGETRequestForResource:(NSString*)resource withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*, NSURLResponse*, NSError*))completionBlock
+- (void)performGETRequestForResource:(NSString*)resource withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock
 {
 	if (params) {
 		NSString *parameterString = [self parameterStringWithDictionary:params];
@@ -29,7 +29,11 @@
 
 	NSURL *url = [NSURL URLWithString:resource];
 
-	NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:completionBlock];
+	NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData* data, NSURLResponse* response, NSError* error){
+		if (!error) {
+			completionBlock(data);
+		}
+	}];
 	[dataTask resume];
 }
 

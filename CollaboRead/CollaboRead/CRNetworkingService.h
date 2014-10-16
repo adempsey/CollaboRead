@@ -11,6 +11,6 @@
 @interface CRNetworkingService : NSObject
 
 + (CRNetworkingService*)sharedInstance;
-- (void)performGETRequestForResource:(NSString*)resource withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*, NSURLResponse*, NSError*))completionBlock;
+- (void)performGETRequestForResource:(NSString*)resource withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock;
 
 @end

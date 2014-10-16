@@ -37,11 +37,9 @@
 
 - (void)retrieveItemList:(NSString*)itemList withBlock:(void (^)(NSArray*))block
 {
-	void (^completionBlock)(NSData*, NSURLResponse*, NSError*) = ^void(NSData *data, NSURLResponse *response, NSError *error) {
-		if (!error) {
-			NSArray *users = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-			block(users);
-		}
+	void (^completionBlock)(NSData*) = ^void(NSData *json) {
+		NSArray *list = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+		block(list);
 	};
 
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:itemList];
