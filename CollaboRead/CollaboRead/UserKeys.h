@@ -10,7 +10,7 @@
 #define CollaboRead_UserKeys_h
 
 //Relevant to all
-#define ID_NUM @"id_num"
+#define ID_NUM @"userID"
 #define U_NAME @"name"
 #define TYPE @"type"
 #define TITLE @"title"
