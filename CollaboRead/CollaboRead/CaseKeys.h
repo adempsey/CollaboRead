@@ -10,10 +10,11 @@
 #define CollaboRead_CaseKeys_h
 
 //Groups
-#define GROUP @"caseSet_id"
+#define GROUP @"setID"
 #define CASES @"cases"
 
 //Cases
+#define CASE_ID @"caseID"
 #define IMAGE @"images" //array
 #define DATE @"date"
 #define C_NAME @"name"

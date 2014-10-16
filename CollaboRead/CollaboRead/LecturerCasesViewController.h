@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LecturerCasesViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface LecturerCasesViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) NSDictionary *lecturer;
 @property (nonatomic, strong) NSArray *caseSets;

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */; };
+		8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */; };
 		8DA5DE2219E6064B002EA706 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2119E6064B002EA706 /* main.m */; };
 		8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2419E6064B002EA706 /* AppDelegate.m */; };
 		8DA5DE2819E6064B002EA706 /* ImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* ImageController.m */; };
@@ -31,6 +33,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8D16E93419EF440500DAFEC0 /* CRNetworkingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNetworkingService.h; sourceTree = "<group>"; };
+		8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNetworkingService.m; sourceTree = "<group>"; };
+		8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAPIClientService.h; sourceTree = "<group>"; };
+		8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAPIClientService.m; sourceTree = "<group>"; };
 		8DA5DE1C19E6064A002EA706 /* CollaboRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollaboRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA5DE2019E6064A002EA706 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DA5DE2119E6064B002EA706 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -74,6 +80,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8D16E93319EF438A00DAFEC0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */,
+				8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */,
+				8D16E93419EF440500DAFEC0 /* CRNetworkingService.h */,
+				8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
 		8DA5DE1319E6064A002EA706 = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +112,7 @@
 		8DA5DE1E19E6064A002EA706 /* CollaboRead */ = {
 			isa = PBXGroup;
 			children = (
+				8D16E93319EF438A00DAFEC0 /* Services */,
 				BBA2EBD519EED7C40093044E /* View */,
 				8DA5DE2319E6064B002EA706 /* AppDelegate.h */,
 				8DA5DE2419E6064B002EA706 /* AppDelegate.m */,
@@ -255,8 +273,10 @@
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* LecturerCasesViewController.m in Sources */,
 				BB913F6419E989B6006C3EEC /* AnswerPoint.m in Sources */,
+				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
 				BBA2EBD819EEE54B0093044E /* CaseCell.m in Sources */,
 				8DA5DE2219E6064B002EA706 /* main.m in Sources */,
+				8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */,
 				BBA2EBCF19EEC2EF0093044E /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
