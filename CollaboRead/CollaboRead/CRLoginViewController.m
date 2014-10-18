@@ -8,12 +8,13 @@
 //  Copyright (c) 2014 CollaboRead. All rights reserved.
 //
 
-#import "LoginViewController.h"
+#import "CRLoginViewController.h"
 #import "UserKeys.h"
-#import "LecturerCasesViewController.h"
+#import "CRSelectCaseViewController.h"
+#import "CRSelectLecturerViewController.h"
 #import "CRAPIClientService.h"
 
-@interface LoginViewController ()
+@interface CRLoginViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -24,7 +25,7 @@
 
 @end
 
-@implementation LoginViewController
+@implementation CRLoginViewController
 
 
 -(void)attemptLogin:(NSArray *)users
@@ -44,9 +45,15 @@
                 NSLog(@"good");
                 UIViewController *newController;
                 //Check type of user and make appropriate view
-                if ([[currUser objectForKey:TYPE] isEqualToString:LECTURER]) {
-                    UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"navController"];
-                    ((LecturerCasesViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = currUser;
+                if ([currUser[TYPE] isEqualToString:LECTURER]) {
+                    UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"caseNavController"];
+                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = currUser;
+                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
+                    newController = navController;
+                }
+                else if([currUser[TYPE] isEqualToString:STUDENT]) {
+                    UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
+                    ((CRSelectLecturerViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
                     newController = navController;
                 }
 

@@ -1,5 +1,5 @@
 //
-//  LoginViewController.h
+//  CRLoginViewController.h
 //  CollaboRead
 //
 //  Checks login information and directs user to appropriate flow based on role
@@ -10,6 +10,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate>
+@interface CRLoginViewController : UIViewController <UITextFieldDelegate>
 
 @end

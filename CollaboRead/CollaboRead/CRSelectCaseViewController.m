@@ -1,28 +1,26 @@
 //
-//  LecturerCasesViewController.m
+//  CRSelectCaseViewController.m
 //  CollaboRead
 //
 //  Created by Hannah Clark on 10/15/14.
 //  Copyright (c) 2014 CollaboRead. All rights reserved.
 //
 
-#import "LecturerCasesViewController.h"
+#import "CRSelectCaseViewController.h"
 #import "ImageController.h"
 #import "UserKeys.h"
 #import "CaseKeys.h"
-#import "CaseCell.h"
+#import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
 
-@interface LecturerCasesViewController()
+@interface CRSelectCaseViewController()
 {
     NSIndexPath *selectedPath; //Allows the view to pass the selected case in the segue prep function
 }
 
-@property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
-
 @end
 
-@implementation LecturerCasesViewController
+@implementation CRSelectCaseViewController
 
 -(void)viewDidLoad
 {
@@ -32,7 +30,7 @@
     //Get lecturers cases and reload view with that information
 	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer[ID_NUM] block:^(NSArray *caseSets) {
 		self.caseSets = caseSets;
-		[self.collectionView reloadData];
+        [self.collectionView reloadData];//Maybe put back on main thread?
 	}];
 }
 
@@ -52,9 +50,9 @@
 //Set the cell to have the image and name of the case it corresponds to
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CaseCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CaseCell" forIndexPath:indexPath];
-    cell.name.text = [[[[self.caseSets objectAtIndex:indexPath.section] objectForKey:CASES] objectAtIndex:indexPath.row] objectForKey:C_NAME];
-    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[[[[self.caseSets objectAtIndex:indexPath.section] objectForKey:CASES] objectAtIndex:indexPath.row] objectForKey:IMAGE] objectAtIndex:0]]]];
+    CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CaseCell" forIndexPath:indexPath];
+    cell.name.text = self.caseSets[indexPath.section][CASES][indexPath.row][C_NAME];
+    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.caseSets[indexPath.section][CASES][indexPath.row][IMAGE][0]]]];
     return cell;
 }
 
@@ -63,9 +61,6 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedPath = indexPath;
-}
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout
@@ -85,11 +80,8 @@
  
  //Give the case analysis view the appropriate case
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-     NSLog(@"before");
      ImageController *nextController = segue.destinationViewController;
-     nextController.caseChosen = [[[self.caseSets objectAtIndex:selectedPath.section] objectForKey:CASES] objectAtIndex:selectedPath.row];
-     NSLog(@"segue");
-     
+     nextController.caseChosen = self.caseSets[selectedPath.section][CASES][selectedPath.row];
  }
 
 

@@ -8,7 +8,7 @@
         <!--Login View Controller-->
         <scene sceneID="hcs-nu-eRv">
             <objects>
-                <viewController id="aTb-68-nBh" customClass="LoginViewController" sceneMemberID="viewController">
+                <viewController id="aTb-68-nBh" customClass="CRLoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TdW-jK-dRP"/>
                         <viewControllerLayoutGuide type="bottom" id="tEd-VL-ry3"/>
@@ -82,14 +82,14 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-633.75" y="345"/>
+            <point key="canvasLocation" x="-729.75" y="92.25"/>
         </scene>
-        <!--Lecturer Cases View Controller-->
+        <!--Select Case View Controller-->
         <scene sceneID="LWa-HB-qKg">
             <objects>
-                <collectionViewController storyboardIdentifier="lectureCases" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CoA-IA-OLj" customClass="LecturerCasesViewController" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="lectureCases" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CoA-IA-OLj" customClass="CRSelectCaseViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="gMe-YN-zDz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mok-pE-UwP">
                             <size key="itemSize" width="200" height="204"/>
@@ -98,7 +98,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CaseCell" id="7DX-Hg-q9c" customClass="CaseCell">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CaseCell" id="7DX-Hg-q9c" userLabel="Titled Image Collection Cell" customClass="CRTitledImageCollectionCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -138,7 +138,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <outlet property="image" destination="JxN-bi-Gtz" id="azb-6w-uRm"/>
+                                    <outlet property="image" destination="JxN-bi-Gtz" id="U2v-1r-vXR"/>
                                     <outlet property="name" destination="ChP-1f-Jnd" id="8km-9G-Yiz"/>
                                     <segue destination="BYZ-38-t0r" kind="show" id="5q8-UK-n2z"/>
                                 </connections>
@@ -157,6 +157,75 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="epf-Xt-EAU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="924.75" y="92.25"/>
+        </scene>
+        <!--Select Lecturer View Controller-->
+        <scene sceneID="UXg-Oe-v2K">
+            <objects>
+                <collectionViewController id="YKS-bg-0N7" customClass="CRSelectLecturerViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="daw-D3-NtV">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="3S5-5E-h34">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LecturerCell" id="I7G-bh-6rY" customClass="CRTitledImageCollectionCell">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fnd-BM-10I">
+                                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                            <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                                <rect key="frame" x="8" y="149" width="184" height="51"/>
+                                            </variation>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="swF-b3-0rd">
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                            <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                                <rect key="frame" x="0.0" y="0.0" width="200" height="142"/>
+                                            </variation>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <size key="customSize" width="200" height="200"/>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="Fnd-BM-10I"/>
+                                        <exclude reference="swF-b3-0rd"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="subviews">
+                                        <include reference="Fnd-BM-10I"/>
+                                        <include reference="swF-b3-0rd"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <outlet property="image" destination="swF-b3-0rd" id="ZMi-e8-yOo"/>
+                                    <outlet property="name" destination="Fnd-BM-10I" id="WGp-cP-set"/>
+                                    <segue destination="CoA-IA-OLj" kind="show" id="cdK-ms-ClA"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="YKS-bg-0N7" id="jNl-uB-Ij3"/>
+                            <outlet property="delegate" destination="YKS-bg-0N7" id="VaB-SH-SbL"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="q17-rS-kRi"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WM3-hh-EOK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="165.75" y="785.25"/>
         </scene>
         <!--Image Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -179,7 +248,7 @@
         <!--Navigation Controller-->
         <scene sceneID="GuU-qB-hiF">
             <objects>
-                <navigationController storyboardIdentifier="navController" automaticallyAdjustsScrollViewInsets="NO" id="LZN-Xv-EVM" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="caseNavController" automaticallyAdjustsScrollViewInsets="NO" id="LZN-Xv-EVM" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="USn-CI-1bM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -194,5 +263,26 @@
             </objects>
             <point key="canvasLocation" x="165.75" y="92.25"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="s3B-7I-oaQ">
+            <objects>
+                <navigationController storyboardIdentifier="lectNavController" automaticallyAdjustsScrollViewInsets="NO" id="tCL-nn-J2I" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mqg-OD-qRK">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="YKS-bg-0N7" kind="relationship" relationship="rootViewController" id="QDv-R0-e20"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UAO-pJ-MFg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-506.25" y="801"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="JK5-uj-xnE"/>
+    </inferredMetricsTieBreakers>
 </document>
