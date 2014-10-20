@@ -82,7 +82,7 @@
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
      CRImageController *nextController = segue.destinationViewController;
      nextController.caseChosen = self.caseSets[selectedPath.section][CASES][[self.caseSets[selectedPath.section][CASES] allKeys][selectedPath.row]];
-     nextController.caseId = [self.caseSets[selectedPath.section][CASES] allKeys];
+     nextController.caseId = [[self.caseSets[selectedPath.section][CASES] allKeys][selectedPath.row] integerValue];
  }
 
 
