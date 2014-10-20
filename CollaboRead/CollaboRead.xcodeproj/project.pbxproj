@@ -21,6 +21,8 @@
 		BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */; };
 		BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */; };
 		BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */; };
+		BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */; };
+		BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,10 @@
 		BBA2EBDB19EEF3340093044E /* CaseKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaseKeys.h; sourceTree = "<group>"; };
 		BBD3135619F2E2040017B96A /* CRSelectLecturerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSelectLecturerViewController.h; sourceTree = "<group>"; };
 		BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSelectLecturerViewController.m; sourceTree = "<group>"; };
+		BBD3B03319F5B60300C18A6A /* CRStudentImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStudentImageViewController.h; sourceTree = "<group>"; };
+		BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRStudentImageViewController.m; sourceTree = "<group>"; };
+		BBD3B03619F5B64200C18A6A /* CRLecturerImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRLecturerImageViewController.h; sourceTree = "<group>"; };
+		BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRLecturerImageViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +170,10 @@
 				BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */,
 				8DA5DE2619E6064B002EA706 /* CRImageController.h */,
 				8DA5DE2719E6064B002EA706 /* CRImageController.m */,
+				BBD3B03619F5B64200C18A6A /* CRLecturerImageViewController.h */,
+				BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */,
+				BBD3B03319F5B60300C18A6A /* CRStudentImageViewController.h */,
+				BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */,
 				BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */,
 				BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */,
 				BBA2EBD619EEE54B0093044E /* CRTitledImageCollectionCell.h */,
@@ -277,7 +287,9 @@
 				8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */,
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */,
+				BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */,
 				BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */,
+				BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */,
 				BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
 				BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */,

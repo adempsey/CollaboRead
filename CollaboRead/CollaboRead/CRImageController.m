@@ -30,7 +30,6 @@
 @property (nonatomic, strong) UIButton *clearButton;
 @property (nonatomic, strong) UIButton *eraseButton;
 @property (nonatomic, strong) UIButton *undoButton;
-
 @property(nonatomic, strong) NSMutableArray *undoStack;
 
 -(void)penSelected:(UIButton *)pen;
@@ -153,10 +152,6 @@
     self.drawView = [[UIImageView alloc] initWithFrame:self.caseImage.frame];
 }
 
--(void)loadView {
-    [super loadView];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     //Most likely will be done by a transitioning view
@@ -212,7 +207,6 @@
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%f,%f",[[touches anyObject] locationInView:self.drawView].x,[[touches anyObject] locationInView:self.drawView].x);
     if (self.penButton.selected) {
         lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
         NSMutableArray *newDrawing;
@@ -241,7 +235,6 @@
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%f,%f",[[touches anyObject] locationInView:self.drawView].x,[[touches anyObject] locationInView:self.drawView].x);
     if (self.penButton.selected) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
         [self drawLineFrom:lastPoint to:currentPoint];
@@ -258,7 +251,6 @@
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%f,%f",[[touches anyObject] locationInView:self.drawView].x,[[touches anyObject] locationInView:self.drawView].x);
     if (self.penButton.selected) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
         [self drawLineFrom:lastPoint to:currentPoint];
