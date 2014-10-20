@@ -7,7 +7,7 @@
 //
 
 #import "CRSelectCaseViewController.h"
-#import "ImageController.h"
+#import "CRImageController.h"
 #import "UserKeys.h"
 #import "CaseKeys.h"
 #import "CRTitledImageCollectionCell.h"
@@ -51,8 +51,8 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CaseCell" forIndexPath:indexPath];
-    cell.name.text = self.caseSets[indexPath.section][CASES][indexPath.row][C_NAME];
-    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.caseSets[indexPath.section][CASES][indexPath.row][IMAGE][0]]]];
+    cell.name.text = self.caseSets[indexPath.section][CASES][[self.caseSets[indexPath.section][CASES] allKeys][indexPath.row]][C_NAME];
+    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.caseSets[indexPath.section][CASES][[self.caseSets[indexPath.section][CASES] allKeys][indexPath.row]][IMAGE][0]]]];
     return cell;
 }
 
@@ -80,8 +80,9 @@
  
  //Give the case analysis view the appropriate case
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-     ImageController *nextController = segue.destinationViewController;
-     nextController.caseChosen = self.caseSets[selectedPath.section][CASES][selectedPath.row];
+     CRImageController *nextController = segue.destinationViewController;
+     nextController.caseChosen = self.caseSets[selectedPath.section][CASES][[self.caseSets[selectedPath.section][CASES] allKeys][selectedPath.row]];
+     nextController.caseId = [self.caseSets[selectedPath.section][CASES] allKeys];
  }
 
 

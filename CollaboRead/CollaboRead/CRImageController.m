@@ -1,5 +1,5 @@
 //
-//  StudentImageController.m
+//  CRImageController.m
 //  CollaboRead
 //
 //  Allows drawing a path in red over a preloaded image. Image should be loaded using loadAndScaleImage:
@@ -9,20 +9,20 @@
 //  Copyright (c) 2014 CollaboRead. All rights reserved.
 //
 
-#import "ImageController.h"
-#import "AnswerPoint.h"
+#import "CRImageController.h"
+#import "CRAnswerPoint.h"
 #import "CaseKeys.h"
 
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
 
-@interface ImageController ()
+@interface CRImageController ()
 {
     CGFloat red;
     CGFloat blue;
     CGFloat green;
-    AnswerPoint *lastPoint;
+    CRAnswerPoint *lastPoint;
 }
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
@@ -37,12 +37,13 @@
 -(void)clearImage:(UIButton *)clear;
 -(void)eraserSelected:(UIButton *)eraser;
 -(void)undoEdit:(UIButton *)undo;
--(void)drawLineFrom:(AnswerPoint *)beg to:(AnswerPoint *)fin;
--(void)eraseLineFrom:(AnswerPoint *)beg to:(AnswerPoint *)fin;
+-(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
+-(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
+-(void)removePointFromAnswer:(CRAnswerPoint *)pt;
 
 @end
 
-@implementation ImageController
+@implementation CRImageController
 
 //Enables appropriate touch control
 -(void)penSelected:(UIButton *)pen
@@ -50,6 +51,8 @@
     [pen setSelected: YES];
     [self.eraseButton setSelected:NO];
 }
+
+//Clears all drawaings, makes empty answer array so it is undoable.
 -(void)clearImage:(UIButton *)clear
 {
     self.drawView.image = [[UIImage alloc] init];
@@ -65,6 +68,8 @@
     [self.penButton setSelected:NO];
     
 }
+
+//Pops from answer stack and redraws previous answer
 -(void)undoEdit:(UIButton *)undo
 {
     [self.penButton setSelected:NO];
@@ -86,9 +91,9 @@
         CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
         CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.coordinate.x, lastPoint.coordinate.y);
         for (int i = 0; i < [drawingGuide count] - 1; i++) {
-            AnswerPoint *beg = [drawingGuide objectAtIndex:i];
+            CRAnswerPoint *beg = [drawingGuide objectAtIndex:i];
             if (!beg.isEndPoint) {
-                AnswerPoint *fin = [drawingGuide objectAtIndex:i + 1];
+                CRAnswerPoint *fin = [drawingGuide objectAtIndex:i + 1];
                 CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
                 CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
                 [self drawLineFrom:beg to:fin];
@@ -207,11 +212,12 @@
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"%f,%f",[[touches anyObject] locationInView:self.drawView].x,[[touches anyObject] locationInView:self.drawView].x);
     if (self.penButton.selected) {
-        lastPoint = [[AnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
+        lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
         NSMutableArray *newDrawing;
         if ([self.undoStack count] > 0) {
-            newDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack objectAtIndex:0]];
+            newDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack objectAtIndex:0] copyItems:YES];
         } else {
             newDrawing = [[NSMutableArray alloc] init];
         }
@@ -221,50 +227,51 @@
     }
     
     else if (self.eraseButton.selected) {
-        lastPoint = [[AnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
+        lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
         NSMutableArray *newDrawing;
         if ([self.undoStack count] > 0) {
-            newDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack objectAtIndex:0]];
+            newDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack objectAtIndex:0] copyItems:YES];
         } else {
             newDrawing = [[NSMutableArray alloc] init];
         }
-        [newDrawing addObject:lastPoint];
         [self.undoStack insertObject:newDrawing atIndex:0];
         [self.undoButton setEnabled:YES];
+        [self removePointFromAnswer:lastPoint];
     }
-    
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"%f,%f",[[touches anyObject] locationInView:self.drawView].x,[[touches anyObject] locationInView:self.drawView].x);
     if (self.penButton.selected) {
-        AnswerPoint *currentPoint = [[AnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
+        CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
         [self drawLineFrom:lastPoint to:currentPoint];
-        [[self.undoStack objectAtIndex:0] addObject:currentPoint];
+        [self.undoStack[0] addObject:currentPoint];
         lastPoint = currentPoint;
     }
     
     else if (self.eraseButton.selected) {
-        AnswerPoint *currentPoint = [[AnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
+        CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
         [self eraseLineFrom:lastPoint to:currentPoint];
-        [[self.undoStack objectAtIndex:0] addObject:currentPoint];
+        [self removePointFromAnswer:currentPoint];
         lastPoint = currentPoint;
     }
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"%f,%f",[[touches anyObject] locationInView:self.drawView].x,[[touches anyObject] locationInView:self.drawView].x);
     if (self.penButton.selected) {
-        AnswerPoint *currentPoint = [[AnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
+        CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
         [self drawLineFrom:lastPoint to:currentPoint];
-        [[self.undoStack objectAtIndex:0] addObject:currentPoint];
+        [self.undoStack[0] addObject:currentPoint];
     }
     else if (self.eraseButton.selected) {
-        AnswerPoint *currentPoint = [[AnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
+        CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
         [self eraseLineFrom:lastPoint to:currentPoint];
-        [[self.undoStack objectAtIndex:0] addObject:currentPoint];
+        [self removePointFromAnswer:currentPoint];
     }
 }
 
--(void)drawLineFrom:(AnswerPoint *)beg to:(AnswerPoint *)fin {
+-(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable
     UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
     [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
@@ -286,14 +293,13 @@
 
 
 
--(void)eraseLineFrom:(AnswerPoint *)beg to:(AnswerPoint *)fin {
+-(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable
     UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
     [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
     
     //Set up to draw line
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 20.0);
-//    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 0, green, blue, 1.0);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeClear);
     CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
     CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
@@ -306,7 +312,20 @@
     UIGraphicsEndImageContext();
 }
 
-
+//Remove all points within erase range from answer array, setting endpoints appropriately
+-(void)removePointFromAnswer:(CRAnswerPoint *)pt
+{
+    //Find which to remove
+    NSIndexSet *toRemove = [self.undoStack[0] indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [pt isInTouchRange:obj];
+    }];
+    //Set endpoints of precending points to points to remove
+    [toRemove enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        ((CRAnswerPoint *)[self.undoStack[0] objectAtIndex:idx - 1]).isEndPoint = YES;
+    }];
+    //Remove points
+    [self.undoStack[0] removeObjectsAtIndexes:toRemove];
+}
 
 
 - (void)didReceiveMemoryWarning {

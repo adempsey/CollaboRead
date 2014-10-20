@@ -11,12 +11,12 @@
 		8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */; };
 		8DA5DE2219E6064B002EA706 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2119E6064B002EA706 /* main.m */; };
 		8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2419E6064B002EA706 /* AppDelegate.m */; };
-		8DA5DE2819E6064B002EA706 /* ImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* ImageController.m */; };
+		8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* CRImageController.m */; };
 		8DA5DE2B19E6064B002EA706 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2919E6064B002EA706 /* Main.storyboard */; };
 		8DA5DE2D19E6064B002EA706 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2C19E6064B002EA706 /* Images.xcassets */; };
 		8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2E19E6064B002EA706 /* LaunchScreen.xib */; };
 		8DA5DE3C19E6064B002EA706 /* CollaboReadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */; };
-		BB913F6419E989B6006C3EEC /* AnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* AnswerPoint.m */; };
+		BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */; };
 		BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */; };
 		BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */; };
 		BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */; };
@@ -43,16 +43,16 @@
 		8DA5DE2119E6064B002EA706 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8DA5DE2319E6064B002EA706 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8DA5DE2419E6064B002EA706 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		8DA5DE2619E6064B002EA706 /* ImageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageController.h; sourceTree = "<group>"; };
-		8DA5DE2719E6064B002EA706 /* ImageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageController.m; sourceTree = "<group>"; };
+		8DA5DE2619E6064B002EA706 /* CRImageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRImageController.h; sourceTree = "<group>"; };
+		8DA5DE2719E6064B002EA706 /* CRImageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRImageController.m; sourceTree = "<group>"; };
 		8DA5DE2A19E6064B002EA706 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8DA5DE2C19E6064B002EA706 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8DA5DE2F19E6064B002EA706 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		8DA5DE3519E6064B002EA706 /* CollaboReadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CollaboReadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA5DE3A19E6064B002EA706 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollaboReadTests.m; sourceTree = "<group>"; };
-		BB913F6219E989B6006C3EEC /* AnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnswerPoint.h; sourceTree = "<group>"; };
-		BB913F6319E989B6006C3EEC /* AnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnswerPoint.m; sourceTree = "<group>"; };
+		BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAnswerPoint.h; sourceTree = "<group>"; };
+		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswerPoint.m; sourceTree = "<group>"; };
 		BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRLoginViewController.h; sourceTree = "<group>"; };
 		BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRLoginViewController.m; sourceTree = "<group>"; };
 		BBA2EBD019EECE270093044E /* UserKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserKeys.h; sourceTree = "<group>"; };
@@ -119,8 +119,8 @@
 				BBA2EBD519EED7C40093044E /* View */,
 				8DA5DE2319E6064B002EA706 /* AppDelegate.h */,
 				8DA5DE2419E6064B002EA706 /* AppDelegate.m */,
-				BB913F6219E989B6006C3EEC /* AnswerPoint.h */,
-				BB913F6319E989B6006C3EEC /* AnswerPoint.m */,
+				BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */,
+				BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */,
 				BBA2EBD019EECE270093044E /* UserKeys.h */,
 				BBA2EBDB19EEF3340093044E /* CaseKeys.h */,
 				8DA5DE2C19E6064B002EA706 /* Images.xcassets */,
@@ -162,8 +162,8 @@
 				8DA5DE2919E6064B002EA706 /* Main.storyboard */,
 				BBA2EBD219EED5F80093044E /* CRSelectCaseViewController.h */,
 				BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */,
-				8DA5DE2619E6064B002EA706 /* ImageController.h */,
-				8DA5DE2719E6064B002EA706 /* ImageController.m */,
+				8DA5DE2619E6064B002EA706 /* CRImageController.h */,
+				8DA5DE2719E6064B002EA706 /* CRImageController.m */,
 				BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */,
 				BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */,
 				BBA2EBD619EEE54B0093044E /* CRTitledImageCollectionCell.h */,
@@ -274,10 +274,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DA5DE2819E6064B002EA706 /* ImageController.m in Sources */,
+				8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */,
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */,
-				BB913F6419E989B6006C3EEC /* AnswerPoint.m in Sources */,
+				BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */,
 				BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
 				BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */,

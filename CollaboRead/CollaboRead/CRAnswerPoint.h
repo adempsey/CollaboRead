@@ -1,5 +1,5 @@
 //
-//  AnswerPoint.h
+//  CRAnswerPoint.h
 //  CollaboRead
 //
 //  Holds a point in a line of an answer drawing.
@@ -11,10 +11,13 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface AnswerPoint : NSObject
+@interface CRAnswerPoint : NSObject <NSCopying>
 @property (nonatomic, assign) CGPoint coordinate;
 @property (nonatomic, assign) BOOL isEndPoint;
 
 -(id)initWithPoint:(CGPoint)point end:(BOOL)end;
+-(BOOL)isEqual:(id)object;
+-(BOOL)isInTouchRange:(id)object;
+-(id)copyWithZone:(NSZone *)zone;
 
 @end

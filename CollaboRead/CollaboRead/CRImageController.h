@@ -1,5 +1,5 @@
 //
-//  ImageController.h
+//  CRImageController.h
 //  CollaboRead
 //
 //  Allows drawing a path in red over a preloaded image. Image should be loaded using loadAndScaleImage:
@@ -12,11 +12,12 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ImageController : UIViewController
+@interface CRImageController : UIViewController
 
 @property (nonatomic, strong) NSDictionary *caseChosen;
-//Loads the image to be drawn over into the view and scales it to fit the screen.
+@property (nonatomic, assign) NSUInteger caseId;
 
+//Loads the image to be drawn over into the view and scales it to fit the screen.
 -(void)loadAndScaleImage:(UIImage *)img;
 
 @end
