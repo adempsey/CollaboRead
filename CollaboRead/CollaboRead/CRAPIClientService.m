@@ -9,12 +9,21 @@
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
 
+#import "NSArray+CRAdditions.h"
+
 #define kCR_API_ADDRESS @"http://collaboread.herokuapp.com/"
+
 #define kCR_API_ENDPOINT_USERS @"users"
 #define kCR_API_ENDPOINT_LECTURERS @"lecturers"
 #define kCR_API_ENDPOINT_CASE_SET @"casesets"
+#define kCR_API_ENDPOINT_SUBMIT_ANSWER @"submitanswer"
+
 #define kCR_API_QUERY_PARAMETER_ID @"id"
 #define kCR_API_QUERY_PARAMETER_LECTURER_ID @"lecturerID"
+#define kCR_API_QUERY_PARAMETER_CASE_SET_ID @"setID"
+#define kCR_API_QUERY_PARAMETER_CASE_ID @"caseID"
+#define kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS @"owners"
+#define kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA @"answerData"
 
 @implementation CRAPIClientService
 
@@ -27,6 +36,8 @@
 	});
 	return sharedInstance;
 }
+
+#pragma mark - Retrieval Methods
 
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*))block
 {
@@ -84,6 +95,23 @@
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:nil completionBlock:completionBlock];
+}
+
+#pragma mark - Submission Methods
+
+- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)())block
+{
+	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
+	NSDictionary *params = @{
+							 kCR_API_QUERY_PARAMETER_CASE_SET_ID: setID,
+							 kCR_API_QUERY_PARAMETER_CASE_ID: caseID,
+							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS: students.jsonString,
+							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA: answer
+							 };
+
+	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"POST" withParams:params completionBlock:^(NSData *data) {
+		block();
+	}];
 }
 
 @end
