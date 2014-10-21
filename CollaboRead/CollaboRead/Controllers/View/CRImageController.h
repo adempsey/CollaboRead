@@ -14,9 +14,11 @@
 
 @interface CRImageController : UIViewController
 
+@property (nonatomic, strong) NSDictionary *user;
 @property (nonatomic, strong) NSDictionary *caseChosen;
 @property (nonatomic, assign) NSUInteger caseId;
-@property (nonatomic, assign) NSNumber *caseGroup;
+@property (nonatomic, assign) NSUInteger caseGroup;
+
 
 //Loads the image to be drawn over into the view and scales it to fit the screen.
 -(void)loadAndScaleImage:(UIImage *)img;

@@ -81,8 +81,10 @@
  //Give the case analysis view the appropriate case
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
      CRImageController *nextController = segue.destinationViewController;
+     nextController.user = self.user;
      nextController.caseChosen = self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST][[self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][selectedPath.row]];
      nextController.caseId = [[self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][selectedPath.row] integerValue];
+     nextController.caseGroup = [self.caseSets[selectedPath.section][CR_DB_CASE_SET_ID] integerValue];
  }
 
 
