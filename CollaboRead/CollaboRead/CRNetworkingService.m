@@ -8,6 +8,9 @@
 
 #import "CRNetworkingService.h"
 
+#define kHTTP_METHOD_GET @"GET"
+#define kHTTP_METHOD_POST @"POST"
+
 @implementation CRNetworkingService
 
 + (CRNetworkingService*)sharedInstance
@@ -20,16 +23,29 @@
 	return sharedInstance;
 }
 
-- (void)performGETRequestForResource:(NSString*)resource withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock
+- (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock
 {
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+
 	if (params) {
-		NSString *parameterString = [self parameterStringWithDictionary:params];
-		resource = [resource stringByAppendingString:parameterString];
+		NSString *paramString = [self parameterStringWithDictionary:params];
+
+		if ([method isEqualToString:kHTTP_METHOD_GET]) {
+			resource = [NSString stringWithFormat:@"%@?%@", resource, paramString];
+
+		} else if ([method isEqualToString:kHTTP_METHOD_POST]) {
+			NSData *encodedParams = [paramString dataUsingEncoding:NSUTF8StringEncoding];
+			[request setHTTPBody:encodedParams];
+
+		}
 	}
 
-	NSURL *url = [NSURL URLWithString:resource];
+	NSURL *resourceURL = [NSURL URLWithString:resource];
+	[request setURL:resourceURL];
 
-	NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData* data, NSURLResponse* response, NSError* error){
+	[request setHTTPMethod:method];
+
+	NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error){
 		if (!error) {
 			completionBlock(data);
 		}
@@ -39,7 +55,7 @@
 
 - (NSString*)parameterStringWithDictionary:(NSDictionary*)dictionary
 {
-	NSString *queryString = @"?";
+	NSString *queryString = @"";
 
 	for (NSString* key in dictionary) {
 		NSString *queryParameter = [NSString stringWithFormat:@"%@=%@&", key, dictionary[key]];

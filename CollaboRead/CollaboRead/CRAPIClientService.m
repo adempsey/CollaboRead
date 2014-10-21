@@ -58,7 +58,7 @@
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturer};
 
-	[[CRNetworkingService sharedInstance] performGETRequestForResource:resource withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:params completionBlock:completionBlock];
 }
 
 - (void)retrieveItemFromEndpoint:(NSString*)endpoint withID:(NSString*)idNumber completionBlock:(void (^)(NSDictionary*))block
@@ -71,7 +71,7 @@
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_ID: idNumber};
 
-	[[CRNetworkingService sharedInstance] performGETRequestForResource:resource withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:params completionBlock:completionBlock];
 }
 
 - (void)retrieveItemListFromEndpoint:(NSString*)endpoint completionBlock:(void (^)(NSArray*))block
@@ -83,7 +83,7 @@
 
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
 
-	[[CRNetworkingService sharedInstance] performGETRequestForResource:resource withParams:nil completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:nil completionBlock:completionBlock];
 }
 
 @end
