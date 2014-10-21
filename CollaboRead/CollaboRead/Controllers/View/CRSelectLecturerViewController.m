@@ -10,7 +10,7 @@
 #import "CRSelectCaseViewController.h"
 #import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
-#import "UserKeys.h"
+#import "CRUserKeys.h"
 
 @interface CRSelectLecturerViewController ()
 {
@@ -74,8 +74,8 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LecturerCell" forIndexPath:indexPath];
-    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.lecturers[indexPath.row][PICT]]]];
-    cell.name.text = [NSString stringWithFormat:@"%@ %@", self.lecturers[indexPath.row][TITLE], self.lecturers[indexPath.row][U_NAME]];
+    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.lecturers[indexPath.row][CR_DB_USER_PICTURE]]]];
+    cell.name.text = [NSString stringWithFormat:@"%@ %@", self.lecturers[indexPath.row][CR_DB_USER_TITLE], self.lecturers[indexPath.row][CR_DB_USER_NAME]];
     
     // Configure the cell
     
