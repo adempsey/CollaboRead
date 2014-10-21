@@ -45,12 +45,9 @@
 
 	[request setHTTPMethod:method];
 
-	NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData* data, NSURLResponse* response, NSError* error){
-		if (!error) {
-			completionBlock(data);
-		}
+	[NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error ) {
+		completionBlock(data);
 	}];
-	[dataTask resume];
 }
 
 - (NSString*)parameterStringWithDictionary:(NSDictionary*)dictionary
