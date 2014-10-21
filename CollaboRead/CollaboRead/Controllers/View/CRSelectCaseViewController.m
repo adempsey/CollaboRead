@@ -8,8 +8,8 @@
 
 #import "CRSelectCaseViewController.h"
 #import "CRImageController.h"
-#import "UserKeys.h"
-#import "CaseKeys.h"
+#import "CRUserKeys.h"
+#import "CRCaseKeys.h"
 #import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
 
@@ -25,10 +25,10 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = [self.lecturer objectForKey:U_NAME];
+    self.navigationItem.title = [self.lecturer objectForKey:CR_DB_USER_NAME];
 
     //Get lecturers cases and reload view with that information
-	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer[ID_NUM] block:^(NSArray *caseSets) {
+	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer[CR_DB_USER_ID] block:^(NSArray *caseSets) {
 		self.caseSets = caseSets;
         [self.collectionView reloadData];//Maybe put back on main thread?
 	}];
@@ -38,7 +38,7 @@
 //Set the number of cases per section to be the number of cases in the group it was formed from
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-	return (self.caseSets && [self.caseSets isKindOfClass:[NSArray class]]) ? ((NSArray*) self.caseSets[section][CASES]).count : 0;
+	return (self.caseSets && [self.caseSets isKindOfClass:[NSArray class]]) ? ((NSArray*) self.caseSets[section][CR_DB_CASE_SET_CASE_LIST]).count : 0;
 }
 
 //Set the number of sections to be the number of groupings
@@ -51,8 +51,8 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CaseCell" forIndexPath:indexPath];
-    cell.name.text = self.caseSets[indexPath.section][CASES][[self.caseSets[indexPath.section][CASES] allKeys][indexPath.row]][C_NAME];
-    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.caseSets[indexPath.section][CASES][[self.caseSets[indexPath.section][CASES] allKeys][indexPath.row]][IMAGE][0]]]];
+    cell.name.text = self.caseSets[indexPath.section][CR_DB_CASE_SET_CASE_LIST][[self.caseSets[indexPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][indexPath.row]][CR_DB_CASE_NAME];
+    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.caseSets[indexPath.section][CR_DB_CASE_SET_CASE_LIST][[self.caseSets[indexPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][indexPath.row]][CR_DB_CASE_IMAGE_LIST][0]]]];
     return cell;
 }
 
@@ -81,8 +81,8 @@
  //Give the case analysis view the appropriate case
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
      CRImageController *nextController = segue.destinationViewController;
-     nextController.caseChosen = self.caseSets[selectedPath.section][CASES][[self.caseSets[selectedPath.section][CASES] allKeys][selectedPath.row]];
-     nextController.caseId = [[self.caseSets[selectedPath.section][CASES] allKeys][selectedPath.row] integerValue];
+     nextController.caseChosen = self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST][[self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][selectedPath.row]];
+     nextController.caseId = [[self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][selectedPath.row] integerValue];
  }
 
 

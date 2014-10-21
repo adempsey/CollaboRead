@@ -9,7 +9,7 @@
 //
 
 #import "CRLoginViewController.h"
-#import "UserKeys.h"
+#import "CRUserKeys.h"
 #import "CRSelectCaseViewController.h"
 #import "CRSelectLecturerViewController.h"
 #import "CRAPIClientService.h"
@@ -35,23 +35,23 @@
     if ([users count] > 0) {
         //Find matching user from list
         currUser = [users objectAtIndex:0];
-        for (int i = 1; i < [users count] && ![[currUser objectForKey:EMAIL] isEqualToString:self.emailField.text]; i++) {
+        for (int i = 1; i < [users count] && ![[currUser objectForKey:CR_DB_USER_EMAIL] isEqualToString:self.emailField.text]; i++) {
             currUser = [users objectAtIndex:i];
         }
         //Check that user was found, (list didn't run out)
-        if ([[currUser objectForKey:EMAIL] isEqualToString:self.emailField.text]) {
+        if ([[currUser objectForKey:CR_DB_USER_EMAIL] isEqualToString:self.emailField.text]) {
             //Check password
-            if ([[currUser objectForKey:PASS] isEqualToString:self.passwordField.text]) {
+            if ([[currUser objectForKey:CR_DB_USER_PASSWORD] isEqualToString:self.passwordField.text]) {
                 NSLog(@"good");
                 UIViewController *newController;
                 //Check type of user and make appropriate view
-                if ([currUser[TYPE] isEqualToString:LECTURER]) {
+                if ([currUser[CR_DB_USER_TYPE] isEqualToString:CR_USER_TYPE_LECTURER]) {
                     UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"caseNavController"];
                     ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = currUser;
                     ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
                     newController = navController;
                 }
-                else if([currUser[TYPE] isEqualToString:STUDENT]) {
+                else if([currUser[CR_DB_USER_TYPE] isEqualToString:CR_USER_TYPE_STUDENT]) {
                     UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
                     ((CRSelectLecturerViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
                     newController = navController;
