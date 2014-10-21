@@ -100,7 +100,7 @@
 				8D16E93419EF440500DAFEC0 /* CRNetworkingService.h */,
 				8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */,
 			);
-			name = Services;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		8DA5DE1319E6064A002EA706 = {
@@ -124,15 +124,15 @@
 		8DA5DE1E19E6064A002EA706 /* CollaboRead */ = {
 			isa = PBXGroup;
 			children = (
+				8DEE5ADE19F642EA0090AF0B /* Views */,
+				8DEE5ADD19F642440090AF0B /* Controllers */,
 				8DEE5AD919F63EBC0090AF0B /* Categories */,
 				8D16E93319EF438A00DAFEC0 /* Services */,
-				BBA2EBD519EED7C40093044E /* View */,
+				8DA5DE2919E6064B002EA706 /* Main.storyboard */,
 				8DA5DE2319E6064B002EA706 /* AppDelegate.h */,
 				8DA5DE2419E6064B002EA706 /* AppDelegate.m */,
-				BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */,
-				BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */,
-				BBA2EBD019EECE270093044E /* UserKeys.h */,
-				BBA2EBDB19EEF3340093044E /* CaseKeys.h */,
+				8DEE5AE119F644560090AF0B /* Utilities */,
+				8DEE5AE019F643F70090AF0B /* Constants */,
 				8DA5DE2C19E6064B002EA706 /* Images.xcassets */,
 				8DA5DE2E19E6064B002EA706 /* LaunchScreen.xib */,
 				8DA5DE1F19E6064A002EA706 /* Supporting Files */,
@@ -172,13 +172,63 @@
 				8DEE5ADA19F63EFB0090AF0B /* NSArray+CRAdditions.h */,
 				8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */,
 			);
-			name = Categories;
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		8DEE5ADD19F642440090AF0B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				BBA2EBD519EED7C40093044E /* View */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		8DEE5ADE19F642EA0090AF0B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8DEE5ADF19F642F50090AF0B /* Cells */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		8DEE5ADF19F642F50090AF0B /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				BBA2EBD619EEE54B0093044E /* CRTitledImageCollectionCell.h */,
+				BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		8DEE5AE019F643F70090AF0B /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				BBA2EBD019EECE270093044E /* UserKeys.h */,
+				BBA2EBDB19EEF3340093044E /* CaseKeys.h */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		8DEE5AE119F644560090AF0B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				8DEE5AE219F644610090AF0B /* Drawing */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		8DEE5AE219F644610090AF0B /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */,
+				BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */,
+			);
+			path = Drawing;
 			sourceTree = "<group>";
 		};
 		BBA2EBD519EED7C40093044E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8DA5DE2919E6064B002EA706 /* Main.storyboard */,
 				BBA2EBD219EED5F80093044E /* CRSelectCaseViewController.h */,
 				BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */,
 				8DA5DE2619E6064B002EA706 /* CRImageController.h */,
@@ -189,12 +239,10 @@
 				BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */,
 				BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */,
 				BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */,
-				BBA2EBD619EEE54B0093044E /* CRTitledImageCollectionCell.h */,
-				BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */,
 				BBD3135619F2E2040017B96A /* CRSelectLecturerViewController.h */,
 				BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */,
 			);
-			name = View;
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
