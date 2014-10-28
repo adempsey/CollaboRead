@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CRUser.h"
 
 @interface CRSelectLecturerViewController : UICollectionViewController
 
-@property (nonatomic, strong) NSDictionary *user;
+@property (nonatomic, strong) CRUser *user;
 
 @end

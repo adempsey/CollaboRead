@@ -28,10 +28,10 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = [self.lecturer objectForKey:CR_DB_USER_NAME];
+	self.navigationItem.title = self.lecturer.name;
 
     //Get lecturers cases and reload view with that information
-	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer[CR_DB_USER_ID] block:^(NSArray *caseSets) {
+	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer.userID block:^(NSArray *caseSets) {
 		self.caseSets = caseSets;
         [self.collectionView reloadData];//Maybe put back on main thread?
 	}];

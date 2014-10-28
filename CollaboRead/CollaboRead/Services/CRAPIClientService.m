@@ -9,6 +9,7 @@
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
 #import "CRCaseSet.h"
+#import "CRUser.h"
 
 #import "NSArray+CRAdditions.h"
 
@@ -42,7 +43,18 @@
 
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*))block
 {
-	[self retrieveItemListFromEndpoint:kCR_API_ENDPOINT_USERS completionBlock:block];
+	[self retrieveItemListFromEndpoint:kCR_API_ENDPOINT_USERS completionBlock:^(NSArray *list) {
+		NSMutableArray *userList = [[NSMutableArray alloc] init];
+
+		[list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+			if ([obj isKindOfClass:[NSDictionary class]]) {
+				CRUser *user = [[CRUser alloc] initWithDictionary:obj];
+				[userList addObject:user];
+			}
+		}];
+
+		block(userList);
+	}];
 }
 
 - (void)retrieveLecturersWithBlock:(void (^)(NSArray*))block

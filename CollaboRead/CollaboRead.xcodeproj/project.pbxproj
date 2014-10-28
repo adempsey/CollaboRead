@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */; };
 		8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */; };
+		8D5508AB19FF509B00AF5302 /* CRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D5508AA19FF509B00AF5302 /* CRUser.m */; };
 		8DA5DE2219E6064B002EA706 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2119E6064B002EA706 /* main.m */; };
 		8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2419E6064B002EA706 /* AppDelegate.m */; };
 		8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* CRImageController.m */; };
@@ -43,6 +44,8 @@
 		8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNetworkingService.m; sourceTree = "<group>"; };
 		8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAPIClientService.h; sourceTree = "<group>"; };
 		8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAPIClientService.m; sourceTree = "<group>"; };
+		8D5508A919FF509B00AF5302 /* CRUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUser.h; sourceTree = "<group>"; };
+		8D5508AA19FF509B00AF5302 /* CRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUser.m; sourceTree = "<group>"; };
 		8DA5DE1C19E6064A002EA706 /* CollaboRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollaboRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA5DE2019E6064A002EA706 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DA5DE2119E6064B002EA706 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -176,6 +179,8 @@
 		8DE0B25D19FF2F7A00760434 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				8D5508A919FF509B00AF5302 /* CRUser.h */,
+				8D5508AA19FF509B00AF5302 /* CRUser.m */,
 				8DE0B25E19FF2FD300760434 /* CRCase.h */,
 				8DE0B25F19FF2FD300760434 /* CRCase.m */,
 				8DE0B26119FF306900760434 /* CRCaseSet.h */,
@@ -370,6 +375,7 @@
 				8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */,
 				8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */,
 				BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */,
+				8D5508AB19FF509B00AF5302 /* CRUser.m in Sources */,
 				BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */,
 				BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */,
 				8DE0B26019FF2FD300760434 /* CRCase.m in Sources */,

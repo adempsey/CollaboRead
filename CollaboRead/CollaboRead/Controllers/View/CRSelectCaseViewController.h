@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CRUser.h"
 
 @interface CRSelectCaseViewController : UICollectionViewController
 
-@property (nonatomic, strong) NSDictionary *lecturer;
-@property (nonatomic, strong) NSDictionary *user;
+@property (nonatomic, strong) CRUser *lecturer;
+@property (nonatomic, strong) CRUser *user;
 
 @end

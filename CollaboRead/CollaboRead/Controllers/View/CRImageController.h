@@ -12,10 +12,11 @@
 #import <UIKit/UIKit.h>
 
 #import "CRCase.h"
+#import "CRUser.h"
 
 @interface CRImageController : UIViewController
 
-@property (nonatomic, strong) NSDictionary *user;
+@property (nonatomic, strong) CRUser *user;
 @property (nonatomic, strong) CRCase *caseChosen;
 @property (nonatomic, assign) NSUInteger caseId;
 @property (nonatomic, assign) NSUInteger caseGroup;
