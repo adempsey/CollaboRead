@@ -99,9 +99,15 @@
 
 #pragma mark - Submission Methods
 
-- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)())block
+- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(NSDictionary*))block
 {
+	void (^completionBlock)(NSData*) = ^void(NSData *json) {
+		NSDictionary *caseItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+		block(caseItem);
+	};
+
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
+
 	NSDictionary *params = @{
 							 kCR_API_QUERY_PARAMETER_CASE_SET_ID: setID,
 							 kCR_API_QUERY_PARAMETER_CASE_ID: caseID,
@@ -109,9 +115,7 @@
 							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA: answer
 							 };
 
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"POST" withParams:params completionBlock:^(NSData *data) {
-		block();
-	}];
+	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"POST" withParams:params completionBlock:completionBlock];
 }
 
 @end

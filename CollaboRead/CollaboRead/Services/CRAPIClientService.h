@@ -18,6 +18,6 @@
 - (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(NSDictionary*))block;
 - (void)retrieveCaseSetsWithLecturer:(NSString*)lecturer block:(void (^)(NSArray*))block;
 
-- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)())block;
+- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(NSDictionary*))block;
 
 @end
