@@ -12,6 +12,5 @@
 
 @property (nonatomic, strong) NSDictionary *lecturer;
 @property (nonatomic, strong) NSDictionary *user;
-@property (nonatomic, strong) NSArray *caseSets;
 
 @end

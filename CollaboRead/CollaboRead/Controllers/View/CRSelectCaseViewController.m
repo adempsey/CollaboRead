@@ -9,7 +9,8 @@
 #import "CRSelectCaseViewController.h"
 #import "CRImageController.h"
 #import "CRUserKeys.h"
-#import "CRCaseKeys.h"
+#import "CRCaseSet.h"
+#import "CRCase.h"
 #import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
 
@@ -17,6 +18,8 @@
 {
     NSIndexPath *selectedPath; //Allows the view to pass the selected case in the segue prep function
 }
+
+@property (nonatomic, strong) NSArray *caseSets;
 
 @end
 
@@ -38,21 +41,27 @@
 //Set the number of cases per section to be the number of cases in the group it was formed from
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-	return (self.caseSets && [self.caseSets isKindOfClass:[NSArray class]]) ? ((NSArray*) self.caseSets[section][CR_DB_CASE_SET_CASE_LIST]).count : 0;
+	return self.caseSets ? ((CRCaseSet*) self.caseSets[section]).cases.count : 0;
 }
 
 //Set the number of sections to be the number of groupings
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return [self.caseSets count];
+    return self.caseSets.count;
 }
 
 //Set the cell to have the image and name of the case it corresponds to
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CaseCell" forIndexPath:indexPath];
-    cell.name.text = self.caseSets[indexPath.section][CR_DB_CASE_SET_CASE_LIST][[self.caseSets[indexPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][indexPath.row]][CR_DB_CASE_NAME];
-    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.caseSets[indexPath.section][CR_DB_CASE_SET_CASE_LIST][[self.caseSets[indexPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][indexPath.row]][CR_DB_CASE_IMAGE_LIST][0]]]];
+
+	CRCaseSet *caseSet = self.caseSets[indexPath.section];
+	NSString *caseKey = caseSet.cases.allKeys[indexPath.row];
+	CRCase *crCase = caseSet.cases[caseKey];
+
+	cell.name.text = crCase.name;
+	cell.image.image = crCase.images[0];
+
     return cell;
 }
 
@@ -71,21 +80,27 @@
 }
 
 //Cells are 50 pixels away from edge of view and 30 from each other?
-- (UIEdgeInsets)collectionView:
-(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
     return UIEdgeInsetsMake(50, 50, 30, 30);
 }
 
- #pragma mark - Navigation
- 
- //Give the case analysis view the appropriate case
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-     CRImageController *nextController = segue.destinationViewController;
-     nextController.user = self.user;
-     nextController.caseChosen = self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST][[self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][selectedPath.row]];
-     nextController.caseId = [[self.caseSets[selectedPath.section][CR_DB_CASE_SET_CASE_LIST] allKeys][selectedPath.row] integerValue];
-     nextController.caseGroup = [self.caseSets[selectedPath.section][CR_DB_CASE_SET_ID] integerValue];
- }
+#pragma mark - Navigation
+
+//Give the case analysis view the appropriate case
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	CRImageController *nextController = segue.destinationViewController;
+	nextController.user = self.user;
+
+	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
+	NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[selectedPath.row];
+	CRCase *selectedCase = selectedCaseSet.cases[selectedCaseKey];
+
+	nextController.caseChosen = selectedCase;
+	nextController.caseId = [selectedCaseKey integerValue];
+	nextController.caseGroup = [selectedCaseSet.setID integerValue];
+}
 
 
 @end

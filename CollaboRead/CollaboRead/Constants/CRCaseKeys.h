@@ -12,6 +12,7 @@
 //Groups
 #define CR_DB_CASE_SET_ID @"setID"
 #define CR_DB_CASE_SET_CASE_LIST @"cases"
+#define CR_DB_CASE_SET_OWNERS @"owners"
 
 //Cases
 #define CR_DB_CASE_ID @"caseID"

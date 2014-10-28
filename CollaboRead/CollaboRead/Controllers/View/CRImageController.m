@@ -11,7 +11,6 @@
 
 #import "CRImageController.h"
 #import "CRAnswerPoint.h"
-#import "CRCaseKeys.h"
 
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
@@ -155,9 +154,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     //Most likely will be done by a transitioning view
-    UIImage *img = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[self.caseChosen objectForKey:CR_DB_CASE_IMAGE_LIST] objectAtIndex: 0]]]];
-    self.navigationItem.title = [self.caseChosen objectForKey:CR_DB_CASE_NAME];
+	UIImage *img = self.caseChosen.images[0];
+	self.navigationItem.title = self.caseChosen.name;
     [self loadAndScaleImage:img];
+
     self.undoStack = [[NSMutableArray alloc] init];
     
     [self.view addSubview:self.caseImage];

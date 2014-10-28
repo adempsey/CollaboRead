@@ -8,6 +8,7 @@
 
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
+#import "CRCaseSet.h"
 
 #import "NSArray+CRAdditions.h"
 
@@ -62,8 +63,17 @@
 - (void)retrieveCaseSetsWithLecturer:(NSString *)lecturer block:(void (^)(NSArray *))block
 {
 	void (^completionBlock)(NSData*) = ^void(NSData *json) {
-		NSArray *retrievedItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
-		block(retrievedItem);
+		NSArray *retrievedItems = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+		NSMutableArray *caseSets = [[NSMutableArray alloc] init];
+
+		[retrievedItems enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+			if ([obj isKindOfClass:[NSDictionary class]]) {
+				CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:obj];
+				[caseSets addObject:caseSet];
+			}
+		}];
+
+		block(caseSets);
 	};
 
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
