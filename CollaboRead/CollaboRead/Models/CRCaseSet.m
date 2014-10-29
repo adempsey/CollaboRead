@@ -17,22 +17,22 @@
 	if (self = [super init]) {
 		self.setID = dictionary[CR_DB_CASE_SET_ID];
 		self.owners = dictionary[CR_DB_CASE_SET_OWNERS];
-		self.cases = dictionary[CR_DB_CASE_SET_CASE_LIST];
+		[self setCases:dictionary[CR_DB_CASE_SET_CASE_LIST]];
 	}
 	return self;
 }
 
-- (void)setCases:(NSDictionary *)cases
+- (void)setCases:(NSArray *)cases
 {
 	NSMutableDictionary *casesDictionary = [[NSMutableDictionary alloc] init];
 
-	[cases enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+	[cases enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		if ([obj isKindOfClass:[NSDictionary class]]) {
 			CRCase *crCase = [[CRCase alloc] initWithDictionary:obj];
-			casesDictionary[key] = crCase;
+			casesDictionary[crCase.caseID] = crCase;
 
 		} else if ([obj isKindOfClass:[CRCase class]]) {
-			casesDictionary[key] = obj;
+			casesDictionary[((CRCase*)obj).caseID] = obj;
 		}
 	}];
 

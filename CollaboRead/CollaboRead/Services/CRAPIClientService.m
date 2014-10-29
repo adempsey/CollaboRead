@@ -13,7 +13,7 @@
 
 #import "NSArray+CRAdditions.h"
 
-#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/"
+#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
 
 #define kCR_API_ENDPOINT_USERS @"users"
 #define kCR_API_ENDPOINT_LECTURERS @"lecturers"
