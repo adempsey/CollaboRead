@@ -10,7 +10,8 @@
 #import "CRSelectCaseViewController.h"
 #import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
-#import "CRUserKeys.h"
+#import "CRCaseSet.h"
+#import "CRCase.h"
 
 @interface CRSelectLecturerViewController ()
 {
@@ -74,11 +75,10 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LecturerCell" forIndexPath:indexPath];
-    cell.image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.lecturers[indexPath.row][CR_DB_USER_PICTURE]]]];
-    cell.name.text = [NSString stringWithFormat:@"%@ %@", self.lecturers[indexPath.row][CR_DB_USER_TITLE], self.lecturers[indexPath.row][CR_DB_USER_NAME]];
-    
-    // Configure the cell
-    
+	CRUser *lecturer = self.lecturers[indexPath.row];
+	cell.image.image = lecturer.image;
+	cell.name.text = [NSString stringWithFormat:@"%@ %@", lecturer.title, lecturer.name];
+
     return cell;
 }
 #pragma mark – UICollectionViewDelegateFlowLayout
