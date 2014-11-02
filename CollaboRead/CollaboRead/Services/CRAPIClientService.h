@@ -8,14 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+#import "CRCaseSet.h"
+#import "CRUser.h"
+
 @interface CRAPIClientService : NSObject
 
 + (CRAPIClientService*)sharedInstance;
 
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*))block;
 - (void)retrieveLecturersWithBlock:(void (^)(NSArray*))block;
-- (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(NSDictionary*))block;
-- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(NSDictionary*))block;
+- (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(CRUser*))block;
+- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*))block;
 - (void)retrieveCaseSetsWithLecturer:(NSString*)lecturer block:(void (^)(NSArray*))block;
 
 - (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(NSDictionary*))block;
