@@ -36,10 +36,10 @@
 -(void)submitAnswer:(UIButton *)submitButton
 {
     CRUser *params = self.user;
-    NSString *name = params.name;
+    NSString *userID = params.userID;
     NSString *caseID = [NSString stringWithFormat: @"%ld", (long)self.caseId];
     NSString *setID = [NSString stringWithFormat: @"%ld", (long)self.caseGroup];
-    NSArray *students = [[NSArray alloc]initWithObjects:name, nil];;
+    NSArray *students = [[NSArray alloc]initWithObjects:userID, nil];;
     NSString *answers = [NSString stringWithFormat: @"%ld", (long)self.undoStack[0]];
     [[CRAPIClientService sharedInstance] submitAnswer:answers fromStudents:students forCase:caseID inSet:setID block:^(NSDictionary *block){
     
