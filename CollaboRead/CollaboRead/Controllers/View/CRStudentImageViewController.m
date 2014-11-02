@@ -7,7 +7,9 @@
 //
 
 #import "CRStudentImageViewController.h"
-
+#import "CRAPIClientService.h"
+#import "CRUser.h"
+#import "CRUserKeys.h"
 @interface CRStudentImageViewController ()
 
 -(void)submitAnswer:(UIButton *)submitButton;
@@ -33,7 +35,15 @@
 
 -(void)submitAnswer:(UIButton *)submitButton
 {
-    //API call
+    CRUser *params = self.user;
+    NSString *name = params.name;
+    NSString *caseID = [NSString stringWithFormat: @"%ld", (long)self.caseId];
+    NSString *setID = [NSString stringWithFormat: @"%ld", (long)self.caseGroup];
+    NSArray *students = [[NSArray alloc]initWithObjects:name, nil];;
+    NSString *answers = [NSString stringWithFormat: @"%ld", (long)self.undoStack[0]];
+    [[CRAPIClientService sharedInstance] submitAnswer:answers fromStudents:students forCase:caseID inSet:setID block:^(NSDictionary *block){
+    
+    }];
 }
 
 /*

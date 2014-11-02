@@ -29,7 +29,6 @@
 @property (nonatomic, strong) UIButton *clearButton;
 @property (nonatomic, strong) UIButton *eraseButton;
 @property (nonatomic, strong) UIButton *undoButton;
-@property(nonatomic, strong) NSMutableArray *undoStack;
 
 -(void)penSelected:(UIButton *)pen;
 -(void)clearImage:(UIButton *)clear;
