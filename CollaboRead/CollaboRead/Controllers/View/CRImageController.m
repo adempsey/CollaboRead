@@ -90,7 +90,7 @@
         NSMutableArray *drawingGuide = [self.undoStack objectAtIndex:0];
         //Make region drawable
         UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
-        [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
+        [self.drawView.image drawAtPoint:CGPointMake(0, 0)];
         
         //Set up to draw lines
         //Could use drawLineFrom:to:, but is much slower
@@ -98,10 +98,10 @@
         CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
         CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
         CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.coordinate.x, lastPoint.coordinate.y);
-        for (int i = 0; i < [drawingGuide count] - 1; i++) {
-            CRAnswerPoint *beg = [drawingGuide objectAtIndex:i];
+        for (int i = 1; i < [drawingGuide count]; i++) {
+            CRAnswerPoint *beg = [drawingGuide objectAtIndex:i - 1];
             if (!beg.isEndPoint) {
-                CRAnswerPoint *fin = [drawingGuide objectAtIndex:i + 1];
+                CRAnswerPoint *fin = [drawingGuide objectAtIndex:i];
                 CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
                 CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
                 [self drawLineFrom:beg to:fin];
@@ -157,7 +157,7 @@
     }
     
     [self.caseImage setFrame:newFrame];
-    self.drawView = [[UIImageView alloc] initWithFrame:self.caseImage.frame];
+    self.drawView = [[UIImageView alloc] initWithFrame:newFrame];
 }
 
 - (void)viewDidLoad {
@@ -275,7 +275,7 @@
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable
     UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
-    [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
+    [self.drawView.image drawAtPoint:CGPointMake(0, 0)];//Using drawInRect blurs previous lines for currently unknown reason
     
     //Set up to draw line
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
@@ -297,7 +297,7 @@
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable
     UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
-    [self.drawView.image drawInRect: CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)]; //Drawable rect w/in image is 0,0 in image, to w, h of image
+    [self.drawView.image drawAtPoint:CGPointMake(0, 0)]; //Doesn't use drawInRect to keep consistent with drawing lines and prevent blurring that ocurred for unknown reason
     
     //Set up to draw line
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 20.0);
