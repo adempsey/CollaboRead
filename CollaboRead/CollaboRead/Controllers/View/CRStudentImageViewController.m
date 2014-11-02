@@ -19,7 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     UIButton *submitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];//Change to custom
-    [submitButton setFrame:CGRectMake(self.view.frame.size.width - 170, self.view.frame.size.height - 70, 50, 150)];
+    [submitButton setFrame:CGRectMake(self.view.frame.size.width - 170, self.view.frame.size.height - 70, 150, 50)];
     [submitButton setBackgroundColor:[UIColor lightGrayColor]];
     [submitButton setTitle:@"Submit Answer" forState:UIControlStateNormal];//Change to setting images?
     [self.view addSubview:submitButton];

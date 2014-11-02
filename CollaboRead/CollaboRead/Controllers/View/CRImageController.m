@@ -73,6 +73,16 @@
     [self.penButton setSelected:NO];
     [self.eraseButton setSelected:NO];
     [self.undoStack removeObjectAtIndex:0];
+
+    [self redrawAnswer];
+    
+    if ([self.undoStack count] == 0) {
+        [self.undoButton setEnabled:NO];
+    }
+}
+
+-(void)redrawAnswer
+{
     self.drawView.image = [[UIImage alloc] init];
     
     //Draw last version if present
@@ -102,9 +112,6 @@
         [self.drawView setAlpha:1.0];
     }
     UIGraphicsEndImageContext();
-    if ([self.undoStack count] == 0) {
-        [self.undoButton setEnabled:NO];
-    }
 }
 
 //Loads the image to be drawn over into the image view and scales it to fit the screen.
@@ -114,6 +121,8 @@
 {
     self.caseImage = [[UIImageView alloc] initWithImage:img];
     CGRect newFrame = self.caseImage.frame;
+    CGFloat topBarHeight = self.navigationController.navigationBar.frame.size.height +
+                            [UIApplication sharedApplication].statusBarFrame.size.height;
     
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
     if (newFrame.size.height > newFrame.size.width) {
@@ -125,10 +134,10 @@
     }
     
     //If the image doesn't already fit as much as the view as possible
-    if (newFrame.size.height != self.view.frame.size.height &&
+    if (newFrame.size.height != self.view.frame.size.height - topBarHeight &&
         newFrame.size.width != self.view.frame.size.width) {
         
-        double scale = self.view.frame.size.height/newFrame.size.height;
+        double scale = (self.view.frame.size.height - topBarHeight)/newFrame.size.height;
         
         //Determine whether having image expand to sides will cut off top and bottom. If it does, expand to top and bottom. If it doesn't expanding to top and bottom would have either caused the sides to be cut off or it fits the screen exactly and it doesn't matter which to use as scale.
         //Each case expands and centers image appropriately
@@ -142,7 +151,7 @@
         else {
             newFrame.size.width *= scale;
             newFrame.size.height *= scale;
-            newFrame.origin.y = 0;
+            newFrame.origin.y = topBarHeight;
             newFrame.origin.x = (self.view.frame.size.width - newFrame.size.width)/2;
         }
     }
