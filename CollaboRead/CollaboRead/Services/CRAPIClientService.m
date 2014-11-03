@@ -136,11 +136,12 @@
 
 #pragma mark - Submission Methods
 
-- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(NSDictionary*))block
+- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*))block
 {
 	void (^completionBlock)(NSData*) = ^void(NSData *json) {
 		NSDictionary *caseItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
-		block(caseItem);
+		CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:caseItem];
+		block(caseSet);
 	};
 
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];

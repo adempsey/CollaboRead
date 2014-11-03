@@ -28,11 +28,6 @@
     [submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 -(void)submitAnswer:(UIButton *)submitButton
 {
     CRUser *params = self.user;
@@ -41,19 +36,9 @@
     NSString *setID = [NSString stringWithFormat: @"%ld", (long)self.caseGroup];
     NSArray *students = [[NSArray alloc]initWithObjects:userID, nil];;
     NSString *answers = [NSString stringWithFormat: @"%ld", (long)self.undoStack[0]];
-    [[CRAPIClientService sharedInstance] submitAnswer:answers fromStudents:students forCase:caseID inSet:setID block:^(NSDictionary *block){
+    [[CRAPIClientService sharedInstance] submitAnswer:answers fromStudents:students forCase:caseID inSet:setID block:^(CRCaseSet *block){
     
     }];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
