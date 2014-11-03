@@ -12,6 +12,17 @@
 
 @implementation CRAnswerPoint
 
+-(id)initFromJSONDict:(NSDictionary *)dict
+{
+    self = [super init];
+    if (self) {
+        NSLog(@"x = %@", dict[@"x"]);
+        self.coordinate = CGPointMake([dict[@"x"] floatValue], [dict[@"y"] floatValue]);
+        self.isEndPoint = [dict[@"isEnd"] boolValue];
+    }
+    return self;
+}
+
 //Make a point with coordinate and endpoint boolean
 -(id)initWithPoint:(CGPoint)point end:(BOOL)end{
     self = [super init];
@@ -44,6 +55,11 @@
 -(id)copyWithZone:(NSZone *)zone
 {
     return [[CRAnswerPoint alloc] initWithPoint:self.coordinate end:self.isEndPoint];
+}
+
+-(NSString *)stringFromPoint
+{
+    return [NSString stringWithFormat:@"{\"x\":\"%f\",\"y\":\"%f\",\"isEnd\":\"%d\"}", self.coordinate.x, self.coordinate.y, self.isEndPoint];
 }
 
 @end

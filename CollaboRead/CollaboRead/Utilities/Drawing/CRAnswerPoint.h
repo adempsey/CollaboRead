@@ -15,9 +15,11 @@
 @property (nonatomic, assign) CGPoint coordinate;
 @property (nonatomic, assign) BOOL isEndPoint;
 
+-(id)initFromJSONDict:(NSDictionary *)dict;
 -(id)initWithPoint:(CGPoint)point end:(BOOL)end;
 -(BOOL)isEqual:(id)object;
 -(BOOL)isInTouchRange:(id)object;
 -(id)copyWithZone:(NSZone *)zone;
+-(NSString *)stringFromPoint;
 
 @end
