@@ -10,11 +10,11 @@
 
 @interface CRAnswer : NSObject
 
-@property (nonatomic, readwrite, strong) NSString *answerData;
+@property (nonatomic, readwrite, strong) NSArray *answerData;
 @property (nonatomic, readwrite, strong) NSDate *submissionDate;
 @property (nonatomic, readwrite, strong) NSArray *owners;
 
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
-- (instancetype)initWithData:(NSString*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners;
+- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners;
 
 @end

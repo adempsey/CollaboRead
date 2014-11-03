@@ -26,7 +26,7 @@
 	return self;
 }
 
-- (instancetype)initWithData:(NSString*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners
+- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners
 {
 	if (self = [super init]) {
 		self.answerData = answerData;

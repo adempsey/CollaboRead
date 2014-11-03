@@ -150,7 +150,7 @@
 							 kCR_API_QUERY_PARAMETER_CASE_SET_ID: setID,
 							 kCR_API_QUERY_PARAMETER_CASE_ID: caseID,
 							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS: answer.owners.jsonString,
-							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA: answer.answerData
+							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA: answer.answerData.jsonString
 							 };
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"POST" withParams:params completionBlock:completionBlock];
