@@ -136,7 +136,7 @@
 
 #pragma mark - Submission Methods
 
-- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*))block
+- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*))block
 {
 	void (^completionBlock)(NSData*) = ^void(NSData *json) {
 		NSDictionary *caseItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
@@ -149,8 +149,8 @@
 	NSDictionary *params = @{
 							 kCR_API_QUERY_PARAMETER_CASE_SET_ID: setID,
 							 kCR_API_QUERY_PARAMETER_CASE_ID: caseID,
-							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS: students.jsonString,
-							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA: answer
+							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS: answer.owners.jsonString,
+							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA: answer.answerData
 							 };
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"POST" withParams:params completionBlock:completionBlock];

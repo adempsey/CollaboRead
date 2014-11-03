@@ -10,6 +10,7 @@
 
 #import "CRCase.h"
 #import "CRCaseKeys.h"
+#import "CRAnswer.h"
 
 @implementation CRCase
 
@@ -42,6 +43,23 @@
 	}];
 
 	_images = caseImages;
+}
+
+- (void)setAnswers:(NSArray *)answers
+{
+	NSMutableArray *caseAnswers = [[NSMutableArray alloc] init];
+
+	[answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		if ([obj isKindOfClass:[NSDictionary class]]) {
+			CRAnswer *answer = [[CRAnswer alloc] initWithDictionary:obj];
+			[caseAnswers addObject:answer];
+
+		} else if ([obj isKindOfClass:[CRAnswer class]]) {
+			[caseAnswers addObject:obj];
+		}
+	}];
+
+	_answers = caseAnswers;
 }
 
 @end

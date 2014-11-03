@@ -36,9 +36,12 @@
     NSString *setID = [NSString stringWithFormat: @"%ld", (long)self.caseGroup];
     NSArray *students = [[NSArray alloc]initWithObjects:userID, nil];;
     NSString *answers = [NSString stringWithFormat: @"%ld", (long)self.undoStack[0]];
-    [[CRAPIClientService sharedInstance] submitAnswer:answers fromStudents:students forCase:caseID inSet:setID block:^(CRCaseSet *block){
-    
-    }];
+
+	CRAnswer *answer = [[CRAnswer alloc] initWithData:answers submissionDate:nil owners:students];
+
+	[[CRAPIClientService sharedInstance] submitAnswer:answer forCase:caseID inSet:setID block:^(CRCaseSet *block) {
+
+	}];
 }
 
 @end
