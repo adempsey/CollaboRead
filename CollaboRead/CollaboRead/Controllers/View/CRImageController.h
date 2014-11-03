@@ -20,6 +20,7 @@
 @property (nonatomic, strong) CRCase *caseChosen;
 @property (nonatomic, assign) NSUInteger caseId;
 @property (nonatomic, assign) NSUInteger caseGroup;
+@property(nonatomic, strong) NSMutableArray *undoStack;
 
 
 //Loads the image to be drawn over into the view and scales it to fit the screen.

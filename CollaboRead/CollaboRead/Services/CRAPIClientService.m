@@ -8,8 +8,6 @@
 
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
-#import "CRCaseSet.h"
-#import "CRUser.h"
 
 #import "NSArray+CRAdditions.h"
 
@@ -73,14 +71,20 @@
 	}];
 }
 
-- (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(NSDictionary*))block
+- (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(CRUser*))block
 {
-	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_LECTURERS withID:lecturerID completionBlock:block];
+	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_LECTURERS withID:lecturerID completionBlock:^(NSDictionary *userDictionary) {
+		CRUser *lecturer = [[CRUser alloc] initWithDictionary:userDictionary];
+		block(lecturer);
+	}];
 }
 
-- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(NSDictionary*))block
+- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*))block
 {
-	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_CASE_SET withID:caseSetID completionBlock:block];
+	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_CASE_SET withID:caseSetID completionBlock:^(NSDictionary *caseSetDictionary) {
+		CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:caseSetDictionary];
+		block(caseSet);
+	}];
 }
 
 - (void)retrieveCaseSetsWithLecturer:(NSString *)lecturer block:(void (^)(NSArray *))block
@@ -132,11 +136,12 @@
 
 #pragma mark - Submission Methods
 
-- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(NSDictionary*))block
+- (void)submitAnswer:(NSString*)answer fromStudents:(NSArray*)students forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*))block
 {
 	void (^completionBlock)(NSData*) = ^void(NSData *json) {
 		NSDictionary *caseItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
-		block(caseItem);
+		CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:caseItem];
+		block(caseSet);
 	};
 
 	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
