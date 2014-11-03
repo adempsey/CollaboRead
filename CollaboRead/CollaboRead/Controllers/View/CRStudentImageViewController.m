@@ -10,6 +10,8 @@
 #import "CRAPIClientService.h"
 #import "CRUser.h"
 #import "CRUserKeys.h"
+#import "CRAnswerPoint.h"
+#import "NSArray+CRAdditions.h"
 @interface CRStudentImageViewController ()
 
 -(void)submitAnswer:(UIButton *)submitButton;
@@ -30,13 +32,15 @@
 
 -(void)submitAnswer:(UIButton *)submitButton
 {
-    CRUser *params = self.user;
-    NSString *userID = params.userID;
-    NSString *caseID = [NSString stringWithFormat: @"%ld", (long)self.caseId];
-    NSString *setID = [NSString stringWithFormat: @"%ld", (long)self.caseGroup];
-    NSArray *students = [[NSArray alloc]initWithObjects:userID, nil];;
-    NSString *answers = [NSString stringWithFormat: @"%ld", (long)self.undoStack[0]];
-    [[CRAPIClientService sharedInstance] submitAnswer:answers fromStudents:students forCase:caseID inSet:setID block:^(CRCaseSet *block){
+    NSString *userID = self.user.userID;
+    NSArray *students = [[NSArray alloc]initWithObjects:userID, nil];
+    
+    NSMutableArray *ansStrs = [[NSMutableArray alloc] init];
+    [self.undoStack[0] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [ansStrs addObject:[(CRAnswerPoint *)obj jsonDictFromPoint]];
+    }];
+    NSString *answers = [ansStrs jsonString];
+    [[CRAPIClientService sharedInstance] submitAnswer:answers fromStudents:students forCase:self.caseId inSet:self.caseGroup block:^(CRCaseSet *block){
     
     }];
 }

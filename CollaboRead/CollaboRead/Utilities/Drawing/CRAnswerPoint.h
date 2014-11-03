@@ -20,6 +20,6 @@
 -(BOOL)isEqual:(id)object;
 -(BOOL)isInTouchRange:(id)object;
 -(id)copyWithZone:(NSZone *)zone;
--(NSString *)stringFromPoint;
+-(NSDictionary *)jsonDictFromPoint;
 
 @end

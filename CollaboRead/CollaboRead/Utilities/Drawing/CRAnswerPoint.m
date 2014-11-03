@@ -57,9 +57,9 @@
     return [[CRAnswerPoint alloc] initWithPoint:self.coordinate end:self.isEndPoint];
 }
 
--(NSString *)stringFromPoint
+-(NSDictionary *)jsonDictFromPoint
 {
-    return [NSString stringWithFormat:@"{\"x\":\"%f\",\"y\":\"%f\",\"isEnd\":\"%d\"}", self.coordinate.x, self.coordinate.y, self.isEndPoint];
+    return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:self.coordinate.x], @"x", [NSNumber numberWithFloat:self.coordinate.y], @"y", [NSNumber numberWithFloat: self.isEndPoint], @"isEnd",nil];
 }
 
 @end

@@ -18,8 +18,8 @@
 
 @property (nonatomic, strong) CRUser *user;
 @property (nonatomic, strong) CRCase *caseChosen;
-@property (nonatomic, assign) NSUInteger caseId;
-@property (nonatomic, assign) NSUInteger caseGroup;
+@property (nonatomic, assign) NSString *caseId;
+@property (nonatomic, assign) NSString *caseGroup;
 @property(nonatomic, strong) NSMutableArray *undoStack;
 
 

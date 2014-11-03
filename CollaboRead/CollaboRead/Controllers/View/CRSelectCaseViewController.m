@@ -98,8 +98,8 @@
 	CRCase *selectedCase = selectedCaseSet.cases[selectedCaseKey];
 
 	nextController.caseChosen = selectedCase;
-	nextController.caseId = [selectedCaseKey integerValue];
-	nextController.caseGroup = [selectedCaseSet.setID integerValue];
+    nextController.caseId = selectedCaseKey;
+	nextController.caseGroup = selectedCaseSet.setID;
 }
 
 
