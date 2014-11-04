@@ -21,7 +21,7 @@
 @property (nonatomic, readwrite, assign) NSString *year;
 @property (nonatomic, readwrite, strong) NSArray *caseSetIDs;
 
-#warning temporary - should remove once authentication's a thing
+// temporary - should remove once authentication's a thing
 @property (nonatomic, readwrite, strong) NSString *password;
 
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
