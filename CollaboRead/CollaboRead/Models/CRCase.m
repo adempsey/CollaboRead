@@ -23,6 +23,7 @@
 		self.images = dictionary[CR_DB_CASE_IMAGE_LIST];
 		self.answers = dictionary[CR_DB_CASE_ANSWER_LIST];
 		self.lecturerAnswers = dictionary[CR_DB_CASE_ANSWER_LECTURER];
+        
 	}
 	return self;
 }

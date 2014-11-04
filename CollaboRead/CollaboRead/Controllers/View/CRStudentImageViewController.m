@@ -37,7 +37,6 @@
     [self.undoStack[0] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [answerPts addObject:[(CRAnswerPoint *)obj jsonDictFromPoint]];
     }];
-    
 	CRAnswer *answer = [[CRAnswer alloc] initWithData:answerPts submissionDate:nil owners:students];
 
 	[[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup block:^(CRCaseSet *block) {

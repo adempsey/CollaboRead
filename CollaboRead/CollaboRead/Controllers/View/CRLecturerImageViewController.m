@@ -7,6 +7,8 @@
 //
 
 #import "CRLecturerImageViewController.h"
+#include "CRAPIClientService.h"
+#include "CRAnswerPoint.h"
 
 @interface CRLecturerImageViewController ()
 
@@ -25,6 +27,16 @@
 {
     [self.hideButton setSelected:NO];
     [self.showButton setSelected:YES];
+    [self clearDrawing];
+    if ([self.undoStack count] > 0) {
+        [self drawAnswer:self.undoStack[0]];
+    }
+    /*[[CRAPIClientService sharedInstance] retrieveCaseSetWithID:self.caseGroup block:^(CRCaseSet *caseSet)
+     {
+         //update case to get new answers
+         self.caseChosen = caseSet.cases[self.caseId];
+         [self drawStudentAnswers];
+     }];*/ //UNCOMMENT WHEN FIXED
 }
 
 //Redraw only instructor answer
@@ -32,7 +44,23 @@
 {
     [self.showButton setSelected:NO];
     [self.hideButton setSelected:YES];
-    [self redrawAnswer];
+    [self clearDrawing];
+    
+}
+
+-(void)drawStudentAnswers
+{
+    NSArray *answers = self.caseChosen.answers;
+    [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSMutableArray *ansLine = [[NSMutableArray alloc] init];
+        [((CRAnswer *)obj).answerData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
+        }];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self drawAnswer:ansLine];
+        });
+    }];
+    
 }
 
 - (void)viewDidLoad {

@@ -113,6 +113,7 @@
 {
 	void (^completionBlock)(NSData*) = ^void(NSData *json) {
 		NSDictionary *retrievedItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+        NSLog(@"%@", retrievedItem);
 		block(retrievedItem);
 	};
 
@@ -140,6 +141,7 @@
 {
 	void (^completionBlock)(NSData*) = ^void(NSData *json) {
 		NSDictionary *caseItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+        NSLog(@"%@", caseItem);
 		CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:caseItem];
 		block(caseSet);
 	};
@@ -152,7 +154,7 @@
 							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS: answer.owners.jsonString,
 							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA: answer.answerData.jsonString
 							 };
-
+    NSLog(@"%@", params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA]);
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"POST" withParams:params completionBlock:completionBlock];
 }
 

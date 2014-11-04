@@ -52,7 +52,7 @@
 //Clears all drawaings, makes empty answer array so it is undoable.
 -(void)clearImage:(UIButton *)clear
 {
-    self.drawView.image = [[UIImage alloc] init];
+    [self clearDrawing];
     [self.penButton setSelected:NO];
     [self.eraseButton setSelected:NO];
     [self.undoStack insertObject:[[NSMutableArray alloc] init] atIndex:0];
@@ -72,44 +72,46 @@
     [self.penButton setSelected:NO];
     [self.eraseButton setSelected:NO];
     [self.undoStack removeObjectAtIndex:0];
-
-    [self redrawAnswer];
     
     if ([self.undoStack count] == 0) {
         [self.undoButton setEnabled:NO];
     }
+    else {
+            [self drawAnswer: self.undoStack[0]];
+    }
 }
 
--(void)redrawAnswer
+-(void)clearDrawing
 {
     self.drawView.image = [[UIImage alloc] init];
+}
+
+-(void)drawAnswer:(NSArray *)ans
+{
+    self.drawView.image = [[UIImage alloc] init];
+
+    //Make region drawable
+    UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
+    [self.drawView.image drawAtPoint:CGPointMake(0, 0)];
     
-    //Draw last version if present
-    if ([self.undoStack count] > 0) {
-        NSMutableArray *drawingGuide = [self.undoStack objectAtIndex:0];
-        //Make region drawable
-        UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
-        [self.drawView.image drawAtPoint:CGPointMake(0, 0)];
-        
-        //Set up to draw lines
-        //Could use drawLineFrom:to:, but is much slower
-        CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
-        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
-        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.coordinate.x, lastPoint.coordinate.y);
-        for (int i = 1; i < [drawingGuide count]; i++) {
-            CRAnswerPoint *beg = [drawingGuide objectAtIndex:i - 1];
-            if (!beg.isEndPoint) {
-                CRAnswerPoint *fin = [drawingGuide objectAtIndex:i];
-                CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
-                CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
-                [self drawLineFrom:beg to:fin];
-            }
+    //Set up to draw lines
+    //Could use drawLineFrom:to:, but is much slower
+    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
+    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
+    CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
+    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.coordinate.x, lastPoint.coordinate.y);
+    for (int i = 1; i < [ans count]; i++) {
+        CRAnswerPoint *beg = [ans objectAtIndex:i - 1];
+        if (!beg.isEndPoint) {
+            CRAnswerPoint *fin = [ans objectAtIndex:i];
+            CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
+            CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
+            [self drawLineFrom:beg to:fin];
         }
-        CGContextStrokePath(UIGraphicsGetCurrentContext());
-        self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
-        [self.drawView setAlpha:1.0];
     }
+    CGContextStrokePath(UIGraphicsGetCurrentContext());
+    self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
+    [self.drawView setAlpha:1.0];
     UIGraphicsEndImageContext();
 }
 
