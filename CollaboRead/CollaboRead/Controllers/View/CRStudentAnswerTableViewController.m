@@ -24,6 +24,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
 #define kNavigationBarHeight 44.0 // bad but w/e
 #define kTableViewWidth 230.0
+#define kTableViewMargin (kTableViewWidth/8)
 
 @interface CRStudentAnswerTableViewController ()
 
@@ -61,9 +62,9 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	
 	CGRect screenBounds = [UIScreen mainScreen].bounds;
 	CGFloat viewOriginY = kNavigationBarHeight + [UIApplication sharedApplication].statusBarFrame.size.height;
-	CGRect viewFrame = CGRectMake(screenBounds.size.width - kTableViewWidth,
+	CGRect viewFrame = CGRectMake(screenBounds.size.width - kTableViewMargin,
 								  viewOriginY,
-								  kTableViewWidth,
+								  kTableViewMargin,
 								  screenBounds.size.height - viewOriginY);
 	[self.view setFrame:viewFrame];
 	
@@ -85,9 +86,10 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
 - (void)moveTable:(UIPanGestureRecognizer*)gesture
 {
-	CGFloat gestureXLocation = [gesture locationInView:self.view].x;
-	if (gesture.state == UIGestureRecognizerStateBegan && (gestureXLocation > 7*kTableViewWidth/8 || self.tableIsVisible)) {
+	if (gesture.state == UIGestureRecognizerStateBegan) {
 		self.didBeginMovingTable = YES;
+
+		[self setFullView:YES];
 	}
 
 	if (gesture.state == UIGestureRecognizerStateChanged && self.didBeginMovingTable) {
@@ -108,6 +110,16 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	}
 }
 
+// Reduces area of view when not visible
+// This allows the user to touch parts of the view below the panel when it's not shown
+- (void)setFullView:(BOOL)shouldBeFull
+{
+	CGRect viewFrame = self.view.frame;
+	viewFrame.origin.x = [UIScreen mainScreen].bounds.size.width - (shouldBeFull ? kTableViewWidth : (kTableViewMargin));
+	viewFrame.size.width = shouldBeFull ? kTableViewWidth : kTableViewMargin;
+	self.view.frame = viewFrame;
+}
+
 - (void)toggleTable
 {
 	if (self.tableIsVisible) {
@@ -121,6 +133,8 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 {
 	CGRect currentTableFrame = self.tableView.frame;
 	currentTableFrame.origin.x = 0;
+
+	[self setFullView:YES];
 
 	[UIView animateWithDuration:0.25 animations:^{
 		self.tableView.frame = currentTableFrame;
@@ -141,6 +155,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	} completion:^(BOOL finished) {
 		if (finished) {
 			self.tableIsVisible = NO;
+			[self setFullView:NO];
 		}
 	}];
 }
