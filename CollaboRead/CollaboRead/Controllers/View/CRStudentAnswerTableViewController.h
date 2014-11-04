@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CRStudentAnswerTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface CRStudentAnswerTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, readwrite, weak) id delegate;
 
 - (instancetype)initWithStudents:(NSArray*)students;
+- (void)toggleTable;
 
 @end
 

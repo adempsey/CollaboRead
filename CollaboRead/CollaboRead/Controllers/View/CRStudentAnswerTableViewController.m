@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 };
 
 #define kNavigationBarHeight 44.0 // bad but w/e
+#define kTableViewWidth 230.0
 
 @interface CRStudentAnswerTableViewController ()
 
@@ -30,6 +31,8 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 @property (nonatomic, readwrite, strong) NSArray *students;
 @property (nonatomic, readwrite, strong) NSMutableArray *selectedStudents;
 @property (nonatomic, readwrite, assign) BOOL shouldShowStudentNames;
+@property (nonatomic, readwrite, assign) BOOL tableIsVisible;
+@property (nonatomic, readwrite, assign) BOOL didBeginMovingTable;
 
 @end
 
@@ -43,9 +46,11 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		self.tableView.dataSource = self;
 		
 		self.students = [[NSArray alloc] initWithArray:students];
-		self.selectedStudents = [self.students mutableCopy];
+		self.selectedStudents = [[NSMutableArray alloc] init];
 		
 		self.shouldShowStudentNames = NO;
+		self.tableIsVisible = NO;
+		self.didBeginMovingTable = NO;
 	}
 	return self;
 }
@@ -55,16 +60,89 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
     [super viewDidLoad];
 	
 	CGRect screenBounds = [UIScreen mainScreen].bounds;
-	CGFloat viewWidth = 230;
 	CGFloat viewOriginY = kNavigationBarHeight + [UIApplication sharedApplication].statusBarFrame.size.height;
+	CGRect viewFrame = CGRectMake(screenBounds.size.width - kTableViewWidth,
+								  viewOriginY,
+								  kTableViewWidth,
+								  screenBounds.size.height - viewOriginY);
+	[self.view setFrame:viewFrame];
 	
-	[self.view setFrame:CGRectMake(screenBounds.size.width - viewWidth,
-								   viewOriginY,
-								   viewWidth,
-								   screenBounds.size.height - viewOriginY)];
-	
-	self.tableView.frame = self.view.bounds;
+	CGRect tableViewFrame = CGRectMake(kTableViewWidth, 0, kTableViewWidth, viewFrame.size.height);
+	self.tableView.frame = tableViewFrame;
+
+	UIView *tableViewBackgroundView = [[UIView alloc] initWithFrame:tableViewFrame];
+	tableViewBackgroundView.backgroundColor = self.tableView.backgroundColor;
+	tableViewBackgroundView.alpha = 0.9;
+	self.tableView.backgroundColor = [UIColor clearColor];
+	self.tableView.backgroundView = tableViewBackgroundView;
+
 	[self.view addSubview:self.tableView];
+
+	UIPanGestureRecognizer *tableSlideGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveTable:)];
+	tableSlideGestureRecognizer.delegate = self;
+	[self.view addGestureRecognizer:tableSlideGestureRecognizer];
+}
+
+- (void)moveTable:(UIPanGestureRecognizer*)gesture
+{
+	CGFloat gestureXLocation = [gesture locationInView:self.view].x;
+	if (gesture.state == UIGestureRecognizerStateBegan && (gestureXLocation > 7*kTableViewWidth/8 || self.tableIsVisible)) {
+		self.didBeginMovingTable = YES;
+	}
+
+	if (gesture.state == UIGestureRecognizerStateChanged && self.didBeginMovingTable) {
+		CGPoint translation = [gesture translationInView:self.view];
+		CGPoint center = self.tableView.center;
+
+		[self.tableView setCenter:CGPointMake(MAX(center.x + translation.x, kTableViewWidth/2), center.y)];
+		[gesture setTranslation:CGPointZero inView:self.view];
+
+	} else if (gesture.state == UIGestureRecognizerStateEnded) {
+		if (self.tableView.center.x < 7*kTableViewWidth/8) {
+			[self showTable];
+		} else {
+			[self hideTable];
+		}
+
+		self.didBeginMovingTable = NO;
+	}
+}
+
+- (void)toggleTable
+{
+	if (self.tableIsVisible) {
+		[self hideTable];
+	} else {
+		[self showTable];
+	}
+}
+
+- (void)showTable
+{
+	CGRect currentTableFrame = self.tableView.frame;
+	currentTableFrame.origin.x = 0;
+
+	[UIView animateWithDuration:0.25 animations:^{
+		self.tableView.frame = currentTableFrame;
+	} completion:^(BOOL finished) {
+		if (finished) {
+			self.tableIsVisible = YES;
+		}
+	}];
+}
+
+- (void)hideTable
+{
+	CGRect currentTableFrame = self.tableView.frame;
+	currentTableFrame.origin.x = kTableViewWidth;
+
+	[UIView animateWithDuration:0.25 animations:^{
+		self.tableView.frame = currentTableFrame;
+	} completion:^(BOOL finished) {
+		if (finished) {
+			self.tableIsVisible = NO;
+		}
+	}];
 }
 
 #pragma mark - UITableView Datasource Methods

@@ -7,7 +7,8 @@
 //
 
 #import "CRImageController.h"
+#import "CRStudentAnswerTableViewController.h"
 
-@interface CRLecturerImageViewController : CRImageController
+@interface CRLecturerImageViewController : CRImageController <CRStudentAnswerTableViewDelegate>
 
 @end
