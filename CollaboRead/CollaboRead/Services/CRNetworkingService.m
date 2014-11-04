@@ -46,8 +46,7 @@
 	[request setHTTPMethod:method];
 
 	[NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error ) {
-		NSData *escapedData = [self decodeHTMLEntitiesInJSON:data];
-		completionBlock(escapedData);
+		completionBlock(data);
 	}];
 }
 
@@ -62,24 +61,6 @@
 
 	// Remove trailing '&' character
 	return [queryString substringToIndex:queryString.length-1];
-}
-
-- (NSData*)decodeHTMLEntitiesInJSON:(NSData*)json
-{
-	NSString __block *stringifiedJSON = [NSString stringWithUTF8String:json.bytes];
-
-	NSDictionary *entities = @{
-							   @"&lt;"	: @"",
-							   @"&gt;"	: @"",
-							   @"&amp;"	: @"",
-							   @"&quot;": @""
-							   };
-
-	[entities enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-		stringifiedJSON = [stringifiedJSON stringByReplacingOccurrencesOfString:key withString:obj];
-	}];
-
-	return [stringifiedJSON dataUsingEncoding:NSUTF8StringEncoding];
 }
 
 @end
