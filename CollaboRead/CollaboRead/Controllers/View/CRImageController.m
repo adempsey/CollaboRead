@@ -77,7 +77,8 @@
         [self.undoButton setEnabled:NO];
     }
     else {
-            [self drawAnswer: self.undoStack[0]];
+		self.drawView.image = [[UIImage alloc] init];
+		[self drawAnswer: self.undoStack[0]];
     }
 }
 
@@ -88,7 +89,6 @@
 
 -(void)drawAnswer:(NSArray *)ans
 {
-    self.drawView.image = [[UIImage alloc] init];
 
     //Make region drawable
     UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image

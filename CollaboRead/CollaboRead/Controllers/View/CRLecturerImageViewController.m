@@ -33,12 +33,12 @@
     if ([self.undoStack count] > 0) {
         [self drawAnswer:self.undoStack[0]];
     }
-    /*[[CRAPIClientService sharedInstance] retrieveCaseSetWithID:self.caseGroup block:^(CRCaseSet *caseSet)
+    [[CRAPIClientService sharedInstance] retrieveCaseSetWithID:self.caseGroup block:^(CRCaseSet *caseSet)
      {
          //update case to get new answers
          self.caseChosen = caseSet.cases[self.caseId];
          [self drawStudentAnswers];
-     }];*/ //UNCOMMENT WHEN FIXED
+     }]; //UNCOMMENT WHEN FIXED
 }
 
 //Redraw only instructor answer
@@ -47,7 +47,9 @@
     [self.showButton setSelected:NO];
     [self.hideButton setSelected:YES];
     [self clearDrawing];
-    
+	if ([self.undoStack count] > 0) {
+		[self drawAnswer:self.undoStack[0]];
+	}
 }
 
 -(void)drawStudentAnswers
@@ -58,9 +60,7 @@
         [((CRAnswer *)obj).answerData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
         }];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self drawAnswer:ansLine];
-        });
+		[self drawAnswer:ansLine];
     }];
     
 }

@@ -16,7 +16,6 @@
 {
     self = [super init];
     if (self) {
-        NSLog(@"x = %@", dict[@"x"]);
         self.coordinate = CGPointMake([dict[@"x"] floatValue], [dict[@"y"] floatValue]);
         self.isEndPoint = [dict[@"isEnd"] boolValue];
     }
