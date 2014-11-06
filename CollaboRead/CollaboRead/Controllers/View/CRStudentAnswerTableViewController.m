@@ -8,6 +8,7 @@
 
 #import "CRStudentAnswerTableViewController.h"
 #import "CRUser.h"
+#import "CRColors.h"
 
 typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewSections) {
 	kSECTION_OPTIONS = 0,
@@ -72,7 +73,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	self.tableView.frame = tableViewFrame;
 
 	UIView *tableViewBackgroundView = [[UIView alloc] initWithFrame:tableViewFrame];
-	tableViewBackgroundView.backgroundColor = self.tableView.backgroundColor;
+	tableViewBackgroundView.backgroundColor = CR_COLOR_PRIMARY;
 	tableViewBackgroundView.alpha = 0.9;
 	self.tableView.backgroundColor = [UIColor clearColor];
 	self.tableView.backgroundView = tableViewBackgroundView;
@@ -197,8 +198,10 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	}
 	
 	cell.textLabel.text = [self titleForCellAtIndexPath:indexPath];
-	cell.accessoryType = [self accessoryTypeForCellAtIndexPath:indexPath];
+	cell.textLabel.textColor = [UIColor whiteColor];
 	cell.textLabel.adjustsFontSizeToFitWidth = YES;
+	
+	cell.accessoryType = [self accessoryTypeForCellAtIndexPath:indexPath];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
 }

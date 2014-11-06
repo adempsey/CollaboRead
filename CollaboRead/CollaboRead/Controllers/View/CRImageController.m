@@ -163,6 +163,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+	
     //Most likely will be done by a transitioning view
 	UIImage *img = self.caseChosen.images[0];
 	self.navigationItem.title = self.caseChosen.name;

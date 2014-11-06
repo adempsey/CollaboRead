@@ -26,25 +26,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
     self.navigationItem.title = @"Select Lecturer";
     
     //Get Lecturers to display
-    [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers)
-    {
+    [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers) {
         self.lecturers = lecturers;
         [self.collectionView reloadData];
     }];
-    
-    // Do any additional setup after loading the view.
 }
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 #pragma mark - Navigation
 

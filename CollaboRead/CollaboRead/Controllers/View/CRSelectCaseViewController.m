@@ -28,6 +28,9 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+	
 	self.navigationItem.title = self.lecturer.name;
 
     //Get lecturers cases and reload view with that information

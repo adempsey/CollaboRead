@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "CRColors.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +17,22 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	// Override point for customization after application launch.
+	
+	// Set application color scheme
+	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+	
+	[[UIButton appearance] setTintColor:CR_COLOR_TINT];
+	
+	[[UINavigationBar appearance] setBarTintColor:CR_COLOR_PRIMARY];
+	[[UINavigationBar appearance] setTintColor:CR_COLOR_TINT];
+	[[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+	
+	[[UITableViewCell appearance] setBackgroundColor:CR_COLOR_PRIMARY];
+	[[UITableViewCell appearance] setTintColor:CR_COLOR_TINT];
+	
+	[[UITextField appearance] setTintColor:CR_COLOR_TINT];
+	[[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
+	
 	return YES;
 }
 
