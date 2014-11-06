@@ -80,6 +80,10 @@
 		self.drawView.image = [[UIImage alloc] init];
 		[self drawAnswer: self.undoStack[0]];
     }
+    else if(self.undoStack.count == 1){
+        [self.undoStack removeObjectAtIndex:0];
+        [self clearDrawing];
+    }
 }
 
 -(void)clearDrawing
@@ -266,7 +270,9 @@
     }];
     //Set endpoints of precending points to points to remove
     [toRemove enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        ((CRAnswerPoint *)[self.undoStack[0] objectAtIndex:idx - 1]).isEndPoint = YES;
+        if (idx != 0) {
+            ((CRAnswerPoint *)[self.undoStack[0] objectAtIndex:idx - 1]).isEndPoint = YES;
+        }
     }];
     //Remove points
     [self.undoStack[0] removeObjectsAtIndexes:toRemove];
@@ -285,6 +291,7 @@
 			[self undoEdit];
 			break;
 		case kCR_PANEL_TOOL_CLEAR:
+            [self.undoStack insertObject:[[NSMutableArray alloc] init] atIndex:0];
 			[self clearDrawing];
 			break;
 	}

@@ -15,7 +15,7 @@
 @interface CRToolPanelViewController ()
 
 @property (nonatomic, readwrite, strong) UITableView *tableView;
-@property (nonatomic, readwrite, assign) NSIndexPath *selectedTool;
+@property (nonatomic, readwrite, strong) NSIndexPath *selectedTool;
 
 @end
 
