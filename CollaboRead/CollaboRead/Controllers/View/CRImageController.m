@@ -25,15 +25,10 @@
 }
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
-@property (nonatomic, strong) UIButton *penButton;
-@property (nonatomic, strong) UIButton *clearButton;
-@property (nonatomic, strong) UIButton *eraseButton;
-@property (nonatomic, strong) UIButton *undoButton;
 
--(void)penSelected:(UIButton *)pen;
--(void)clearImage:(UIButton *)clear;
--(void)eraserSelected:(UIButton *)eraser;
--(void)undoEdit:(UIButton *)undo;
+@property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
+@property (nonatomic, readwrite, assign) NSUInteger selectedTool;
+
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)removePointFromAnswer:(CRAnswerPoint *)pt;
@@ -42,41 +37,46 @@
 
 @implementation CRImageController
 
-//Enables appropriate touch control
--(void)penSelected:(UIButton *)pen
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    [pen setSelected: YES];
-    [self.eraseButton setSelected:NO];
+	if (self = [super initWithCoder:aDecoder]) {
+		self.selectedTool = kCR_PANEL_TOOL_PEN;
+	}
+	return self;
 }
 
-//Clears all drawaings, makes empty answer array so it is undoable.
--(void)clearImage:(UIButton *)clear
-{
-    [self clearDrawing];
-    [self.penButton setSelected:NO];
-    [self.eraseButton setSelected:NO];
-    [self.undoStack insertObject:[[NSMutableArray alloc] init] atIndex:0];
+- (void)viewDidLoad {
+	[super viewDidLoad];
+
+	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+
+	//Most likely will be done by a transitioning view
+	UIImage *img = self.caseChosen.images[0];
+	self.navigationItem.title = self.caseChosen.name;
+	[self loadAndScaleImage:img];
+
+	self.undoStack = [[NSMutableArray alloc] init];
+
+	[self.view addSubview:self.caseImage];
+	[self.view addSubview:self.drawView];
+
+	self.toolPanelViewController = [[CRToolPanelViewController alloc] init];
+	self.toolPanelViewController.delegate = self;
+	[self.view addSubview:self.toolPanelViewController.view];
+
+	red = 255;
+	blue = 0;
+	green = 0;
 }
 
-//Enables appropriate touch control
--(void)eraserSelected:(UIButton *)eraser
-{
-    [eraser setSelected:YES];
-    [self.penButton setSelected:NO];
-    
-}
+#pragma mark - Tool Methods
 
 //Pops from answer stack and redraws previous answer
--(void)undoEdit:(UIButton *)undo
+-(void)undoEdit
 {
-    [self.penButton setSelected:NO];
-    [self.eraseButton setSelected:NO];
-    [self.undoStack removeObjectAtIndex:0];
-    
-    if ([self.undoStack count] == 0) {
-        [self.undoButton setEnabled:NO];
-    }
-    else {
+	if (self.undoStack.count > 1) {
+		[self.undoStack removeObjectAtIndex:0];
+
 		self.drawView.image = [[UIImage alloc] init];
 		[self drawAnswer: self.undoStack[0]];
     }
@@ -86,6 +86,8 @@
 {
     self.drawView.image = [[UIImage alloc] init];
 }
+
+#pragma mark - Drawing Methods
 
 -(void)drawAnswer:(NSArray *)ans
 {
@@ -161,66 +163,8 @@
     self.drawView = [[UIImageView alloc] initWithFrame:newFrame];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-	
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-	
-    //Most likely will be done by a transitioning view
-	UIImage *img = self.caseChosen.images[0];
-	self.navigationItem.title = self.caseChosen.name;
-    [self loadAndScaleImage:img];
-
-    self.undoStack = [[NSMutableArray alloc] init];
-    
-    [self.view addSubview:self.caseImage];
-    [self.view addSubview:self.drawView];
-    
-    
-    //Storyboards are getting a little on my nerves, so I'm writing the code for the buttons for now
-    self.penButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];//Change to custom
-    [self.penButton setFrame:CGRectMake(BUTTON_SPACE, self.view.frame.size.height/2.0 - (2 * BUTTON_HEIGHT + BUTTON_SPACE * 1.5), BUTTON_HEIGHT, BUTTON_WIDTH)];
-    [self.penButton setBackgroundColor:[UIColor lightGrayColor]];
-    [self.penButton setTitle:@"PEN" forState:UIControlStateNormal];//Change to setting images?
-    [self.penButton setTitle:@"PEN" forState:UIControlStateSelected];
-    [self.penButton setSelected:YES];
-    [self.view addSubview:self.penButton];
-    [self.penButton addTarget:self action:@selector(penSelected:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    self.eraseButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];//Change to custom
-    [self.eraseButton setFrame:CGRectMake(BUTTON_SPACE, self.view.frame.size.height/2.0 - (BUTTON_HEIGHT + BUTTON_SPACE/2.0), BUTTON_HEIGHT, BUTTON_WIDTH)];
-    [self.eraseButton setBackgroundColor:[UIColor lightGrayColor]];
-    [self.eraseButton setTitle:@"ERS" forState:UIControlStateNormal];//Change to setting images?
-    [self.eraseButton setTitle:@"ERS" forState:UIControlStateSelected];
-    [self.view addSubview:self.eraseButton];
-    [self.eraseButton addTarget:self action:@selector(eraserSelected:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.undoButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];//Change to custom
-    [self.undoButton setFrame:CGRectMake(BUTTON_SPACE, self.view.frame.size.height/2.0 + BUTTON_SPACE/2.0, BUTTON_HEIGHT, BUTTON_WIDTH)];
-    [self.undoButton setBackgroundColor:[UIColor lightGrayColor]];
-    [self.undoButton setTitle:@"UNDO" forState:UIControlStateNormal];//Change to setting images?
-    [self.undoButton setTitle:@"UNDO" forState:UIControlStateSelected];
-    [self.view addSubview:self.undoButton];
-    [self.undoButton setEnabled:NO];
-    [self.undoButton addTarget:self action:@selector(undoEdit:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];//Change to custom
-    [self.clearButton setFrame:CGRectMake(BUTTON_SPACE, self.view.frame.size.height/2.0 + BUTTON_SPACE * 1.5 + BUTTON_HEIGHT, BUTTON_HEIGHT, BUTTON_WIDTH)];
-    [self.clearButton setBackgroundColor:[UIColor lightGrayColor]];
-    [self.clearButton setTitle:@"CLR" forState:UIControlStateNormal];//Change to setting images?
-    [self.clearButton setTitle:@"CLR" forState:UIControlStateSelected];
-    [self.view addSubview:self.clearButton];
-    [self.clearButton addTarget:self action:@selector(clearImage:) forControlEvents:UIControlEventTouchUpInside];
-    
-    red = 255;
-    blue = 0;
-    green = 0;
-
-}
-
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (self.penButton.selected) {
+    if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
         NSMutableArray *newDrawing;
         if ([self.undoStack count] > 0) {
@@ -230,10 +174,9 @@
         }
         [newDrawing addObject:lastPoint];
         [self.undoStack insertObject:newDrawing atIndex:0];
-        [self.undoButton setEnabled:YES];
     }
     
-    else if (self.eraseButton.selected) {
+    else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
         lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
         NSMutableArray *newDrawing;
         if ([self.undoStack count] > 0) {
@@ -242,20 +185,19 @@
             newDrawing = [[NSMutableArray alloc] init];
         }
         [self.undoStack insertObject:newDrawing atIndex:0];
-        [self.undoButton setEnabled:YES];
         [self removePointFromAnswer:lastPoint];
     }
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (self.penButton.selected) {
+    if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
         [self drawLineFrom:lastPoint to:currentPoint];
         [self.undoStack[0] addObject:currentPoint];
         lastPoint = currentPoint;
     }
     
-    else if (self.eraseButton.selected) {
+    else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
         [self eraseLineFrom:lastPoint to:currentPoint];
         [self removePointFromAnswer:currentPoint];
@@ -264,12 +206,12 @@
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (self.penButton.selected) {
+    if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
         [self drawLineFrom:lastPoint to:currentPoint];
         [self.undoStack[0] addObject:currentPoint];
     }
-    else if (self.eraseButton.selected) {
+    else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
         [self eraseLineFrom:lastPoint to:currentPoint];
         [self removePointFromAnswer:currentPoint];
@@ -295,8 +237,6 @@
     [self.drawView setAlpha:1.0];
     UIGraphicsEndImageContext();
 }
-
-
 
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable
@@ -332,10 +272,22 @@
     [self.undoStack[0] removeObjectsAtIndexes:toRemove];
 }
 
+#pragma mark - CRToolPanelViewController Delegate Methods
 
-- (void)didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
-	// Dispose of any resources that can be recreated.
+- (void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didSelectTool:(NSInteger)tool
+{
+	switch (tool) {
+		case kCR_PANEL_TOOL_PEN:
+		case kCR_PANEL_TOOL_ERASER:
+			self.selectedTool = tool;
+			break;
+		case kCR_PANEL_TOOL_UNDO:
+			[self undoEdit];
+			break;
+		case kCR_PANEL_TOOL_CLEAR:
+			[self clearDrawing];
+			break;
+	}
 }
 
 @end

@@ -13,8 +13,9 @@
 
 #import "CRCase.h"
 #import "CRUser.h"
+#import "CRToolPanelViewController.h"
 
-@interface CRImageController : UIViewController
+@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate>
 
 @property (nonatomic, strong) CRUser *user;
 @property (nonatomic, strong) CRCase *caseChosen;
