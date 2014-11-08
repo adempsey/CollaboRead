@@ -18,9 +18,6 @@
 
 @interface CRImageController ()
 {
-    CGFloat red;
-    CGFloat blue;
-    CGFloat green;
     CRAnswerPoint *lastPoint;
 }
 @property (nonatomic, strong) UIImageView *drawView;
@@ -64,9 +61,9 @@
 	self.toolPanelViewController.delegate = self;
 	[self.view addSubview:self.toolPanelViewController.view];
 
-	red = 255;
-	blue = 0;
-	green = 0;
+	self.lineRedComp = 255;
+	self.lineBlueComp = 0;
+	self.lineGreenComp = 0;
 }
 
 #pragma mark - Tool Methods
@@ -78,7 +75,7 @@
 		[self.undoStack removeObjectAtIndex:0];
 
 		self.drawView.image = [[UIImage alloc] init];
-		[self drawAnswer: self.undoStack[0]];
+		[self drawAnswer: self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
     }
     else if(self.undoStack.count == 1){
         [self.undoStack removeObjectAtIndex:0];
@@ -93,7 +90,7 @@
 
 #pragma mark - Drawing Methods
 
--(void)drawAnswer:(NSArray *)ans
+-(void)drawAnswer:(NSArray *)ans inRed:(CGFloat)r Green:(CGFloat)g Blue:(CGFloat)b
 {
 
     //Make region drawable
@@ -103,7 +100,7 @@
     //Set up to draw lines
     //Could use drawLineFrom:to:, but is much slower
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
+    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), r, g, b, 1.0);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
     CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.coordinate.x, lastPoint.coordinate.y);
     for (int i = 1; i < [ans count]; i++) {
@@ -229,7 +226,7 @@
     
     //Set up to draw line
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), red, green, blue, 1.0);
+    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.lineRedComp, self.lineGreenComp, self.lineBlueComp, 1.0);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
     CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
     CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);

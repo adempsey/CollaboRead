@@ -10,6 +10,22 @@
 #include "CRAPIClientService.h"
 #include "CRAnswerPoint.h"
 
+#define studentColors @[@{@"red":@0, @"green": @255, @"blue" : @0}, \
+                        @{@"red":@0, @"green": @0, @"blue" : @255}, \
+                        @{@"red":@255, @"green": @255, @"blue" : @0}, \
+                        @{@"red":@255, @"green": @0, @"blue" : @255}, \
+                        @{@"red":@0, @"green": @255, @"blue" : @255}, \
+                        @{@"red":@255, @"green": @150, @"blue" : @100}, \
+                        @{@"red":@175, @"green": @255, @"blue" : @50}, \
+                        @{@"red":@175, @"green": @255, @"blue" : @255}, \
+                        @{@"red":@175, @"green": @100, @"blue" : @255}, \
+                        @{@"red":@175, @"green": @255, @"blue" : @200}, \
+                        @{@"red":@255, @"green": @50, @"blue" : @100}, \
+                        @{@"red":@150, @"green": @150, @"blue" : @255}, \
+                        @{@"red":@255, @"green": @200, @"blue" : @255}, \
+                        @{@"red":@0, @"green": @150, @"blue" : @150}, \
+                        @{@"red":@150, @"green": @100, @"blue" : @100}]
+
 @interface CRLecturerImageViewController ()
 
 @property (nonatomic, strong) UIButton *showButton;
@@ -31,14 +47,14 @@
     [self.showButton setSelected:YES];
     [self clearDrawing];
     if ([self.undoStack count] > 0) {
-        [self drawAnswer:self.undoStack[0]];
+        [self drawAnswer:self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
     }
     [[CRAPIClientService sharedInstance] retrieveCaseSetWithID:self.caseGroup block:^(CRCaseSet *caseSet)
      {
          //update case to get new answers
          self.caseChosen = caseSet.cases[self.caseId];
          [self drawStudentAnswers];
-     }]; //UNCOMMENT WHEN FIXED
+     }];
 }
 
 //Redraw only instructor answer
@@ -48,7 +64,7 @@
     [self.hideButton setSelected:YES];
     [self clearDrawing];
 	if ([self.undoStack count] > 0) {
-		[self drawAnswer:self.undoStack[0]];
+		[self drawAnswer:self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
 	}
 }
 
@@ -60,7 +76,8 @@
         [((CRAnswer *)obj).answerData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
         }];
-		[self drawAnswer:ansLine];
+        NSDictionary* color = studentColors[idx % 15];
+        [self drawAnswer:ansLine inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
     }];
     
 }

@@ -17,6 +17,9 @@
 
 @interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate>
 
+@property (nonatomic, assign) CGFloat lineRedComp;
+@property (nonatomic, assign) CGFloat lineBlueComp;
+@property (nonatomic, assign) CGFloat lineGreenComp;
 @property (nonatomic, strong) CRUser *user;
 @property (nonatomic, strong) CRCase *caseChosen;
 @property (nonatomic, strong) NSString *caseId;
@@ -27,7 +30,8 @@
 //Loads the image to be drawn over into the view and scales it to fit the screen.
 -(void)loadAndScaleImage:(UIImage *)img;
 
--(void)drawAnswer:(NSArray *)ans;
+-(void)drawAnswer:(NSArray *)ans inRed:(CGFloat)r Green:(CGFloat)g Blue:(CGFloat)b;
+
 -(void)clearDrawing;
 
 @end
