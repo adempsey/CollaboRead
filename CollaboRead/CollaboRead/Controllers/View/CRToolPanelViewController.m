@@ -8,9 +8,10 @@
 
 #import "CRToolPanelViewController.h"
 #import "CRToolPanelCell.h"
+#import "CRColors.h"
 
-#define kNavigationBarHeight 44.0 // bad but w/e
-#define kTableViewWidth 90.0
+#define kNavigationBarHeight 12.0 // bad but w/e
+#define kButtonDimension 60.0
 
 @interface CRToolPanelViewController ()
 
@@ -29,6 +30,8 @@
 		self.tableView.delegate = self;
 		
 		self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
+
+		self.toolPanelIsVisible = YES;
 	}
 	return self;
 }
@@ -40,18 +43,57 @@
 	CGFloat viewOriginY = kNavigationBarHeight + [UIApplication sharedApplication].statusBarFrame.size.height;
 	CGRect viewFrame = CGRectMake(0,
 								  viewOriginY,
-								  kTableViewWidth,
+								  kToolPanelTableViewWidth,
 								  screenBounds.size.height - viewOriginY);
 	self.view.frame = viewFrame;
 	self.view.backgroundColor = [UIColor clearColor];
 	
-	self.tableView.frame = CGRectMake(0, 80, self.view.frame.size.width, self.view.frame.size.height);
-	self.tableView.backgroundColor = [UIColor clearColor];
+	self.tableView.frame = self.view.frame;
 	self.tableView.separatorColor = [UIColor clearColor];
-	
+
 	[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
-	
+	self.tableView.scrollEnabled = NO;
+	self.tableView.contentInset = UIEdgeInsetsMake(80, 0, 0, 0);
+
+	UIView *tableViewBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+	tableViewBackgroundView.backgroundColor = CR_COLOR_PRIMARY;
+	tableViewBackgroundView.alpha = 0.8;
+	self.tableView.backgroundColor = [UIColor clearColor];
+	self.tableView.backgroundView = tableViewBackgroundView;
+
 	[self.view addSubview:self.tableView];
+}
+
+// Reduces area of view when not visible
+// This allows the user to touch parts of the view below the panel when it's not shown
+- (void)setFullView:(BOOL)shouldBeFull
+{
+	CGRect viewFrame = self.view.frame;
+	viewFrame.size.width = shouldBeFull ? kToolPanelTableViewWidth : kToolPanelTableViewMargin;
+	self.view.frame = viewFrame;
+}
+
+- (void)toggleToolPanel
+{
+	CGRect currentTableFrame = self.tableView.frame;
+	currentTableFrame.origin.x = self.toolPanelIsVisible ? -kToolPanelTableViewWidth : 0;
+
+	if (!self.toolPanelIsVisible) {
+		[self setFullView:YES];
+		self.tableView.alpha = 1.0;
+	}
+
+	[UIView animateWithDuration:0.25 animations:^{
+		self.tableView.frame = currentTableFrame;
+	} completion:^(BOOL finished) {
+		if (finished) {
+			self.toolPanelIsVisible = !self.toolPanelIsVisible;
+			if (!self.toolPanelIsVisible) {
+				[self setFullView:NO];
+				self.tableView.alpha = 0.0;
+			}
+		}
+	}];
 }
 
 #pragma mark - UITableView Data Source
@@ -83,7 +125,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return kTableViewWidth;
+	return kToolPanelTableViewWidth;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

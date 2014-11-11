@@ -14,6 +14,7 @@
 		8D48119C1A0B47AB004329AE /* CRToolPanelPen.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D4811981A0B47AB004329AE /* CRToolPanelPen.png */; };
 		8D48119D1A0B47AB004329AE /* CRToolPanelUndo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D4811991A0B47AB004329AE /* CRToolPanelUndo.png */; };
 		8D5508AB19FF509B00AF5302 /* CRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D5508AA19FF509B00AF5302 /* CRUser.m */; };
+		8D7530A51A11EA6E0077A01C /* CRToolPanelToggle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */; };
 		8DA5DE2219E6064B002EA706 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2119E6064B002EA706 /* main.m */; };
 		8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2419E6064B002EA706 /* AppDelegate.m */; };
 		8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* CRImageController.m */; };
@@ -61,6 +62,7 @@
 		8D5508A919FF509B00AF5302 /* CRUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUser.h; sourceTree = "<group>"; };
 		8D5508AA19FF509B00AF5302 /* CRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUser.m; sourceTree = "<group>"; };
 		8D71EA471A09D2E7001347EA /* CRColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRColors.h; sourceTree = "<group>"; };
+		8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelToggle.png; sourceTree = "<group>"; };
 		8DA5DE1C19E6064A002EA706 /* CollaboRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollaboRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA5DE2019E6064A002EA706 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DA5DE2119E6064B002EA706 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 		8DD3600C1A0B343A00E572D1 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */,
 				8D4811961A0B47AB004329AE /* CRToolPanelClear.png */,
 				8D4811971A0B47AB004329AE /* CRToolPanelEraser.png */,
 				8D4811981A0B47AB004329AE /* CRToolPanelPen.png */,
@@ -417,6 +420,7 @@
 			files = (
 				8D48119A1A0B47AB004329AE /* CRToolPanelClear.png in Resources */,
 				8D48119C1A0B47AB004329AE /* CRToolPanelPen.png in Resources */,
+				8D7530A51A11EA6E0077A01C /* CRToolPanelToggle.png in Resources */,
 				8DA5DE2B19E6064B002EA706 /* Main.storyboard in Resources */,
 				8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */,
 				8D48119B1A0B47AB004329AE /* CRToolPanelEraser.png in Resources */,

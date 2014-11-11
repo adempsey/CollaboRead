@@ -26,6 +26,8 @@
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
 
+@property (nonatomic, readwrite, strong) UIButton *toggleButton;
+
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)removePointFromAnswer:(CRAnswerPoint *)pt;
@@ -38,6 +40,7 @@
 {
 	if (self = [super initWithCoder:aDecoder]) {
 		self.selectedTool = kCR_PANEL_TOOL_PEN;
+		self.toggleButton = [[UIButton alloc] init];
 	}
 	return self;
 }
@@ -64,6 +67,25 @@
 	self.lineRedComp = 255;
 	self.lineBlueComp = 0;
 	self.lineGreenComp = 0;
+
+	self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
+										 self.view.frame.size.height - 60.0 - 10.0,
+										 60.0,
+										 60.0);
+	UIImage *toggleButtonImage = [UIImage imageNamed:@"CRToolPanelToggle.png"];
+	[self.toggleButton setImage:toggleButtonImage forState:UIControlStateNormal];
+	[self.toggleButton addTarget:self action:@selector(toggleToolPanel) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:self.toggleButton];
+}
+
+- (void)toggleToolPanel
+{
+	CGFloat buttonAlpha = self.toolPanelViewController.toolPanelIsVisible ? 0.5: 1.0;
+	[self.toolPanelViewController toggleToolPanel];
+
+	[UIView animateWithDuration:0.25 animations:^{
+		self.toggleButton.alpha = buttonAlpha;
+	}];
 }
 
 #pragma mark - Tool Methods

@@ -123,11 +123,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
 - (void)toggleTable
 {
-	if (self.tableIsVisible) {
-		[self hideTable];
-	} else {
-		[self showTable];
-	}
+	self.tableIsVisible ? [self hideTable] : [self showTable];
 }
 
 - (void)showTable

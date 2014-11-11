@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#define kToolPanelTableViewWidth 90.0
+#define kToolPanelTableViewMargin (kToolPanelTableViewWidth/8)
+
 typedef NS_ENUM(NSUInteger, kPanelSections) {
 	kCR_PANEL_TOOL_PEN = 0,
 	kCR_PANEL_TOOL_ERASER,
@@ -19,6 +22,9 @@ typedef NS_ENUM(NSUInteger, kPanelSections) {
 @interface CRToolPanelViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, readwrite, weak) id delegate;
+@property (nonatomic, readwrite, assign) BOOL toolPanelIsVisible;
+
+- (void)toggleToolPanel;
 
 @end
 
