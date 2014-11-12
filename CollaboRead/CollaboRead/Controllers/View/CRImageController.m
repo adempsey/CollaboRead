@@ -59,6 +59,9 @@
 
 	self.undoStack = [[NSMutableArray alloc] init];
 
+	// Invisible now so that the image fades in once the view appears
+	self.caseImage.alpha = 0.0;
+
 	[self.view addSubview:self.caseImage];
 	[self.view addSubview:self.drawView];
     
@@ -78,6 +81,15 @@
 	[self.toggleButton setImage:toggleButtonImage forState:UIControlStateNormal];
 	[self.toggleButton addTarget:self action:@selector(toggleToolPanel) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:self.toggleButton];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+
+	[UIView animateWithDuration:0.25 animations:^{
+		self.caseImage.alpha = 1.0;
+	}];
 }
 
 - (void)toggleToolPanel
