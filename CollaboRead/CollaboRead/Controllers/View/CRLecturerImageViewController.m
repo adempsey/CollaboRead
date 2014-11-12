@@ -57,8 +57,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    CGFloat topBarHeight = self.navigationController.navigationBar.frame.size.height +
-    [UIApplication sharedApplication].statusBarFrame.size.height;
+    //CGFloat topBarHeight = self.navigationController.navigationBar.frame.size.height +
+    //[UIApplication sharedApplication].statusBarFrame.size.height;
 	self.view.autoresizesSubviews = NO;
 
 	// Should pass array of CRUsers that have submitted answers

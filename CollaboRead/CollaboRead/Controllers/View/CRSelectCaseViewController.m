@@ -52,6 +52,7 @@
 		[self.activityIndicator removeFromSuperview];
         [self.collectionView reloadData];//Maybe put back on main thread?
 	}];
+    [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
     
 }
 
@@ -72,14 +73,14 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CaseCell" forIndexPath:indexPath];
-
+    cell.contentView.frame = cell.bounds;
+    cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	CRCaseSet *caseSet = self.caseSets[indexPath.section];
 	NSString *caseKey = caseSet.cases.allKeys[indexPath.row];
 	CRCase *crCase = caseSet.cases[caseKey];
-
+    
 	cell.name.text = crCase.name;
 	cell.image.image = crCase.images[0];
-
     return cell;
 }
 
@@ -87,7 +88,12 @@
 //When a cell is selected, remember its path to set the case for the next view
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *segID = @"StudentSelectedCase";
+    if ([self.user.title isEqualToString: @"lecturer"]) {
+        segID = @"LecturerSelectedCase";
+    }
     selectedPath = indexPath;
+    [self performSegueWithIdentifier:segID sender:self];
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout

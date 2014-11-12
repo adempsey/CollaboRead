@@ -12,6 +12,20 @@
 
 @implementation CRTitledImageCollectionCell
 
+-(id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height - 21)];
+        
+        self.name = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height - 21, frame.size.width, 21)];
+        self.name.textAlignment = NSTextAlignmentCenter;
+        self.name.textColor = [UIColor whiteColor];
+        [self.contentView addSubview:self.image];
+        [self.contentView addSubview:self.name];
+    }
+    return self;
+}
 
 
 @end

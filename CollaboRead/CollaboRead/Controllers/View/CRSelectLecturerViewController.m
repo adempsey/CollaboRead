@@ -43,7 +43,7 @@
 	self.activityIndicator.frame = CGRectMake((self.view.frame.size.width - 50.0)/2, (self.view.frame.size.height - 50.0)/2, 50.0, 50.0);
 	[self.activityIndicator startAnimating];
 	[self.view addSubview:self.activityIndicator];
-
+    [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"LecturerCell"];
     //Get Lecturers to display
     [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers) {
         self.lecturers = lecturers;
@@ -81,9 +81,11 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LecturerCell" forIndexPath:indexPath];
+    cell.contentView.frame = cell.bounds;
+    cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	CRUser *lecturer = self.lecturers[indexPath.row];
 	cell.image.image = lecturer.image;
-	cell.name.text = [NSString stringWithFormat:@"%@ %@", lecturer.title, lecturer.name];
+	cell.name.text = lecturer.name;
 
     return cell;
 }
@@ -105,6 +107,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedPath = indexPath;
+    [self performSegueWithIdentifier:@"LecturerSelected" sender:self];
 }
 
 @end
