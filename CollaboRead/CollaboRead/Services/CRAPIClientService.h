@@ -19,6 +19,7 @@
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*))block;
 - (void)retrieveLecturersWithBlock:(void (^)(NSArray*))block;
 - (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(CRUser*))block;
+- (void)retrieveStudentWithID:(NSString*)studentID block:(void (^)(CRUser*))block;
 - (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*))block;
 - (void)retrieveCaseSetsWithLecturer:(NSString*)lecturer block:(void (^)(NSArray*))block;
 

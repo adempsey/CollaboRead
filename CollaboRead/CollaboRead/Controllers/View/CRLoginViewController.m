@@ -68,10 +68,12 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
                 UIViewController *newController;
                 //Check type of user and make appropriate view
+                
 				if ([currUser.type isEqualToString:CR_USER_TYPE_LECTURER]) {
                     UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"caseNavController"];
                     ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = currUser;
                     ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
+                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).allUsers = users;
                     newController = navController;
                 }
                 else if([currUser.type isEqualToString:CR_USER_TYPE_STUDENT]) {

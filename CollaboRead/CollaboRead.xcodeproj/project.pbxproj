@@ -386,7 +386,6 @@
 				TargetAttributes = {
 					8DA5DE1B19E6064A002EA706 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = SMEUFVNQEF;
 					};
 					8DA5DE3419E6064B002EA706 = {
 						CreatedOnToolsVersion = 6.0;
@@ -588,6 +587,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = CollaboRead/Info.plist;
@@ -601,6 +601,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = CollaboRead/Info.plist;

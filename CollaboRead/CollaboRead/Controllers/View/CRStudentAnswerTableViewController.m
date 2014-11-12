@@ -30,7 +30,6 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 @interface CRStudentAnswerTableViewController ()
 
 @property (nonatomic, readwrite, strong) UITableView *tableView;
-@property (nonatomic, readwrite, strong) NSArray *students;
 @property (nonatomic, readwrite, strong) NSMutableArray *selectedStudents;
 @property (nonatomic, readwrite, assign) BOOL shouldShowStudentNames;
 @property (nonatomic, readwrite, assign) BOOL tableIsVisible;

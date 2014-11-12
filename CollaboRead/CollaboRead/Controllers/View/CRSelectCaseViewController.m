@@ -38,6 +38,7 @@
 		self.caseSets = caseSets;
         [self.collectionView reloadData];//Maybe put back on main thread?
 	}];
+    
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -103,6 +104,7 @@
 	nextController.caseChosen = selectedCase;
     nextController.caseId = selectedCaseKey;
 	nextController.caseGroup = selectedCaseSet.setID;
+    nextController.allUsers = self.allUsers;
 }
 
 

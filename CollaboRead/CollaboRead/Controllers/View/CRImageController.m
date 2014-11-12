@@ -11,7 +11,9 @@
 
 #import "CRImageController.h"
 #import "CRAnswerPoint.h"
-
+#import "CRUser.h"
+#import "CRAnswer.h"
+#import "CRAPIClientService.h"
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
@@ -59,7 +61,7 @@
 
 	[self.view addSubview:self.caseImage];
 	[self.view addSubview:self.drawView];
-
+    
 	self.toolPanelViewController = [[CRToolPanelViewController alloc] init];
 	self.toolPanelViewController.delegate = self;
 	[self.view addSubview:self.toolPanelViewController.view];

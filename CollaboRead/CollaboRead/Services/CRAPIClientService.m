@@ -79,6 +79,14 @@
 	}];
 }
 
+- (void)retrieveStudentWithID:(NSString*)studentID block:(void (^)(CRUser*))block
+{
+    [self retrieveItemFromEndpoint:kCR_API_ENDPOINT_USERS withID:studentID completionBlock:^(NSDictionary *userDictionary) {
+        CRUser *student = [[CRUser alloc] initWithDictionary:userDictionary];
+        block(student);
+    }];
+}
+
 - (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*))block
 {
 	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_CASE_SET withID:caseSetID completionBlock:^(NSDictionary *caseSetDictionary) {

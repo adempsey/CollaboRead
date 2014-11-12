@@ -12,6 +12,9 @@
 
 @property (nonatomic, readwrite, weak) id delegate;
 
+@property (nonatomic, readwrite, strong) NSArray *students;
+
+
 - (instancetype)initWithStudents:(NSArray*)students;
 - (void)toggleTable;
 
@@ -20,6 +23,6 @@
 @protocol CRStudentAnswerTableViewDelegate <NSObject>
 
 @required
-- (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didChangeStudentSelection:(NSArray*)selectedStudents;
+- (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didChangeStudentSelection:(NSArray*)selectedStudents ;
 
 @end
