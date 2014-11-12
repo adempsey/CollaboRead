@@ -12,6 +12,7 @@
 #import "CRUserKeys.h"
 #import "CRAnswerPoint.h"
 #import "CRColors.h"
+#import "CRViewSizeMacros.h"
 
 @interface CRStudentImageViewController ()
 
@@ -25,12 +26,14 @@
     [super viewDidLoad];
 
     UIButton *submitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];//Change to custom
-    [submitButton setFrame:CGRectMake(self.view.frame.size.width - 170, self.view.frame.size.height - 70, 150, 50)];
+    CGRect frame = LANDSCAPE_FRAME;
+    [submitButton setFrame:CGRectMake(frame.size.width - 170, frame.size.height - 70, 150, 50)];
 	submitButton.backgroundColor = CR_COLOR_PRIMARY;
 	submitButton.titleLabel.textColor = [UIColor whiteColor];
     [submitButton setTitle:@"Submit Answer" forState:UIControlStateNormal];//Change to setting images?
 	[submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:submitButton];
+    [self.view setNeedsDisplay];
 }
 
 -(void)submitAnswer:(UIButton *)submitButton

@@ -12,6 +12,7 @@
 #import "CRAPIClientService.h"
 #import "CRCaseSet.h"
 #import "CRCase.h"
+#import "CRViewSizeMacros.h"
 
 @interface CRSelectLecturerViewController ()
 {
@@ -40,7 +41,8 @@
     
     self.navigationItem.title = @"Select Lecturer";
 
-	self.activityIndicator.frame = CGRectMake((self.view.frame.size.width - 50.0)/2, (self.view.frame.size.height - 50.0)/2, 50.0, 50.0);
+    CGRect frame = LANDSCAPE_FRAME;
+	self.activityIndicator.frame = CGRectMake((frame.size.width - 50.0)/2, (frame.size.height - 50.0)/2, 50.0, 50.0);
 	[self.activityIndicator startAnimating];
 	[self.view addSubview:self.activityIndicator];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"LecturerCell"];

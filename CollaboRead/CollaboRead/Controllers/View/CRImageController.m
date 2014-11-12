@@ -14,6 +14,7 @@
 #import "CRUser.h"
 #import "CRAnswer.h"
 #import "CRAPIClientService.h"
+#import "CRViewSizeMacros.h"
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
@@ -73,8 +74,9 @@
 	self.lineBlueComp = 0;
 	self.lineGreenComp = 0;
 
+    CGRect frame = LANDSCAPE_FRAME;
 	self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
-										 self.view.frame.size.height - 60.0 - 10.0,
+										 frame.size.height - 60.0 - 10.0,
 										 60.0,
 										 60.0);
 	UIImage *toggleButtonImage = [UIImage imageNamed:@"CRToolPanelToggle.png"];
@@ -161,9 +163,11 @@
 {
     self.caseImage = [[UIImageView alloc] initWithImage:img];
     CGRect newFrame = self.caseImage.frame;
-    CGFloat topBarHeight = self.navigationController.navigationBar.frame.size.height +
-                            [UIApplication sharedApplication].statusBarFrame.size.height;
     
+    CGFloat topBarHeight = TOP_BAR_HEIGHT;//TOP_BAR_HEIGHT;
+    NSLog(@"%f", topBarHeight);
+    CGRect viewFrame = LANDSCAPE_FRAME;
+    NSLog(@"%@", NSStringFromCGRect(viewFrame));
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
     if (newFrame.size.height > newFrame.size.width) {
         self.caseImage.image = [[UIImage alloc] initWithCGImage:self.caseImage.image.CGImage scale:1.0 orientation:UIImageOrientationLeft];
@@ -174,25 +178,25 @@
     }
     
     //If the image doesn't already fit as much as the view as possible
-    if (newFrame.size.height != self.view.frame.size.height - topBarHeight &&
-        newFrame.size.width != self.view.frame.size.width) {
+    if (newFrame.size.height != viewFrame.size.height - topBarHeight &&
+        newFrame.size.width != viewFrame.size.width) {
         
-        double scale = (self.view.frame.size.height - topBarHeight)/newFrame.size.height;
+        double scale = (viewFrame.size.height - topBarHeight)/newFrame.size.height;
         
         //Determine whether having image expand to sides will cut off top and bottom. If it does, expand to top and bottom. If it doesn't expanding to top and bottom would have either caused the sides to be cut off or it fits the screen exactly and it doesn't matter which to use as scale.
         //Each case expands and centers image appropriately
-        if (newFrame.size.width * scale > self.view.frame.size.width) {
-            scale = self.view.frame.size.width/newFrame.size.width;
+        if (newFrame.size.width * scale > viewFrame.size.width) {
+            scale = viewFrame.size.width/newFrame.size.width;
             newFrame.size.width *= scale;
             newFrame.size.height *= scale;
-            newFrame.origin.y = (self.view.frame.size.height - newFrame.size.height)/2;
+            newFrame.origin.y = (viewFrame.size.height - newFrame.size.height)/2;
             newFrame.origin.x = 0;
         }
         else {
             newFrame.size.width *= scale;
             newFrame.size.height *= scale;
             newFrame.origin.y = topBarHeight;
-            newFrame.origin.x = (self.view.frame.size.width - newFrame.size.width)/2;
+            newFrame.origin.x = (viewFrame.size.width - newFrame.size.width)/2;
         }
     }
     

@@ -89,6 +89,7 @@
 																					  action:@selector(toggleTable)];
 
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
+    [self.view setNeedsDisplay];
 }
 
 #pragma mark - CRStudentAnswerTable Delegate Methods

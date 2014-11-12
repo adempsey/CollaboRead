@@ -14,6 +14,7 @@
 #import "CRSelectCaseViewController.h"
 #import "CRSelectLecturerViewController.h"
 #import "CRAPIClientService.h"
+#import "CRViewSizeMacros.h"
 
 typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	kCR_LOGIN_ERROR_CREDENTIALS = 0
@@ -40,7 +41,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 {
 	[super viewDidLoad];
 
-	CGRect screenBounds = [UIScreen mainScreen].bounds;
+	CGRect screenBounds = LANDSCAPE_FRAME;
 	CGFloat activityIndicatorSize = 30.0;
 	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((screenBounds.size.width - activityIndicatorSize)/2,
 																					   self.loginButton.frame.origin.y,

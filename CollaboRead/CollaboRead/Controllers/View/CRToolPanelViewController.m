@@ -9,8 +9,8 @@
 #import "CRToolPanelViewController.h"
 #import "CRToolPanelCell.h"
 #import "CRColors.h"
+#import "CRViewSizeMacros.h"
 
-#define kNavigationBarHeight 12.0 // bad but w/e
 #define kButtonDimension 60.0
 
 @interface CRToolPanelViewController ()
@@ -39,12 +39,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	CGRect screenBounds = [UIScreen mainScreen].bounds;
-	CGFloat viewOriginY = kNavigationBarHeight + [UIApplication sharedApplication].statusBarFrame.size.height;
+	CGFloat viewOriginY = TOP_BAR_HEIGHT;
+    
+    CGRect screenFrame = LANDSCAPE_FRAME;
+    
 	CGRect viewFrame = CGRectMake(0,
 								  viewOriginY,
 								  kToolPanelTableViewWidth,
-								  screenBounds.size.height - viewOriginY);
+								  screenFrame.size.height - viewOriginY);
 	self.view.frame = viewFrame;
 	self.view.backgroundColor = [UIColor clearColor];
 	
