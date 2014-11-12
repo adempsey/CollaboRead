@@ -20,10 +20,19 @@
 }
 
 @property (nonatomic, strong) NSArray *caseSets;
+@property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation CRSelectCaseViewController
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+	if (self = [super initWithCoder:aDecoder]) {
+		self.activityIndicator = [[UIActivityIndicatorView alloc] init];
+	}
+	return self;
+}
 
 -(void)viewDidLoad
 {
@@ -33,9 +42,14 @@
 	
 	self.navigationItem.title = self.lecturer.name;
 
+	self.activityIndicator.frame = CGRectMake((self.view.frame.size.width - 50.0)/2, (self.view.frame.size.height - 50.0)/2, 50.0, 50.0);
+	[self.activityIndicator startAnimating];
+	[self.view addSubview:self.activityIndicator];
+
     //Get lecturers cases and reload view with that information
 	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer.userID block:^(NSArray *caseSets) {
 		self.caseSets = caseSets;
+		[self.activityIndicator removeFromSuperview];
         [self.collectionView reloadData];//Maybe put back on main thread?
 	}];
     

@@ -19,10 +19,19 @@
 }
 
 @property (nonatomic, strong) NSArray *lecturers;
+@property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation CRSelectLecturerViewController
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+	if (self = [super initWithCoder:aDecoder]) {
+		self.activityIndicator = [[UIActivityIndicatorView alloc] init];
+	}
+	return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,10 +39,15 @@
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
     self.navigationItem.title = @"Select Lecturer";
-    
+
+	self.activityIndicator.frame = CGRectMake((self.view.frame.size.width - 50.0)/2, (self.view.frame.size.height - 50.0)/2, 50.0, 50.0);
+	[self.activityIndicator startAnimating];
+	[self.view addSubview:self.activityIndicator];
+
     //Get Lecturers to display
     [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers) {
         self.lecturers = lecturers;
+		[self.activityIndicator removeFromSuperview];
         [self.collectionView reloadData];
     }];
 }
