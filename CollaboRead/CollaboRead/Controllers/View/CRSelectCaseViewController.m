@@ -127,6 +127,8 @@
     nextController.caseId = selectedCaseKey;
 	nextController.caseGroup = selectedCaseSet.setID;
     nextController.allUsers = self.allUsers;
+    nextController.lecturerID = self.lecturer.userID;
+    nextController.indexPath = selectedPath;
 }
 
 

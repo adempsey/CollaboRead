@@ -14,6 +14,7 @@
 
 @property (nonatomic, readwrite, strong) NSArray *students;
 
+@property (nonatomic, readwrite, strong) NSString *isRefresh;
 
 - (instancetype)initWithStudents:(NSArray*)students;
 - (void)toggleTable;

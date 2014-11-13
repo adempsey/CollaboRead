@@ -26,6 +26,8 @@
 @property (nonatomic, strong) NSString *caseGroup;
 @property(nonatomic, strong) NSMutableArray *undoStack;
 @property (nonatomic, strong) NSArray *allUsers;
+@property (nonatomic, strong) NSString *lecturerID;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 
 //Loads the image to be drawn over into the view and scales it to fit the screen.

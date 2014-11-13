@@ -21,6 +21,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	kOPTION_SHOW_ALL = 0,
 	kOPTION_HIDE_ALL,
 	kOPTION_SHOW_NAMES,
+    kOPTION_REFRSH,
 	kOPTION_COUNT
 };
 
@@ -34,6 +35,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 @property (nonatomic, readwrite, assign) BOOL shouldShowStudentNames;
 @property (nonatomic, readwrite, assign) BOOL tableIsVisible;
 @property (nonatomic, readwrite, assign) BOOL didBeginMovingTable;
+@property (nonatomic, readwrite, strong) NSIndexPath *tempIndexPath;
 
 @end
 
@@ -209,20 +211,31 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	if (indexPath.section == kSECTION_OPTIONS) {
 		
 		if (indexPath.row == kOPTION_SHOW_ALL) {
+            self.isRefresh = @"no";
+
 			self.selectedStudents = [self.students mutableCopy];
 			[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
 			
 		} else if (indexPath.row == kOPTION_HIDE_ALL) {
+            self.isRefresh = @"no";
+
 			[self.selectedStudents removeAllObjects];
 			[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
 			
 		} else if (indexPath.row == kOPTION_SHOW_NAMES) {
+            self.isRefresh = @"no";
+
 			self.shouldShowStudentNames = !self.shouldShowStudentNames;
 	
-		}
+        }else if (indexPath.row == kOPTION_REFRSH) {
+            self.isRefresh = @"yes";
+            
+        }
+        
 		
 	} else if (indexPath.section == kSECTION_STUDENTS) {
-		
+        self.isRefresh = @"no";
+
 		CRUser *selectedStudent = self.students[indexPath.row];
 		
 		if ([self.selectedStudents containsObject:selectedStudent]) {
@@ -234,7 +247,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		}
 		
 		[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
-	}
+    }
 	
 	[self.tableView reloadData];
 	[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -255,6 +268,9 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 			case kOPTION_SHOW_NAMES:
 				return @"Show Student Names";
 				break;
+            case kOPTION_REFRSH:
+                return @"Refesh Answers";
+                break;
 			default:
 				return @"";
 		}

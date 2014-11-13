@@ -35,6 +35,8 @@
 @property (nonatomic, strong) NSString *userIDtemp;
 @property (nonatomic, strong) CRAnswer *currentAnswer;
 @property (nonatomic, strong) UIBarButtonItem *toggleStudentAnswerTableButton;
+@property (nonatomic, strong) UIBarButtonItem *toggleStudentRefreshAnswerTableButton;
+
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerViewController;
 
 @end
@@ -63,7 +65,21 @@
 
 	// Should pass array of CRUsers that have submitted answers
 	// This workflow will need to be adjusted in the future, since this list will change as students submit answers
+    [self loadStudents];
+	self.studentAnswerViewController.delegate = self;
+	[self.view addSubview:self.studentAnswerViewController.view];
+	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:@"Answers"
+																					   style:UIBarButtonItemStylePlain
+																					  target:self.studentAnswerViewController
+																					  action:@selector(toggleTable)];
+	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
+    [self.view setNeedsDisplay];
     
+}
+
+
+- (void) loadStudents
+{
     NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
     NSArray *answers = self.caseChosen.answers;
     
@@ -81,44 +97,73 @@
     }];
     self.allStudents = [NSArray arrayWithArray:allstudents];
     self.studentAnswerViewController = [[CRStudentAnswerTableViewController alloc] initWithStudents:self.allStudents];
-	self.studentAnswerViewController.delegate = self;
-	[self.view addSubview:self.studentAnswerViewController.view];
-	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:@"Answers"
-																					   style:UIBarButtonItemStylePlain
-																					  target:self.studentAnswerViewController
-																					  action:@selector(toggleTable)];
 
-	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
-    [self.view setNeedsDisplay];
 }
+
+
+- (void) refreshStudents
+{
+    NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
+    __block NSArray *answers;
+    [[CRAPIClientService sharedInstance] retrieveCaseSetWithID:self.caseId block:^(CRCaseSet *block) {
+        CRCaseSet *selectedCaseSet = block;
+        NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[self.indexPath.row];
+        CRCase *selectedCase = selectedCaseSet.cases[selectedCaseKey];
+        answers = selectedCase.answers;
+    }];
+    
+    [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            self.userID = obj;
+            [self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSString *temp = ((CRUser*) obj).userID;
+                if ([self.userID isEqualToString:temp]){
+                    [allstudents addObject:((CRUser*) obj)];
+                }
+            }];
+            
+        }];
+    }];
+    self.allStudents = [NSArray arrayWithArray:allstudents];
+    self.studentAnswerViewController = [[CRStudentAnswerTableViewController alloc] initWithStudents:self.allStudents];
+
+}
+
 
 #pragma mark - CRStudentAnswerTable Delegate Methods
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeStudentSelection:(NSArray *)students
 {
-    [self clearDrawing];
-    NSArray *answers = self.caseChosen.answers;
     
-    NSMutableArray *temp = [[NSMutableArray alloc] init];;
-    [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        self.currentAnswer = ((CRAnswer *)obj);
-        [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            self.userIDtemp = obj;
-            [students enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                if ([self.userIDtemp isEqualToString:((CRUser*) obj).userID]){
-                    [temp addObject:self.currentAnswer];
-                }
+    if ([self.studentAnswerViewController.isRefresh isEqualToString:@"yes"]){
+        [self refreshStudents];
+    } else {
+        [self clearDrawing];
+        if ([self.undoStack count] > 0) {
+            [self drawAnswer:self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+        }
+        NSArray *answers = self.caseChosen.answers;
+        NSMutableArray *temp = [[NSMutableArray alloc] init];;
+        [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            self.currentAnswer = ((CRAnswer *)obj);
+            [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                self.userIDtemp = obj;
+                [students enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    if ([self.userIDtemp isEqualToString:((CRUser*) obj).userID]){
+                        [temp addObject:self.currentAnswer];
+                    }
+                }];
             }];
         }];
-    }];
-    NSArray *tempAnswers = [NSArray arrayWithArray:temp];
-    [tempAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSMutableArray *ansLine = [[NSMutableArray alloc] init];
-        [((CRAnswer *)obj).answerData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
+        NSArray *tempAnswers = [NSArray arrayWithArray:temp];
+        [tempAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSMutableArray *ansLine = [[NSMutableArray alloc] init];
+            [((CRAnswer *)obj).answerData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
+            }];
+            NSDictionary* color = studentColors[idx % 15];
+            [self drawAnswer:ansLine inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
         }];
-        NSDictionary* color = studentColors[idx % 15];
-        [self drawAnswer:ansLine inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
-    }];
+    }
 }
 
 @end
