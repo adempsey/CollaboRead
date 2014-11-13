@@ -23,5 +23,10 @@
         kNavigationBarHeight + \
         [UIApplication sharedApplication].statusBarFrame.size.height
 
+#define STATUS_BAR_HEIGHT ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:\
+        NSNumericSearch] == NSOrderedAscending) ? \
+        [UIApplication sharedApplication].statusBarFrame.size.width : \
+        [UIApplication sharedApplication].statusBarFrame.size.height
+
 
 #endif

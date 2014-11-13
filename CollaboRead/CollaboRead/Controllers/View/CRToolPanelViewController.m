@@ -39,8 +39,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	CGFloat viewOriginY = TOP_BAR_HEIGHT;
-    
+	CGFloat viewOriginY = STATUS_BAR_HEIGHT;
+    CGFloat topBar = TOP_BAR_HEIGHT;
     CGRect screenFrame = LANDSCAPE_FRAME;
     
 	CGRect viewFrame = CGRectMake(0,
@@ -55,7 +55,7 @@
 
 	[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
 	self.tableView.scrollEnabled = NO;
-	self.tableView.contentInset = UIEdgeInsetsMake(80, 0, 0, 0);
+	self.tableView.contentInset = UIEdgeInsetsMake((self.view.frame.size.height - topBar - kCR_PANEL_TOOL_COUNT * kToolPanelTableViewWidth) / 2.0, 0, 0, 0);
 
 	UIView *tableViewBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
 	tableViewBackgroundView.backgroundColor = CR_COLOR_PRIMARY;

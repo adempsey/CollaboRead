@@ -165,9 +165,7 @@
     CGRect newFrame = self.caseImage.frame;
     
     CGFloat topBarHeight = TOP_BAR_HEIGHT;//TOP_BAR_HEIGHT;
-    NSLog(@"%f", topBarHeight);
     CGRect viewFrame = LANDSCAPE_FRAME;
-    NSLog(@"%@", NSStringFromCGRect(viewFrame));
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
     if (newFrame.size.height > newFrame.size.width) {
         self.caseImage.image = [[UIImage alloc] initWithCGImage:self.caseImage.image.CGImage scale:1.0 orientation:UIImageOrientationLeft];
