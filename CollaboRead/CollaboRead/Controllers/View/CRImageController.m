@@ -15,6 +15,7 @@
 #import "CRAnswer.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
+#import "CRDrawingPreserver.h"
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
@@ -58,7 +59,6 @@
 	self.navigationItem.title = self.caseChosen.name;
 	[self loadAndScaleImage:img];
 
-	self.undoStack = [[NSMutableArray alloc] init];
 	// Invisible now so that the image fades in once the view appears
 	self.caseImage.alpha = 0.0;
     self.lecturerID = self.user.userID;
@@ -69,10 +69,6 @@
 	self.toolPanelViewController.delegate = self;
 	[self.view addSubview:self.toolPanelViewController.view];
 
-	self.lineRedComp = 255;
-	self.lineBlueComp = 0;
-	self.lineGreenComp = 0;
-
     CGRect frame = LANDSCAPE_FRAME;
 	self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
 										 frame.size.height - 60.0 - 10.0,
@@ -82,6 +78,19 @@
 	[self.toggleButton setImage:toggleButtonImage forState:UIControlStateNormal];
 	[self.toggleButton addTarget:self action:@selector(toggleToolPanel) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:self.toggleButton];
+    
+    self.lineRedComp = 255;
+    self.lineBlueComp = 0;
+    self.lineGreenComp = 0;
+    
+    self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseId];
+    if (!self.undoStack) {
+        self.undoStack = [[NSMutableArray alloc] init];
+    }
+    else if ([self.undoStack count] > 0)
+    {
+        [self drawAnswer:self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -254,6 +263,7 @@
         [self eraseLineFrom:lastPoint to:currentPoint];
         [self removePointFromAnswer:currentPoint];
     }
+    [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
 }
 
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
@@ -323,10 +333,12 @@
 			break;
 		case kCR_PANEL_TOOL_UNDO:
 			[self undoEdit];
+            [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
 			break;
 		case kCR_PANEL_TOOL_CLEAR:
             [self.undoStack insertObject:[[NSMutableArray alloc] init] atIndex:0];
 			[self clearDrawing];
+            [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
 			break;
 	}
 }
