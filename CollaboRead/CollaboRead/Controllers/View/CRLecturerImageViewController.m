@@ -114,6 +114,7 @@
     }
     NSArray *answers =self.caseChosen.answers;
     NSMutableArray *temp = [[NSMutableArray alloc] init];;
+	NSMutableArray *colors = [[NSMutableArray alloc] init];
     [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         self.currentAnswer = ((CRAnswer *)obj);
         [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -121,8 +122,11 @@
             [students enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 if ([self.userIDtemp isEqualToString:((CRUser*) obj).userID]){
                     [temp addObject:self.currentAnswer];
-                }
-            }];
+				}
+
+				NSUInteger studentIndex = [self.allStudents indexOfObject:obj];
+				[colors addObject:studentColors[studentIndex % 15]];
+			}];
         }];
     }];
     NSArray *tempAnswers = [NSArray arrayWithArray:temp];
@@ -130,8 +134,9 @@
         NSMutableArray *ansLine = [[NSMutableArray alloc] init];
         [((CRAnswer *)obj).answerData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
-        }];
-        NSDictionary* color = studentColors[idx % 15];
+		}];
+
+		NSDictionary *color = colors[idx];
         [self drawAnswer:ansLine inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
     }];
 }
