@@ -47,7 +47,12 @@
 {
 	serverAddress = [NSString stringWithFormat:@"http://%@", serverAddress];
 	_serverAddress = serverAddress;
-	self.serverAPIAddress = [serverAddress stringByAppendingString:@":5000/api/v1/"];
+
+	if (![serverAddress isEqualToString:@"http://collaboread.herokuapp.com"]) {
+		serverAddress = [serverAddress stringByAppendingString:@":5000"];
+	}
+
+	self.serverAPIAddress = [serverAddress stringByAppendingString:@"/api/v1/"];
 }
 
 #pragma mark - Retrieval Methods
