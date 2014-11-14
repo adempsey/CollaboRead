@@ -122,7 +122,6 @@
 	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
 	NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[selectedPath.row];
 	CRCase *selectedCase = selectedCaseSet.cases[selectedCaseKey];
-
 	nextController.caseChosen = selectedCase;
     nextController.caseId = selectedCaseKey;
 	nextController.caseGroup = selectedCaseSet.setID;

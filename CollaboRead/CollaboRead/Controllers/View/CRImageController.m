@@ -59,10 +59,9 @@
 	[self loadAndScaleImage:img];
 
 	self.undoStack = [[NSMutableArray alloc] init];
-
 	// Invisible now so that the image fades in once the view appears
 	self.caseImage.alpha = 0.0;
-
+    self.lecturerID = self.user.userID;
 	[self.view addSubview:self.caseImage];
 	[self.view addSubview:self.drawView];
     

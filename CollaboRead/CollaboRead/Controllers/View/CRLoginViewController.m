@@ -104,7 +104,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 			[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
         }
     }
-}
+}  
 
 //Start attempt to login with api call
 -(IBAction)loginPressed:(id)sender
