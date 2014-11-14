@@ -10,7 +10,7 @@
 #import "CRUser.h"
 #import "CRColors.h"
 #import "CRViewSizeMacros.h"
-
+#import "CRAPIClientService.h"
 typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewSections) {
 	kSECTION_OPTIONS = 0,
 	kSECTION_STUDENTS,
@@ -36,6 +36,8 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 @property (nonatomic, readwrite, assign) BOOL tableIsVisible;
 @property (nonatomic, readwrite, assign) BOOL didBeginMovingTable;
 @property (nonatomic, readwrite, strong) NSIndexPath *tempIndexPath;
+@property (nonatomic, strong) NSArray *caseSets;
+@property (nonatomic, strong) NSString *userID;
 
 @end
 
@@ -211,36 +213,43 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	if (indexPath.section == kSECTION_OPTIONS) {
 		
 		if (indexPath.row == kOPTION_SHOW_ALL) {
-            self.isRefresh = @"no";
-
 			self.selectedStudents = [self.students mutableCopy];
 			[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
-			
 		} else if (indexPath.row == kOPTION_HIDE_ALL) {
-            self.isRefresh = @"no";
-
 			[self.selectedStudents removeAllObjects];
 			[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
-			
 		} else if (indexPath.row == kOPTION_SHOW_NAMES) {
-            self.isRefresh = @"no";
-
 			self.shouldShowStudentNames = !self.shouldShowStudentNames;
-	
         }else if (indexPath.row == kOPTION_REFRSH) {
-            self.isRefresh = @"yes";
-            
+            [[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *caseSets) {
+                self.caseSets = caseSets;
+                CRCaseSet *selectedCaseSet = self.caseSets[self.indexPath.section];
+                NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[self.indexPath.row];
+                CRCase *selectedCase = selectedCaseSet.cases[selectedCaseKey];
+                NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
+                NSArray *answers = selectedCase.answers;
+                [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        self.userID = obj;
+                        [self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            NSString *temp = ((CRUser*) obj).userID;
+                            if ([self.userID isEqualToString:temp]){
+                                [allstudents addObject:((CRUser*) obj)];
+                            }
+                        }];
+                        
+                    }];
+                }];
+                self.submittedStudents = [NSArray arrayWithArray:allstudents];
+                self.students = [NSArray arrayWithArray:self.submittedStudents];
+                [self.delegate studentAnswerTableView:self didRefresh:selectedCase];
+                [self.tableView reloadData];
+            }];
         }
-        
-		
 	} else if (indexPath.section == kSECTION_STUDENTS) {
-        self.isRefresh = @"no";
-
 		CRUser *selectedStudent = self.students[indexPath.row];
-		
 		if ([self.selectedStudents containsObject:selectedStudent]) {
 			[self.selectedStudents removeObject:selectedStudent];
-			
 		} else {
 			[self.selectedStudents addObject:selectedStudent];
 			
