@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 CollaboRead. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "CRStudentImageViewController.h"
 #import "CRAPIClientService.h"
 #import "CRUser.h"
@@ -32,6 +34,8 @@
 	submitButton.titleLabel.textColor = [UIColor whiteColor];
     [submitButton setTitle:@"Submit Answer" forState:UIControlStateNormal];//Change to setting images?
 	[submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
+	submitButton.layer.borderWidth = 2.0;
+	submitButton.layer.borderColor = [[UIColor whiteColor] CGColor];
     [self.view addSubview:submitButton];
     [self.view setNeedsDisplay];
 }
