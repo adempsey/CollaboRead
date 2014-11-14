@@ -25,6 +25,12 @@
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS @"owners"
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA @"answerData"
 
+@interface CRAPIClientService ()
+
+@property (nonatomic, readwrite, strong) NSString *serverAPIAddress;
+
+@end
+
 @implementation CRAPIClientService
 
 + (CRAPIClientService*)sharedInstance
@@ -39,8 +45,9 @@
 
 - (void)setServerAddress:(NSString *)serverAddress
 {
-	serverAddress = [NSString stringWithFormat:@"http://%@/api/v1/", serverAddress];
+	serverAddress = [NSString stringWithFormat:@"http://%@", serverAddress];
 	_serverAddress = serverAddress;
+	self.serverAPIAddress = [serverAddress stringByAppendingString:@":5000/api/v1/"];
 }
 
 #pragma mark - Retrieval Methods
@@ -117,7 +124,7 @@
 		block(caseSets);
 	};
 
-	NSString *resource = [self.serverAddress stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
+	NSString *resource = [self.serverAPIAddress stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturer};
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:params completionBlock:completionBlock];
@@ -130,7 +137,7 @@
 		block(retrievedItem);
 	};
 
-	NSString *resource = [self.serverAddress stringByAppendingString:endpoint];
+	NSString *resource = [self.serverAPIAddress stringByAppendingString:endpoint];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_ID: idNumber};
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:params completionBlock:completionBlock];
@@ -143,7 +150,7 @@
 		block(list);
 	};
 
-	NSString *resource = [self.serverAddress stringByAppendingString:endpoint];
+	NSString *resource = [self.serverAPIAddress stringByAppendingString:endpoint];
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:nil completionBlock:completionBlock];
 }
@@ -158,7 +165,7 @@
 		block(caseSet);
 	};
 
-	NSString *resource = [self.serverAddress stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
+	NSString *resource = [self.serverAPIAddress stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
 
 	NSDictionary *params = @{
 							 kCR_API_QUERY_PARAMETER_CASE_SET_ID: setID,
