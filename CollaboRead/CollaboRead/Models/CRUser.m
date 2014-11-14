@@ -37,8 +37,9 @@
 
 - (void)setImageURL:(NSString *)imageURLString
 {
-	NSURL *imageURL = [NSURL URLWithString:imageURLString];
-	self.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+//	NSURL *imageURL = [NSURL URLWithString:imageURLString];
+//	self.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+	self.image = [UIImage imageNamed:@"shapiro.jpg"];
 	_imageURL = imageURLString;
 }
 
