@@ -51,15 +51,15 @@
                                     <action selector="loginPressed:" destination="aTb-68-nBh" eventType="touchUpInside" id="Icy-zw-SkP"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="CRLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="rUL-K3-HMX">
-                                <rect key="frame" x="171" y="59" width="258" height="200"/>
+                            <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CRLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="rUL-K3-HMX">
+                                <rect key="frame" x="195" y="58" width="210" height="163"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="LyH-2h-iDw"/>
-                                    <constraint firstAttribute="width" constant="258" id="f4X-ax-h6u"/>
+                                    <constraint firstAttribute="height" constant="163" id="50r-0O-p8Y"/>
+                                    <constraint firstAttribute="width" constant="210" id="a3V-Bx-xZ7"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mf-Dt-Hi5">
-                                <rect key="frame" x="94" y="265" width="412" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mf-Dt-Hi5">
+                                <rect key="frame" x="94" y="227" width="412" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="MGV-En-0bc"/>
                                     <constraint firstAttribute="width" constant="412" id="fD9-Yj-yOZ"/>
@@ -68,6 +68,11 @@
                                 <color key="textColor" red="1" green="0.27843137254901962" blue="0.37647058823529411" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Server" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jIF-lr-ujp">
+                                <rect key="frame" x="171" y="251" width="258" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.10980392156862745" green="0.10588235294117647" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -77,7 +82,9 @@
                             <constraint firstItem="8Mf-Dt-Hi5" firstAttribute="top" secondItem="rUL-K3-HMX" secondAttribute="bottom" constant="6" id="Z0v-Sr-Fdj"/>
                             <constraint firstAttribute="centerX" secondItem="rUL-K3-HMX" secondAttribute="centerX" constant="-0.5" id="gru-MT-9A4"/>
                             <constraint firstAttribute="centerX" secondItem="wEI-KF-4qq" secondAttribute="centerX" id="hAM-xa-wrY"/>
+                            <constraint firstItem="rUL-K3-HMX" firstAttribute="top" secondItem="TdW-jK-dRP" secondAttribute="bottom" constant="38" id="oRM-44-geh"/>
                             <constraint firstAttribute="centerX" secondItem="8Mf-Dt-Hi5" secondAttribute="centerX" id="sHC-BU-CER"/>
+                            <constraint firstAttribute="centerX" secondItem="jIF-lr-ujp" secondAttribute="centerX" id="snl-GY-Bak"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="AA2-ff-GGt" appends="YES" id="AYg-kP-hCk"/>
@@ -90,6 +97,7 @@
                         <outlet property="errorLabel" destination="8Mf-Dt-Hi5" id="83w-Nc-jXc"/>
                         <outlet property="loginButton" destination="yos-ON-6fb" id="YXO-hi-MTi"/>
                         <outlet property="passwordField" destination="wEI-KF-4qq" id="qMe-jb-TTa"/>
+                        <outlet property="serverField" destination="jIF-lr-ujp" id="FCS-qv-5Ht"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8S5-pp-Bn8" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -14,6 +14,8 @@
 
 @interface CRAPIClientService : NSObject
 
+@property (nonatomic, readwrite, strong) NSString *serverAddress;
+
 + (CRAPIClientService*)sharedInstance;
 
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*))block;

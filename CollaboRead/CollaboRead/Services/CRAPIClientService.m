@@ -11,7 +11,7 @@
 
 #import "NSArray+CRAdditions.h"
 
-#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
+//#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
 
 #define kCR_API_ENDPOINT_USERS @"users"
 #define kCR_API_ENDPOINT_LECTURERS @"lecturers"
@@ -35,6 +35,12 @@
 		sharedInstance = [[self alloc] init];
 	});
 	return sharedInstance;
+}
+
+- (void)setServerAddress:(NSString *)serverAddress
+{
+	serverAddress = [NSString stringWithFormat:@"http://%@/api/v1/", serverAddress];
+	_serverAddress = serverAddress;
 }
 
 #pragma mark - Retrieval Methods
@@ -111,7 +117,7 @@
 		block(caseSets);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
+	NSString *resource = [self.serverAddress stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturer};
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:params completionBlock:completionBlock];
@@ -124,7 +130,7 @@
 		block(retrievedItem);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
+	NSString *resource = [self.serverAddress stringByAppendingString:endpoint];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_ID: idNumber};
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:params completionBlock:completionBlock];
@@ -137,7 +143,7 @@
 		block(list);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
+	NSString *resource = [self.serverAddress stringByAppendingString:endpoint];
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:nil completionBlock:completionBlock];
 }
@@ -152,7 +158,7 @@
 		block(caseSet);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
+	NSString *resource = [self.serverAddress stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
 
 	NSDictionary *params = @{
 							 kCR_API_QUERY_PARAMETER_CASE_SET_ID: setID,

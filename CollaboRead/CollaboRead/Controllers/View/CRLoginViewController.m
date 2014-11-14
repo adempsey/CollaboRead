@@ -22,6 +22,8 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 @interface CRLoginViewController ()
 
+@property (weak, nonatomic) IBOutlet UITextField *serverField;
+
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
@@ -107,6 +109,8 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 //Start attempt to login with api call
 -(IBAction)loginPressed:(id)sender
 {
+	[[CRAPIClientService sharedInstance] setServerAddress:self.serverField.text];
+
 	self.loginButton.userInteractionEnabled = NO;
 	self.loginButton.hidden = YES;
 
