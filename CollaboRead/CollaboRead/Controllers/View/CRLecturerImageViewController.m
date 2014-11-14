@@ -115,17 +115,15 @@
     NSArray *answers =self.caseChosen.answers;
     NSMutableArray *temp = [[NSMutableArray alloc] init];;
 	NSMutableArray *colors = [[NSMutableArray alloc] init];
-    [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger ansIdx, BOOL *stop) {
         self.currentAnswer = ((CRAnswer *)obj);
         [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             self.userIDtemp = obj;
             [students enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 if ([self.userIDtemp isEqualToString:((CRUser*) obj).userID]){
                     [temp addObject:self.currentAnswer];
-				}
-
-				NSUInteger studentIndex = [self.allStudents indexOfObject:obj];
-				[colors addObject:studentColors[studentIndex % 15]];
+                    [colors addObject:studentColors[ansIdx % 15]];
+                }
 			}];
         }];
     }];
