@@ -14,7 +14,7 @@
 #import "CRAPIClientService.h"
 
 @implementation CRCase
-
+//Translate from JSON to Objective C object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
 {
 	if (self = [super init]) {
@@ -29,6 +29,7 @@
 	return self;
 }
 
+//Custom setter sets image access urls dependent on server used
 - (void)setImages:(NSArray *)images
 {
 	NSMutableArray *caseImages = [[NSMutableArray alloc] init];
@@ -58,6 +59,7 @@
 	_images = caseImages;
 }
 
+//Custom setter translates answer json into answer object if needed
 - (void)setAnswers:(NSArray *)answers
 {
 	NSMutableArray *caseAnswers = [[NSMutableArray alloc] init];

@@ -24,6 +24,7 @@
 // temporary - should remove once authentication's a thing
 @property (nonatomic, readwrite, strong) NSString *password;
 
+//Translate from JSON to Objective C object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
 @end

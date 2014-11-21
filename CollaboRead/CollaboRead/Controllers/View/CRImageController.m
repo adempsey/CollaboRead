@@ -61,6 +61,8 @@
 
 	// Invisible now so that the image fades in once the view appears
 	self.caseImage.alpha = 0.0;
+    self.drawView.alpha = 0.0;
+    
     self.lecturerID = self.user.userID;
 	[self.view addSubview:self.caseImage];
 	[self.view addSubview:self.drawView];
@@ -69,7 +71,7 @@
 	self.toolPanelViewController.delegate = self;
 	[self.view addSubview:self.toolPanelViewController.view];
 
-    CGRect frame = LANDSCAPE_FRAME;
+    CGRect frame = LANDSCAPE_FRAME; //Frame adjusted based on iOS 7 or 8
 	self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
 										 frame.size.height - 60.0 - 10.0,
 										 60.0,
@@ -83,6 +85,7 @@
     self.lineBlueComp = 0;
     self.lineGreenComp = 0;
     
+    //Try to load drawings from previous viewing during session or make new undo stack
     self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseId];
     if (!self.undoStack) {
         self.undoStack = [[NSMutableArray alloc] init];
@@ -99,6 +102,7 @@
 
 	[UIView animateWithDuration:0.25 animations:^{
 		self.caseImage.alpha = 1.0;
+        self.drawView.alpha = 1.0;
 	}];
 }
 
@@ -129,6 +133,7 @@
     }
 }
 
+//Only clears image, does not affect saved data
 -(void)clearDrawing
 {
     self.drawView.image = [[UIImage alloc] init];
@@ -144,7 +149,7 @@
     [self.drawView.image drawAtPoint:CGPointMake(0, 0)];
     
     //Set up to draw lines
-    //Could use drawLineFrom:to:, but is much slower
+    //Could use drawLineFrom:to:, but is much slower than displaying in one go
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
     CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), r, g, b, 1.0);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
@@ -172,8 +177,10 @@
     self.caseImage = [[UIImageView alloc] initWithImage:img];
     CGRect newFrame = self.caseImage.frame;
     
-    CGFloat topBarHeight = TOP_BAR_HEIGHT;//TOP_BAR_HEIGHT;
+    //Determine boundaries based on iOS version
+    CGFloat topBarHeight = TOP_BAR_HEIGHT;
     CGRect viewFrame = LANDSCAPE_FRAME;
+    
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
     if (newFrame.size.height > newFrame.size.width) {
         self.caseImage.image = [[UIImage alloc] initWithCGImage:self.caseImage.image.CGImage scale:1.0 orientation:UIImageOrientationLeft];
@@ -210,6 +217,7 @@
     self.drawView = [[UIImageView alloc] initWithFrame:newFrame];
 }
 
+//Prepares undostack, begins appropriate draw action
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
@@ -236,6 +244,7 @@
     }
 }
 
+//Continues appropriate draw action, changing undostack as necessary
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
@@ -252,6 +261,7 @@
     }
 }
 
+//Finishes appropriate drawing action, updates record of drawing on image
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
@@ -265,6 +275,7 @@
     }
     [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
 }
+
 
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable

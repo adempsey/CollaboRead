@@ -13,7 +13,7 @@
 @property (nonatomic, readwrite, strong) NSString *setID;
 @property (nonatomic, readwrite, strong) NSArray *owners;
 @property (nonatomic, readwrite, strong) NSDictionary *cases;
-
+//Translate from JSON to Objective C object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
 @end

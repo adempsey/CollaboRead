@@ -18,7 +18,7 @@
 -(id)initFromJSONDict:(NSDictionary *)dict;
 -(id)initWithPoint:(CGPoint)point end:(BOOL)end;
 -(BOOL)isEqual:(id)object;
--(BOOL)isInTouchRange:(id)object;
+-(BOOL)isInTouchRange:(id)object; //Used to determine erase radius
 -(id)copyWithZone:(NSZone *)zone;
 -(NSDictionary *)jsonDictFromPoint;
 

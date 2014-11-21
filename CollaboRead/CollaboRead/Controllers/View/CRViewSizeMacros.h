@@ -2,6 +2,9 @@
 //  CRViewSizeMacros.h
 //  CollaboRead
 //
+//  Use to determine size of view elements rather than doing so directly in most cases because of
+//  conflicts in behavior between iOS 7 and 8
+//
 //  Created by Hannah Clark on 11/12/14.
 //  Copyright (c) 2014 CollaboRead. All rights reserved.
 //

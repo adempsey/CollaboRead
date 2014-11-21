@@ -16,6 +16,7 @@
 
 @implementation CRAnswer
 
+//Translate JSON dictionary of an answer into app useable objective c object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
 {
 	if (self = [super init]) {
@@ -26,6 +27,7 @@
 	return self;
 }
 
+//Create an answer from data provide by app
 - (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners
 {
 	if (self = [super init]) {

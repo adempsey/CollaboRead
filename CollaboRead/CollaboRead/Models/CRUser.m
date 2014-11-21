@@ -17,7 +17,7 @@
 @end
 
 @implementation CRUser
-
+//Create an answer from data provide by app
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
 {
 	if (self = [super init]) {
@@ -35,11 +35,12 @@
 	return self;
 }
 
+//Replaces generic setter to update all image fields in one go
 - (void)setImageURL:(NSString *)imageURLString
 {
-//	NSURL *imageURL = [NSURL URLWithString:imageURLString];
-//	self.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-	self.image = [UIImage imageNamed:@"shapiro.jpg"];
+	NSURL *imageURL = [NSURL URLWithString:imageURLString];
+	self.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+//	self.image = [UIImage imageNamed:@"shapiro.jpg"];
 	_imageURL = imageURLString;
 }
 

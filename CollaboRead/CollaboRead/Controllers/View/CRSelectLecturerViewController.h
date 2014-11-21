@@ -11,6 +11,6 @@
 
 @interface CRSelectLecturerViewController : UICollectionViewController
 
-@property (nonatomic, strong) CRUser *user;
+@property (nonatomic, strong) CRUser *user; //Logged in user, passed through all views
 
 @end

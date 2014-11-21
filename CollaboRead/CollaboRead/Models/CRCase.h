@@ -17,6 +17,7 @@
 @property (nonatomic, readwrite, strong) NSArray *answers;
 @property (nonatomic, readwrite, strong) NSArray *lecturerAnswers;
 
+//Translate from JSON to Objective C object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
 @end

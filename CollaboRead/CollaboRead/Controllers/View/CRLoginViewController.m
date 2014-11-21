@@ -16,13 +16,14 @@
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
 
+#define kActivityIndicatorSize 30.0
 typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	kCR_LOGIN_ERROR_CREDENTIALS = 0
 };
 
 @interface CRLoginViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *serverField;
+@property (weak, nonatomic) IBOutlet UITextField *serverField; //UNTIL WE GET TUFTS SERVER ONLY
 
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -31,27 +32,26 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 @property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
 
--(IBAction)loginPressed:(id)sender;
--(IBAction)exitTextField:(id)sender;
--(void)attemptLogin:(NSArray *)users;
+-(IBAction)loginPressed:(id)sender; //Triggers login attempt based on button press
+-(IBAction)exitTextField:(id)sender; //Dismisses keyboard when appropriate
+-(void)attemptLogin:(NSArray *)users; //Checks validity of information against users in database
 
 @end
 
 @implementation CRLoginViewController
 
+//Sets up activity indicator, other setup done via storyboard
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-
 	CGRect screenBounds = LANDSCAPE_FRAME;
-	CGFloat activityIndicatorSize = 30.0;
-	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((screenBounds.size.width - activityIndicatorSize)/2,
-																					   self.loginButton.frame.origin.y,
-																					   activityIndicatorSize,
-																					   activityIndicatorSize)];
+	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((screenBounds.size
+        .width - kActivityIndicatorSize)/2, self.loginButton.frame.origin.y, kActivityIndicatorSize,
+        kActivityIndicatorSize)];
 	[self.view addSubview:self.activityIndicator];
 }
 
+//Checks credentials in fields against users retrieved from database
 -(void)attemptLogin:(NSArray *)users
 {
     //Try to authenticate users
@@ -109,6 +109,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 //Start attempt to login with api call
 -(IBAction)loginPressed:(id)sender
 {
+    //Determine source, UNTIL WE GET TUFTS SERVER ONLY
 	[[CRAPIClientService sharedInstance] setServerAddress:self.serverField.text];
 
 	self.loginButton.userInteractionEnabled = NO;
@@ -134,6 +135,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
     [textField resignFirstResponder];
 }
 
+//Adjust desplay to give user feedback on login credentials
 - (void)showSuccess
 {
 	NSString *unicodeCheckMark = @"\u2713";

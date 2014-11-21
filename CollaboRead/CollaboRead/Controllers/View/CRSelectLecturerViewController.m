@@ -19,7 +19,7 @@
     NSIndexPath *selectedPath;
 }
 
-@property (nonatomic, strong) NSArray *lecturers;
+@property (nonatomic, strong) NSArray *lecturers; //Lecturers in database
 @property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
 
 @end
@@ -37,16 +37,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+    //Set up display with placeholder, iOS version appropriately
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
     self.navigationItem.title = @"Select Lecturer";
-
     CGRect frame = LANDSCAPE_FRAME;
 	self.activityIndicator.frame = CGRectMake((frame.size.width - 50.0)/2, (frame.size.height - 50.0)/2, 50.0, 50.0);
 	[self.activityIndicator startAnimating];
 	[self.view addSubview:self.activityIndicator];
+    
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"LecturerCell"];
-    //Get Lecturers to display
+    
+    //Get Lecturers to display and display when possible
     [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers) {
         self.lecturers = lecturers;
 		[self.activityIndicator removeFromSuperview];
@@ -56,7 +57,7 @@
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+//Pass along user and lecturer
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     CRSelectCaseViewController *nextController = [segue destinationViewController];
     nextController.user = self.user;
@@ -66,7 +67,7 @@
 
 #pragma mark <UICollectionViewDataSource>
 
-//No groupings so single section
+//No groupings so view only has single section
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
@@ -105,7 +106,8 @@
 }
 #pragma mark <UICollectionViewDelegate>
 
-//When a cell is selected, remember its path to set the case for the next view
+//When a cell is selected, remember its path to set the case for the next view, trigger segue
+//Segue is triggered here rather than automatically because of difficulties between custom collectionviewcells in iOS 7 vs 8
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedPath = indexPath;
