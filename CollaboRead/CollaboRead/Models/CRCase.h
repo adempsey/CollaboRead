@@ -20,4 +20,6 @@
 //Translate from JSON to Objective C object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
+//Use for sorting array of cases by ascending dates
+-(NSInteger)compareDates:(CRCase *)other;
 @end

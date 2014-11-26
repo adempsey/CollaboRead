@@ -12,6 +12,7 @@
 #import "CRCaseKeys.h"
 #import "CRAnswer.h"
 #import "CRAPIClientService.h"
+#import "NSDate+CRAdditions.h"
 
 @implementation CRCase
 //Translate from JSON to Objective C object
@@ -20,7 +21,7 @@
 	if (self = [super init]) {
 		self.caseID = dictionary[CR_DB_CASE_ID];
 		self.name = dictionary[CR_DB_CASE_NAME];
-		self.date = dictionary[CR_DB_CASE_DATE];
+		self.date = [NSDate dateFromJSONString: dictionary[CR_DB_CASE_DATE]];
 		self.images = dictionary[CR_DB_CASE_IMAGE_LIST];
 		self.answers = dictionary[CR_DB_CASE_ANSWER_LIST];
 		self.lecturerAnswers = dictionary[CR_DB_CASE_ANSWER_LECTURER];
@@ -75,6 +76,17 @@
 	}];
 
 	_answers = caseAnswers;
+}
+-(NSInteger)compareDates:(CRCase *)other
+{
+    if ([self.date isEqualToDate:other.date]) {
+        return NSOrderedSame;
+    }
+    else if ([[self.date earlierDate:other.date] isEqualToDate:self.date])
+    {
+        return NSOrderedAscending;
+    }
+    return NSOrderedDescending;
 }
 
 @end

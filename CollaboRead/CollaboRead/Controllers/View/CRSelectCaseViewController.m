@@ -78,8 +78,8 @@
     cell.contentView.frame = cell.bounds;
     cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	CRCaseSet *caseSet = self.caseSets[indexPath.section];
-	NSString *caseKey = caseSet.cases.allKeys[indexPath.row];
-	CRCase *crCase = caseSet.cases[caseKey];
+	NSArray *caseArray = [caseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
+	CRCase *crCase = caseArray[indexPath.row];
     
 	cell.name.text = crCase.name;
 	cell.image.image = crCase.images[0];
