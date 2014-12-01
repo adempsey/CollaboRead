@@ -38,15 +38,15 @@
 	[images enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		if ([obj isKindOfClass:[NSString class]]) {
 
-			NSString *serverAddress = [[CRAPIClientService sharedInstance] serverAddress];
+//			NSString *serverAddress = [[CRAPIClientService sharedInstance] serverAddress];
 
 			NSString *urlString;
 			// temporary for usability test
-			if ([serverAddress isEqualToString:@"http://collaboread.herokuapp.com"]) {
+//			if ([serverAddress isEqualToString:@"http://collaboread.herokuapp.com"]) {
 				urlString = obj;
-			} else {
-				urlString = [NSString stringWithFormat:@"%@/~AMD/cr/%@", serverAddress, obj];
-			}
+//			} else {
+//				urlString = [NSString stringWithFormat:@"%@/~AMD/cr/%@", serverAddress, obj];
+//			}
 
 			NSURL *imageURL = [NSURL URLWithString:urlString];
 			UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];

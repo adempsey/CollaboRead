@@ -10,6 +10,7 @@
 #include "CRAPIClientService.h"
 #include "CRAnswerPoint.h"
 #include "CRUser.h"
+#import "CRAnswerSubmissionService.h"
 
 #define studentColors @[@{@"red":@0, @"green": @255, @"blue" : @0}, \
                         @{@"red":@0, @"green": @0, @"blue" : @255}, \
@@ -79,11 +80,18 @@
 																					  action:@selector(toggleTable)];
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
     [self.view setNeedsDisplay];
-    
+	
+	[[CRAnswerSubmissionService sharedInstance] setDidReceiveAnswerBlock:^(NSString* answer) {
+		[self didReceiveAnswer:answer];
+	}];
 }
 
+- (void)didReceiveAnswer:(NSString*)answerData
+{
+	NSLog(@"%@", answerData);
+}
 
-- (void) loadStudents
+- (void)loadStudents
 {
     NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
     NSArray *answers = self.caseChosen.answers;

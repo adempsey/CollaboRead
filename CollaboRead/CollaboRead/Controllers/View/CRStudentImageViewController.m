@@ -15,6 +15,7 @@
 #import "CRAnswerPoint.h"
 #import "CRColors.h"
 #import "CRViewSizeMacros.h"
+#import "CRAnswerSubmissionService.h"
 
 @interface CRStudentImageViewController ()
 
@@ -63,12 +64,14 @@
         [answerPts addObject:[(CRAnswerPoint *)obj jsonDictFromPoint]];
     }];
 	CRAnswer *answer = [[CRAnswer alloc] initWithData:answerPts submissionDate:nil owners:students];
+	
+	[[CRAnswerSubmissionService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup];
 
-    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
-		NSString *unicodeCheckMark = @"\u2713";
-		[submitButton setTitle:unicodeCheckMark forState:UIControlStateNormal];
-		[activityIndicator removeFromSuperview];
-	}];
+//    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
+//		NSString *unicodeCheckMark = @"\u2713";
+//		[submitButton setTitle:unicodeCheckMark forState:UIControlStateNormal];
+//		[activityIndicator removeFromSuperview];
+//	}];
 }
 
 @end

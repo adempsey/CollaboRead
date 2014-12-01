@@ -31,6 +31,7 @@
 		8DCF9CAB1A2BF071000D42C5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCF9CAA1A2BF071000D42C5 /* CFNetwork.framework */; };
 		8DCF9CAD1A2BF076000D42C5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCF9CAC1A2BF076000D42C5 /* Security.framework */; };
 		8DCF9CAF1A2BF07B000D42C5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCF9CAE1A2BF07B000D42C5 /* Foundation.framework */; };
+		8DCF9CB31A2BF8FB000D42C5 /* CRAnswerSubmissionService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF9CB21A2BF8FB000D42C5 /* CRAnswerSubmissionService.m */; };
 		8DD3600A1A0AC93D00E572D1 /* CRLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DD360091A0AC93D00E572D1 /* CRLogo.png */; };
 		8DD360171A0B366200E572D1 /* CRToolPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */; };
 		8DD3601A1A0B3E8900E572D1 /* CRToolPanelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DD360191A0B3E8900E572D1 /* CRToolPanelCell.m */; };
@@ -97,6 +98,8 @@
 		8DCF9CAA1A2BF071000D42C5 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8DCF9CAC1A2BF076000D42C5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8DCF9CAE1A2BF07B000D42C5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		8DCF9CB11A2BF8FB000D42C5 /* CRAnswerSubmissionService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAnswerSubmissionService.h; sourceTree = "<group>"; };
+		8DCF9CB21A2BF8FB000D42C5 /* CRAnswerSubmissionService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswerSubmissionService.m; sourceTree = "<group>"; };
 		8DD360091A0AC93D00E572D1 /* CRLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRLogo.png; sourceTree = "<group>"; };
 		8DD360151A0B366200E572D1 /* CRToolPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToolPanelViewController.h; sourceTree = "<group>"; };
 		8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToolPanelViewController.m; sourceTree = "<group>"; };
@@ -154,6 +157,8 @@
 		8D16E93319EF438A00DAFEC0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8DCF9CB11A2BF8FB000D42C5 /* CRAnswerSubmissionService.h */,
+				8DCF9CB21A2BF8FB000D42C5 /* CRAnswerSubmissionService.m */,
 				BB375B5C1A141DCC007D8556 /* CRViewSizeMacros.h */,
 				8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */,
 				8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */,
@@ -527,6 +532,7 @@
 				8DE0B26019FF2FD300760434 /* CRCase.m in Sources */,
 				8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
+				8DCF9CB31A2BF8FB000D42C5 /* CRAnswerSubmissionService.m in Sources */,
 				8DD3601A1A0B3E8900E572D1 /* CRToolPanelCell.m in Sources */,
 				8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */,
 				BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */,
