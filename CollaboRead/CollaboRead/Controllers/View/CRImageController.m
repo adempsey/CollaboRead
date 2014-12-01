@@ -19,6 +19,7 @@
 #import "CRViewSizeMacros.h"
 #import "CRDrawingPreserver.h"
 #import "CRUserKeys.h"
+#import "CRAnswerSubmissionService.h"
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
@@ -51,6 +52,7 @@
 	if (self = [super initWithCoder:aDecoder]) {
 		self.selectedTool = kCR_PANEL_TOOL_PEN;
 		self.toggleButton = [[UIButton alloc] init];
+		[[CRAnswerSubmissionService sharedInstance] initiateConnection];
 	}
 	return self;
 }
@@ -133,6 +135,12 @@
 		self.caseImage.alpha = 1.0;
         self.drawView.alpha = 1.0;
 	}];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	[[CRAnswerSubmissionService sharedInstance] disconnect];
 }
 
 - (void)toggleToolPanel

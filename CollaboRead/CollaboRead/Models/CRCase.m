@@ -33,12 +33,36 @@
 
 - (void)setScans:(NSArray *)scans
 {
+//<<<<<<< HEAD
 	NSMutableArray *finalArray = [[NSMutableArray alloc] init];
 	
 	[scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		if ([obj isKindOfClass:[NSDictionary class]]) {
 			CRScan *scan = [[CRScan alloc] initWithDictionary:obj];
 			[finalArray addObject:scan];
+//=======
+//	NSMutableArray *caseImages = [[NSMutableArray alloc] init];
+//
+//	[images enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//		if ([obj isKindOfClass:[NSString class]]) {
+//
+////			NSString *serverAddress = [[CRAPIClientService sharedInstance] serverAddress];
+//
+//			NSString *urlString;
+//			// temporary for usability test
+////			if ([serverAddress isEqualToString:@"http://collaboread.herokuapp.com"]) {
+//				urlString = obj;
+////			} else {
+////				urlString = [NSString stringWithFormat:@"%@/~AMD/cr/%@", serverAddress, obj];
+////			}
+//
+//			NSURL *imageURL = [NSURL URLWithString:urlString];
+//			UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+//			[caseImages addObject:image];
+//
+//		} else if ([obj isKindOfClass:[UIImage class]]) {
+//			[caseImages addObject:obj];
+//>>>>>>> added basic websockets template code
 		}
 	}];
 	
