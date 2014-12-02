@@ -28,7 +28,7 @@
     CGRect screenBounds = LANDSCAPE_FRAME;
     CGFloat viewOriginY = TOP_BAR_HEIGHT;
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-    CGRect viewFrame = CGRectMake(screenBounds.size.width - kTableViewMargin,
+    CGRect viewFrame = CGRectMake(screenBounds.size.width ,
                                   viewOriginY,
                                   kTableViewMargin,
                                   screenHeight - viewOriginY);
@@ -39,12 +39,12 @@
 
 - (instancetype)initWithPatientInfo: (NSString *) patientInfo {
     UITextView *myTextView = [[UITextView alloc]initWithFrame:
-                              CGRectMake(10, 50, 200, 350)];
+                              CGRectMake(10, 50, 210, 350)];
     [myTextView setText:patientInfo];
     myTextView.textColor = [UIColor cyanColor];
     myTextView.backgroundColor = [UIColor clearColor];
     myTextView.editable = NO;
-    myTextView.delegate = self;
+//    myTextView.delegate = self;
     [self.view addSubview:myTextView];
     return self;
 }
@@ -65,8 +65,8 @@
 {
     CGRect viewFrame = self.view.frame;
     CGRect screenFrame = LANDSCAPE_FRAME;
-    viewFrame.origin.x = screenFrame.size.width - (shouldBeFull ? kTableViewWidth : (kTableViewMargin));
-    viewFrame.size.width = shouldBeFull ? kTableViewWidth : kTableViewMargin;
+    viewFrame.origin.x = screenFrame.size.width - (shouldBeFull ? kTableViewWidth : 0);
+    viewFrame.size.width = shouldBeFull ? kTableViewWidth : 0;
     self.view.frame = viewFrame;
 }
 
