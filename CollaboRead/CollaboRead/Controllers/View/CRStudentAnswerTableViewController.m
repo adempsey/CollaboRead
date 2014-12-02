@@ -225,7 +225,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
                 self.caseSets = caseSets;
                 CRCaseSet *selectedCaseSet = self.caseSets[self.indexPath.section];
                 NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[self.indexPath.row];
-                CRCase *selectedCase = selectedCaseSet.cases[selectedCaseKey];
+                CRCase *selectedCase = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
                 NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
                 NSArray *answers = selectedCase.answers;
                 [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -278,7 +278,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 				return @"Show Student Names";
 				break;
             case kOPTION_REFRSH:
-                return @"Refesh Answers";
+                return @"Refresh Answers";
                 break;
 			default:
 				return @"";

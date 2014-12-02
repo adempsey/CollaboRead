@@ -122,10 +122,10 @@
 	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
     NSArray *caseArray = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
 	CRCase *selectedCase = caseArray[selectedPath.row];
-    NSString *selectedCaseKey = [selectedCaseSet.cases keysSortedByValueUsingSelector:@selector(compareDates:)][selectedPath.row];
+    //NSString *selectedCaseKey = [selectedCaseSet.cases allKeysForObject:selectedCase][0];//[selectedCaseSet.cases keysSortedByValueUsingSelector:@selector(compareDates:)][selectedPath.row];
     //selectedCaseSet.cases.allKeys[selectedPath.row];
 	nextController.caseChosen = selectedCase;
-    nextController.caseId = selectedCaseKey;
+    nextController.caseId = selectedCase.caseID;
 	nextController.caseGroup = selectedCaseSet.setID;
     nextController.allUsers = self.allUsers;
     nextController.lecturerID = self.lecturer.userID;
