@@ -84,6 +84,7 @@
     self.lineRedComp = 255;
     self.lineBlueComp = 0;
     self.lineGreenComp = 0;
+    self.patientInfo = self.caseChosen.patientInfo;
     
     //Try to load drawings from previous viewing during session or make new undo stack
     self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseId];

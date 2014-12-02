@@ -25,7 +25,7 @@
 		self.images = dictionary[CR_DB_CASE_IMAGE_LIST];
 		self.answers = dictionary[CR_DB_CASE_ANSWER_LIST];
 		self.lecturerAnswers = dictionary[CR_DB_CASE_ANSWER_LECTURER];
-        
+        self.patientInfo = dictionary[CR_DB_PATIENT_INFO];
 	}
 	return self;
 }

@@ -16,6 +16,7 @@
 @property (nonatomic, readwrite, strong) NSArray *images;
 @property (nonatomic, readwrite, strong) NSArray *answers;
 @property (nonatomic, readwrite, strong) NSArray *lecturerAnswers;
+@property (nonatomic, readwrite, strong) NSString *patientInfo;
 
 //Translate from JSON to Objective C object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;

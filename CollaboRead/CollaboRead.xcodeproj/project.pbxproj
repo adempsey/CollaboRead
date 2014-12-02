@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		36ED59531A2D3CEE00F61D7B /* CRPatientInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */; };
 		8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */; };
 		8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */; };
 		8D34C1401A15FC37007BC6CB /* shapiro.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8D34C13F1A15FC37007BC6CB /* shapiro.jpg */; };
@@ -53,6 +54,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRPatientInfoViewController.h; sourceTree = "<group>"; };
+		36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRPatientInfoViewController.m; sourceTree = "<group>"; };
 		8D16E93419EF440500DAFEC0 /* CRNetworkingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNetworkingService.h; sourceTree = "<group>"; };
 		8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNetworkingService.m; sourceTree = "<group>"; };
 		8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAPIClientService.h; sourceTree = "<group>"; };
@@ -343,6 +346,8 @@
 				BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */,
 				8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */,
 				8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */,
+				36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */,
+				36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -399,7 +404,7 @@
 					};
 					8DA5DE3419E6064B002EA706 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 9QL6K4MK7J;
+						DevelopmentTeam = 4364EPG2B5;
 						TestTargetID = 8DA5DE1B19E6064A002EA706;
 					};
 				};
@@ -456,6 +461,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DD360171A0B366200E572D1 /* CRToolPanelViewController.m in Sources */,
+				36ED59531A2D3CEE00F61D7B /* CRPatientInfoViewController.m in Sources */,
 				8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */,
 				BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */,
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,

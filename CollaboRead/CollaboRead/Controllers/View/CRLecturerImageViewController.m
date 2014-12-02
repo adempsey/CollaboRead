@@ -55,7 +55,6 @@
         NSDictionary* color = studentColors[idx % 15];
         [self drawAnswer:ansLine inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
     }];
-    
 }
 
 - (void)viewDidLoad {
@@ -79,7 +78,6 @@
 																					  action:@selector(toggleTable)];
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
     [self.view setNeedsDisplay];
-    
 }
 
 

@@ -21,5 +21,6 @@
 #define CR_DB_CASE_NAME @"name"
 #define CR_DB_CASE_ANSWER_LIST @"answers" //array
 #define CR_DB_CASE_ANSWER_LECTURER @"lecturer_answer"
+#define CR_DB_PATIENT_INFO @"patientInfo"
 
 #endif

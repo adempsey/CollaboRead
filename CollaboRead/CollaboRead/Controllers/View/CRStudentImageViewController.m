@@ -15,10 +15,12 @@
 #import "CRAnswerPoint.h"
 #import "CRColors.h"
 #import "CRViewSizeMacros.h"
-
+#import "CRPatientInfoViewController.h"
 @interface CRStudentImageViewController ()
 
 -(void)submitAnswer:(UIButton *)submitButton;
+@property (nonatomic, strong) UIBarButtonItem *togglePatientInfoButton;
+@property (nonatomic, readwrite, strong) CRPatientInfoViewController *patientInfoViewController;
 
 @end
 
@@ -37,6 +39,13 @@
 	[submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
 	submitButton.layer.borderWidth = 2.0;
 	submitButton.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.patientInfoViewController = [[CRPatientInfoViewController alloc] initWithPatientInfo:self.patientInfo];
+    [self.view addSubview:self.patientInfoViewController.view];
+    self.togglePatientInfoButton= [[UIBarButtonItem alloc] initWithTitle:@"Patient Info"
+                                                                           style:UIBarButtonItemStylePlain
+                                                                          target:self.patientInfoViewController
+                                                                          action:@selector(toggleTable)];
+    self.navigationItem.rightBarButtonItem = self.togglePatientInfoButton;
     [self.view addSubview:submitButton];
     [self.view setNeedsDisplay];
 }
