@@ -38,6 +38,7 @@
 		BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */; };
 		BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */; };
 		BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */; };
+		BBCCEDE11A71991800782507 /* CRToolPanelScan.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCCEDE01A71991800782507 /* CRToolPanelScan.png */; };
 		BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */; };
 		BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */; };
 		BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */; };
@@ -112,6 +113,7 @@
 		BBA2EBD619EEE54B0093044E /* CRTitledImageCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRTitledImageCollectionCell.h; sourceTree = "<group>"; };
 		BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRTitledImageCollectionCell.m; sourceTree = "<group>"; };
 		BBA2EBDB19EEF3340093044E /* CRCaseKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRCaseKeys.h; sourceTree = "<group>"; };
+		BBCCEDE01A71991800782507 /* CRToolPanelScan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelScan.png; sourceTree = "<group>"; };
 		BBD3135619F2E2040017B96A /* CRSelectLecturerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSelectLecturerViewController.h; sourceTree = "<group>"; };
 		BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSelectLecturerViewController.m; sourceTree = "<group>"; };
 		BBD3B03319F5B60300C18A6A /* CRStudentImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStudentImageViewController.h; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 		8DD3600C1A0B343A00E572D1 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				BBCCEDE01A71991800782507 /* CRToolPanelScan.png */,
 				8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */,
 				8D4811961A0B47AB004329AE /* CRToolPanelClear.png */,
 				8D4811971A0B47AB004329AE /* CRToolPanelEraser.png */,
@@ -440,6 +443,7 @@
 				8DA5DE2B19E6064B002EA706 /* Main.storyboard in Resources */,
 				8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */,
 				8D48119B1A0B47AB004329AE /* CRToolPanelEraser.png in Resources */,
+				BBCCEDE11A71991800782507 /* CRToolPanelScan.png in Resources */,
 				8DA5DE2D19E6064B002EA706 /* Images.xcassets in Resources */,
 				8DD3600A1A0AC93D00E572D1 /* CRLogo.png in Resources */,
 				8D48119D1A0B47AB004329AE /* CRToolPanelUndo.png in Resources */,

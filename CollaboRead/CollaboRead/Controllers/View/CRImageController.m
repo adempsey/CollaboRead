@@ -365,7 +365,10 @@
             [self.undoStack insertObject:[[NSMutableArray alloc] init] atIndex:0];
 			[self clearDrawing];
             [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
-			break;
+            break;
+        case kCR_PANEL_TOOL_SCANS:
+            //[self.scanView setHidden: !self.scanView.Hidden]
+            break;
 	}
 }
 

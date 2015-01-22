@@ -139,6 +139,12 @@
 		[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
 	} else {
+        NSLog(@"%@", indexPath);
+        if (indexPath.row == kCR_PANEL_TOOL_SCANS && self.selectedTool.row ==kCR_PANEL_TOOL_SCANS) {
+            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+            self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
+            [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
 		self.selectedTool = indexPath;
 	}
 }
@@ -161,6 +167,9 @@
 		case kCR_PANEL_TOOL_CLEAR:
 			title = @"CRToolPanelClear.png";
 			break;
+        case kCR_PANEL_TOOL_SCANS:
+            title = @"CRToolPanelScan.png";
+            break;
 	}
 	
 	if (title) {
