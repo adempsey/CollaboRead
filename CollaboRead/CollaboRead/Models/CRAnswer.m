@@ -21,7 +21,11 @@
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
 {
 	if (self = [super init]) {
-		self.answerData = dictionary[kANSWER_DATA];
+        NSMutableArray *points = [[NSMutableArray alloc] init];
+        for (NSDictionary *pt in dictionary[kANSWER_DATA]) {
+            [points addObject: [[CRAnswerPoint alloc] initFromJSONDict:pt]];
+        }
+        self.answerData = points;
 		self.submissionDate = [NSDate dateFromJSONString:dictionary[kANSWER_SUBMISSION_DATE]];
 		self.owners = dictionary[kANSWER_OWNERS];
 	}
@@ -37,16 +41,6 @@
 		self.owners = owners;
 	}
 	return self;
-}
-
--(void)setAnswerData:(NSArray *)answerData
-{
-    // "x", "y", "isEnd"
-    NSMutableArray *points = [[NSMutableArray alloc] init];
-    for (NSDictionary *pt in answerData) {
-        [points addObject: [[CRAnswerPoint alloc] initFromJSONDict:pt]];
-    }
-    _answerData = points;
 }
 
 @end
