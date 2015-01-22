@@ -7,6 +7,7 @@
 //
 
 #import "CRAnswer.h"
+#import "CRAnswerPoint.h"
 
 #import "NSDate+CRAdditions.h"
 
@@ -36,6 +37,16 @@
 		self.owners = owners;
 	}
 	return self;
+}
+
+-(void)setAnswerData:(NSArray *)answerData
+{
+    // "x", "y", "isEnd"
+    NSMutableArray *points = [[NSMutableArray alloc] init];
+    for (NSDictionary *pt in answerData) {
+        [points addObject: [[CRAnswerPoint alloc] initFromJSONDict:pt]];
+    }
+    _answerData = points;
 }
 
 @end

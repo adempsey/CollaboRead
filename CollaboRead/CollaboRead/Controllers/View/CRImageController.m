@@ -16,6 +16,7 @@
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
 #import "CRDrawingPreserver.h"
+#import "CRUserKeys.h"
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
@@ -88,6 +89,19 @@
     
     //Try to load drawings from previous viewing during session or make new undo stack
     self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseId];
+    if (!self.undoStack) {
+        if ([self.user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
+            NSArray *answers = self.caseChosen.answers;
+            NSUInteger idx = [answers indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                return [((CRAnswer *)obj).owners indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                    return [(NSString *)obj isEqualToString:self.user.userID];
+                }] != NSNotFound;
+            }];
+            if(idx != NSNotFound) {
+                self.undoStack = [[NSMutableArray alloc] initWithObjects:[NSMutableArray arrayWithArray:((CRAnswer *)answers[idx]).answerData], nil];
+            }
+        }
+    }
     if (!self.undoStack) {
         self.undoStack = [[NSMutableArray alloc] init];
     }
