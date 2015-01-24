@@ -14,8 +14,9 @@
 #import "CRCase.h"
 #import "CRUser.h"
 #import "CRToolPanelViewController.h"
+#import "CRScansMenuViewController.h"
 
-@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate>
+@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate>
 
 //The following define drawing color used by user
 @property (nonatomic, assign) CGFloat lineRedComp;
