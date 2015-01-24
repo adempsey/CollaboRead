@@ -19,6 +19,7 @@
 @interface CRScansMenuViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (nonatomic, weak) id < CRScansMenuViewControllerDelegate> delegate;
+@property (nonatomic, strong) NSArray *scans;
 
 -(void) setViewFrame:(CGRect)frame;
 

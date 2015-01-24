@@ -15,6 +15,9 @@
 #define kANSWER_SUBMISSION_DATE @"submissionDate"
 #define kANSWER_OWNERS @"owners"
 
+#define kANSWER_SLICE @""
+#define kANSWER_SCAN @""
+
 @implementation CRAnswer
 
 //Translate JSON dictionary of an answer into app useable objective c object
@@ -28,6 +31,8 @@
         self.answerData = points;
 		self.submissionDate = [NSDate dateFromJSONString:dictionary[kANSWER_SUBMISSION_DATE]];
 		self.owners = dictionary[kANSWER_OWNERS];
+        //self.scanID = dictionary[kANSWER_SCAN];
+        //self.sliceID = dictionary[kANSWER_SLICE];
 	}
 	return self;
 }

@@ -9,6 +9,8 @@
 #import "CRScansMenuViewController.h"
 #import "CRColors.h"
 #import "CRTitledImageCollectionCell.h"
+#import "CRScan.h"
+#import "CRSlice.h"
 
 #define kScanMenuMargin 5
 
@@ -49,6 +51,9 @@ static NSString * const reuseIdentifier = @"scanCell";
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
     [self.view addSubview:self.collectionView];
+    if (self.scans == nil) {
+        self.scans = [[NSArray alloc] init];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,7 +79,7 @@ static NSString * const reuseIdentifier = @"scanCell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.view.frame.size.width == 0 ? 0 : 5;
+    return self.view.frame.size.width == 0 ? 0 : [self.scans count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -82,7 +87,8 @@ static NSString * const reuseIdentifier = @"scanCell";
 
     // Configure the cell
     
-    //cell.name.text = @"I win!!";
+    cell.name.text = ((CRScan *)self.scans[indexPath.row]).name;
+    cell.image.image = ((CRSlice *)((CRScan *)self.scans[indexPath.row]).slices[0]).image;
     
     return cell;
 }

@@ -13,6 +13,8 @@
 @property (nonatomic, readwrite, strong) NSArray *answerData;//Data that can be used to recreate answer
 @property (nonatomic, readwrite, strong) NSDate *submissionDate;//Create Date
 @property (nonatomic, readwrite, strong) NSArray *owners;//Submitting users
+@property (nonatomic, strong) NSString *scanID;
+@property (nonatomic, strong) NSString *sliceID;
 
 //Translate JSON dictionary of an answer into app useable objective c object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;

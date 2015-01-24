@@ -13,6 +13,7 @@
 #import "CRAnswer.h"
 #import "CRAPIClientService.h"
 #import "NSDate+CRAdditions.h"
+#import "CRScan.h"
 
 @implementation CRCase
 //Translate from JSON to Objective C object
@@ -38,23 +39,21 @@
 	[images enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		if ([obj isKindOfClass:[NSString class]]) {
 
-			NSString *serverAddress = [[CRAPIClientService sharedInstance] serverAddress];
-
-			NSString *urlString;
-			// temporary for usability test
-			if ([serverAddress isEqualToString:@"http://collaboread.herokuapp.com"]) {
-				urlString = obj;
-			} else {
-				urlString = [NSString stringWithFormat:@"%@/~AMD/cr/%@", serverAddress, obj];
-			}
-
-			NSURL *imageURL = [NSURL URLWithString:urlString];
+			NSURL *imageURL = [NSURL URLWithString:obj];
 			UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
 			[caseImages addObject:image];
 
 		} else if ([obj isKindOfClass:[UIImage class]]) {
 			[caseImages addObject:obj];
 		}
+        /*if ([obj isKindOfClass:[NSDictionary class]]) {
+            
+            CRScan *scan = [[CRScan alloc]initWithJSON:obj];
+            [caseImages addObject:scan];
+            
+        } else if ([obj isKindOfClass:[CRScan class]]) {
+            [caseImages addObject:obj];
+        }*/
 	}];
 
 	_images = caseImages;

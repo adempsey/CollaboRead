@@ -28,6 +28,9 @@
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
 
+@property (nonatomic, assign) NSUInteger *scanIndex;
+@property (nonatomic, assign) NSUInteger *sliceIndex;
+
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
 
@@ -57,6 +60,9 @@
 	[super viewDidLoad];
 
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    self.scanIndex = 0;
+    self.sliceIndex = 0;
 
 	//Most likely will be done by a transitioning view
 	UIImage *img = self.caseChosen.images[0];
