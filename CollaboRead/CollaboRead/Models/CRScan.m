@@ -9,10 +9,10 @@
 #import "CRScan.h"
 #import "CRSlice.h"
 
-#define kSCAN_ID @""
-#define kSCAN_SLICES @""
-#define kSCAN_ANSWER @""
-#define kSCAN_NAME @""
+#define kSCAN_ID @"scanID"
+#define kSCAN_SLICES @"slices"
+#define kSCAN_ANSWER @"hasDrawing"
+#define kSCAN_NAME @"name"
 
 @implementation CRScan
 
