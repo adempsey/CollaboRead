@@ -8,9 +8,9 @@
 
 #import "CRSlice.h"
 
-#define kSLICE_ID @""
-#define kSLICE_IMAGE_URL @""
-#define kSLICE_ANSWER @""
+#define kSLICE_ID @"sliceID"
+#define kSLICE_IMAGE_URL @"url"
+#define kSLICE_ANSWER @"hasDrawing"
 
 @implementation CRSlice
 
