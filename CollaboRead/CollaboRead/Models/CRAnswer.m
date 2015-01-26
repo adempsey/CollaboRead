@@ -7,13 +7,12 @@
 //
 
 #import "CRAnswer.h"
+#import "CRAnswerLine.h"
 #import "CRAnswerPoint.h"
+#import "CRCaseKeys.h"
 
 #import "NSDate+CRAdditions.h"
-
-#define kANSWER_DATA @"answerData"
-#define kANSWER_SUBMISSION_DATE @"submissionDate"
-#define kANSWER_OWNERS @"owners"
+#import "NSDictionary+CRAdditions.h"
 
 @implementation CRAnswer
 
@@ -21,26 +20,45 @@
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
 {
 	if (self = [super init]) {
-        NSMutableArray *points = [[NSMutableArray alloc] init];
-        for (NSDictionary *pt in dictionary[kANSWER_DATA]) {
-            [points addObject: [[CRAnswerPoint alloc] initFromJSONDict:pt]];
-        }
-        self.answerData = points;
-		self.submissionDate = [NSDate dateFromJSONString:dictionary[kANSWER_SUBMISSION_DATE]];
-		self.owners = dictionary[kANSWER_OWNERS];
+		self.answerID = dictionary[CR_DB_ANSWER_ID];
+		self.owners = dictionary[CR_DB_ANSWER_OWNERS];
+		self.submissionDate = dictionary[CR_DB_ANSWER_SUBMISSION_DATE];
+		
+		NSMutableArray *drawings = [[NSMutableArray alloc] init];
+		for (NSDictionary *drawing in dictionary[CR_DB_ANSWER_DRAWINGS]) {
+			CRAnswerLine *answerDrawing = [[CRAnswerLine alloc] initWithDictionary:drawing];
+			[drawings addObject:answerDrawing];
+		}
+		self.drawings = drawings;
 	}
 	return self;
 }
 
 //Create an answer from data provide by app
-- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners
+- (instancetype)initWithData:(NSArray*)drawings submissionDate:(NSDate*)date owners:(NSArray*)owners answerID:(NSString*)answerID
 {
 	if (self = [super init]) {
-		self.answerData = answerData;
+		self.answerID = answerID;
+		self.drawings = drawings;
 		self.submissionDate = date;
 		self.owners = owners;
 	}
 	return self;
+}
+
+- (NSDictionary*)jsonDictionary
+{
+	NSMutableArray *drawingDescriptions = [[NSMutableArray alloc] init];
+	[self.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		if ([obj isKindOfClass:[CRAnswerLine class]]) {
+			[drawingDescriptions addObject:((CRAnswerLine*)obj).jsonDictionary];
+		}
+	}];
+#warning wrong date
+	return @{CR_DB_ANSWER_ID: self.answerID,
+			 CR_DB_ANSWER_OWNERS: self.owners,
+			 CR_DB_ANSWER_SUBMISSION_DATE: @"january 25",
+			 CR_DB_ANSWER_DRAWINGS: drawingDescriptions};
 }
 
 @end

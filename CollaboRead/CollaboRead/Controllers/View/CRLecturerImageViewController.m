@@ -49,7 +49,7 @@
     NSArray *answers = self.caseChosen.answers;
     [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSMutableArray *ansLine = [[NSMutableArray alloc] init];
-        [((CRAnswer *)obj).answerData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
         }];
         NSDictionary* color = studentColors[idx % 15];
@@ -128,7 +128,7 @@
     NSArray *tempAnswers = [NSArray arrayWithArray:temp];
     [tempAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSMutableArray *ansLine = [[NSMutableArray alloc] init];
-        [((CRAnswer *)obj).answerData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
 		}];
 

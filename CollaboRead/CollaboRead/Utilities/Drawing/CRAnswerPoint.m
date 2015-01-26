@@ -9,6 +9,8 @@
 //
 
 #import "CRAnswerPoint.h"
+#import "NSDictionary+CRAdditions.h"
+#import "CRCaseKeys.h"
 
 @implementation CRAnswerPoint
 
@@ -59,6 +61,11 @@
 -(NSDictionary *)jsonDictFromPoint
 {
     return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:self.coordinate.x], @"x", [NSNumber numberWithFloat:self.coordinate.y], @"y", [NSNumber numberWithFloat: self.isEndPoint], @"isEnd",nil];
+}
+
+- (NSString*)jsonString
+{
+	return [self jsonDictFromPoint].jsonString;
 }
 
 @end

@@ -11,6 +11,7 @@
 #import "CRCase.h"
 #import "CRCaseKeys.h"
 #import "CRAnswer.h"
+#import "CRScan.h"
 #import "CRAPIClientService.h"
 #import "NSDate+CRAdditions.h"
 
@@ -22,42 +23,25 @@
 		self.caseID = dictionary[CR_DB_CASE_ID];
 		self.name = dictionary[CR_DB_CASE_NAME];
 		self.date = [NSDate dateFromJSONString: dictionary[CR_DB_CASE_DATE]];
-		self.images = dictionary[CR_DB_CASE_IMAGE_LIST];
-		self.answers = dictionary[CR_DB_CASE_ANSWER_LIST];
-		self.lecturerAnswers = dictionary[CR_DB_CASE_ANSWER_LECTURER];
+		self.scans = dictionary[CR_DB_CASE_SCANS];
+		self.answers = dictionary[CR_DB_CASE_ANSWERS];
         self.patientInfo = dictionary[CR_DB_PATIENT_INFO];
 	}
 	return self;
 }
 
-//Custom setter sets image access urls dependent on server used
-- (void)setImages:(NSArray *)images
+- (void)setScans:(NSArray *)scans
 {
-	NSMutableArray *caseImages = [[NSMutableArray alloc] init];
-
-	[images enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-		if ([obj isKindOfClass:[NSString class]]) {
-
-			NSString *serverAddress = [[CRAPIClientService sharedInstance] serverAddress];
-
-			NSString *urlString;
-			// temporary for usability test
-			if ([serverAddress isEqualToString:@"http://collaboread.herokuapp.com"]) {
-				urlString = obj;
-			} else {
-				urlString = [NSString stringWithFormat:@"%@/~AMD/cr/%@", serverAddress, obj];
-			}
-
-			NSURL *imageURL = [NSURL URLWithString:urlString];
-			UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-			[caseImages addObject:image];
-
-		} else if ([obj isKindOfClass:[UIImage class]]) {
-			[caseImages addObject:obj];
+	NSMutableArray *finalArray = [[NSMutableArray alloc] init];
+	
+	[scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		if ([obj isKindOfClass:[NSDictionary class]]) {
+			CRScan *scan = [[CRScan alloc] initWithDictionary:obj];
+			[finalArray addObject:scan];
 		}
 	}];
-
-	_images = caseImages;
+	
+	_scans = finalArray;
 }
 
 //Custom setter translates answer json into answer object if needed

@@ -11,6 +11,8 @@
 #import "CRUserKeys.h"
 #import "CRCaseSet.h"
 #import "CRCase.h"
+#import "CRScan.h"
+#import "CRSlice.h"
 #import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
@@ -82,7 +84,9 @@
 	CRCase *crCase = caseArray[indexPath.row];
     
 	cell.name.text = crCase.name;
-	cell.image.image = crCase.images[0];
+	CRScan *scan = crCase.scans[0];
+	CRSlice *slice = scan.slices[0];
+	cell.image.image = slice.image;
     return cell;
 }
 

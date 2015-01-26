@@ -21,5 +21,6 @@
 -(BOOL)isInTouchRange:(id)object; //Used to determine erase radius
 -(id)copyWithZone:(NSZone *)zone;
 -(NSDictionary *)jsonDictFromPoint;
+-(NSString*)jsonString;
 
 @end

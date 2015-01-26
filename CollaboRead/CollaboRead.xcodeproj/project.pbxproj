@@ -17,6 +17,10 @@
 		8D48119D1A0B47AB004329AE /* CRToolPanelUndo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D4811991A0B47AB004329AE /* CRToolPanelUndo.png */; };
 		8D5508AB19FF509B00AF5302 /* CRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D5508AA19FF509B00AF5302 /* CRUser.m */; };
 		8D7530A51A11EA6E0077A01C /* CRToolPanelToggle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */; };
+		8D9830B31A74430600FC2BE1 /* CRScan.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D9830B21A74430600FC2BE1 /* CRScan.m */; };
+		8D9830B61A74435300FC2BE1 /* CRSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D9830B51A74435300FC2BE1 /* CRSlice.m */; };
+		8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D9830B81A74480000FC2BE1 /* CRAnswerLine.m */; };
+		8D9830BC1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D9830BB1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m */; };
 		8DA5DE2219E6064B002EA706 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2119E6064B002EA706 /* main.m */; };
 		8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2419E6064B002EA706 /* AppDelegate.m */; };
 		8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* CRImageController.m */; };
@@ -70,6 +74,14 @@
 		8D5508AA19FF509B00AF5302 /* CRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUser.m; sourceTree = "<group>"; };
 		8D71EA471A09D2E7001347EA /* CRColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRColors.h; sourceTree = "<group>"; };
 		8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelToggle.png; sourceTree = "<group>"; };
+		8D9830B11A74430600FC2BE1 /* CRScan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRScan.h; sourceTree = "<group>"; };
+		8D9830B21A74430600FC2BE1 /* CRScan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRScan.m; sourceTree = "<group>"; };
+		8D9830B41A74435300FC2BE1 /* CRSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSlice.h; sourceTree = "<group>"; };
+		8D9830B51A74435300FC2BE1 /* CRSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSlice.m; sourceTree = "<group>"; };
+		8D9830B71A74480000FC2BE1 /* CRAnswerLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAnswerLine.h; sourceTree = "<group>"; };
+		8D9830B81A74480000FC2BE1 /* CRAnswerLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswerLine.m; sourceTree = "<group>"; };
+		8D9830BA1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+CRAdditions.h"; sourceTree = "<group>"; };
+		8D9830BB1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+CRAdditions.m"; sourceTree = "<group>"; };
 		8DA5DE1C19E6064A002EA706 /* CollaboRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollaboRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA5DE2019E6064A002EA706 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DA5DE2119E6064B002EA706 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -253,6 +265,12 @@
 		8DE0B25D19FF2F7A00760434 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				8D9830B71A74480000FC2BE1 /* CRAnswerLine.h */,
+				8D9830B81A74480000FC2BE1 /* CRAnswerLine.m */,
+				8D9830B11A74430600FC2BE1 /* CRScan.h */,
+				8D9830B21A74430600FC2BE1 /* CRScan.m */,
+				8D9830B41A74435300FC2BE1 /* CRSlice.h */,
+				8D9830B51A74435300FC2BE1 /* CRSlice.m */,
 				8DCD7B491A0709B00005BFDA /* CRAnswer.h */,
 				8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */,
 				8D5508A919FF509B00AF5302 /* CRUser.h */,
@@ -268,6 +286,8 @@
 		8DEE5AD919F63EBC0090AF0B /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				8D9830BA1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.h */,
+				8D9830BB1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m */,
 				8DCD7B4C1A070BAF0005BFDA /* NSDate+CRAdditions.h */,
 				8DCD7B4D1A070BAF0005BFDA /* NSDate+CRAdditions.m */,
 				8DEE5ADA19F63EFB0090AF0B /* NSArray+CRAdditions.h */,
@@ -471,20 +491,24 @@
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */,
 				BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */,
+				8D9830B61A74435300FC2BE1 /* CRSlice.m in Sources */,
 				8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */,
 				8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */,
 				BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */,
 				8D5508AB19FF509B00AF5302 /* CRUser.m in Sources */,
 				BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */,
 				8DCD7B4E1A070BAF0005BFDA /* NSDate+CRAdditions.m in Sources */,
+				8D9830B31A74430600FC2BE1 /* CRScan.m in Sources */,
 				BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */,
 				8DE0B26019FF2FD300760434 /* CRCase.m in Sources */,
+				8D9830BC1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m in Sources */,
 				8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
 				8DD3601A1A0B3E8900E572D1 /* CRToolPanelCell.m in Sources */,
 				8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */,
 				BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */,
 				8DA5DE2219E6064B002EA706 /* main.m in Sources */,
+				8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */,
 				8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */,
 				BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */,
 			);

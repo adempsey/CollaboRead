@@ -13,6 +13,8 @@
 #import "CRAnswerPoint.h"
 #import "CRUser.h"
 #import "CRAnswer.h"
+#import "CRScan.h"
+#import "CRSlice.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
 #import "CRDrawingPreserver.h"
@@ -56,7 +58,11 @@
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
 	//Most likely will be done by a transitioning view
-	UIImage *img = self.caseChosen.images[0];
+	
+#warning temporary - to be controlled by UI
+	CRScan *scan = self.caseChosen.scans[0];
+	CRSlice *slice = scan.slices[0];
+	UIImage *img = slice.image;
 	self.navigationItem.title = self.caseChosen.name;
 	[self loadAndScaleImage:img];
 
@@ -98,7 +104,10 @@
                 }] != NSNotFound;
             }];
             if(idx != NSNotFound) {
-                self.undoStack = [[NSMutableArray alloc] initWithObjects:[NSMutableArray arrayWithArray:((CRAnswer *)answers[idx]).answerData], nil];
+				CRAnswer *answer = answers[idx];
+				NSArray *answerData = answer.drawings;
+				self.undoStack = [[NSMutableArray alloc] initWithObjects:answerData, nil];
+//                self.undoStack = [[NSMutableArray alloc] initWithObjects:[NSMutableArray arrayWithArray:((CRAnswer *)answers[idx]).answerData], nil];
             }
         }
     }

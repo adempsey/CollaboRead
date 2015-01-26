@@ -13,6 +13,7 @@
 #import "CRUser.h"
 #import "CRUserKeys.h"
 #import "CRAnswerPoint.h"
+#import "CRAnswerLine.h"
 #import "CRColors.h"
 #import "CRViewSizeMacros.h"
 #import "CRPatientInfoViewController.h"
@@ -60,18 +61,16 @@
 																										   50.0)];
     submitButton.userInteractionEnabled = NO; //Disallow repeated submissions
 	[submitButton setTitle:@"" forState:UIControlStateNormal];
-
+	
 	[activityIndicator startAnimating];
 	[submitButton addSubview:activityIndicator];
 
     NSArray *students = [[NSArray alloc]initWithObjects:self.user.userID, nil];
 
     //Prepare and send answer
-    NSMutableArray *answerPts = [[NSMutableArray alloc] init];
-    [self.undoStack[0] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [answerPts addObject:[(CRAnswerPoint *)obj jsonDictFromPoint]];
-    }];
-	CRAnswer *answer = [[CRAnswer alloc] initWithData:answerPts submissionDate:nil owners:students];
+	CRAnswerLine *ansDraw = [[CRAnswerLine alloc] initWithPoints:self.undoStack[0] forSlice: @"more blah" ofScan: @"blah"];
+#warning this is not a real id
+	CRAnswer *answer = [[CRAnswer alloc] initWithData:@[ansDraw] submissionDate:nil owners:students answerID:@"idk"];
 
     [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
 		NSString *unicodeCheckMark = @"\u2713";

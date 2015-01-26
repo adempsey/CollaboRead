@@ -8,8 +8,11 @@
 
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
+#import "CRAnswerLine.h"
+#import "CRAnswerPoint.h"
 
 #import "NSArray+CRAdditions.h"
+#import "NSDictionary+CRAdditions.h"
 
 //#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
 
@@ -45,14 +48,11 @@
 
 - (void)setServerAddress:(NSString *)serverAddress
 {
-	serverAddress = [NSString stringWithFormat:@"http://%@", serverAddress];
-	_serverAddress = serverAddress;
+#warning temporary - here for testing
+	_serverAddress = @"http://collaboread.herokuapp.com";
+//	_serverAddress = @"http://localhost:5000";
 
-	if (![serverAddress isEqualToString:@"http://collaboread.herokuapp.com"]) {
-		serverAddress = [serverAddress stringByAppendingString:@":5000"];
-	}
-
-	self.serverAPIAddress = [serverAddress stringByAppendingString:@"/api/v1/"];
+	self.serverAPIAddress = [_serverAddress stringByAppendingString:@"/api/v1/"];
 }
 
 #pragma mark - Retrieval Methods
@@ -171,13 +171,13 @@
 	};
 
 	NSString *resource = [self.serverAPIAddress stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
-
-	NSDictionary *params = @{
-							 kCR_API_QUERY_PARAMETER_CASE_SET_ID: setID,
-							 kCR_API_QUERY_PARAMETER_CASE_ID: caseID,
-							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS: answer.owners.jsonString,
-							 kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA: answer.answerData.jsonString
-							 };
+	
+	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: answer.jsonDictionary];
+	params[@"drawings"] = ((NSDictionary *)params[@"drawings"]).jsonString;
+	params[@"owners"] = ((NSArray *)params[@"owners"]).jsonString;
+	params[kCR_API_QUERY_PARAMETER_CASE_SET_ID] = setID;
+	params[kCR_API_QUERY_PARAMETER_CASE_ID] = caseID;
+	
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"POST" withParams:params completionBlock:completionBlock];
 }
 
