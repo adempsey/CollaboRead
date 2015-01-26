@@ -36,5 +36,4 @@
 	
 	_slices = finalArray;
 }
-
 @end

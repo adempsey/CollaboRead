@@ -14,6 +14,7 @@
 #import "CRScan.h"
 #import "CRAPIClientService.h"
 #import "NSDate+CRAdditions.h"
+#import "CRScan.h"
 
 @implementation CRCase
 //Translate from JSON to Objective C object

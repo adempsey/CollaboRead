@@ -14,6 +14,9 @@
 #import "NSDate+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
 
+#define kANSWER_SLICE @""
+#define kANSWER_SCAN @""
+
 @implementation CRAnswer
 
 //Translate JSON dictionary of an answer into app useable objective c object

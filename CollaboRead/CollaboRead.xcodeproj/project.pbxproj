@@ -37,12 +37,15 @@
 		8DE0B26019FF2FD300760434 /* CRCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B25F19FF2FD300760434 /* CRCase.m */; };
 		8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B26219FF306900760434 /* CRCaseSet.m */; };
 		8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */; };
+		BB3A8B641A74457800C71141 /* CRScan.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3A8B631A74457800C71141 /* CRScan.m */; };
+		BB3A8B671A74464F00C71141 /* CRSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3A8B661A74464F00C71141 /* CRSlice.m */; };
 		BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */; };
 		BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */; };
 		BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */; };
 		BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */; };
 		BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */; };
 		BBCCEDE11A71991800782507 /* CRToolPanelScan.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCCEDE01A71991800782507 /* CRToolPanelScan.png */; };
+		BBCCEDE71A719F3300782507 /* CRScansMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */; };
 		BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */; };
 		BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */; };
 		BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */; };
@@ -113,6 +116,10 @@
 		8DEE5ADA19F63EFB0090AF0B /* NSArray+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+CRAdditions.h"; sourceTree = "<group>"; };
 		8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+CRAdditions.m"; sourceTree = "<group>"; };
 		BB375B5C1A141DCC007D8556 /* CRViewSizeMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRViewSizeMacros.h; path = ../Controllers/View/CRViewSizeMacros.h; sourceTree = "<group>"; };
+		BB3A8B621A74457800C71141 /* CRScan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRScan.h; sourceTree = "<group>"; };
+		BB3A8B631A74457800C71141 /* CRScan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRScan.m; sourceTree = "<group>"; };
+		BB3A8B651A74464F00C71141 /* CRSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSlice.h; sourceTree = "<group>"; };
+		BB3A8B661A74464F00C71141 /* CRSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSlice.m; sourceTree = "<group>"; };
 		BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAnswerPoint.h; sourceTree = "<group>"; };
 		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswerPoint.m; sourceTree = "<group>"; };
 		BBA0C1111A1637F800FFA921 /* CRDrawingPreserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRDrawingPreserver.h; sourceTree = "<group>"; };
@@ -126,6 +133,8 @@
 		BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRTitledImageCollectionCell.m; sourceTree = "<group>"; };
 		BBA2EBDB19EEF3340093044E /* CRCaseKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRCaseKeys.h; sourceTree = "<group>"; };
 		BBCCEDE01A71991800782507 /* CRToolPanelScan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelScan.png; sourceTree = "<group>"; };
+		BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRScansMenuViewController.h; path = ../../../CRScansMenuViewController.h; sourceTree = "<group>"; };
+		BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRScansMenuViewController.m; path = ../../../CRScansMenuViewController.m; sourceTree = "<group>"; };
 		BBD3135619F2E2040017B96A /* CRSelectLecturerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSelectLecturerViewController.h; sourceTree = "<group>"; };
 		BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSelectLecturerViewController.m; sourceTree = "<group>"; };
 		BBD3B03319F5B60300C18A6A /* CRStudentImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStudentImageViewController.h; sourceTree = "<group>"; };
@@ -279,6 +288,10 @@
 				8DE0B25F19FF2FD300760434 /* CRCase.m */,
 				8DE0B26119FF306900760434 /* CRCaseSet.h */,
 				8DE0B26219FF306900760434 /* CRCaseSet.m */,
+				BB3A8B621A74457800C71141 /* CRScan.h */,
+				BB3A8B631A74457800C71141 /* CRScan.m */,
+				BB3A8B651A74464F00C71141 /* CRSlice.h */,
+				BB3A8B661A74464F00C71141 /* CRSlice.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -363,6 +376,8 @@
 				8DA5DE2719E6064B002EA706 /* CRImageController.m */,
 				8DD360151A0B366200E572D1 /* CRToolPanelViewController.h */,
 				8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */,
+				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
+				BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */,
 				BBD3B03319F5B60300C18A6A /* CRStudentImageViewController.h */,
 				BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */,
 				BBD3B03619F5B64200C18A6A /* CRLecturerImageViewController.h */,
@@ -505,12 +520,14 @@
 				8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
 				8DD3601A1A0B3E8900E572D1 /* CRToolPanelCell.m in Sources */,
+				BB3A8B641A74457800C71141 /* CRScan.m in Sources */,
 				8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */,
 				BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */,
 				8DA5DE2219E6064B002EA706 /* main.m in Sources */,
 				8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */,
 				8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */,
 				BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */,
+				BBCCEDE71A719F3300782507 /* CRScansMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

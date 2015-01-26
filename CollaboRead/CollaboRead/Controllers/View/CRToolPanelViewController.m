@@ -11,8 +11,6 @@
 #import "CRColors.h"
 #import "CRViewSizeMacros.h"
 
-#define kButtonDimension 60.0
-
 @interface CRToolPanelViewController ()
 
 @property (nonatomic, readwrite, strong) UITableView *tableView;
@@ -84,6 +82,9 @@
 		[self setFullView:YES];
 		self.tableView.alpha = 1.0;
 	}
+    else if (self.selectedTool.row == kCR_PANEL_TOOL_SCANS) {
+        [self tableView:self.tableView didSelectRowAtIndexPath:self.selectedTool];
+    }
 
 	[UIView animateWithDuration:0.25 animations:^{
 		self.tableView.frame = currentTableFrame;
@@ -138,15 +139,15 @@
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 		[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
-	} else {
-        NSLog(@"%@", indexPath);
-        if (indexPath.row == kCR_PANEL_TOOL_SCANS && self.selectedTool.row ==kCR_PANEL_TOOL_SCANS) {
+	} else if (indexPath.row == kCR_PANEL_TOOL_SCANS && self.selectedTool.row ==kCR_PANEL_TOOL_SCANS) {
             [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
             self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
             [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
-        }
-		self.selectedTool = indexPath;
-	}
+    }
+    else
+    {
+            self.selectedTool = indexPath;
+    }
 }
 
 #pragma mark - Extra TableView Methods

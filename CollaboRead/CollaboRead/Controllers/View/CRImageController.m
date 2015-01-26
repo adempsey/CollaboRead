@@ -30,11 +30,17 @@
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
 
+@property (nonatomic, assign) NSUInteger *scanIndex;
+@property (nonatomic, assign) NSUInteger *sliceIndex;
+
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
 
 @property (nonatomic, readwrite, strong) UIButton *toggleButton;
 
+@property (nonatomic, strong) CRScansMenuViewController *scansMenuController;
+
+-(void)toggleScansMenu;
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)removePointFromAnswer:(CRAnswerPoint *)pt;
@@ -56,6 +62,9 @@
 	[super viewDidLoad];
 
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    self.scanIndex = 0;
+    self.sliceIndex = 0;
 
 	//Most likely will be done by a transitioning view
 	
@@ -76,7 +85,6 @@
     
 	self.toolPanelViewController = [[CRToolPanelViewController alloc] init];
 	self.toolPanelViewController.delegate = self;
-	[self.view addSubview:self.toolPanelViewController.view];
 
     CGRect frame = LANDSCAPE_FRAME; //Frame adjusted based on iOS 7 or 8
 	self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
@@ -86,7 +94,15 @@
 	UIImage *toggleButtonImage = [UIImage imageNamed:@"CRToolPanelToggle.png"];
 	[self.toggleButton setImage:toggleButtonImage forState:UIControlStateNormal];
 	[self.toggleButton addTarget:self action:@selector(toggleToolPanel) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:self.toggleButton];
+    
+    self.scansMenuController = [[CRScansMenuViewController alloc] init];
+    self.scansMenuController.delegate = self;
+    [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - kButtonDimension, 0, 0)];
+    self.scansMenuController.view.hidden = YES;
+    
+    [self.view addSubview:self.scansMenuController.view];
+    [self.view addSubview:self.toolPanelViewController.view];
+    [self.view addSubview:self.toggleButton];
     
     self.lineRedComp = 255;
     self.lineBlueComp = 0;
@@ -123,7 +139,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-
+    
 	[UIView animateWithDuration:0.25 animations:^{
 		self.caseImage.alpha = 1.0;
         self.drawView.alpha = 1.0;
@@ -357,6 +373,28 @@
     [self.undoStack[0] removeObjectsAtIndexes:toRemove];
 }
 
+-(void)toggleScansMenu
+{
+    CGRect frame = LANDSCAPE_FRAME;
+    if (self.scansMenuController.view.hidden) {
+        self.scansMenuController.view.hidden = NO;
+        CGFloat size = self.toolPanelViewController.view.frame.size.height * 0.75;
+        frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - size - kButtonDimension, size, size);
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.scansMenuController setViewFrame: frame];
+        } completion:^(BOOL finished) {}];
+    }
+    else {
+        frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - kButtonDimension, 0, 0);
+    
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.scansMenuController setViewFrame: frame];
+        } completion:^(BOOL finished) {
+            self.scansMenuController.view.hidden = YES;
+        }];
+    }
+}
+
 #pragma mark - CRToolPanelViewController Delegate Methods
 
 - (void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didSelectTool:(NSInteger)tool
@@ -376,7 +414,7 @@
             [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
             break;
         case kCR_PANEL_TOOL_SCANS:
-            //[self.scanView setHidden: !self.scanView.Hidden]
+            [self toggleScansMenu];
             break;
 	}
 }

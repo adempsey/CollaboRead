@@ -10,6 +10,7 @@
 
 #define kToolPanelTableViewWidth 90.0
 #define kToolPanelTableViewMargin (kToolPanelTableViewWidth/8)
+#define kButtonDimension 60.0
 
 typedef NS_ENUM(NSUInteger, kPanelSections) {
 	kCR_PANEL_TOOL_PEN = 0,
@@ -35,3 +36,4 @@ typedef NS_ENUM(NSUInteger, kPanelSections) {
 - (void)toolPanelViewController:(CRToolPanelViewController*)toolPanelViewController didSelectTool:(NSInteger)tool;
 
 @end
+
