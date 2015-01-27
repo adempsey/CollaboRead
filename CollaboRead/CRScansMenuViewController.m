@@ -17,6 +17,7 @@
 @interface CRScansMenuViewController ()
 
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) NSIndexPath *selectedIndex;
 
 @end
 
@@ -24,10 +25,10 @@
 
 static NSString * const reuseIdentifier = @"scanCell";
 
--(instancetype)init {
+-(instancetype)initWithScans:(NSArray *)scans {
     self = [super init];
     if (self) {
-        
+        self.scans = scans;
     }
     return self;
 }
@@ -36,6 +37,10 @@ static NSString * const reuseIdentifier = @"scanCell";
     self.view.frame = frame;
     [self.collectionView reloadData];
     self.collectionView.frame = CGRectMake(kScanMenuMargin, kScanMenuMargin, frame.size.width - 2 * kScanMenuMargin, frame.size.height - 2 * kScanMenuMargin);
+    if (!self.selectedIndex) {
+        self.selectedIndex = [NSIndexPath indexPathForItem:0 inSection:0];
+    }
+    [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone];
 }
 
 - (void)viewDidLoad {
@@ -61,16 +66,6 @@ static NSString * const reuseIdentifier = @"scanCell";
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -86,15 +81,18 @@ static NSString * const reuseIdentifier = @"scanCell";
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
     // Configure the cell
-    
     cell.name.text = ((CRScan *)self.scans[indexPath.row]).name;
     cell.image.image = ((CRSlice *)((CRScan *)self.scans[indexPath.row]).slices[0]).image;
-    
     return cell;
 }
 
 #pragma mark <UICollectionViewDelegate>
 
+- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.selectedIndex = indexPath;
+    [self.delegate scansMenuViewControllerDidSelectScan:((CRScan *)self.scans[indexPath.row]).scanID];
+}
 #pragma mark – UICollectionViewDelegateFlowLayout
 //Cells are all 100 x 100 pixels
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*) collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath

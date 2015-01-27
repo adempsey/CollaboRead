@@ -30,8 +30,8 @@
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
 
-@property (nonatomic, assign) NSUInteger *scanIndex;
-@property (nonatomic, assign) NSUInteger *sliceIndex;
+@property (nonatomic, assign) NSUInteger scanIndex;
+@property (nonatomic, assign) NSUInteger sliceIndex;
 
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
@@ -66,14 +66,8 @@
     self.scanIndex = 0;
     self.sliceIndex = 0;
 
-	//Most likely will be done by a transitioning view
-	
-#warning temporary - to be controlled by UI
-	CRScan *scan = self.caseChosen.scans[0];
-	CRSlice *slice = scan.slices[0];
-	UIImage *img = slice.image;
 	self.navigationItem.title = self.caseChosen.name;
-	[self loadAndScaleImage:img];
+	[self loadAndScaleImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).image];
 
 	// Invisible now so that the image fades in once the view appears
 	self.caseImage.alpha = 0.0;
@@ -95,7 +89,7 @@
 	[self.toggleButton setImage:toggleButtonImage forState:UIControlStateNormal];
 	[self.toggleButton addTarget:self action:@selector(toggleToolPanel) forControlEvents:UIControlEventTouchUpInside];
     
-    self.scansMenuController = [[CRScansMenuViewController alloc] init];
+    self.scansMenuController = [[CRScansMenuViewController alloc] initWithScans:self.caseChosen.scans];
     self.scansMenuController.delegate = self;
     [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - kButtonDimension, 0, 0)];
     self.scansMenuController.view.hidden = YES;
@@ -176,6 +170,7 @@
 //Only clears image, does not affect saved data
 -(void)clearDrawing
 {
+    self.drawView.frame = self.caseImage.frame;
     self.drawView.image = [[UIImage alloc] init];
 }
 
@@ -214,8 +209,12 @@
 //storyboard
 -(void)loadAndScaleImage:(UIImage *)img
 {
-    self.caseImage = [[UIImageView alloc] initWithImage:img];
-    CGRect newFrame = self.caseImage.frame;
+    if (!self.caseImage) {
+        self.caseImage = [[UIImageView alloc] init];
+        self.drawView = [[UIImageView alloc] init];
+    }
+    self.caseImage.image = img;
+    CGRect newFrame = CGRectMake(0, 0, img.size.width, img.size.height);
     
     //Determine boundaries based on iOS version
     CGFloat topBarHeight = TOP_BAR_HEIGHT;
@@ -252,9 +251,11 @@
             newFrame.origin.x = (viewFrame.size.width - newFrame.size.width)/2;
         }
     }
-    
     [self.caseImage setFrame:newFrame];
-    self.drawView = [[UIImageView alloc] initWithFrame:newFrame];
+    [self clearDrawing];
+    [self.drawView setNeedsDisplay];
+    [self.caseImage setNeedsDisplay];
+    [self.view setNeedsDisplay];
 }
 
 //Prepares undostack, begins appropriate draw action
@@ -417,6 +418,22 @@
             [self toggleScansMenu];
             break;
 	}
+}
+
+#pragma mark - CRScansMenuViewController Delegate Methods
+-(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
+{
+    [self.caseChosen.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([((CRScan *)obj).scanID isEqualToString:scanId]) {
+            if (idx != self.scanIndex) {
+                
+                self.scanIndex = idx;
+                self.sliceIndex = 0;
+                [self loadAndScaleImage:((CRSlice *)((CRScan *) obj).slices[self.sliceIndex]).image];
+            }
+            *stop = true;
+        }
+    }];
 }
 
 @end

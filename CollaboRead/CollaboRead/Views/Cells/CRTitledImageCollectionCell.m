@@ -9,6 +9,7 @@
 //
 
 #import "CRTitledImageCollectionCell.h"
+#import "CRColors.h"
 
 @implementation CRTitledImageCollectionCell
 
@@ -25,6 +26,11 @@
         [self.contentView addSubview:self.name];
     }
     return self;
+}
+
+-(void)setSelected:(BOOL)selected
+{
+    self.name.textColor = selected ? CR_COLOR_TINT : [UIColor whiteColor];
 }
 
 

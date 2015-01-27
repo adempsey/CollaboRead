@@ -31,7 +31,7 @@
 @property (nonatomic, strong) NSArray *allUsers; //Used for LecturerImageViewController subclass
 @property (nonatomic, strong) NSString *lecturerID;//Lecturer who own's case
 @property (nonatomic, strong) NSIndexPath *indexPath;//
-@property (nonatomic, strong) NSString *patientInfo;//Lecturer who own's case
+@property (nonatomic, strong) NSString *patientInfo;
 
 
 //Loads the image to be drawn over into the view and scales it to fit the screen.

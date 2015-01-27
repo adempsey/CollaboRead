@@ -21,7 +21,6 @@
 		8D9830BC1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D9830BB1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m */; };
 		8DA5DE2219E6064B002EA706 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2119E6064B002EA706 /* main.m */; };
 		8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2419E6064B002EA706 /* AppDelegate.m */; };
-		8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* CRImageController.m */; };
 		8DA5DE2B19E6064B002EA706 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2919E6064B002EA706 /* Main.storyboard */; };
 		8DA5DE2D19E6064B002EA706 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2C19E6064B002EA706 /* Images.xcassets */; };
 		8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2E19E6064B002EA706 /* LaunchScreen.xib */; };
@@ -47,6 +46,7 @@
 		BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */; };
 		BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */; };
 		BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */; };
+		BBE8DCCF1A77EA8500B09C4F /* CRImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* CRImageController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -491,7 +491,6 @@
 			files = (
 				8DD360171A0B366200E572D1 /* CRToolPanelViewController.m in Sources */,
 				36ED59531A2D3CEE00F61D7B /* CRPatientInfoViewController.m in Sources */,
-				8DA5DE2819E6064B002EA706 /* CRImageController.m in Sources */,
 				BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */,
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */,
@@ -516,6 +515,7 @@
 				8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */,
 				8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */,
 				BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */,
+				BBE8DCCF1A77EA8500B09C4F /* CRImageController.m in Sources */,
 				BBCCEDE71A719F3300782507 /* CRScansMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

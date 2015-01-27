@@ -15,4 +15,6 @@
 @property (nonatomic, strong) IBOutlet UIImageView *image;
 @property (nonatomic, strong) IBOutlet UILabel *name;
 
+-(void)toggleHighlight;
+
 @end

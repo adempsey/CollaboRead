@@ -11,7 +11,6 @@
 
 @interface CRSlice ()
 
-@property (nonatomic, readwrite, strong) UIImage *image;
 
 @end
 
@@ -31,7 +30,7 @@
 - (void)setUrl:(NSURL *)url
 {
 	NSData *imageData = [NSData dataWithContentsOfURL:url];
-	self.image = [UIImage imageWithData:imageData];
+	_image = [UIImage imageWithData:imageData];
 	_url = url;
 }
 
