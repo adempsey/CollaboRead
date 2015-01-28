@@ -68,9 +68,7 @@
     NSArray *students = [[NSArray alloc]initWithObjects:self.user.userID, nil];
 
     //Prepare and send answer
-	CRAnswerLine *ansDraw = [[CRAnswerLine alloc] initWithPoints:self.undoStack[0] forSlice: @"more blah" ofScan: @"blah"];
-#warning this is not a real id
-	CRAnswer *answer = [[CRAnswer alloc] initWithData:@[ansDraw] submissionDate:nil owners:students answerID:@"idk"];
+	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students];
 
     [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
 		NSString *unicodeCheckMark = @"\u2713";

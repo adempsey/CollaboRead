@@ -8,6 +8,7 @@
 
 #import "CRDrawingPreserver.h"
 
+
 @interface CRDrawingPreserver ()
 
 @property (nonatomic, strong) NSMutableDictionary *drawings;//Holds values of undo stack arrays keyed to case ids
@@ -27,12 +28,12 @@
     return sharedInstance;
 }
 
--(NSMutableArray *)drawingHistoryForCaseID:(NSString *)caseID
+-(CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID
 {
     return [self.drawings objectForKey:caseID];
 }
 
--(void)setDrawingHistory:(NSArray *)drawing forCaseID:(NSString *)caseID
+-(void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID
 {
     [self.drawings setObject:drawing forKey:caseID];
 }

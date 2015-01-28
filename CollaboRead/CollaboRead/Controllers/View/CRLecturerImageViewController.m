@@ -107,9 +107,9 @@
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeStudentSelection:(NSArray *)students
 {
     [self clearDrawing];
-    if ([self.undoStack count] > 0) {
-        [self drawAnswer:self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
-    }
+    //if ([self.undoStack count] > 0) {
+    //    [self drawAnswer:self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+    //}
     NSArray *answers =self.caseChosen.answers;
     NSMutableArray *temp = [[NSMutableArray alloc] init];;
 	NSMutableArray *colors = [[NSMutableArray alloc] init];

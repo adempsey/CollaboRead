@@ -36,6 +36,7 @@
 		8DE0B26019FF2FD300760434 /* CRCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B25F19FF2FD300760434 /* CRCase.m */; };
 		8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B26219FF306900760434 /* CRCaseSet.m */; };
 		8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */; };
+		BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6278C21A79480D002391FB /* CRUndoStack.m */; };
 		BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */; };
 		BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */; };
 		BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */; };
@@ -114,6 +115,8 @@
 		8DEE5ADA19F63EFB0090AF0B /* NSArray+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+CRAdditions.h"; sourceTree = "<group>"; };
 		8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+CRAdditions.m"; sourceTree = "<group>"; };
 		BB375B5C1A141DCC007D8556 /* CRViewSizeMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRViewSizeMacros.h; path = ../Controllers/View/CRViewSizeMacros.h; sourceTree = "<group>"; };
+		BB6278C11A79480D002391FB /* CRUndoStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUndoStack.h; sourceTree = "<group>"; };
+		BB6278C21A79480D002391FB /* CRUndoStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUndoStack.m; sourceTree = "<group>"; };
 		BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAnswerPoint.h; sourceTree = "<group>"; };
 		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswerPoint.m; sourceTree = "<group>"; };
 		BBA0C1111A1637F800FFA921 /* CRDrawingPreserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRDrawingPreserver.h; sourceTree = "<group>"; };
@@ -268,14 +271,14 @@
 		8DE0B25D19FF2F7A00760434 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8D9830B71A74480000FC2BE1 /* CRAnswerLine.h */,
-				8D9830B81A74480000FC2BE1 /* CRAnswerLine.m */,
 				8DD664E31A75F878002C379E /* CRScan.h */,
 				8DD664E41A75F878002C379E /* CRScan.m */,
 				8DD664E51A75F878002C379E /* CRSlice.h */,
 				8DD664E61A75F878002C379E /* CRSlice.m */,
 				8DCD7B491A0709B00005BFDA /* CRAnswer.h */,
 				8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */,
+				8D9830B71A74480000FC2BE1 /* CRAnswerLine.h */,
+				8D9830B81A74480000FC2BE1 /* CRAnswerLine.m */,
 				8D5508A919FF509B00AF5302 /* CRUser.h */,
 				8D5508AA19FF509B00AF5302 /* CRUser.m */,
 				8DE0B25E19FF2FD300760434 /* CRCase.h */,
@@ -349,6 +352,8 @@
 			children = (
 				BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */,
 				BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */,
+				BB6278C11A79480D002391FB /* CRUndoStack.h */,
+				BB6278C21A79480D002391FB /* CRUndoStack.m */,
 			);
 			path = Drawing;
 			sourceTree = "<group>";
@@ -503,6 +508,7 @@
 				BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */,
 				8DCD7B4E1A070BAF0005BFDA /* NSDate+CRAdditions.m in Sources */,
 				BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */,
+				BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */,
 				8DD664E81A75F878002C379E /* CRSlice.m in Sources */,
 				8DE0B26019FF2FD300760434 /* CRCase.m in Sources */,
 				8D9830BC1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m in Sources */,

@@ -10,15 +10,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CRUndoStack.h"
 
 @interface CRDrawingPreserver : NSObject
 
 +(CRDrawingPreserver *) sharedInstance;
 
 //Gives the undoStack for image if found or nil otherwise
--(NSMutableArray *)drawingHistoryForCaseID:(NSString *)caseID;
+-(CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID;
 
 //Adds or updates drawing history for a case
--(void)setDrawingHistory:(NSArray *)drawing forCaseID:(NSString *)caseID;
+-(void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID;
 
 @end

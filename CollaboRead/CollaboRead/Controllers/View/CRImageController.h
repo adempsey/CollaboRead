@@ -15,6 +15,7 @@
 #import "CRUser.h"
 #import "CRToolPanelViewController.h"
 #import "CRScansMenuViewController.h"
+#import "CRUndoStack.h"
 
 @interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate>
 
@@ -27,7 +28,7 @@
 @property (nonatomic, strong) CRCase *caseChosen;//Case information
 @property (nonatomic, strong) NSString *caseId;//Identifier for submitting/getting answers
 @property (nonatomic, strong) NSString *caseGroup;//Identifier for submitting/getting case information
-@property(nonatomic, strong) NSMutableArray *undoStack;//All past iterations of a drawing on the image
+@property(nonatomic, strong) CRUndoStack *undoStack;//All past iterations of a drawing on the image
 @property (nonatomic, strong) NSArray *allUsers; //Used for LecturerImageViewController subclass
 @property (nonatomic, strong) NSString *lecturerID;//Lecturer who own's case
 @property (nonatomic, strong) NSIndexPath *indexPath;//

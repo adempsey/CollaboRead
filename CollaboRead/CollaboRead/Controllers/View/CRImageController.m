@@ -30,6 +30,8 @@
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
 
+@property (nonatomic, strong) NSMutableArray *currentDrawing;
+
 @property (nonatomic, assign) NSUInteger scanIndex;
 @property (nonatomic, assign) NSUInteger sliceIndex;
 
@@ -115,19 +117,17 @@
             }];
             if(idx != NSNotFound) {
 				CRAnswer *answer = answers[idx];
-				NSArray *answerData = answer.drawings;
-				self.undoStack = [[NSMutableArray alloc] initWithObjects:answerData, nil];
-//                self.undoStack = [[NSMutableArray alloc] initWithObjects:[NSMutableArray arrayWithArray:((CRAnswer *)answers[idx]).answerData], nil];
+                self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
             }
         }
+        if (!self.undoStack) {
+            self.undoStack = [[CRUndoStack alloc] init];
+        }
+        [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
     }
-    if (!self.undoStack) {
-        self.undoStack = [[NSMutableArray alloc] init];
-    }
-    else if ([self.undoStack count] > 0)
-    {
-        [self drawAnswer:self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
-    }
+    CRScan *scan = self.caseChosen.scans[self.scanIndex];
+    self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
+    [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -155,14 +155,13 @@
 //Pops from answer stack and redraws previous answer
 -(void)undoEdit
 {
-	if (self.undoStack.count > 1) {
-		[self.undoStack removeObjectAtIndex:0];
-
-		self.drawView.image = [[UIImage alloc] init];
-		[self drawAnswer: self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+    CRScan *scan = self.caseChosen.scans[self.scanIndex];
+    self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack removeLayerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID] copyItems:YES];
+    if (self.currentDrawing.count > 0) {
+        [self clearDrawing];
+        [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
     }
-    else if(self.undoStack.count == 1){
-        [self.undoStack removeObjectAtIndex:0];
+    else {
         [self clearDrawing];
     }
 }
@@ -262,25 +261,11 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
-        NSMutableArray *newDrawing;
-        if ([self.undoStack count] > 0) {
-            newDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack objectAtIndex:0] copyItems:YES];
-        } else {
-            newDrawing = [[NSMutableArray alloc] init];
-        }
-        [newDrawing addObject:lastPoint];
-        [self.undoStack insertObject:newDrawing atIndex:0];
+        [self.currentDrawing addObject:lastPoint];
     }
     
     else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
         lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
-        NSMutableArray *newDrawing;
-        if ([self.undoStack count] > 0) {
-            newDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack objectAtIndex:0] copyItems:YES];
-        } else {
-            newDrawing = [[NSMutableArray alloc] init];
-        }
-        [self.undoStack insertObject:newDrawing atIndex:0];
         [self removePointFromAnswer:lastPoint];
     }
 }
@@ -290,7 +275,7 @@
     if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
         [self drawLineFrom:lastPoint to:currentPoint];
-        [self.undoStack[0] addObject:currentPoint];
+        [self.currentDrawing addObject:currentPoint];
         lastPoint = currentPoint;
     }
     
@@ -307,14 +292,16 @@
     if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
         [self drawLineFrom:lastPoint to:currentPoint];
-        [self.undoStack[0] addObject:currentPoint];
+        [self.currentDrawing addObject:currentPoint];
     }
     else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
         CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
         [self eraseLineFrom:lastPoint to:currentPoint];
         [self removePointFromAnswer:currentPoint];
     }
-    [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
+    CRScan *scan = self.caseChosen.scans[self.scanIndex];
+    [self.undoStack addLayer:self.currentDrawing forSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID];
+    self.currentDrawing = [[NSMutableArray alloc] initWithArray:self.currentDrawing copyItems:YES];
 }
 
 
@@ -361,17 +348,17 @@
 -(void)removePointFromAnswer:(CRAnswerPoint *)pt
 {
     //Find which to remove
-    NSIndexSet *toRemove = [self.undoStack[0] indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+    NSIndexSet *toRemove = [self.currentDrawing indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         return [pt isInTouchRange:obj];
     }];
     //Set endpoints of precending points to points to remove
     [toRemove enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
         if (idx != 0) {
-            ((CRAnswerPoint *)[self.undoStack[0] objectAtIndex:idx - 1]).isEndPoint = YES;
+            ((CRAnswerPoint *)[self.currentDrawing objectAtIndex:idx - 1]).isEndPoint = YES;
         }
     }];
     //Remove points
-    [self.undoStack[0] removeObjectsAtIndexes:toRemove];
+    [self.currentDrawing removeObjectsAtIndexes:toRemove];
 }
 
 -(void)toggleScansMenu
@@ -407,10 +394,11 @@
 			break;
 		case kCR_PANEL_TOOL_UNDO:
 			[self undoEdit];
-            [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
 			break;
 		case kCR_PANEL_TOOL_CLEAR:
-            [self.undoStack insertObject:[[NSMutableArray alloc] init] atIndex:0];
+            //CRScan *scan = self.caseChosen.scans[self.scanIndex];
+            [self.undoStack addLayer:[[NSArray alloc] init] forSlice: ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID ofScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
+            self.currentDrawing = [[NSMutableArray alloc] init];
 			[self clearDrawing];
             [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
             break;
@@ -430,6 +418,9 @@
                 self.scanIndex = idx;
                 self.sliceIndex = 0;
                 [self loadAndScaleImage:((CRSlice *)((CRScan *) obj).slices[self.sliceIndex]).image];
+                CRScan *scan = self.caseChosen.scans[self.scanIndex];
+                self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
+                [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
             }
             *stop = true;
         }
