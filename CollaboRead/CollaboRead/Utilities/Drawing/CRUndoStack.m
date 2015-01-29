@@ -32,6 +32,10 @@
     self = [super init];
     if (self) {
         self.stacks = [[NSMutableDictionary alloc] init];
+        [answer.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            CRAnswerLine *line = obj;
+            [self addLayer:line.data forSlice:line.sliceID ofScan:line.scanID];
+        }];
     }
     return self;
 }
