@@ -26,9 +26,12 @@
 
 @property (nonatomic, strong) CRUser *user;
 @property (nonatomic, strong) CRCase *caseChosen;//Case information
-@property (nonatomic, strong) NSString *caseId;//Identifier for submitting/getting answers
+
+@property (nonatomic, assign) NSUInteger scanIndex;
+@property (nonatomic, assign) NSUInteger sliceIndex;
 @property (nonatomic, strong) NSString *caseGroup;//Identifier for submitting/getting case information
 @property(nonatomic, strong) CRUndoStack *undoStack;//All past iterations of a drawing on the image
+@property (nonatomic, strong) NSMutableArray *currentDrawing;
 @property (nonatomic, strong) NSArray *allUsers; //Used for LecturerImageViewController subclass
 @property (nonatomic, strong) NSString *lecturerID;//Lecturer who own's case
 @property (nonatomic, strong) NSIndexPath *indexPath;//

@@ -10,6 +10,9 @@
 #include "CRAPIClientService.h"
 #include "CRAnswerPoint.h"
 #include "CRUser.h"
+#include "CRAnswerLine.h"
+#include "CRScan.h"
+#include "CRSlice.h"
 
 #define studentColors @[@{@"red":@0, @"green": @255, @"blue" : @0}, \
                         @{@"red":@0, @"green": @0, @"blue" : @255}, \
@@ -31,12 +34,10 @@
 @property (nonatomic, strong) UIButton *showButton;
 @property (nonatomic, strong) UIButton *hideButton;
 @property (nonatomic, strong) NSArray *allStudents;
-@property (nonatomic, strong) NSString *userID;
-@property (nonatomic, strong) NSString *userIDtemp;
-@property (nonatomic, strong) CRAnswer *currentAnswer;
+@property (nonatomic, strong) NSArray *selectedAnswers;
+@property (nonatomic, strong) NSArray *selectedColors;
 @property (nonatomic, strong) UIBarButtonItem *toggleStudentAnswerTableButton;
 @property (nonatomic, strong) UIBarButtonItem *toggleStudentRefreshAnswerTableButton;
-@property (nonatomic, strong) NSArray *caseSets;
 
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerViewController;
 
@@ -46,14 +47,19 @@
 
 -(void)drawStudentAnswers
 {
-    NSArray *answers = self.caseChosen.answers;
-    [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSMutableArray *ansLine = [[NSMutableArray alloc] init];
+    NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
+    NSString *sliceID = ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID;
+    [self.selectedAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSDictionary* color = self.selectedColors[idx];
         [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
+            CRAnswerLine *line = obj;
+            if ([line.scanID isEqualToString: scanID] && [line.sliceID isEqualToString:sliceID]) {
+                [self drawAnswer:line.data inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
+            }
+            *stop = true;
         }];
-        NSDictionary* color = studentColors[idx % 15];
-        [self drawAnswer:ansLine inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
+
+        
     }];
 }
 
@@ -83,22 +89,13 @@
 
 - (void) loadStudents
 {
-    NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
+    NSMutableArray *allStudents = [[NSMutableArray alloc] init];;
     NSArray *answers = self.caseChosen.answers;
     
     [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            self.userID = obj;
-            [self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSString *temp = ((CRUser*) obj).userID;
-                if ([self.userID isEqualToString:temp]){
-                    [allstudents addObject:((CRUser*) obj)];
-                }
-            }];
-            
-        }];
+        [allStudents addObject:((CRAnswer *)obj).owners];
     }];
-    self.allStudents = [NSArray arrayWithArray:allstudents];
+    self.allStudents = allStudents;
     self.studentAnswerViewController = [[CRStudentAnswerTableViewController alloc] initWithStudents:self.allStudents];
 
 }
@@ -107,34 +104,22 @@
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeStudentSelection:(NSArray *)students
 {
     [self clearDrawing];
-    //if ([self.undoStack count] > 0) {
-    //    [self drawAnswer:self.undoStack[0] inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
-    //}
-    NSArray *answers =self.caseChosen.answers;
-    NSMutableArray *temp = [[NSMutableArray alloc] init];;
+    [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+    NSMutableArray *selectedAnswers = [[NSMutableArray alloc] init];;
 	NSMutableArray *colors = [[NSMutableArray alloc] init];
-    [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger ansIdx, BOOL *stop) {
-        self.currentAnswer = ((CRAnswer *)obj);
-        [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            self.userIDtemp = obj;
-            [students enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                if ([self.userIDtemp isEqualToString:((CRUser*) obj).userID]){
-                    [temp addObject:self.currentAnswer];
-                    [colors addObject:studentColors[ansIdx % 15]];
-                }
-			}];
+    [students enumerateObjectsUsingBlock:^(id obj, NSUInteger ansIdx, BOOL *stop) {
+        NSArray *currOwners = obj;
+        [self.caseChosen.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            CRAnswer *currAnswer = obj;
+            if ([currAnswer.owners isEqualToArray:currOwners]){
+                [selectedAnswers addObject:currAnswer];
+                [colors addObject:studentColors[ansIdx % 15]];
+            }
         }];
     }];
-    NSArray *tempAnswers = [NSArray arrayWithArray:temp];
-    [tempAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSMutableArray *ansLine = [[NSMutableArray alloc] init];
-        [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [ansLine addObject:[[CRAnswerPoint alloc] initFromJSONDict:obj]];
-		}];
-
-		NSDictionary *color = colors[idx];
-        [self drawAnswer:ansLine inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
-    }];
+    self.selectedAnswers = selectedAnswers;
+    self.selectedColors = colors;
+    [self drawStudentAnswers];
 }
 
 -(void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase{

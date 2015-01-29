@@ -221,7 +221,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		} else if (indexPath.row == kOPTION_SHOW_NAMES) {
 			self.shouldShowStudentNames = !self.shouldShowStudentNames;
         }else if (indexPath.row == kOPTION_REFRSH) {
-            [[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *caseSets) {
+            /*[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *caseSets) {
                 self.caseSets = caseSets;
                 CRCaseSet *selectedCaseSet = self.caseSets[self.indexPath.section];
                 NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[self.indexPath.row];
@@ -244,10 +244,10 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
                 self.students = [NSArray arrayWithArray:self.submittedStudents];
                 [self.delegate studentAnswerTableView:self didRefresh:selectedCase];
                 [self.tableView reloadData];
-            }];
+            }];*/
         }
 	} else if (indexPath.section == kSECTION_STUDENTS) {
-		CRUser *selectedStudent = self.students[indexPath.row];
+		id selectedStudent = self.students[indexPath.row];
 		if ([self.selectedStudents containsObject:selectedStudent]) {
 			[self.selectedStudents removeObject:selectedStudent];
 		} else {
@@ -285,11 +285,30 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		}
 		
 	} else if (indexPath.section == kSECTION_STUDENTS) {
-		id student = self.students[indexPath.row];
+		NSArray *owners = self.students[indexPath.row];
 		
-		if ([student isKindOfClass:[CRUser class]]) {
-			return self.shouldShowStudentNames ? ((CRUser*)student).name : [NSString stringWithFormat:@"Student %ld", (long) indexPath.row + 1];
-		}
+        if(self.shouldShowStudentNames){//TODO: FIND A BETTER WAY TO HAVE STUDENT IDS AND SHOW NAMES!!!!!!
+            NSMutableArray *ownerNames = [[NSMutableArray alloc] init];
+            [owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSString *userID = obj;
+                [self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString *temp = ((CRUser*) obj).userID;
+                    if ([userID isEqualToString:temp]){
+                        [ownerNames addObject:((CRUser*) obj).name];
+                        *stop = true;
+                    }
+                }];
+                
+            }];
+            NSMutableString *title = [NSMutableString stringWithString:ownerNames[0]];
+            for (int i = 1; i < [ownerNames count]; i ++) {
+                [title appendFormat:@", %@", ownerNames[i]];
+            }
+            return title;
+        }
+        else {
+            return [NSString stringWithFormat:@"Student %ld", (long) indexPath.row + 1];
+        }
 	}
 	
 	return @"";

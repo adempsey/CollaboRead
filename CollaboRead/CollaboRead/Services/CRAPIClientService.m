@@ -49,7 +49,7 @@
 - (void)setServerAddress:(NSString *)serverAddress
 {
 #warning temporary - here for testing
-	_serverAddress = @"http://collaboread.herokuapp.com";
+	_serverAddress = @"https://collaboread.herokuapp.com";
 //	_serverAddress = @"http://localhost:5000";
 
 	self.serverAPIAddress = [_serverAddress stringByAppendingString:@"/api/v1/"];
@@ -156,7 +156,7 @@
 	};
 
 	NSString *resource = [self.serverAPIAddress stringByAppendingString:endpoint];
-
+    NSLog(@"%@", resource);
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:nil completionBlock:completionBlock];
 }
 

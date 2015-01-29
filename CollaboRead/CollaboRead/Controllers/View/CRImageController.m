@@ -30,11 +30,6 @@
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
 
-@property (nonatomic, strong) NSMutableArray *currentDrawing;
-
-@property (nonatomic, assign) NSUInteger scanIndex;
-@property (nonatomic, assign) NSUInteger sliceIndex;
-
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
 
@@ -106,7 +101,7 @@
     self.patientInfo = self.caseChosen.patientInfo;
     
     //Try to load drawings from previous viewing during session or make new undo stack
-    self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseId];
+    self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID];
     if (!self.undoStack) {
         if ([self.user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
             NSArray *answers = self.caseChosen.answers;
@@ -400,7 +395,7 @@
             [self.undoStack addLayer:[[NSArray alloc] init] forSlice: ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID ofScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
             self.currentDrawing = [[NSMutableArray alloc] init];
 			[self clearDrawing];
-            [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseId];
+            [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
             break;
         case kCR_PANEL_TOOL_SCANS:
             [self toggleScansMenu];

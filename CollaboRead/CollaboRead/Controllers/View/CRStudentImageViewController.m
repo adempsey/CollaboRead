@@ -70,7 +70,7 @@
     //Prepare and send answer
 	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students];
 
-    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
+    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
 		NSString *unicodeCheckMark = @"\u2713";
 		[submitButton setTitle:unicodeCheckMark forState:UIControlStateNormal];
 		[activityIndicator removeFromSuperview];
