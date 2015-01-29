@@ -47,6 +47,7 @@
 
 -(void)drawStudentAnswers
 {
+    [self clearDrawing];
     NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
     NSString *sliceID = ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID;
     [self.selectedAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -55,12 +56,13 @@
             CRAnswerLine *line = obj;
             if ([line.scanID isEqualToString: scanID] && [line.sliceID isEqualToString:sliceID]) {
                 [self drawAnswer:line.data inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
+                *stop = true;
             }
-            *stop = true;
         }];
 
         
     }];
+    [self drawAnswer:self.currentDrawing inRed: self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
 }
 
 - (void)viewDidLoad {
@@ -126,5 +128,16 @@
     self.caseChosen.answers = refreshedCase.answers;
 }
 
+-(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
+{
+    [super scansMenuViewControllerDidSelectScan:scanId];
+    [self drawStudentAnswers];
+}
+
+- (void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didSelectTool:(NSInteger)tool
+{
+    [super toolPanelViewController:toolPanelViewController didSelectTool:tool];
+    [self drawStudentAnswers];
+}
 
 @end
