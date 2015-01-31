@@ -87,7 +87,6 @@
 																					  action:@selector(toggleTable)];
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
     [self.view setNeedsDisplay];
-
 	[[CRAnswerSubmissionService sharedInstance] setDidReceiveAnswerBlock:^(NSString* answer) {
 		[self didReceiveAnswer:answer];
 	}];
