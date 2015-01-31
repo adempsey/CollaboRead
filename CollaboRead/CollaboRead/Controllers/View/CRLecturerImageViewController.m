@@ -95,7 +95,9 @@
 
 - (void)didReceiveAnswer:(NSString*)answerData
 {
-	NSLog(@"%@", answerData);
+	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array) {
+		[self.studentAnswerViewController updateAnswers:array];
+	}];
 }
 
 - (void)loadStudents

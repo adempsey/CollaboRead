@@ -206,6 +206,32 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	return cell;
 }
 
+- (void)updateAnswers:(NSArray *)caseSets
+{
+	self.caseSets = caseSets;
+	CRCaseSet *selectedCaseSet = self.caseSets[self.indexPath.section];
+	NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[self.indexPath.row];
+	CRCase *selectedCase = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
+	NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
+	NSArray *answers = selectedCase.answers;
+	[answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		[((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+			self.userID = obj;
+			[self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+				NSString *temp = ((CRUser*) obj).userID;
+				if ([self.userID isEqualToString:temp]){
+					[allstudents addObject:((CRUser*) obj)];
+				}
+			}];
+			
+		}];
+	}];
+	self.submittedStudents = [NSArray arrayWithArray:allstudents];
+	self.students = [NSArray arrayWithArray:self.submittedStudents];
+	[self.delegate studentAnswerTableView:self didRefresh:selectedCase];
+	[self.tableView reloadData];
+}
+
 #pragma mark - UITableView Delegate Methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -25,6 +25,7 @@
 
 - (instancetype)initWithStudents:(NSArray*)students;
 - (void)toggleTable;
+- (void)updateAnswers:(NSArray*)answers;
 
 @end
 

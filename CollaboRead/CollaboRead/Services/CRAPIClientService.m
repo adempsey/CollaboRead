@@ -156,7 +156,6 @@
 	};
 
 	NSString *resource = [self.serverAPIAddress stringByAppendingString:endpoint];
-    NSLog(@"%@", resource);
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:nil completionBlock:completionBlock];
 }
 

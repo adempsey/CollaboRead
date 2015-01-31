@@ -44,7 +44,8 @@
 - (void)initiateConnection
 {
 	if (!self.open) {
-		NSURL *url = [NSURL URLWithString:@"ws://127.0.0.1:9999/"];
+		NSURL *url = [NSURL URLWithString:@"ws://collaboread.herokuapp.com/"];
+//		NSURL *url = [NSURL URLWithString:@"ws://127.0.0.1:5000/"];
 		NSURLRequest *urlRequest = [[NSURLRequest alloc] initWithURL:url];
 		self.socket = [[SRWebSocket alloc] initWithURLRequest:urlRequest];
 		self.socket.delegate = self;
