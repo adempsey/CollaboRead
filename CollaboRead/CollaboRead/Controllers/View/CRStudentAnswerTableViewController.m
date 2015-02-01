@@ -311,20 +311,29 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		}
 		
 	} else if (indexPath.section == kSECTION_STUDENTS) {
-		NSArray *owners = self.students[indexPath.row];
-		
+		id owners = self.students[indexPath.row];
+
+		if ([owners isKindOfClass:[CRUser class]]) {
+			owners = [NSArray arrayWithObject:owners];
+		}
+
+		NSArray *ownersList = (NSArray*)owners;
+
         if(self.shouldShowStudentNames){//TODO: FIND A BETTER WAY TO HAVE STUDENT IDS AND SHOW NAMES!!!!!!
             NSMutableArray *ownerNames = [[NSMutableArray alloc] init];
-            [owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSString *userID = obj;
-                [self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSString *temp = ((CRUser*) obj).userID;
-                    if ([userID isEqualToString:temp]){
-                        [ownerNames addObject:((CRUser*) obj).name];
-                        *stop = true;
-                    }
-                }];
-                
+            [ownersList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+
+				if ([obj isKindOfClass:[CRUser class]]) {
+					CRUser *user = (CRUser*) obj;
+					NSString *userID = user.userID;
+					[self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+						NSString *temp = ((CRUser*) obj).userID;
+						if ([userID isEqualToString:temp]){
+							[ownerNames addObject:((CRUser*) obj).name];
+							*stop = true;
+						}
+					}];
+				}
             }];
             NSMutableString *title = [NSMutableString stringWithString:ownerNames[0]];
             for (int i = 1; i < [ownerNames count]; i ++) {
