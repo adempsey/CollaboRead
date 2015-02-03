@@ -15,13 +15,7 @@
 
 @property (nonatomic, readwrite, strong) NSArray *students;
 
-@property (nonatomic, readwrite, strong) NSArray *submittedStudents;
-
 @property (nonatomic, readwrite, strong) NSArray *allUsers;
-
-@property (nonatomic, readwrite, strong) NSString *lecturerID;
-
-@property (nonatomic, readwrite, strong) NSIndexPath *indexPath;
 
 - (instancetype)initWithStudents:(NSArray*)students;
 - (void)toggleTable;
@@ -33,10 +27,6 @@
 
 @required
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didChangeStudentSelection:(NSArray*)selectedStudents ;
-
-
-@required
-- (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didRefresh:(CRCase*)refreshedCase ;
 
 
 @end

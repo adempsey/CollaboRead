@@ -51,6 +51,7 @@
     [self clearDrawing];
     NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
     NSString *sliceID = ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID;
+    
     [self.selectedAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSDictionary* color = self.selectedColors[idx];
         [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -77,8 +78,6 @@
     [self loadStudents];
 	self.studentAnswerViewController.delegate = self;
 	[self.view addSubview:self.studentAnswerViewController.view];
-    self.studentAnswerViewController.indexPath = self.indexPath;
-    self.studentAnswerViewController.lecturerID = self.lecturerID;
     self.studentAnswerViewController.allUsers = self.allUsers;
 
 	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:@"Answers"
@@ -95,7 +94,15 @@
 - (void)didReceiveAnswer:(NSString*)answerData
 {
 	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array) {
-		[self.studentAnswerViewController updateAnswers:array];
+        CRCaseSet *selectedCaseSet = array[self.indexPath.section];
+        self.caseChosen = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
+        
+        NSMutableArray *students = [[NSMutableArray alloc] init];
+        NSArray *answers = self.caseChosen.answers;
+        [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [students addObject:((CRAnswer *)obj).owners];
+        }];
+        self.studentAnswerViewController.students = students;
 	}];
 }
 
@@ -119,13 +126,14 @@
     [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
     NSMutableArray *selectedAnswers = [[NSMutableArray alloc] init];;
 	NSMutableArray *colors = [[NSMutableArray alloc] init];
-    [students enumerateObjectsUsingBlock:^(id obj, NSUInteger ansIdx, BOOL *stop) {
-        NSArray *currOwners = obj;
-        [self.caseChosen.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            CRAnswer *currAnswer = obj;
+    [self.caseChosen.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger ansIdx, BOOL *stop) {
+        CRAnswer *currAnswer = obj;
+        [students enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSArray *currOwners = obj;
             if ([currAnswer.owners isEqualToArray:currOwners]){
                 [selectedAnswers addObject:currAnswer];
                 [colors addObject:studentColors[ansIdx % 15]];
+                *stop = true;
             }
         }];
     }];

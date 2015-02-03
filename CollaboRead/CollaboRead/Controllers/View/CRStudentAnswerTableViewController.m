@@ -21,7 +21,6 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	kOPTION_SHOW_ALL = 0,
 	kOPTION_HIDE_ALL,
 	kOPTION_SHOW_NAMES,
-    kOPTION_REFRSH,
 	kOPTION_COUNT
 };
 
@@ -49,13 +48,12 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStyleGrouped];
 		self.tableView.delegate = self;
 		self.tableView.dataSource = self;
-		
-		self.students = [[NSArray alloc] initWithArray:students];
+        self.shouldShowStudentNames = NO;
+        self.tableIsVisible = NO;
+        self.didBeginMovingTable = NO;
 		self.selectedStudents = [[NSMutableArray alloc] init];
+        _students = [[NSArray alloc] initWithArray:students];
 		
-		self.shouldShowStudentNames = NO;
-		self.tableIsVisible = NO;
-		self.didBeginMovingTable = NO;
 	}
 	return self;
 }
@@ -86,6 +84,12 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	UIPanGestureRecognizer *tableSlideGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveTable:)];
 	tableSlideGestureRecognizer.delegate = self;
 	[self.view addGestureRecognizer:tableSlideGestureRecognizer];
+}
+
+-(void)setStudents:(NSArray *)students
+{
+    _students = students;
+    [self.tableView reloadData];
 }
 
 - (void)moveTable:(UIPanGestureRecognizer*)gesture
@@ -206,32 +210,6 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	return cell;
 }
 
-- (void)updateAnswers:(NSArray *)caseSets
-{
-	self.caseSets = caseSets;
-	CRCaseSet *selectedCaseSet = self.caseSets[self.indexPath.section];
-	NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[self.indexPath.row];
-	CRCase *selectedCase = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
-	NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
-	NSArray *answers = selectedCase.answers;
-	[answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-		[((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-			self.userID = obj;
-			[self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-				NSString *temp = ((CRUser*) obj).userID;
-				if ([self.userID isEqualToString:temp]){
-					[allstudents addObject:((CRUser*) obj)];
-				}
-			}];
-			
-		}];
-	}];
-	self.submittedStudents = [NSArray arrayWithArray:allstudents];
-	self.students = [NSArray arrayWithArray:self.submittedStudents];
-	[self.delegate studentAnswerTableView:self didRefresh:selectedCase];
-	[self.tableView reloadData];
-}
-
 #pragma mark - UITableView Delegate Methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -246,31 +224,6 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 			[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
 		} else if (indexPath.row == kOPTION_SHOW_NAMES) {
 			self.shouldShowStudentNames = !self.shouldShowStudentNames;
-        }else if (indexPath.row == kOPTION_REFRSH) {
-            /*[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *caseSets) {
-                self.caseSets = caseSets;
-                CRCaseSet *selectedCaseSet = self.caseSets[self.indexPath.section];
-                NSString *selectedCaseKey = selectedCaseSet.cases.allKeys[self.indexPath.row];
-                CRCase *selectedCase = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
-                NSMutableArray *allstudents = [[NSMutableArray alloc] init];;
-                NSArray *answers = selectedCase.answers;
-                [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    [((CRAnswer *)obj).owners enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        self.userID = obj;
-                        [self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            NSString *temp = ((CRUser*) obj).userID;
-                            if ([self.userID isEqualToString:temp]){
-                                [allstudents addObject:((CRUser*) obj)];
-                            }
-                        }];
-                        
-                    }];
-                }];
-                self.submittedStudents = [NSArray arrayWithArray:allstudents];
-                self.students = [NSArray arrayWithArray:self.submittedStudents];
-                [self.delegate studentAnswerTableView:self didRefresh:selectedCase];
-                [self.tableView reloadData];
-            }];*/
         }
 	} else if (indexPath.section == kSECTION_STUDENTS) {
 		id selectedStudent = self.students[indexPath.row];
@@ -303,9 +256,6 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 			case kOPTION_SHOW_NAMES:
 				return @"Show Student Names";
 				break;
-            case kOPTION_REFRSH:
-                return @"Refresh Answers";
-                break;
 			default:
 				return @"";
 		}
@@ -323,9 +273,8 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
             NSMutableArray *ownerNames = [[NSMutableArray alloc] init];
             [ownersList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 
-				if ([obj isKindOfClass:[CRUser class]]) {
-					CRUser *user = (CRUser*) obj;
-					NSString *userID = user.userID;
+				if ([obj isKindOfClass:[NSString class]]) {
+                    NSString *userID = obj;
 					[self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 						NSString *temp = ((CRUser*) obj).userID;
 						if ([userID isEqualToString:temp]){
