@@ -7,12 +7,12 @@
 //
 
 #import "CRLecturerImageViewController.h"
-#include "CRAPIClientService.h"
-#include "CRAnswerPoint.h"
-#include "CRUser.h"
-#include "CRAnswerLine.h"
-#include "CRScan.h"
-#include "CRSlice.h"
+#import "CRAPIClientService.h"
+#import "CRAnswerPoint.h"
+#import "CRUser.h"
+#import "CRAnswerLine.h"
+#import "CRScan.h"
+#import "CRSlice.h"
 #import "CRAnswerSubmissionService.h"
 
 #define studentColors @[@{@"red":@0, @"green": @255, @"blue" : @0}, \
@@ -32,6 +32,7 @@
                         @{@"red":@150, @"green": @100, @"blue" : @100}]
 
 @interface CRLecturerImageViewController ()
+
 @property (nonatomic, strong) UIButton *showButton;
 @property (nonatomic, strong) UIButton *hideButton;
 @property (nonatomic, strong) NSArray *allStudents;
