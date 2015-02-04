@@ -14,7 +14,7 @@
 #import "NSArray+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
 
-//#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
+#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
 
 #define kCR_API_ENDPOINT_USERS @"users"
 #define kCR_API_ENDPOINT_LECTURERS @"lecturers"
@@ -28,12 +28,6 @@
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS @"owners"
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_DATA @"answerData"
 
-@interface CRAPIClientService ()
-
-@property (nonatomic, readwrite, strong) NSString *serverAPIAddress;
-
-@end
-
 @implementation CRAPIClientService
 
 + (CRAPIClientService*)sharedInstance
@@ -44,15 +38,6 @@
 		sharedInstance = [[self alloc] init];
 	});
 	return sharedInstance;
-}
-
-- (void)setServerAddress:(NSString *)serverAddress
-{
-#warning temporary - here for testing
-	_serverAddress = @"https://collaboread.herokuapp.com";
-//	_serverAddress = @"http://localhost:5000";
-
-	self.serverAPIAddress = [_serverAddress stringByAppendingString:@"/api/v1/"];
 }
 
 #pragma mark - Retrieval Methods
@@ -129,7 +114,7 @@
 		block(caseSets);
 	};
 
-	NSString *resource = [self.serverAPIAddress stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
+	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturer};
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:params completionBlock:completionBlock];
@@ -142,7 +127,7 @@
 		block(retrievedItem);
 	};
 
-	NSString *resource = [self.serverAPIAddress stringByAppendingString:endpoint];
+	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_ID: idNumber};
 
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:params completionBlock:completionBlock];
@@ -155,7 +140,7 @@
 		block(list);
 	};
 
-	NSString *resource = [self.serverAPIAddress stringByAppendingString:endpoint];
+	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
 	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:@"GET" withParams:nil completionBlock:completionBlock];
 }
 
@@ -169,7 +154,7 @@
 		block(caseSet);
 	};
 
-	NSString *resource = [self.serverAPIAddress stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
+	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
 	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: answer.jsonDictionary];
 	params[@"drawings"] = ((NSDictionary *)params[@"drawings"]).jsonString;

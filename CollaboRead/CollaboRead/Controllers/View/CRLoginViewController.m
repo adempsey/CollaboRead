@@ -109,9 +109,6 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 //Start attempt to login with api call
 -(IBAction)loginPressed:(id)sender
 {
-    //Determine source, UNTIL WE GET TUFTS SERVER ONLY
-	[[CRAPIClientService sharedInstance] setServerAddress:self.serverField.text];
-
 	self.loginButton.userInteractionEnabled = NO;
 	self.loginButton.hidden = YES;
 
