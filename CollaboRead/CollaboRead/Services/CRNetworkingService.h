@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+/*!
+ @class CRNetworkingService
+ @discussion This class is responsible for communicating with RESTful services.
+ The class is essentially just an abstraction for easily constructing network requests
+ */
 @interface CRNetworkingService : NSObject
 
 + (CRNetworkingService*)sharedInstance;

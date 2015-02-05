@@ -23,6 +23,21 @@
 	return sharedInstance;
 }
 
+/*!
+ Initiates a request to a RESTful web resource and provides the server's response in the completion block
+ 
+ @param resource
+ Network address of the desired resource
+ 
+ @param method
+ Desired HTTP method (e.g., GET, POST, etc.)
+ 
+ @param params
+ A dictionary of the parameters to include along the request
+ 
+ @param completionBlock
+ Completion block to be executed once the response is received from the server, which passes the response data
+ */
 - (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock
 {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -30,13 +45,14 @@
 	if (params) {
 		NSString *paramString = [self parameterStringWithDictionary:params];
 
+		// HTTP GET requests append parameters to the end of the URL
 		if ([method isEqualToString:kHTTP_METHOD_GET]) {
 			resource = [NSString stringWithFormat:@"%@?%@", resource, paramString];
 
+		// HTTP POST requests set the request body as the parameter string
 		} else if ([method isEqualToString:kHTTP_METHOD_POST]) {
 			NSData *encodedParams = [paramString dataUsingEncoding:NSUTF8StringEncoding];
 			[request setHTTPBody:encodedParams];
-
 		}
 	}
 
@@ -50,6 +66,16 @@
 	}];
 }
 
+#pragma mark - Helper Methods
+
+/*!
+ Converts a dictionary of request parameters into a string for requests
+ 
+ @param dictionary
+ Dictionary containing the parameter keys and values to be used in the request
+ 
+ @return Properly formatted parameter string with the dictionary's keys and values
+ */
 - (NSString*)parameterStringWithDictionary:(NSDictionary*)dictionary
 {
 	NSString *queryString = @"";
