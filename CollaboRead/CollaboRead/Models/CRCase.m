@@ -12,12 +12,11 @@
 #import "CRCaseKeys.h"
 #import "CRAnswer.h"
 #import "CRScan.h"
-#import "CRAPIClientService.h"
+
 #import "NSDate+CRAdditions.h"
-#import "CRScan.h"
 
 @implementation CRCase
-//Translate from JSON to Objective C object
+
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
 {
 	if (self = [super init]) {
@@ -33,39 +32,15 @@
 
 - (void)setScans:(NSArray *)scans
 {
-//<<<<<<< HEAD
 	NSMutableArray *finalArray = [[NSMutableArray alloc] init];
 	
 	[scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		if ([obj isKindOfClass:[NSDictionary class]]) {
 			CRScan *scan = [[CRScan alloc] initWithDictionary:obj];
 			[finalArray addObject:scan];
-//=======
-//	NSMutableArray *caseImages = [[NSMutableArray alloc] init];
-//
-//	[images enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//		if ([obj isKindOfClass:[NSString class]]) {
-//
-////			NSString *serverAddress = [[CRAPIClientService sharedInstance] serverAddress];
-//
-//			NSString *urlString;
-//			// temporary for usability test
-////			if ([serverAddress isEqualToString:@"http://collaboread.herokuapp.com"]) {
-//				urlString = obj;
-////			} else {
-////				urlString = [NSString stringWithFormat:@"%@/~AMD/cr/%@", serverAddress, obj];
-////			}
-//
-//			NSURL *imageURL = [NSURL URLWithString:urlString];
-//			UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-//			[caseImages addObject:image];
-//
-//		} else if ([obj isKindOfClass:[UIImage class]]) {
-//			[caseImages addObject:obj];
-//>>>>>>> added basic websockets template code
 		}
 	}];
-	
+
 	_scans = finalArray;
 }
 
@@ -86,13 +61,12 @@
 
 	_answers = caseAnswers;
 }
--(NSInteger)compareDates:(CRCase *)other
+
+- (NSInteger)compareDates:(CRCase *)other
 {
     if ([self.date isEqualToDate:other.date]) {
         return NSOrderedSame;
-    }
-    else if ([[self.date earlierDate:other.date] isEqualToDate:self.date])
-    {
+    } else if ([[self.date earlierDate:other.date] isEqualToDate:self.date]) {
         return NSOrderedAscending;
     }
     return NSOrderedDescending;

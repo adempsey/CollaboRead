@@ -11,7 +11,7 @@
 #import "CRCaseKeys.h"
 
 @implementation CRCaseSet
-//Translate from JSON to Objective C object
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
 	if (self = [super init]) {
@@ -21,6 +21,7 @@
 	}
 	return self;
 }
+
 //Custom setter turns cases into appropriate object from dictionary if needed
 - (void)setCases:(NSArray *)cases
 {

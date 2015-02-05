@@ -9,12 +9,10 @@
 #import "CRAnswerLine.h"
 #import "CRAnswerPoint.h"
 #import "CRCaseKeys.h"
-#import "NSArray+CRAdditions.h"
-#import "NSDictionary+CRAdditions.h"
 
 @implementation CRAnswerLine
 
--(instancetype)initWithPoints:(NSArray *)points forSlice:(NSString *)slice ofScan:(NSString *)scan
+- (instancetype)initWithPoints:(NSArray *)points forSlice:(NSString *)slice ofScan:(NSString *)scan
 {
 	self = [super init];
 	if (self) {

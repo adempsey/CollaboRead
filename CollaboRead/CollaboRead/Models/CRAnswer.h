@@ -8,18 +8,60 @@
 
 #import <Foundation/Foundation.h>
 
+/*!
+ @class CRAnswer
+ 
+ @discussion Object for storing data about a user's answer for a particular slice.
+ */
 @interface CRAnswer : NSObject
 
+/*!
+ @brief Answer's ID number
+ */
 @property (nonatomic, readwrite, strong) NSString *answerID;
-@property (nonatomic, readwrite, strong) NSArray *drawings;//Data that can be used to recreate answer
-@property (nonatomic, readwrite, strong) NSDate *submissionDate;//Create Date
-@property (nonatomic, readwrite, strong) NSArray *owners;//Submitting users
 
-//Translate JSON dictionary of an answer into app useable objective c object
+/*!
+ @brief Array of CRAnswerLine objects containing drawing data
+ */
+@property (nonatomic, readwrite, strong) NSArray *drawings;
+
+/*!
+ @brief Date the answer was originally submitted
+ */
+@property (nonatomic, readwrite, strong) NSDate *submissionDate;
+
+/*!
+ @brief Array of users that submitted the answer
+ */
+@property (nonatomic, readwrite, strong) NSArray *owners;
+
+/*!
+ Initializes CRAnswer object with data from the supplied dictionary
+ 
+ @param dictionary
+ Dictionary with keys and values containing answer data
+ */
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
-//Create an answer from data provide by app
+
+/*!
+ Initializes CRAnswer object with data from the supplied parameters
+ 
+ @param answerData
+ Array of CRAnswerLine objects containing drawing data
+ @param date
+ Date the answer was originally submitted
+ @param owners
+ Array of users that submitted the answer
+ @param answerID
+ Answer's ID number
+ */
 - (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners answerID:(NSString*)answerID;
 
+/*!
+ Converts object into a dictionary, i.e. JSON representation
+ 
+ @return dictionary containing object values
+ */
 - (NSDictionary*)jsonDictionary;
 
 @end

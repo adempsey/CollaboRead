@@ -8,18 +8,10 @@
 
 #import "CRAnswer.h"
 #import "CRAnswerLine.h"
-#import "CRAnswerPoint.h"
 #import "CRCaseKeys.h"
-
-#import "NSDate+CRAdditions.h"
-#import "NSDictionary+CRAdditions.h"
-
-#define kANSWER_SLICE @""
-#define kANSWER_SCAN @""
 
 @implementation CRAnswer
 
-//Translate JSON dictionary of an answer into app useable objective c object
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
 {
 	if (self = [super init]) {
@@ -37,7 +29,6 @@
 	return self;
 }
 
-//Create an answer from data provide by app
 - (instancetype)initWithData:(NSArray*)drawings submissionDate:(NSDate*)date owners:(NSArray*)owners answerID:(NSString*)answerID
 {
 	if (self = [super init]) {

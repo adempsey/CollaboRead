@@ -7,17 +7,20 @@
 //
 
 #import "CRUser.h"
-
 #import "CRUserKeys.h"
 
 @interface CRUser ()
 
+/*!
+ @brief Image for the user's avatar
+ @warning Don't set this property manually. Set implicitly using imageURL instead
+ */
 @property (nonatomic, readwrite, strong) UIImage *image;
 
 @end
 
 @implementation CRUser
-//Create an answer from data provide by app
+
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
 {
 	if (self = [super init]) {
@@ -29,18 +32,16 @@
 		self.imageURL = dictionary[CR_DB_USER_PICTURE];
 		self.year = dictionary[CR_DB_USER_YEAR];
 		self.caseSetIDs = dictionary[CR_DB_USER_CASE_SETS];
-
 		self.password = dictionary[CR_DB_USER_PASSWORD];
 	}
 	return self;
 }
 
-//Replaces generic setter to update all image fields in one go
+// Implicitly sets value of image property
 - (void)setImageURL:(NSString *)imageURLString
 {
 	NSURL *imageURL = [NSURL URLWithString:imageURLString];
 	self.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-//	self.image = [UIImage imageNamed:@"shapiro.jpg"];
 	_imageURL = imageURLString;
 }
 

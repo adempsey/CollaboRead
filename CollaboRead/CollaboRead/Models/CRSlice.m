@@ -9,29 +9,24 @@
 #import "CRSlice.h"
 #import "CRCaseKeys.h"
 
-@interface CRSlice ()
-
-
-@end
-
 @implementation CRSlice
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
 	if (self = [super init]) {
 		self.sliceID = dictionary[CR_DB_SLICE_ID];
-		self.url = [NSURL URLWithString:dictionary[CR_DB_SLICE_URL]];
+		self.imageURL = [NSURL URLWithString:dictionary[CR_DB_SLICE_URL]];
 		self.hasDrawing = [dictionary[CR_DB_SLICE_HAS_DRAWING] boolValue];
 	}
 	return self;
 }
 
 // Implicitly sets value of image property
-- (void)setUrl:(NSURL *)url
+- (void)setImageURL:(NSURL *)url
 {
 	NSData *imageData = [NSData dataWithContentsOfURL:url];
 	_image = [UIImage imageWithData:imageData];
-	_url = url;
+	_imageURL = url;
 }
 
 @end
