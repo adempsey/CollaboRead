@@ -23,21 +23,6 @@
 	return sharedInstance;
 }
 
-/*!
- Initiates a request to a RESTful web resource and provides the server's response in the completion block
- 
- @param resource
- Network address of the desired resource
- 
- @param method
- Desired HTTP method (e.g., GET, POST, etc.)
- 
- @param params
- A dictionary of the parameters to include along the request
- 
- @param completionBlock
- Completion block to be executed once the response is received from the server, which passes the response data
- */
 - (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock
 {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];

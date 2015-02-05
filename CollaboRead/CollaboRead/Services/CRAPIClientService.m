@@ -45,12 +45,6 @@
 
 #pragma mark - Public API Interface Methods
 
-/*!
- Retrieves a list of all users from the API
- 
- @param block
- completion block to execute with list of users
- */
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*))block
 {
 	[self retrieveItemListFromEndpoint:kCR_API_ENDPOINT_USERS completionBlock:^(NSArray *list) {
@@ -67,12 +61,6 @@
 	}];
 }
 
-/*!
- Retrieves a list of all lecturers from the API
- 
- @param block
- completion block to execute with list of lecturers
- */
 - (void)retrieveLecturersWithBlock:(void (^)(NSArray*))block
 {
 	[self retrieveItemListFromEndpoint:kCR_API_ENDPOINT_LECTURERS completionBlock:^(NSArray *list) {
@@ -89,15 +77,6 @@
 	}];
 }
 
-/*!
- Retrieves a specific lecturer from the API
- 
- @param lecturerID
- ID number of the desired lecturer
- 
- @param block
- completion block to execute with CRUser object for retrieved lecturer
- */
 - (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(CRUser*))block
 {
 	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_LECTURERS withID:lecturerID completionBlock:^(NSDictionary *userDictionary) {
@@ -106,15 +85,6 @@
 	}];
 }
 
-/*!
- Retrieves a specific student from the API
- 
- @param studentID
- ID number of the desired student
- 
- @param block
- completion block to execute with CRUser object for retrieved student
- */
 - (void)retrieveStudentWithID:(NSString*)studentID block:(void (^)(CRUser*))block
 {
     [self retrieveItemFromEndpoint:kCR_API_ENDPOINT_USERS withID:studentID completionBlock:^(NSDictionary *userDictionary) {
@@ -123,15 +93,6 @@
     }];
 }
 
-/*!
- Retrieves a specific case set from the API
- 
- @param caseSetID
- ID number of the desired case set
- 
- @param block
- completion block to execute with CRCaseSet object for retrieved case set
- */
 - (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*))block
 {
 	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_CASE_SET withID:caseSetID completionBlock:^(NSDictionary *caseSetDictionary) {
@@ -140,15 +101,6 @@
 	}];
 }
 
-/*!
- Retrieves a list of case sets belonging to the given lecturer from the API
- 
- @param lecturerID
- ID number of the desired lecturer
- 
- @param block
- completion block to execute with list of case sets retrieved from the API
- */
 - (void)retrieveCaseSetsWithLecturer:(NSString *)lecturerID block:(void (^)(NSArray *))block
 {
 	void (^completionBlock)(NSData*) = ^void(NSData *json) {
@@ -178,10 +130,8 @@
  
  @param endpoint
  The desired endpoint from which to retrieve the item
- 
  @param idNumber
  The desired item's ID number
- 
  @param block
  completion block to execute with item retrieved from the API
  */
@@ -203,7 +153,6 @@
  
  @param endpoint
  The desired endpoint from which to retrieve the list of items
- 
  @param block
  completion block to execute with item list retrieved from the API
  */
@@ -220,21 +169,6 @@
 
 #pragma mark - Public Submission Methods
 
-/*!
- Submits an answer object to the API. The updated case set is included in the completion block
- 
- @param answer
- The CRAnswer object containing the drawing data and answer owners
- 
- @param caseID
- ID number of the case to submit an answer to
- 
- @param setID
- ID number of the case set containing the current case
- 
- @param block
- completion block to execute with updated case set retrieved from the API
- */
 - (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*))block
 {
 	void (^completionBlock)(NSData*) = ^void(NSData *json) {
