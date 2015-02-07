@@ -125,6 +125,7 @@
     CRScan *scan = self.caseChosen.scans[self.scanIndex];
     self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
     [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+    lastPoint = nil;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -262,49 +263,74 @@
 
 //Prepares undostack, begins appropriate draw action
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
-        lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
-        [self.currentDrawing addObject:lastPoint];
-    }
+    CGPoint touchPt = [[touches anyObject] locationInView:self.drawView];
+    if (CGRectContainsPoint(self.drawView.bounds, touchPt)) {
+        if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
+            [self.currentDrawing addObject:lastPoint];
+        }
     
-    else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
-        lastPoint = [[CRAnswerPoint alloc] initWithPoint:[[touches anyObject] locationInView:self.drawView] end:NO];
-        [self removePointFromAnswer:lastPoint];
+        else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
+            [self removePointFromAnswer:lastPoint];
+        }
     }
 }
 
 //Continues appropriate draw action, changing undostack as necessary
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
-        CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
-        [self drawLineFrom:lastPoint to:currentPoint];
-        [self.currentDrawing addObject:currentPoint];
-        lastPoint = currentPoint;
+    CGPoint touchPt = [[touches anyObject] locationInView:self.drawView];
+    if (CGRectContainsPoint(self.drawView.bounds, touchPt)) {
+        if (self.selectedTool == kCR_PANEL_TOOL_PEN && lastPoint != nil) {
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
+            [self drawLineFrom:lastPoint to:currentPoint];
+            [self.currentDrawing addObject:currentPoint];
+            lastPoint = currentPoint;
+        }
+        else if (self.selectedTool == kCR_PANEL_TOOL_PEN)
+        {
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
+            [self.currentDrawing addObject:lastPoint];
+        }
+        
+        else if (self.selectedTool == kCR_PANEL_TOOL_ERASER && lastPoint != nil) {
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
+            [self eraseLineFrom:lastPoint to:currentPoint];
+            [self removePointFromAnswer:currentPoint];
+            lastPoint = currentPoint;
+        }
+        else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
+            [self removePointFromAnswer:lastPoint];
+        }
     }
-    
-    else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
-        CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
-        [self eraseLineFrom:lastPoint to:currentPoint];
-        [self removePointFromAnswer:currentPoint];
-        lastPoint = currentPoint;
+    else {
+        if (lastPoint != nil) {
+            lastPoint.isEndPoint = YES;
+            lastPoint = nil;
+        }
     }
 }
 
 //Finishes appropriate drawing action, updates record of drawing on image
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
-        CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
-        [self drawLineFrom:lastPoint to:currentPoint];
-        [self.currentDrawing addObject:currentPoint];
+    CGPoint touchPt = [[touches anyObject] locationInView:self.drawView];
+    if (CGRectContainsPoint(self.drawView.bounds, touchPt)) {
+        if (self.selectedTool == kCR_PANEL_TOOL_PEN && lastPoint != nil) {
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
+            [self drawLineFrom:lastPoint to:currentPoint];
+            [self.currentDrawing addObject:currentPoint];
+        }
+        else if (self.selectedTool == kCR_PANEL_TOOL_ERASER && lastPoint != nil) {
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
+            [self eraseLineFrom:lastPoint to:currentPoint];
+            [self removePointFromAnswer:currentPoint];
+        }
+        CRScan *scan = self.caseChosen.scans[self.scanIndex];
+        [self.undoStack addLayer:self.currentDrawing forSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID];
+        self.currentDrawing = [[NSMutableArray alloc] initWithArray:self.currentDrawing copyItems:YES];
     }
-    else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
-        CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
-        [self eraseLineFrom:lastPoint to:currentPoint];
-        [self removePointFromAnswer:currentPoint];
-    }
-    CRScan *scan = self.caseChosen.scans[self.scanIndex];
-    [self.undoStack addLayer:self.currentDrawing forSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID];
-    self.currentDrawing = [[NSMutableArray alloc] initWithArray:self.currentDrawing copyItems:YES];
+    lastPoint = nil;
 }
 
 
