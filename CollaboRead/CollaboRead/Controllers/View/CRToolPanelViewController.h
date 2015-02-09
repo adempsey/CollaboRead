@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, kPanelSections) {
 	kCR_PANEL_TOOL_ERASER,
 	kCR_PANEL_TOOL_UNDO,
 	kCR_PANEL_TOOL_CLEAR,
+    kCR_PANEL_TOOL_ZOOM,
     kCR_PANEL_TOOL_SCANS,
 	kCR_PANEL_TOOL_COUNT
 };
@@ -34,6 +35,7 @@ typedef NS_ENUM(NSUInteger, kPanelSections) {
 
 @required
 - (void)toolPanelViewController:(CRToolPanelViewController*)toolPanelViewController didSelectTool:(NSInteger)tool;
+- (void)toolPanelViewController:(CRToolPanelViewController*)toolPanelViewController didDeselectTool:(NSInteger)tool;
 
 @end
 

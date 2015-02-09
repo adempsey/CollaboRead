@@ -44,7 +44,6 @@
 //Draws answer indicated by array in specified color (Floats on scale of 0 - 255)
 -(void)drawAnswer:(NSArray *)ans inRed:(CGFloat)r Green:(CGFloat)g Blue:(CGFloat)b;
 
-//Clears all drawings from screen without affecting any stored information
 -(void)clearDrawing;
 
 @end
