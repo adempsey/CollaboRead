@@ -46,6 +46,8 @@
 		BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6278C21A79480D002391FB /* CRUndoStack.m */; };
 		BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */; };
 		BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */; };
+		BBA0C59D1A89427F009E53EC /* CRImageScrollBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */; };
+		BBA0C5A01A8952C4009E53EC /* CRImageScrollBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */; };
 		BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */; };
 		BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */; };
 		BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */; };
@@ -138,6 +140,10 @@
 		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswerPoint.m; sourceTree = "<group>"; };
 		BBA0C1111A1637F800FFA921 /* CRDrawingPreserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRDrawingPreserver.h; sourceTree = "<group>"; };
 		BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRDrawingPreserver.m; sourceTree = "<group>"; };
+		BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRImageScrollBarController.h; sourceTree = "<group>"; };
+		BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRImageScrollBarController.m; sourceTree = "<group>"; };
+		BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRImageScrollBar.h; sourceTree = "<group>"; };
+		BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRImageScrollBar.m; sourceTree = "<group>"; };
 		BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRLoginViewController.h; sourceTree = "<group>"; };
 		BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRLoginViewController.m; sourceTree = "<group>"; };
 		BBA2EBD019EECE270093044E /* CRUserKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRUserKeys.h; sourceTree = "<group>"; };
@@ -378,6 +384,8 @@
 			isa = PBXGroup;
 			children = (
 				8DEE5ADF19F642F50090AF0B /* Cells */,
+				BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */,
+				BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -422,29 +430,47 @@
 			path = Drawing;
 			sourceTree = "<group>";
 		};
+		BBA0C5991A894201009E53EC /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				8DD360151A0B366200E572D1 /* CRToolPanelViewController.h */,
+				8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */,
+				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
+				BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */,
+				36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */,
+				36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */,
+				8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */,
+				8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */,
+				BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */,
+				BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */,
+			);
+			name = SubViews;
+			sourceTree = "<group>";
+		};
+		BBA0C59A1A894218009E53EC /* ImageEditingViews */ = {
+			isa = PBXGroup;
+			children = (
+				8DA5DE2619E6064B002EA706 /* CRImageController.h */,
+				8DA5DE2719E6064B002EA706 /* CRImageController.m */,
+				BBD3B03319F5B60300C18A6A /* CRStudentImageViewController.h */,
+				BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */,
+				BBD3B03619F5B64200C18A6A /* CRLecturerImageViewController.h */,
+				BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */,
+			);
+			name = ImageEditingViews;
+			sourceTree = "<group>";
+		};
 		BBA2EBD519EED7C40093044E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BBA0C59A1A894218009E53EC /* ImageEditingViews */,
+				BBA0C5991A894201009E53EC /* SubViews */,
 				BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */,
 				BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */,
 				BBD3135619F2E2040017B96A /* CRSelectLecturerViewController.h */,
 				BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */,
 				BBA2EBD219EED5F80093044E /* CRSelectCaseViewController.h */,
 				BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */,
-				8DA5DE2619E6064B002EA706 /* CRImageController.h */,
-				8DA5DE2719E6064B002EA706 /* CRImageController.m */,
-				8DD360151A0B366200E572D1 /* CRToolPanelViewController.h */,
-				8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */,
-				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
-				BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */,
-				BBD3B03319F5B60300C18A6A /* CRStudentImageViewController.h */,
-				BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */,
-				BBD3B03619F5B64200C18A6A /* CRLecturerImageViewController.h */,
-				BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */,
-				8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */,
-				8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */,
-				36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */,
-				36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -562,6 +588,7 @@
 				8DD360171A0B366200E572D1 /* CRToolPanelViewController.m in Sources */,
 				36ED59531A2D3CEE00F61D7B /* CRPatientInfoViewController.m in Sources */,
 				BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */,
+				BBA0C5A01A8952C4009E53EC /* CRImageScrollBar.m in Sources */,
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */,
 				BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */,
@@ -583,6 +610,7 @@
 				8DD3601A1A0B3E8900E572D1 /* CRToolPanelCell.m in Sources */,
 				8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */,
 				BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */,
+				BBA0C59D1A89427F009E53EC /* CRImageScrollBarController.m in Sources */,
 				8DA5DE2219E6064B002EA706 /* main.m in Sources */,
 				8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */,
 				8DCF9CA51A2BEF6A000D42C5 /* SRWebSocket.m in Sources */,

@@ -20,6 +20,7 @@
 #import "CRDrawingPreserver.h"
 #import "CRUserKeys.h"
 #import "CRAnswerSubmissionService.h"
+#import "CRImageScrollBarController.h"
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
@@ -44,6 +45,7 @@
 @property (nonatomic, readwrite, strong) UIButton *toggleButton;
 
 @property (nonatomic, strong) CRScansMenuViewController *scansMenuController;
+@property (nonatomic, strong) CRImageScrollBarController *scrollBarController;
 
 -(void)toggleScansMenu;
 -(void)toggleZoom;
@@ -111,6 +113,10 @@
     [self.view addSubview:self.scansMenuController.view];
     [self.view addSubview:self.toolPanelViewController.view];
     [self.view addSubview:self.toggleButton];
+    
+    self.scrollBarController = [[CRImageScrollBarController alloc] init];
+    [self.scrollBarController setPartitions:5 andHighlights:nil];
+    [self.view addSubview:self.scrollBarController.view];
     
     self.lineRedComp = 255;
     self.lineBlueComp = 0;
@@ -222,7 +228,16 @@
     
     CGFloat moveLeft = (origFrame.size.width - newWidth)/2 + (currFrame.origin.x - (origFrame.size.width - currFrame.size.width)/2) * newWidth / currFrame.size.width;
     CGFloat moveUp = (origFrame.size.height - newHeight)/2 + (currFrame.origin.y - (origFrame.size.height - currFrame.size.height)/2) * newHeight / currFrame.size.height;
-    
+    if (origFrame.size.width > moveLeft + newWidth) {
+        moveLeft = origFrame.size.width - newWidth;
+    } else if (moveLeft > 0) {
+        moveLeft = 0;
+    }
+    if (origFrame.size.height > moveUp + newHeight) {
+        moveUp = origFrame.size.height - newHeight;
+    } else if (moveUp > 0) {
+        moveUp = 0;
+    }
     CGRect newFrame = CGRectMake(moveLeft, moveUp, newWidth, newHeight);
     self.zoomView.frame = newFrame;
 }
