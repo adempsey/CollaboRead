@@ -38,17 +38,20 @@
     CGContextSetFillColorWithColor(context, [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:.9].CGColor);
     CGRect slider = CGRectMake(self.scrollOffset, 0, self.frame.size.width/self.partitions, self.frame.size.height);
     CGContextFillRect(context, slider);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:.9].CGColor);
+    CGContextSetLineWidth(context, 2);
+    CGContextAddRect(context, slider);
     
     CGContextStrokePath(context);
 }
 
 -(void)setScrollOffset:(CGFloat)scrollOffset {
     _scrollOffset = scrollOffset;
-    if (self.partitions < 2) {
+    /*if (self.partitions < 2) {
         _scrollOffset = 0;
     } else if (scrollOffset > self.frame.size.width - self.frame.size.width/self.partitions) {
         _scrollOffset = self.frame.size.width/(self.partitions - 1);
-    }
+    }*/
     [self setNeedsDisplay];
 }
 -(void)setPartitions:(NSUInteger)partitions {

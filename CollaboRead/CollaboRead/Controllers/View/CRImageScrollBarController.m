@@ -47,12 +47,15 @@
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     CGFloat loc = [[touches anyObject] locationInView:self.view].x;
+    CGFloat halfSlider = self.view.frame.size.width/self.partitions/2;
     if (self.partitions < 2) {
-        loc = self.view.frame.size.width/self.partitions/2;
-    } else if (loc > self.view.frame.size.width - self.view.frame.size.width/self.partitions/2) {
-        loc = self.view.frame.size.width - self.view.frame.size.width/self.partitions/2;
+        loc = halfSlider;
+    } else if (loc < halfSlider) {
+        loc = halfSlider;
+    } else if (loc > self.view.frame.size.width - halfSlider) {
+        loc = self.view.frame.size.width - halfSlider;
     }
-    self.view.scrollOffset = loc - self.view.frame.size.width/self.partitions/2;
+    self.view.scrollOffset = loc - halfSlider;
     NSUInteger partition = loc / (self.view.frame.size.width/self.partitions);
     [self.delegate imageScroller:self didChangePosition:partition];
     
@@ -60,17 +63,20 @@
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     CGFloat loc = [[touches anyObject] locationInView:self.view].x;
+    CGFloat halfSlider = self.view.frame.size.width/self.partitions/2;
     NSUInteger position = loc / (self.view.frame.size.width / self.partitions);
-    loc = position * (self.view.frame.size.width/self.partitions);
+    loc = position * (self.view.frame.size.width/self.partitions) + halfSlider;
     if (self.partitions < 2) {
-        loc = self.view.frame.size.width/self.partitions/2;
-    } else if (loc > self.view.frame.size.width - self.view.frame.size.width/self.partitions/2) {
-        loc = self.view.frame.size.width - self.view.frame.size.width/self.partitions/2;
+        loc = halfSlider;
+    } else if (loc < halfSlider) {
+        loc = halfSlider;
+    } else if (loc > self.view.frame.size.width - halfSlider) {
+        loc = self.view.frame.size.width - halfSlider;
     }
-    self.view.scrollOffset = loc - self.view.frame.size.width/self.partitions/2;;
-    /*[UIView animateWithDuration:0.2 animations:^{
-        [self.view setNeedsDisplay];
-    }];*/
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        self.view.scrollOffset = loc - halfSlider;
+    }];
     NSUInteger partition = loc / (self.view.frame.size.width/self.partitions);
     self.isMoving = NO;
     [self.delegate imageScroller:self didStopAtPosition:partition];
