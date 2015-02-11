@@ -26,15 +26,7 @@
 }
 
 - (void)viewDidLoad {
-    self.view.backgroundColor = [UIColor redColor];
-    self.view.frame = CGRectMake(0, 0, 500, 20);
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
--(void)setWidth:(CGFloat)width {
-    CGRect old = self.view.frame;
-    old = CGRectMake(old.origin.x, old.origin.y, width, old.size.height);
 }
 
 -(void)setPartitions:(NSUInteger)partitions andHighlights:(NSArray *)highlights {
@@ -54,21 +46,34 @@
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGPoint loc = [[touches anyObject] locationInView:self.view];
-    self.view.scrollOffset = loc.x;
-    [self.view setNeedsDisplay];
+    CGFloat loc = [[touches anyObject] locationInView:self.view].x;
+    if (self.partitions < 2) {
+        loc = self.view.frame.size.width/self.partitions/2;
+    } else if (loc > self.view.frame.size.width - self.view.frame.size.width/self.partitions/2) {
+        loc = self.view.frame.size.width - self.view.frame.size.width/self.partitions/2;
+    }
+    self.view.scrollOffset = loc - self.view.frame.size.width/self.partitions/2;
+    NSUInteger partition = loc / (self.view.frame.size.width/self.partitions);
+    [self.delegate imageScroller:self didChangePosition:partition];
+    
     
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     CGFloat loc = [[touches anyObject] locationInView:self.view].x;
     NSUInteger position = loc / (self.view.frame.size.width / self.partitions);
     loc = position * (self.view.frame.size.width/self.partitions);
-    self.view.scrollOffset = loc;
-    [UIView animateWithDuration:0.2 animations:^{
+    if (self.partitions < 2) {
+        loc = self.view.frame.size.width/self.partitions/2;
+    } else if (loc > self.view.frame.size.width - self.view.frame.size.width/self.partitions/2) {
+        loc = self.view.frame.size.width - self.view.frame.size.width/self.partitions/2;
+    }
+    self.view.scrollOffset = loc - self.view.frame.size.width/self.partitions/2;;
+    /*[UIView animateWithDuration:0.2 animations:^{
         [self.view setNeedsDisplay];
-    }];
+    }];*/
+    NSUInteger partition = loc / (self.view.frame.size.width/self.partitions);
     self.isMoving = NO;
-    
+    [self.delegate imageScroller:self didStopAtPosition:partition];
 }
 
 - (void)didReceiveMemoryWarning {

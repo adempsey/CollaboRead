@@ -16,8 +16,9 @@
 #import "CRToolPanelViewController.h"
 #import "CRScansMenuViewController.h"
 #import "CRUndoStack.h"
+#import "CRImageScrollBarController.h"
 
-@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate>
+@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate, CRImageScrollBarControllerDelegate>
 
 //The following define drawing color used by user
 @property (nonatomic, assign) CGFloat lineRedComp;

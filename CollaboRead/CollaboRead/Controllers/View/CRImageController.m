@@ -21,6 +21,7 @@
 #import "CRUserKeys.h"
 #import "CRAnswerSubmissionService.h"
 #import "CRImageScrollBarController.h"
+#import "CRAnswerLine.h"
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
@@ -54,6 +55,7 @@
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)removePointFromAnswer:(CRAnswerPoint *)pt;
+-(void)swapImage;
 
 @end
 
@@ -73,11 +75,19 @@
 	[super viewDidLoad];
 
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationItem.title = self.caseChosen.name;
     
     self.scanIndex = 0;
     self.sliceIndex = 0;
+    
+    self.scrollBarController = [[CRImageScrollBarController alloc] init];
+    self.scrollBarController.delegate = self;
+    NSArray *highlights = nil;
+    if ([self.user.type isEqualToString: CR_USER_TYPE_LECTURER]) {
+        highlights = [self.caseChosen answerSlicesForScan: ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
+    }
+    [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:highlights];
 
-	self.navigationItem.title = self.caseChosen.name;
 	[self loadAndScaleImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).image];
 
 	// Invisible now so that the image fades in once the view appears
@@ -92,6 +102,7 @@
     self.limView.hidden = YES;
     [self.view addSubview:self.limView];
     [self.limView addSubview:self.zoomView];
+    [self.view addSubview:self.scrollBarController.view];
     
 	self.toolPanelViewController = [[CRToolPanelViewController alloc] init];
 	self.toolPanelViewController.delegate = self;
@@ -113,10 +124,6 @@
     [self.view addSubview:self.scansMenuController.view];
     [self.view addSubview:self.toolPanelViewController.view];
     [self.view addSubview:self.toggleButton];
-    
-    self.scrollBarController = [[CRImageScrollBarController alloc] init];
-    [self.scrollBarController setPartitions:5 andHighlights:nil];
-    [self.view addSubview:self.scrollBarController.view];
     
     self.lineRedComp = 255;
     self.lineBlueComp = 0;
@@ -305,6 +312,14 @@
     UIGraphicsEndImageContext();
 }
 
+
+-(void)swapImage {
+    CRScan *scan = self.caseChosen.scans[self.scanIndex];
+    [self loadAndScaleImage:((CRSlice *)((CRScan *) scan).slices[self.sliceIndex]).image];
+    self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
+    [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+}
+
 //Loads the image to be drawn over into the image view and scales it to fit the screen.
 //Necessary while this all is done programmatically, use "Mode: Aspect Fit" instead setting up with
 //storyboard
@@ -319,7 +334,7 @@
     CGRect newFrame = CGRectMake(0, 0, img.size.width, img.size.height);
     
     //Determine boundaries based on iOS version
-    CGFloat topBarHeight = TOP_BAR_HEIGHT;
+    CGFloat topBarHeight = TOP_BAR_HEIGHT + self.scrollBarController.view.frame.size.height;
     CGRect viewFrame = LANDSCAPE_FRAME;
     
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
@@ -353,6 +368,7 @@
             newFrame.origin.x = (viewFrame.size.width - newFrame.size.width)/2;
         }
     }
+    self.scrollBarController.view.frame = CGRectMake(newFrame.origin.x, TOP_BAR_HEIGHT, newFrame.size.width, self.scrollBarController.view.frame.size.height);
     [self.caseImage setFrame:newFrame];
     [self clearDrawing];
     [self.limView setFrame:newFrame];
@@ -586,17 +602,30 @@
     [self.caseChosen.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([((CRScan *)obj).scanID isEqualToString:scanId]) {
             if (idx != self.scanIndex) {
-                
                 self.scanIndex = idx;
                 self.sliceIndex = 0;
-                [self loadAndScaleImage:((CRSlice *)((CRScan *) obj).slices[self.sliceIndex]).image];
-                CRScan *scan = self.caseChosen.scans[self.scanIndex];
-                self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
-                [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+                NSArray *highlights = nil;
+                if ([self.user.type isEqualToString: CR_USER_TYPE_LECTURER]) {
+                    highlights = [self.caseChosen answerSlicesForScan: ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
+                }
+                [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:highlights];
+                [self swapImage];
             }
             *stop = true;
         }
     }];
 }
+
+#pragma mark - CRImageScrollBarController Delegate Methods
+
+-(void) imageScroller:(CRImageScrollBarController *)imageScroller didChangePosition:(NSUInteger)newIndex {
+    self.sliceIndex = newIndex;
+    [self swapImage];
+}
+-(void) imageScroller:(CRImageScrollBarController *)imageScroller didStopAtPosition:(NSUInteger)newIndex {
+    self.sliceIndex = newIndex;
+    [self swapImage];
+}
+
 
 @end

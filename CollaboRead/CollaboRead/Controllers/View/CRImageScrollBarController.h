@@ -11,11 +11,12 @@
 
 @interface CRImageScrollBarController : UIViewController
 -(void)setPartitions:(NSUInteger)partitions andHighlights:(NSArray *)highlights;
--(void)setWidth:(CGFloat)width;
+
 @property (nonatomic, strong) CRImageScrollBar *view;
+@property (nonatomic, weak) id delegate;
 @end
 
-@protocol CRImageScrollerDelegate <NSObject>
+@protocol CRImageScrollBarControllerDelegate <NSObject>
 
 @required
 -(void)imageScroller:(CRImageScrollBarController *)imageScroller didChangePosition:(NSUInteger)newIndex;

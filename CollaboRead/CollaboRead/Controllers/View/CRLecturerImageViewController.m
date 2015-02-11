@@ -159,4 +159,9 @@
     [self drawStudentAnswers];
 }
 
+-(void) imageScroller:(CRImageScrollBarController *)imageScroller didStopAtPosition:(NSUInteger)newIndex {
+    [super imageScroller:imageScroller didStopAtPosition:newIndex];
+    [self drawStudentAnswers];
+}
+
 @end
