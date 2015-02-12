@@ -193,7 +193,6 @@
 			children = (
 				8DCF9CB11A2BF8FB000D42C5 /* CRAnswerSubmissionService.h */,
 				8DCF9CB21A2BF8FB000D42C5 /* CRAnswerSubmissionService.m */,
-				BB375B5C1A141DCC007D8556 /* CRViewSizeMacros.h */,
 				8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */,
 				8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */,
 				8D16E93419EF440500DAFEC0 /* CRNetworkingService.h */,
@@ -417,6 +416,7 @@
 		8DEE5AE019F643F70090AF0B /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				BB375B5C1A141DCC007D8556 /* CRViewSizeMacros.h */,
 				8D71EA471A09D2E7001347EA /* CRColors.h */,
 				BBA2EBD019EECE270093044E /* CRUserKeys.h */,
 				BBA2EBDB19EEF3340093044E /* CRCaseKeys.h */,

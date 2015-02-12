@@ -45,7 +45,7 @@
 	
 	self.navigationItem.title = self.lecturer.name;
 
-    CGRect frame = LANDSCAPE_FRAME;
+    CGRect frame = CR_LANDSCAPE_FRAME;
 	self.activityIndicator.frame = CGRectMake((frame.size.width - 50.0)/2, (frame.size.height - 50.0)/2, 50.0, 50.0);
 	[self.activityIndicator startAnimating];
 	[self.view addSubview:self.activityIndicator];

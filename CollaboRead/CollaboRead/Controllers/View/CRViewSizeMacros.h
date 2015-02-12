@@ -14,19 +14,19 @@
 
 #define kNavigationBarHeight 44
 
-#define LANDSCAPE_FRAME ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:\
+#define CR_LANDSCAPE_FRAME ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:\
         NSNumericSearch] == NSOrderedAscending) ? \
         CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, \
         [UIScreen mainScreen].bounds.size.width) : [UIScreen mainScreen].bounds
 
-#define TOP_BAR_HEIGHT ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:\
+#define CR_TOP_BAR_HEIGHT ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:\
         NSNumericSearch] == NSOrderedAscending) ? \
         kNavigationBarHeight + \
         [UIApplication sharedApplication].statusBarFrame.size.width : \
         kNavigationBarHeight + \
         [UIApplication sharedApplication].statusBarFrame.size.height
 
-#define STATUS_BAR_HEIGHT ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:\
+#define CR_STATUS_BAR_HEIGHT ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:\
         NSNumericSearch] == NSOrderedAscending) ? \
         [UIApplication sharedApplication].statusBarFrame.size.width : \
         [UIApplication sharedApplication].statusBarFrame.size.height

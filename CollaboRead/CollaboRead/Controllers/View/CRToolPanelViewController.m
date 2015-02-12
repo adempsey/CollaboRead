@@ -37,9 +37,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	CGFloat viewOriginY = STATUS_BAR_HEIGHT;
-    CGFloat topBar = TOP_BAR_HEIGHT;
-    CGRect screenFrame = LANDSCAPE_FRAME;
+	CGFloat viewOriginY = CR_STATUS_BAR_HEIGHT;
+    CGFloat topBar = CR_TOP_BAR_HEIGHT;
+    CGRect screenFrame = CR_LANDSCAPE_FRAME;
     
 	CGRect viewFrame = CGRectMake(0,
 								  viewOriginY,

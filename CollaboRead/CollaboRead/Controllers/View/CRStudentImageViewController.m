@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    CGRect frame = LANDSCAPE_FRAME; //Use iOS version appropriate bounds
+    CGRect frame = CR_LANDSCAPE_FRAME; //Use iOS version appropriate bounds
 	
 	self.submitButton = [[CRSubmitButton alloc] init];
     [self.submitButton setFrame:CGRectMake(frame.size.width - 170, frame.size.height - 70, 150, 50)];
