@@ -33,6 +33,11 @@
 	self.submitButton = [[CRSubmitButton alloc] init];
     [self.submitButton setFrame:CGRectMake(frame.size.width - 170, frame.size.height - 70, 150, 50)];
 	[self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
+	
+	if ([self userHasPreviouslySubmittedAnswer]) {
+		self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
+	}
+	
 	[self.view addSubview:self.submitButton];
 
     self.patientInfoViewController = [[CRPatientInfoViewController alloc] initWithPatientInfo:self.patientInfo];
@@ -57,6 +62,23 @@
     [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
 		self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUCCESS;
 	}];
+}
+
+- (BOOL)userHasPreviouslySubmittedAnswer
+{
+	BOOL __block hasSubmitted = NO;
+	
+	[self.caseChosen.answers enumerateObjectsUsingBlock:^(id answerObj, NSUInteger idx, BOOL *stop) {
+		if ([answerObj isKindOfClass:[CRAnswer class]]) {
+			CRAnswer *answer = (CRAnswer*)answerObj;
+			
+			if ([answer.owners containsObject:self.user.userID]) {
+				hasSubmitted = YES;
+				*stop = YES;
+			}
+		}
+	}];
+	return hasSubmitted;
 }
 
 @end
