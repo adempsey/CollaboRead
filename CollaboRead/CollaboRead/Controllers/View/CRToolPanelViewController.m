@@ -133,8 +133,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	[self.delegate toolPanelViewController:self didSelectTool:indexPath.row];
-	[self.delegate toolPanelViewController:self didSelectTool:indexPath.row];
+    [self.delegate toolPanelViewController:self didSelectTool:indexPath.row];
     if(self.selectedTool.row ==kCR_PANEL_TOOL_SCANS) {
         switch (indexPath.row) {
             case kCR_PANEL_TOOL_UNDO:
