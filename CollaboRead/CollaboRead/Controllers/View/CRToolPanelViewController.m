@@ -134,20 +134,35 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[self.delegate toolPanelViewController:self didSelectTool:indexPath.row];
-	
-	if (indexPath.row == kCR_PANEL_TOOL_UNDO || indexPath.row == kCR_PANEL_TOOL_CLEAR) {
+	[self.delegate toolPanelViewController:self didSelectTool:indexPath.row];
+    if(self.selectedTool.row ==kCR_PANEL_TOOL_SCANS) {
+        switch (indexPath.row) {
+            case kCR_PANEL_TOOL_UNDO:
+            case kCR_PANEL_TOOL_CLEAR:
+                [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
+            case kCR_PANEL_TOOL_SCANS:
+                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+                self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
+                [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
+                [self.delegate toolPanelViewController:self didSelectTool:self.selectedTool.row];
+                break;
+            case kCR_PANEL_TOOL_PEN:
+            case kCR_PANEL_TOOL_ERASER:
+                [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
+                //unzoom if another button is pressed
+                self.selectedTool = indexPath;
+            default:
+                break;
+        }
+
+    } else if (indexPath.row == kCR_PANEL_TOOL_UNDO || indexPath.row == kCR_PANEL_TOOL_CLEAR) {
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 		[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
-	} else if (indexPath.row == kCR_PANEL_TOOL_SCANS && self.selectedTool.row ==kCR_PANEL_TOOL_SCANS) {
-            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-            self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
-            [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
+	} else {
+        self.selectedTool = indexPath;
     }
-    else
-    {
-            self.selectedTool = indexPath;
-    }
+
 }
 
 #pragma mark - Extra TableView Methods
