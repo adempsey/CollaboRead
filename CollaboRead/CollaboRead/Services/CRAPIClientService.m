@@ -8,8 +8,6 @@
 
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
-#import "CRAnswerLine.h"
-#import "CRAnswerPoint.h"
 
 #import "NSArray+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
