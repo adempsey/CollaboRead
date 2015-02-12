@@ -433,8 +433,19 @@
             break;
         case kCR_PANEL_TOOL_SCANS:
             [self toggleScansMenu];
+            self.selectedTool = tool;
             break;
 	}
+}
+
+-(void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didDeselectTool:(NSInteger)tool
+{
+    switch (tool) {
+        case kCR_PANEL_TOOL_SCANS:
+            [self toggleScansMenu];
+            break;
+        break;
+    }
 }
 
 #pragma mark - CRScansMenuViewController Delegate Methods
