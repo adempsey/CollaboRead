@@ -44,7 +44,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-	CGRect screenBounds = LANDSCAPE_FRAME;
+	CGRect screenBounds = CR_LANDSCAPE_FRAME;
 	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((screenBounds.size
         .width - kActivityIndicatorSize)/2, self.loginButton.frame.origin.y, kActivityIndicatorSize,
         kActivityIndicatorSize)];

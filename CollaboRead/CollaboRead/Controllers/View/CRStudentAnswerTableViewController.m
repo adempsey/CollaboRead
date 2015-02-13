@@ -62,8 +62,8 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 {
     [super viewDidLoad];
 	
-	CGRect screenBounds = LANDSCAPE_FRAME;
-	CGFloat viewOriginY = TOP_BAR_HEIGHT;
+	CGRect screenBounds = CR_LANDSCAPE_FRAME;
+	CGFloat viewOriginY = CR_TOP_BAR_HEIGHT;
 	CGRect viewFrame = CGRectMake(screenBounds.size.width - kTableViewMargin,
 								  viewOriginY,
 								  kTableViewMargin,
@@ -123,7 +123,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 - (void)setFullView:(BOOL)shouldBeFull
 {
 	CGRect viewFrame = self.view.frame;
-    CGRect screenFrame = LANDSCAPE_FRAME;
+    CGRect screenFrame = CR_LANDSCAPE_FRAME;
 	viewFrame.origin.x = screenFrame.size.width - (shouldBeFull ? kTableViewWidth : (kTableViewMargin));
 	viewFrame.size.width = shouldBeFull ? kTableViewWidth : kTableViewMargin;
 	self.view.frame = viewFrame;

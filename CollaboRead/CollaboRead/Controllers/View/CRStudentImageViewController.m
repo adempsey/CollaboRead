@@ -10,20 +10,15 @@
 
 #import "CRStudentImageViewController.h"
 #import "CRAPIClientService.h"
-#import "CRUser.h"
-#import "CRUserKeys.h"
-#import "CRAnswerPoint.h"
-#import "CRAnswerLine.h"
-#import "CRColors.h"
 #import "CRViewSizeMacros.h"
 #import "CRPatientInfoViewController.h"
-#import "CRAnswerSubmissionService.h"
+#import "CRSubmitButton.h"
 
 @interface CRStudentImageViewController ()
 
--(void)submitAnswer:(UIButton *)submitButton;
 @property (nonatomic, strong) UIBarButtonItem *togglePatientInfoButton;
 @property (nonatomic, readwrite, strong) CRPatientInfoViewController *patientInfoViewController;
+@property (nonatomic, readwrite, strong) CRSubmitButton *submitButton;
 
 @end
 
@@ -33,64 +28,57 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    UIButton *submitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];//Change to custom
-    CGRect frame = LANDSCAPE_FRAME; //Use iOS version appropriate bounds
-    [submitButton setFrame:CGRectMake(frame.size.width - 170, frame.size.height - 70, 150, 50)];
-	submitButton.backgroundColor = CR_COLOR_PRIMARY;
-	submitButton.titleLabel.textColor = [UIColor whiteColor];
-    [submitButton setTitle:@"Submit Answer" forState:UIControlStateNormal];//Change to setting images?
-	[submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
-	submitButton.layer.borderWidth = 2.0;
-	submitButton.layer.borderColor = [[UIColor whiteColor] CGColor];
+    CGRect frame = CR_LANDSCAPE_FRAME; //Use iOS version appropriate bounds
+	
+	self.submitButton = [[CRSubmitButton alloc] init];
+    [self.submitButton setFrame:CGRectMake(frame.size.width - 170, frame.size.height - 70, 150, 50)];
+	[self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
+	
+	if ([self userHasPreviouslySubmittedAnswer]) {
+		self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
+	}
+	
+	[self.view addSubview:self.submitButton];
+
     self.patientInfoViewController = [[CRPatientInfoViewController alloc] initWithPatientInfo:self.patientInfo];
     [self.view addSubview:self.patientInfoViewController.view];
+	
     self.togglePatientInfoButton= [[UIBarButtonItem alloc] initWithTitle:@"Patient Info"
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self.patientInfoViewController
                                                                           action:@selector(toggleTable)];
     self.navigationItem.rightBarButtonItem = self.togglePatientInfoButton;
-    [self.view addSubview:submitButton];
-    [self.view setNeedsDisplay];
 }
 
 //Perform action of submitting answer, provide user status update
 -(void)submitAnswer:(UIButton *)submitButton
 {
-    //Show attempt to submit
-	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((submitButton.frame.size.width - 50.0)/2,
-																										   (submitButton.frame.size.height - 50.0)/2,
-																										   50.0,
-																										   50.0)];
-    submitButton.userInteractionEnabled = NO; //Disallow repeated submissions
-	[submitButton setTitle:@"" forState:UIControlStateNormal];
-	
-	[activityIndicator startAnimating];
-	[submitButton addSubview:activityIndicator];
-
+	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
     NSArray *students = [[NSArray alloc]initWithObjects:self.user.userID, nil];
 
     //Prepare and send answer
 	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students];
 
     [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
-		NSString *unicodeCheckMark = @"\u2713";
-		[submitButton setTitle:unicodeCheckMark forState:UIControlStateNormal];
-		[activityIndicator removeFromSuperview];
+		self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUCCESS;
 	}];
-//=======
-//    NSMutableArray *answerPts = [[NSMutableArray alloc] init];
-//    [self.undoStack[0] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//        [answerPts addObject:[(CRAnswerPoint *)obj jsonDictFromPoint]];
-//    }];
-//	CRAnswer *answer = [[CRAnswer alloc] initWithData:answerPts submissionDate:nil owners:students];
-//	
-//	[[CRAnswerSubmissionService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup];
-//
-////    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseId inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
-////		NSString *unicodeCheckMark = @"\u2713";
-////		[submitButton setTitle:unicodeCheckMark forState:UIControlStateNormal];
-////		[activityIndicator removeFromSuperview];
-////	}];
+}
+
+- (BOOL)userHasPreviouslySubmittedAnswer
+{
+	BOOL __block hasSubmitted = NO;
+	
+	[self.caseChosen.answers enumerateObjectsUsingBlock:^(id answerObj, NSUInteger idx, BOOL *stop) {
+		if ([answerObj isKindOfClass:[CRAnswer class]]) {
+			CRAnswer *answer = (CRAnswer*)answerObj;
+			
+			if ([answer.owners containsObject:self.user.userID]) {
+				hasSubmitted = YES;
+				*stop = YES;
+			}
+		}
+	}];
+	return hasSubmitted;
 }
 
 @end

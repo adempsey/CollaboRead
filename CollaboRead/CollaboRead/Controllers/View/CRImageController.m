@@ -107,7 +107,7 @@
 	self.toolPanelViewController = [[CRToolPanelViewController alloc] init];
 	self.toolPanelViewController.delegate = self;
 
-    CGRect frame = LANDSCAPE_FRAME; //Frame adjusted based on iOS 7 or 8
+    CGRect frame = CR_LANDSCAPE_FRAME; //Frame adjusted based on iOS 7 or 8
 	self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
 										 frame.size.height - 60.0 - 10.0,
 										 60.0,
@@ -339,8 +339,8 @@
     CGRect newFrame = CGRectMake(0, 0, img.size.width, img.size.height);
     
     //Determine boundaries based on iOS version
-    CGFloat topBarHeight = TOP_BAR_HEIGHT + self.scrollBarController.view.frame.size.height;
-    CGRect viewFrame = LANDSCAPE_FRAME;
+    CGFloat topBarHeight = CR_TOP_BAR_HEIGHT + self.scrollBarController.view.frame.size.height;
+    CGRect viewFrame = CR_LANDSCAPE_FRAME;
     
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
     if (newFrame.size.height > newFrame.size.width) {
@@ -373,7 +373,7 @@
             newFrame.origin.x = (viewFrame.size.width - newFrame.size.width)/2;
         }
     }
-    self.scrollBarController.view.frame = CGRectMake(newFrame.origin.x, TOP_BAR_HEIGHT, newFrame.size.width, self.scrollBarController.view.frame.size.height);
+    self.scrollBarController.view.frame = CGRectMake(newFrame.origin.x, CR_TOP_BAR_HEIGHT, newFrame.size.width, self.scrollBarController.view.frame.size.height);
     [self.caseImage setFrame:newFrame];
     [self clearDrawing];
     [self.limView setFrame:newFrame];
@@ -539,7 +539,7 @@
 
 -(void)toggleScansMenu
 {
-    CGRect frame = LANDSCAPE_FRAME;
+    CGRect frame = CR_LANDSCAPE_FRAME;
     if (self.scansMenuController.view.hidden) {
         self.scansMenuController.view.hidden = NO;
         CGFloat size = self.toolPanelViewController.view.frame.size.height * 0.75;

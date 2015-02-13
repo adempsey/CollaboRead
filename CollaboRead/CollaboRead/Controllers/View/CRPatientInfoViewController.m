@@ -25,8 +25,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    CGRect screenBounds = LANDSCAPE_FRAME;
-    CGFloat viewOriginY = TOP_BAR_HEIGHT;
+    CGRect screenBounds = CR_LANDSCAPE_FRAME;
+    CGFloat viewOriginY = CR_TOP_BAR_HEIGHT;
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
     CGRect viewFrame = CGRectMake(screenBounds.size.width ,
                                   viewOriginY,
@@ -64,7 +64,7 @@
 - (void)setFullView:(BOOL)shouldBeFull
 {
     CGRect viewFrame = self.view.frame;
-    CGRect screenFrame = LANDSCAPE_FRAME;
+    CGRect screenFrame = CR_LANDSCAPE_FRAME;
     viewFrame.origin.x = screenFrame.size.width - (shouldBeFull ? kTableViewWidth : 0);
     viewFrame.size.width = shouldBeFull ? kTableViewWidth : 0;
     self.view.frame = viewFrame;
