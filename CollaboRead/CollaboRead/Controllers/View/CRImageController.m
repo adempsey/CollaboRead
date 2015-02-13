@@ -204,12 +204,17 @@
         self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         self.currZoom = 1;
+        
     }
     [UIView animateWithDuration:0.25 animations:^{
         self.zoomView.frame = CGRectMake(0, 0, self.limView.frame.size.width, self.limView.frame.size.height);
     } completion:^(BOOL finished) {
         self.limView.hidden = !self.limView.hidden;
-    }];//TODO: animation does not perform as expected, may be fixed
+        self.scrollBarController.view.alpha = self.limView.hidden ? 1.0 : 0.5;
+    }];
+    
+    //self.scrollBarController.view.opaque = !self.scrollBarController.view.opaque;
+    self.scrollBarController.view.userInteractionEnabled = !self.scrollBarController.view.userInteractionEnabled;
 }
 
 #pragma mark - Tool Methods
