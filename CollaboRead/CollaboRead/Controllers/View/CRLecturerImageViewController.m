@@ -40,6 +40,7 @@
 @property (nonatomic, strong) NSArray *selectedColors;
 @property (nonatomic, strong) UIBarButtonItem *toggleStudentAnswerTableButton;
 @property (nonatomic, strong) UIBarButtonItem *toggleStudentRefreshAnswerTableButton;
+@property (nonatomic, strong) UIImageView *studentAnswerView;
 
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerViewController;
 
@@ -49,27 +50,51 @@
 
 -(void)drawStudentAnswers
 {
-    [self clearDrawing];
     NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
     NSString *sliceID = ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID;
-    
+    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
+    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
     [self.selectedAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSDictionary* color = self.selectedColors[idx];
+        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), [color[@"red"] floatValue], [color[@"green"] floatValue], [color[@"blue"] floatValue], 1.0);
+        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
         [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             CRAnswerLine *line = obj;
             if ([line.scanID isEqualToString: scanID] && [line.sliceID isEqualToString:sliceID]) {
-                [self drawAnswer:line.data inRed: [color[@"red"] floatValue] Green:[color[@"green"] floatValue] Blue:[color[@"blue"] floatValue]];
+                for (int i = 1; i < [line.data count]; i++) {
+                    CRAnswerPoint *beg = [line.data objectAtIndex:i - 1];
+                    if (!beg.isEndPoint) {
+                        CRAnswerPoint *fin = [line.data objectAtIndex:i];
+                        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
+                        CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
+                    }
+                }
+                CGContextStrokePath(UIGraphicsGetCurrentContext());
                 *stop = true;
             }
         }];
 
         
     }];
-    [self drawAnswer:self.currentDrawing inRed: self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+    
+    self.studentAnswerView.image = UIGraphicsGetImageFromCurrentImageContext();
+    [self.studentAnswerView setAlpha:1.0];
+    UIGraphicsEndImageContext();
+}
+
+-(void)loadAndScaleImage:(UIImage *)img {
+    [super loadAndScaleImage:img];
+    if (self.studentAnswerView == nil) {
+        self.studentAnswerView = [[UIImageView alloc] init];
+    }
+    self.studentAnswerView.frame = self.imgFrame;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.studentAnswerView = [[UIImageView alloc] init];
+    self.studentAnswerView.frame = self.imgFrame;
+    [self.view addSubview:self.studentAnswerView];
     //CGFloat topBarHeight = self.navigationController.navigationBar.frame.size.height +
     //[UIApplication sharedApplication].statusBarFrame.size.height;
 	self.view.autoresizesSubviews = NO;
@@ -123,8 +148,6 @@
 #pragma mark - CRStudentAnswerTable Delegate Methods
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeStudentSelection:(NSArray *)students
 {
-    [self clearDrawing];
-    [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
     NSMutableArray *selectedAnswers = [[NSMutableArray alloc] init];;
 	NSMutableArray *colors = [[NSMutableArray alloc] init];
     [self.caseChosen.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger ansIdx, BOOL *stop) {
@@ -150,6 +173,7 @@
 -(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
 {
     [super scansMenuViewControllerDidSelectScan:scanId];
+    self.studentAnswerView.frame = self.imgFrame;
     [self drawStudentAnswers];
 }
 
