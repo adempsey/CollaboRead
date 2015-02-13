@@ -181,6 +181,7 @@
 	} else {
         self.selectedTool = indexPath;
     }
+
 }
 
 #pragma mark - Extra TableView Methods
