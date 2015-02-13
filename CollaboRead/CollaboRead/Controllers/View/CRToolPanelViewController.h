@@ -34,6 +34,7 @@ typedef NS_ENUM(NSUInteger, kPanelSections) {
 
 @required
 - (void)toolPanelViewController:(CRToolPanelViewController*)toolPanelViewController didSelectTool:(NSInteger)tool;
+- (void)toolPanelViewController:(CRToolPanelViewController*)toolPanelViewController didDeselectTool:(NSInteger)tool;
 
 @end
 
