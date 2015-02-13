@@ -173,7 +173,7 @@
 //Only clears image, does not affect saved data
 -(void)clearDrawing
 {
-    self.drawView.frame = self.caseImage.frame;
+    self.drawView.frame = self.imgFrame;
     self.drawView.image = [[UIImage alloc] init];
 }
 
@@ -193,12 +193,11 @@
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
     CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.coordinate.x, lastPoint.coordinate.y);
     for (int i = 1; i < [ans count]; i++) {
-        CRAnswerPoint *beg = [ans objectAtIndex:i - 1];
+        CRAnswerPoint *beg = ans[i - 1];
         if (!beg.isEndPoint) {
             CRAnswerPoint *fin = [ans objectAtIndex:i];
             CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
             CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
-            [self drawLineFrom:beg to:fin];
         }
     }
     CGContextStrokePath(UIGraphicsGetCurrentContext());
@@ -254,6 +253,7 @@
             newFrame.origin.x = (viewFrame.size.width - newFrame.size.width)/2;
         }
     }
+    self.imgFrame = newFrame;
     [self.caseImage setFrame:newFrame];
     [self clearDrawing];
     [self.drawView setNeedsDisplay];
@@ -336,7 +336,7 @@
 
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable
-    UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
+    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
     [self.drawView.image drawAtPoint:CGPointMake(0, 0)];//Using drawInRect blurs previous lines for currently unknown reason
     
     //Set up to draw line
@@ -356,7 +356,7 @@
 
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable
-    UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
+    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
     [self.drawView.image drawAtPoint:CGPointMake(0, 0)]; //Doesn't use drawInRect to keep consistent with drawing lines and prevent blurring that ocurred for unknown reason
     
     //Set up to draw line

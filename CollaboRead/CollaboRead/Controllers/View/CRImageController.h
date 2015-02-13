@@ -24,6 +24,8 @@
 @property (nonatomic, assign) CGFloat lineBlueComp;
 @property (nonatomic, assign) CGFloat lineGreenComp;
 
+@property (nonatomic, assign) CGRect imgFrame;
+
 @property (nonatomic, strong) CRUser *user;
 @property (nonatomic, strong) CRCase *caseChosen;//Case information
 
