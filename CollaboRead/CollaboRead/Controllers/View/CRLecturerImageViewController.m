@@ -145,6 +145,11 @@
 
 }
 
+-(void)toggleZoom {
+    [super toggleZoom];
+    self.studentAnswerView.hidden = !self.studentAnswerView.hidden;
+}
+
 #pragma mark - CRStudentAnswerTable Delegate Methods
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeStudentSelection:(NSArray *)students
 {
@@ -185,6 +190,7 @@
 
 -(void) imageScroller:(CRImageScrollBarController *)imageScroller didStopAtPosition:(NSUInteger)newIndex {
     [super imageScroller:imageScroller didStopAtPosition:newIndex];
+    self.studentAnswerView.frame = self.imgFrame;
     [self drawStudentAnswers];
 }
 

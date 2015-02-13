@@ -49,7 +49,6 @@
 @property (nonatomic, strong) CRImageScrollBarController *scrollBarController;
 
 -(void)toggleScansMenu;
--(void)toggleZoom;
 -(void)zoomImageWithTouches:(UITouch *)touchA and:(UITouch *)touchB;
 -(void)panZoom:(UITouch *)touch;
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
@@ -372,6 +371,7 @@
             newFrame.origin.x = (viewFrame.size.width - newFrame.size.width)/2;
         }
     }
+    self.imgFrame = newFrame;
     self.scrollBarController.view.frame = CGRectMake(newFrame.origin.x, CR_TOP_BAR_HEIGHT, newFrame.size.width, self.scrollBarController.view.frame.size.height);
     [self.caseImage setFrame:newFrame];
     [self clearDrawing];
