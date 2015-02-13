@@ -183,7 +183,7 @@
 {
 
     //Make region drawable
-    UIGraphicsBeginImageContext(self.drawView.frame.size);//Draw only in image
+    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
     [self.drawView.image drawAtPoint:CGPointMake(0, 0)];
     
     //Set up to draw lines
