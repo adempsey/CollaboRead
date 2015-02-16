@@ -42,7 +42,7 @@
 @property (nonatomic, strong) UIBarButtonItem *toggleStudentRefreshAnswerTableButton;
 @property (nonatomic, strong) UIImageView *studentAnswerView;
 
-@property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerViewController;
+@property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerTableViewController;
 
 @end
 
@@ -102,15 +102,13 @@
 	// Should pass array of CRUsers that have submitted answers
 	// This workflow will need to be adjusted in the future, since this list will change as students submit answers
     [self loadStudents];
-	self.studentAnswerViewController.delegate = self;
-	[self.view addSubview:self.studentAnswerViewController.view];
-    self.studentAnswerViewController.allUsers = self.allUsers;
+	self.studentAnswerTableViewController.delegate = self;
+	[self.view addSubview:self.studentAnswerTableViewController.view];
+    self.studentAnswerTableViewController.allUsers = self.allUsers;
 
-	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:@"Answers"
-																					   style:UIBarButtonItemStylePlain
-																					  target:self.studentAnswerViewController
-																					  action:@selector(toggleTable)];
+	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:@"Answers" style:UIBarButtonItemStylePlain target:nil action:nil];
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
+	self.studentAnswerTableViewController.toggleButton = self.toggleStudentAnswerTableButton;
     [self.view setNeedsDisplay];
 	[[CRAnswerSubmissionService sharedInstance] setDidReceiveAnswerBlock:^(NSString* answer) {
 		[self didReceiveAnswer:answer];
@@ -128,7 +126,7 @@
         [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [students addObject:((CRAnswer *)obj).owners];
         }];
-        self.studentAnswerViewController.students = students;
+        self.studentAnswerTableViewController.students = students;
 	}];
 }
 
@@ -141,7 +139,7 @@
         [allStudents addObject:((CRAnswer *)obj).owners];
     }];
     self.allStudents = allStudents;
-    self.studentAnswerViewController = [[CRStudentAnswerTableViewController alloc] initWithStudents:self.allStudents];
+    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithStudents:self.allStudents];
 
 }
 

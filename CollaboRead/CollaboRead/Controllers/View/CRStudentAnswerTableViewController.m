@@ -8,9 +8,7 @@
 
 #import "CRStudentAnswerTableViewController.h"
 #import "CRUser.h"
-#import "CRColors.h"
-#import "CRViewSizeMacros.h"
-#import "CRAPIClientService.h"
+
 typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewSections) {
 	kSECTION_OPTIONS = 0,
 	kSECTION_STUDENTS,
@@ -32,8 +30,6 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 @property (nonatomic, readwrite, strong) UITableView *tableView;
 @property (nonatomic, readwrite, strong) NSMutableArray *selectedStudents;
 @property (nonatomic, readwrite, assign) BOOL shouldShowStudentNames;
-@property (nonatomic, readwrite, assign) BOOL tableIsVisible;
-@property (nonatomic, readwrite, assign) BOOL didBeginMovingTable;
 @property (nonatomic, readwrite, strong) NSIndexPath *tempIndexPath;
 @property (nonatomic, strong) NSArray *caseSets;
 @property (nonatomic, strong) NSString *userID;
@@ -45,15 +41,11 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 - (instancetype)initWithStudents:(NSArray*)students
 {
 	if (self = [super init]) {
-		self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStyleGrouped];
-		self.tableView.delegate = self;
-		self.tableView.dataSource = self;
         self.shouldShowStudentNames = NO;
-        self.tableIsVisible = NO;
-        self.didBeginMovingTable = NO;
 		self.selectedStudents = [[NSMutableArray alloc] init];
         _students = [[NSArray alloc] initWithArray:students];
-		
+		self.side = CR_SIDE_BAR_SIDE_RIGHT;
+		self.width = kTableViewWidth;
 	}
 	return self;
 }
@@ -62,107 +54,18 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 {
     [super viewDidLoad];
 	
-	CGRect screenBounds = CR_LANDSCAPE_FRAME;
-	CGFloat viewOriginY = CR_TOP_BAR_HEIGHT;
-	CGRect viewFrame = CGRectMake(screenBounds.size.width - kTableViewMargin,
-								  viewOriginY,
-								  kTableViewMargin,
-								  screenBounds.size.height - viewOriginY);
-	[self.view setFrame:viewFrame];
-	
-	CGRect tableViewFrame = CGRectMake(viewFrame.size.width, 0, kTableViewWidth, viewFrame.size.height);
-	self.tableView.frame = tableViewFrame;
-
-	UIView *tableViewBackgroundView = [[UIView alloc] initWithFrame:tableViewFrame];
-	tableViewBackgroundView.backgroundColor = CR_COLOR_PRIMARY;
-	tableViewBackgroundView.alpha = 0.9;
+	CGRect tableViewFrame = CGRectMake(0, 0, kTableViewWidth, super.view.frame.size.height);
+	self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
+	self.tableView.delegate = self;
+	self.tableView.dataSource = self;
 	self.tableView.backgroundColor = [UIColor clearColor];
-	self.tableView.backgroundView = tableViewBackgroundView;
-
 	[self.view addSubview:self.tableView];
-
-	UIPanGestureRecognizer *tableSlideGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveTable:)];
-	tableSlideGestureRecognizer.delegate = self;
-	[self.view addGestureRecognizer:tableSlideGestureRecognizer];
 }
 
 -(void)setStudents:(NSArray *)students
 {
     _students = students;
     [self.tableView reloadData];
-}
-
-- (void)moveTable:(UIPanGestureRecognizer*)gesture
-{
-	if (gesture.state == UIGestureRecognizerStateBegan) {
-		self.didBeginMovingTable = YES;
-
-		[self setFullView:YES];
-	}
-
-	if (gesture.state == UIGestureRecognizerStateChanged && self.didBeginMovingTable) {
-		CGPoint translation = [gesture translationInView:self.view];
-		CGPoint center = self.tableView.center;
-
-		[self.tableView setCenter:CGPointMake(MAX(center.x + translation.x, kTableViewWidth/2), center.y)];
-		[gesture setTranslation:CGPointZero inView:self.view];
-
-	} else if (gesture.state == UIGestureRecognizerStateEnded) {
-		if (self.tableView.center.x < 7*kTableViewWidth/8) {
-			[self showTable];
-		} else {
-			[self hideTable];
-		}
-
-		self.didBeginMovingTable = NO;
-	}
-}
-
-// Reduces area of view when not visible
-// This allows the user to touch parts of the view below the panel when it's not shown
-- (void)setFullView:(BOOL)shouldBeFull
-{
-	CGRect viewFrame = self.view.frame;
-    CGRect screenFrame = CR_LANDSCAPE_FRAME;
-	viewFrame.origin.x = screenFrame.size.width - (shouldBeFull ? kTableViewWidth : (kTableViewMargin));
-	viewFrame.size.width = shouldBeFull ? kTableViewWidth : kTableViewMargin;
-	self.view.frame = viewFrame;
-}
-
-- (void)toggleTable
-{
-	self.tableIsVisible ? [self hideTable] : [self showTable];
-}
-
-- (void)showTable
-{
-	CGRect currentTableFrame = self.tableView.frame;
-	currentTableFrame.origin.x = 0;
-
-	[self setFullView:YES];
-
-	[UIView animateWithDuration:0.25 animations:^{
-		self.tableView.frame = currentTableFrame;
-	} completion:^(BOOL finished) {
-		if (finished) {
-			self.tableIsVisible = YES;
-		}
-	}];
-}
-
-- (void)hideTable
-{
-	CGRect currentTableFrame = self.tableView.frame;
-	currentTableFrame.origin.x = kTableViewWidth;
-
-	[UIView animateWithDuration:0.25 animations:^{
-		self.tableView.frame = currentTableFrame;
-	} completion:^(BOOL finished) {
-		if (finished) {
-			self.tableIsVisible = NO;
-			[self setFullView:NO];
-		}
-	}];
 }
 
 #pragma mark - UITableView Datasource Methods

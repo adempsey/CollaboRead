@@ -7,26 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CRCase.h"
+#import "CRSideBarViewController.h"
 
-@interface CRStudentAnswerTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
+@interface CRStudentAnswerTableViewController : CRSideBarViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, readwrite, weak) id delegate;
-
 @property (nonatomic, readwrite, strong) NSArray *students;
-
 @property (nonatomic, readwrite, strong) NSArray *allUsers;
 
 - (instancetype)initWithStudents:(NSArray*)students;
-- (void)toggleTable;
-- (void)updateAnswers:(NSArray*)answers;
 
 @end
 
 @protocol CRStudentAnswerTableViewDelegate <NSObject>
 
 @required
-- (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didChangeStudentSelection:(NSArray*)selectedStudents ;
-
+- (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didChangeStudentSelection:(NSArray*)selectedStudents;
 
 @end

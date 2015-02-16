@@ -11,6 +11,7 @@
 		8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */; };
 		8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */; };
 		8D34C1401A15FC37007BC6CB /* shapiro.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8D34C13F1A15FC37007BC6CB /* shapiro.jpg */; };
+		8D3916FE1A8D52E300B7523F /* CRSideBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D3916FD1A8D52E300B7523F /* CRSideBarViewController.m */; };
 		8D48119A1A0B47AB004329AE /* CRToolPanelClear.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D4811961A0B47AB004329AE /* CRToolPanelClear.png */; };
 		8D48119B1A0B47AB004329AE /* CRToolPanelEraser.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D4811971A0B47AB004329AE /* CRToolPanelEraser.png */; };
 		8D48119C1A0B47AB004329AE /* CRToolPanelPen.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D4811981A0B47AB004329AE /* CRToolPanelPen.png */; };
@@ -78,6 +79,8 @@
 		8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAPIClientService.h; sourceTree = "<group>"; };
 		8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAPIClientService.m; sourceTree = "<group>"; };
 		8D34C13F1A15FC37007BC6CB /* shapiro.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = shapiro.jpg; sourceTree = "<group>"; };
+		8D3916FC1A8D52E300B7523F /* CRSideBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSideBarViewController.h; sourceTree = "<group>"; };
+		8D3916FD1A8D52E300B7523F /* CRSideBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSideBarViewController.m; sourceTree = "<group>"; };
 		8D4811961A0B47AB004329AE /* CRToolPanelClear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelClear.png; sourceTree = "<group>"; };
 		8D4811971A0B47AB004329AE /* CRToolPanelEraser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelEraser.png; sourceTree = "<group>"; };
 		8D4811981A0B47AB004329AE /* CRToolPanelPen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelPen.png; sourceTree = "<group>"; };
@@ -446,6 +449,8 @@
 		BBA0C5991A894201009E53EC /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				8D3916FC1A8D52E300B7523F /* CRSideBarViewController.h */,
+				8D3916FD1A8D52E300B7523F /* CRSideBarViewController.m */,
 				8DD360151A0B366200E572D1 /* CRToolPanelViewController.h */,
 				8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */,
 				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
@@ -613,6 +618,7 @@
 				BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */,
 				8DCD7B4E1A070BAF0005BFDA /* NSDate+CRAdditions.m in Sources */,
 				BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */,
+				8D3916FE1A8D52E300B7523F /* CRSideBarViewController.m in Sources */,
 				BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */,
 				8DD664E81A75F878002C379E /* CRSlice.m in Sources */,
 				8DEBB0561A86AA1600DC0FCA /* CRSubmitButton.m in Sources */,
