@@ -7,107 +7,50 @@
 //
 
 #import "CRPatientInfoViewController.h"
-#import "CRViewSizeMacros.h"
-#import "CRColors.h"
+
+#define kVIEW_WIDTH 230.0
+#define kTEXT_VIEW_FONT_SIZE 14.0
 
 @interface CRPatientInfoViewController ()
-@property (nonatomic, readwrite, assign) BOOL tableIsVisible;
+
+@property (nonatomic, readwrite, strong) UITextView *patientInfoTextView;
 
 @end
 
-#define kTableViewWidth 230.0
-#define kTableViewMargin (kTableViewWidth/8)
-
-
 @implementation CRPatientInfoViewController
 
-- (void)viewDidLoad {
+- (instancetype)initWithPatientInfo:(NSString *)patientInfo
+{
+	if (self = [super init]) {
+		self.infoText = patientInfo;
+
+		self.side = CR_SIDE_BAR_SIDE_RIGHT;
+		self.width = kVIEW_WIDTH;
+	}
+	return self;
+}
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    CGRect screenBounds = CR_LANDSCAPE_FRAME;
-    CGFloat viewOriginY = CR_TOP_BAR_HEIGHT;
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-    CGRect viewFrame = CGRectMake(screenBounds.size.width ,
-                                  viewOriginY,
-                                  kTableViewMargin,
-                                  screenHeight - viewOriginY);
-    self.view.backgroundColor = CR_COLOR_PRIMARY;
-    [self.view setFrame:viewFrame];
-    self.tableIsVisible = NO;
+	
+	self.patientInfoTextView = [[UITextView alloc] initWithFrame:CGRectMake(0,
+																			0,
+																			kVIEW_WIDTH,
+																			super.view.frame.size.height)];
+	self.patientInfoTextView.text = self.infoText;
+	self.patientInfoTextView.textColor = [UIColor whiteColor];
+	self.patientInfoTextView.font = [UIFont systemFontOfSize:kTEXT_VIEW_FONT_SIZE];
+	self.patientInfoTextView.textAlignment = NSTextAlignmentRight;
+	self.patientInfoTextView.backgroundColor = [UIColor clearColor];
+	self.patientInfoTextView.editable = NO;
+	[self.view addSubview:self.patientInfoTextView];
 }
 
-- (instancetype)initWithPatientInfo: (NSString *) patientInfo {
-    UITextView *myTextView = [[UITextView alloc]initWithFrame:
-                              CGRectMake(10, 50, 210, 350)];
-    [myTextView setText:patientInfo];
-    myTextView.textColor = [UIColor cyanColor];
-    myTextView.backgroundColor = [UIColor clearColor];
-    myTextView.editable = NO;
-//    myTextView.delegate = self;
-    [self.view addSubview:myTextView];
-    return self;
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
-- (void)toggleTable
+- (void)setInfoText:(NSString *)infoText
 {
-    self.tableIsVisible ? [self hideTable] : [self showTable];
+	_infoText = infoText;
+	self.patientInfoTextView.text = infoText;
 }
-
-- (void)setFullView:(BOOL)shouldBeFull
-{
-    CGRect viewFrame = self.view.frame;
-    CGRect screenFrame = CR_LANDSCAPE_FRAME;
-    viewFrame.origin.x = screenFrame.size.width - (shouldBeFull ? kTableViewWidth : 0);
-    viewFrame.size.width = shouldBeFull ? kTableViewWidth : 0;
-    self.view.frame = viewFrame;
-}
-
-- (void)showTable
-{
-//    currentTableFrame.origin.x = 0;
-    
-    [self setFullView:YES];
-    
-    [UIView animateWithDuration:0.25 animations:^{
-//        self.view.frame = currentTableFrame;
-    } completion:^(BOOL finished) {
-        if (finished) {
-            self.tableIsVisible = YES;
-        }
-    }];
-}
-
-- (void)hideTable
-{
-//    currentTableFrame.origin.x = kTableViewWidth;
-    
-    [UIView animateWithDuration:0.25 animations:^{
-//        self.view.frame = currentTableFrame;
-    } completion:^(BOOL finished) {
-        if (finished) {
-            self.tableIsVisible = NO;
-            [self setFullView:NO];
-        }
-    }];
-}
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

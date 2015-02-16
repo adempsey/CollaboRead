@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 CollaboRead. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
-
 #import "CRStudentImageViewController.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
@@ -29,9 +27,19 @@
     [super viewDidLoad];
 
     CGRect frame = CR_LANDSCAPE_FRAME; //Use iOS version appropriate bounds
-	
+
+	self.togglePatientInfoButton= [[UIBarButtonItem alloc] initWithTitle:@"Patient Info"
+																   style:UIBarButtonItemStylePlain
+																  target:nil
+																  action:nil];
+	self.navigationItem.rightBarButtonItem = self.togglePatientInfoButton;
+
+	self.patientInfoViewController = [[CRPatientInfoViewController alloc] initWithPatientInfo:self.patientInfo];
+	self.patientInfoViewController.toggleButton = self.togglePatientInfoButton;
+    [self.view addSubview:self.patientInfoViewController.view];
+
 	self.submitButton = [[CRSubmitButton alloc] init];
-    [self.submitButton setFrame:CGRectMake(frame.size.width - 170, frame.size.height - 70, 150, 50)];
+	[self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
 	[self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
 	
 	if ([self userHasPreviouslySubmittedAnswer]) {
@@ -39,15 +47,6 @@
 	}
 	
 	[self.view addSubview:self.submitButton];
-
-    self.patientInfoViewController = [[CRPatientInfoViewController alloc] initWithPatientInfo:self.patientInfo];
-    [self.view addSubview:self.patientInfoViewController.view];
-	
-    self.togglePatientInfoButton= [[UIBarButtonItem alloc] initWithTitle:@"Patient Info"
-                                                                           style:UIBarButtonItemStylePlain
-                                                                          target:self.patientInfoViewController
-                                                                          action:@selector(toggleTable)];
-    self.navigationItem.rightBarButtonItem = self.togglePatientInfoButton;
 }
 
 //Perform action of submitting answer, provide user status update

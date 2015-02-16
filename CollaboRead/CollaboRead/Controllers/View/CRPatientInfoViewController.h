@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CRSideBarViewController.h"
 
-@interface CRPatientInfoViewController : UIViewController
+@interface CRPatientInfoViewController : CRSideBarViewController
 
-- (instancetype)initWithPatientInfo: (NSString *) patientInfo;
-- (void)toggleTable;
+@property (nonatomic, readwrite, strong) NSString *infoText;
+
+- (instancetype)initWithPatientInfo:(NSString *)patientInfo;
 
 @end

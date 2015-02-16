@@ -37,10 +37,9 @@
 	if (self = [super init]) {
 		self.backgroundColor = CR_COLOR_PRIMARY;
 
-		self.titleLabel.textColor = [UIColor whiteColor];
 		self.titleLabel.font = [UIFont systemFontOfSize:kTITLE_LABEL_FONT_SIZE];
 
-		self.layer.borderWidth = 2.0;
+		self.layer.borderWidth = 1.0;
 		self.layer.borderColor = [[UIColor whiteColor] CGColor];
 		
 		self.buttonState = CR_SUBMIT_BUTTON_STATE_SUBMIT;
