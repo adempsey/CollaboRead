@@ -545,7 +545,7 @@
 					};
 					8DA5DE3419E6064B002EA706 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 9QL6K4MK7J;
+						DevelopmentTeam = SMEUFVNQEF;
 						TestTargetID = 8DA5DE1B19E6064A002EA706;
 					};
 				};
