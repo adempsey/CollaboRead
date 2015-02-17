@@ -13,7 +13,7 @@
 #import "CRAnswerLine.h"
 #import "CRScan.h"
 #import "CRSlice.h"
-#import "CRAnswerSubmissionService.h"
+#import "CRAnswerRefreshService.h"
 #import "CRErrorAlertService.h"
 
 #define studentColors @[@{@"red":@0, @"green": @255, @"blue" : @0}, \
@@ -110,13 +110,20 @@
 	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:@"Answers" style:UIBarButtonItemStylePlain target:nil action:nil];
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
 	self.studentAnswerTableViewController.toggleButton = self.toggleStudentAnswerTableButton;
-    [self.view setNeedsDisplay];
-	[[CRAnswerSubmissionService sharedInstance] setDidReceiveAnswerBlock:^(NSString* answer) {
-		[self didReceiveAnswer:answer];
+
+	[[CRAnswerRefreshService sharedInstance] setUpdateBlock:^{
+		[self refreshAnswers];
 	}];
+	
+	[[CRAnswerRefreshService sharedInstance] initiateConnectionWithCase:self.caseChosen];
 }
 
-- (void)didReceiveAnswer:(NSString*)answerData
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	[[CRAnswerRefreshService sharedInstance] disconnect];
+}
+
+- (void)refreshAnswers
 {
 	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array, NSError *error) {
 		if (!error) {
