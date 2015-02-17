@@ -174,6 +174,7 @@
 {
     NSMutableArray *selectedAnswers = [[NSMutableArray alloc] init];;
 	NSMutableArray *colors = [[NSMutableArray alloc] init];
+
     [self.caseChosen.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger ansIdx, BOOL *stop) {
         CRAnswer *currAnswer = obj;
         [students enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
