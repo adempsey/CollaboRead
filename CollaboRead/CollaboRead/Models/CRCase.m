@@ -89,6 +89,24 @@
     return idxs;
 }
 
+-(NSArray *)answerScans {
+    NSMutableSet *scanIds = [[NSMutableSet alloc] init];
+    [self.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        CRAnswer *ans = obj;
+        [ans.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            CRAnswerLine *line = obj;
+            [scanIds addObject:line.scanID];
+        }];
+    }];
+    NSMutableArray *idxs = [[NSMutableArray alloc] init];
+    [self.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([scanIds containsObject:((CRScan *)obj).scanID]) {
+            [idxs addObject:[NSNumber numberWithUnsignedInteger:idx]];
+        }
+    }];
+    return idxs;
+}
+
 - (NSInteger)compareDates:(CRCase *)other
 {
     if ([self.date isEqualToDate:other.date]) {

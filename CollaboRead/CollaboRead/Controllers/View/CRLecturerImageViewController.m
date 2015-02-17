@@ -95,9 +95,7 @@
     [super viewDidLoad];
     self.studentAnswerView = [[UIImageView alloc] init];
     self.studentAnswerView.frame = self.imgFrame;
-    [self.view addSubview:self.studentAnswerView];
-    //CGFloat topBarHeight = self.navigationController.navigationBar.frame.size.height +
-    //[UIApplication sharedApplication].statusBarFrame.size.height;
+    [self.view insertSubview:self.studentAnswerView belowSubview:super.limView];
 	self.view.autoresizesSubviews = NO;
 
 	// Should pass array of CRUsers that have submitted answers
@@ -106,6 +104,10 @@
 	self.studentAnswerTableViewController.delegate = self;
 	[self.view addSubview:self.studentAnswerTableViewController.view];
     self.studentAnswerTableViewController.allUsers = self.allUsers;
+    
+    [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:[self.caseChosen answerSlicesForScan: ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID]];
+    NSArray *scanHighlights = [self.caseChosen answerScans];
+    self.scansMenuController.highlights = scanHighlights;
 
 	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:@"Answers" style:UIBarButtonItemStylePlain target:nil action:nil];
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
@@ -195,6 +197,7 @@
 -(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
 {
     [super scansMenuViewControllerDidSelectScan:scanId];
+    [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:[self.caseChosen answerSlicesForScan: ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID]];
     self.studentAnswerView.frame = self.imgFrame;
     [self drawStudentAnswers];
 }

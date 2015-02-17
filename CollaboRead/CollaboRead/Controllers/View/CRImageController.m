@@ -35,7 +35,7 @@
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
 
-@property (nonatomic, strong) UIView *limView;
+
 @property (nonatomic, strong) UIImageView *zoomView;
 @property (nonatomic, assign) CGFloat currZoom;
 
@@ -44,8 +44,7 @@
 
 @property (nonatomic, readwrite, strong) UIButton *toggleButton;
 
-@property (nonatomic, strong) CRScansMenuViewController *scansMenuController;
-@property (nonatomic, strong) CRImageScrollBarController *scrollBarController;
+
 
 -(void)toggleScansMenu;
 -(void)zoomImageWithTouches:(UITouch *)touchA and:(UITouch *)touchB;
@@ -79,11 +78,7 @@
     
     self.scrollBarController = [[CRImageScrollBarController alloc] init];
     self.scrollBarController.delegate = self;
-    NSArray *highlights = nil;
-    if ([self.user.type isEqualToString: CR_USER_TYPE_LECTURER]) {
-        highlights = [self.caseChosen answerSlicesForScan: ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
-    }
-    [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:highlights];
+    [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:nil];
 
 	[self loadAndScaleImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).image];
 
@@ -115,6 +110,7 @@
     
     self.scansMenuController = [[CRScansMenuViewController alloc] initWithScans:self.caseChosen.scans];
     self.scansMenuController.delegate = self;
+    self.scansMenuController.highlights = [[NSArray alloc] init];
     [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - kButtonDimension, 0, 0)];
     self.scansMenuController.view.hidden = YES;
     
@@ -273,11 +269,8 @@
 //Only clears image, does not affect saved data
 -(void)clearDrawing
 {
-    UIGraphicsBeginImageContext(self.drawView.frame.size);
-    [self.caseImage.image drawInRect:CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)];
+    self.drawView.image = [[UIImage alloc] init];
     self.drawView.frame = self.caseImage.frame;
-    self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
 }
 
 #pragma mark - Drawing Methods
@@ -369,7 +362,7 @@
     [self.caseImage setFrame:newFrame];
     [self clearDrawing];
     [self.limView setFrame:newFrame];
-    [self.zoomView setFrame:newFrame];
+    [self.zoomView setFrame:CGRectMake(0, 0, newFrame.size.width, newFrame.size.height)];
 }
 
 //Prepares undostack, begins appropriate draw action
@@ -601,11 +594,7 @@
             if (idx != self.scanIndex) {
                 self.scanIndex = idx;
                 self.sliceIndex = 0;
-                NSArray *highlights = nil;
-                if ([self.user.type isEqualToString: CR_USER_TYPE_LECTURER]) {
-                    highlights = [self.caseChosen answerSlicesForScan: ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
-                }
-                [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:highlights];
+                [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:nil];
                 [self swapImage];
             }
             *stop = true;
