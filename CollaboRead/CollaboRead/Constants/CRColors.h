@@ -20,5 +20,6 @@ alpha:1.0]
 //#define CR_COLOR_SECONDARY UIColorFromRGB(0x525252)
 #define CR_COLOR_TINT UIColorFromRGB(0xBAE7CA)
 #define CR_COLOR_ERROR UIColorFromRGB(0xFF4760)
+#define CR_COLOR_ANSWER_INDICATOR [UIColor yellowColor]
 
 #endif

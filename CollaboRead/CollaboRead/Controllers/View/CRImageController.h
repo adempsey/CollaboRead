@@ -40,6 +40,10 @@
 @property (nonatomic, strong) NSIndexPath *indexPath;//
 @property (nonatomic, strong) NSString *patientInfo;
 
+@property (nonatomic, strong) UIView *limView;
+@property (nonatomic, strong) CRScansMenuViewController *scansMenuController;
+@property (nonatomic, strong) CRImageScrollBarController *scrollBarController;
+
 
 //Loads the image to be drawn over into the view and scales it to fit the screen.
 -(void)loadAndScaleImage:(UIImage *)img;

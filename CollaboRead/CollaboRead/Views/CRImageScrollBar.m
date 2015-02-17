@@ -7,6 +7,7 @@
 //
 
 #import "CRImageScrollBar.h"
+#import "CRColors.h"
 
 @implementation CRImageScrollBar
 
@@ -26,7 +27,7 @@
     // DrawHighlights
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextSetStrokeColorWithColor(context, [UIColor yellowColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [CR_COLOR_ANSWER_INDICATOR CGColor]);
     CGContextSetLineWidth(context, 5);
     [self.highlights enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSUInteger partition = [((NSNumber *)obj) unsignedIntegerValue];

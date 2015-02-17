@@ -65,6 +65,13 @@
 - (NSArray *)answerSlicesForScan:(NSString *)scanID;
 
 /*!
+ Method to determine indices of scans with answers
+
+ @return Array of indices of scans with answers
+ */
+-(NSArray *)answerScans;
+
+/*!
  Method used to sort cases by date
  
  @param other

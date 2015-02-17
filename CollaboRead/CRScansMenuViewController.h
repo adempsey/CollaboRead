@@ -20,6 +20,7 @@
 
 @property (nonatomic, weak) id < CRScansMenuViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSArray *scans;
+@property (nonatomic, strong) NSArray *highlights;
 
 -(instancetype)initWithScans:(NSArray *)scans;
 -(void) setViewFrame:(CGRect)frame;
