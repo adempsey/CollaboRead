@@ -280,11 +280,8 @@
 //Only clears image, does not affect saved data
 -(void)clearDrawing
 {
-    UIGraphicsBeginImageContext(self.drawView.frame.size);
-    [self.caseImage.image drawInRect:CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)];
+    self.drawView.image = [[UIImage alloc] init];
     self.drawView.frame = self.caseImage.frame;
-    self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
 }
 
 #pragma mark - Drawing Methods
@@ -376,7 +373,7 @@
     [self.caseImage setFrame:newFrame];
     [self clearDrawing];
     [self.limView setFrame:newFrame];
-    [self.zoomView setFrame:newFrame];
+    [self.zoomView setFrame:CGRectMake(0, 0, newFrame.size.width, newFrame.size.height)];
 }
 
 //Prepares undostack, begins appropriate draw action
