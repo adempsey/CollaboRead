@@ -11,6 +11,7 @@
 #import "CRViewSizeMacros.h"
 #import "CRPatientInfoViewController.h"
 #import "CRSubmitButton.h"
+#import "CRErrorAlertService.h"
 
 @interface CRStudentImageViewController ()
 
@@ -58,8 +59,19 @@
     //Prepare and send answer
 	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students];
 
-    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block) {//Provide submission success feedback
-		self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUCCESS;
+    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block, NSError *error) {//Provide submission success feedback
+		if (!error) {
+			self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUCCESS;
+		} else {
+			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:^(UIAlertAction *action) {
+				if (self != self.navigationController.viewControllers[0]) {
+					[self.navigationController popViewControllerAnimated:YES];
+				} else if (self.presentingViewController) {
+					[self dismissViewControllerAnimated:YES completion:nil];
+				}
+			}];
+			[self presentViewController:alertController animated:YES completion:nil];
+		}
 	}];
 }
 

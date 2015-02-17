@@ -15,10 +15,12 @@
 #import "CRSelectLecturerViewController.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
+#import "CRErrorAlertService.h"
 
 #define kActivityIndicatorSize 30.0
 typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
-	kCR_LOGIN_ERROR_CREDENTIALS = 0
+	kCR_LOGIN_ERROR_CREDENTIALS = 0,
+	kCR_LOGIN_ERROR_NETWORK
 };
 
 @interface CRLoginViewController ()
@@ -49,6 +51,13 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
         .width - kActivityIndicatorSize)/2, self.loginButton.frame.origin.y, kActivityIndicatorSize,
         kActivityIndicatorSize)];
 	[self.view addSubview:self.activityIndicator];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	self.loginButton.titleLabel.text = @"Login";
+	self.loginButton.userInteractionEnabled = YES;
 }
 
 //Checks credentials in fields against users retrieved from database
@@ -116,8 +125,12 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	self.activityIndicator.hidden = NO;
 
     //When the information comes back, execute attemptLogin: with it
-	[[CRAPIClientService sharedInstance] retrieveUsersWithBlock:^(NSArray* users) {
-		[self attemptLogin:users];
+	[[CRAPIClientService sharedInstance] retrieveUsersWithBlock:^(NSArray* users, NSError *error) {
+		if (!error) {
+			[self attemptLogin:users];
+		} else {
+			[self showError:kCR_LOGIN_ERROR_NETWORK];
+		}
 	}];
 }
 
@@ -135,6 +148,12 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 //Adjust desplay to give user feedback on login credentials
 - (void)showSuccess
 {
+	if (self.errorLabel.alpha > 0.0) {
+		[UIView animateWithDuration:0.25 animations:^{
+			self.errorLabel.alpha = 0.0;
+		}];
+	}
+	
 	NSString *unicodeCheckMark = @"\u2713";
 	self.loginButton.titleLabel.text = unicodeCheckMark;
 
@@ -146,11 +165,25 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 -(void)showError:(NSUInteger)error
 {
-	NSString *errorString = @"Error: ";
-	if (error == kCR_LOGIN_ERROR_CREDENTIALS) {
-		errorString = [errorString stringByAppendingString:@"Incorrect username or password"];
+	if (self.errorLabel.alpha > 0.0) {
+		[UIView animateWithDuration:0.25 animations:^{
+			self.errorLabel.alpha = 0.0;
+		}];
 	}
 
+	NSString *errorString = @"Error: ";
+	switch (error) {
+		case kCR_LOGIN_ERROR_CREDENTIALS:
+			errorString = [errorString stringByAppendingString:@"Incorrect username or password."];
+			break;
+		case kCR_LOGIN_ERROR_NETWORK:
+			errorString = [errorString stringByAppendingString:@"Unable to access network. Please try again in a few minutes."];
+			break;
+		default:
+			errorString = @"";
+			break;
+	}
+	
 	self.errorLabel.text = errorString;
 
 	[self.activityIndicator stopAnimating];

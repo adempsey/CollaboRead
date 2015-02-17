@@ -23,7 +23,7 @@
 	return sharedInstance;
 }
 
-- (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock
+- (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*, NSError*))completionBlock
 {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
 
@@ -47,7 +47,7 @@
 	[request setHTTPMethod:method];
 
 	[NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error ) {
-		completionBlock(data);
+		completionBlock(data, error);
 	}];
 }
 

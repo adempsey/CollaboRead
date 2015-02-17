@@ -14,6 +14,7 @@
 #import "CRScan.h"
 #import "CRSlice.h"
 #import "CRAnswerSubmissionService.h"
+#import "CRErrorAlertService.h"
 
 #define studentColors @[@{@"red":@0, @"green": @255, @"blue" : @0}, \
                         @{@"red":@0, @"green": @0, @"blue" : @255}, \
@@ -117,16 +118,27 @@
 
 - (void)didReceiveAnswer:(NSString*)answerData
 {
-	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array) {
-        CRCaseSet *selectedCaseSet = array[self.indexPath.section];
-        self.caseChosen = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
-        
-        NSMutableArray *students = [[NSMutableArray alloc] init];
-        NSArray *answers = self.caseChosen.answers;
-        [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [students addObject:((CRAnswer *)obj).owners];
-        }];
-        self.studentAnswerTableViewController.students = students;
+	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array, NSError *error) {
+		if (!error) {
+			CRCaseSet *selectedCaseSet = array[self.indexPath.section];
+			self.caseChosen = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
+			
+			NSMutableArray *students = [[NSMutableArray alloc] init];
+			NSArray *answers = self.caseChosen.answers;
+			[answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+				[students addObject:((CRAnswer *)obj).owners];
+			}];
+			self.studentAnswerTableViewController.students = students;
+		} else {
+			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:^(UIAlertAction* action) {
+				if (self != self.navigationController.viewControllers[0]) {
+					[self.navigationController popViewControllerAnimated:YES];
+				} else if (self.presentingViewController) {
+					[self dismissViewControllerAnimated:YES completion:nil];
+				}
+			}];
+			[self presentViewController:alertController animated:YES completion:nil];
+		}
 	}];
 }
 

@@ -52,10 +52,10 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mf-Dt-Hi5">
-                                <rect key="frame" x="94" y="264" width="412" height="21"/>
+                                <rect key="frame" x="50" y="264" width="500" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="MGV-En-0bc"/>
-                                    <constraint firstAttribute="width" constant="412" id="fD9-Yj-yOZ"/>
+                                    <constraint firstAttribute="width" constant="500" id="fD9-Yj-yOZ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" red="1" green="0.27843137254901962" blue="0.37647058823529411" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

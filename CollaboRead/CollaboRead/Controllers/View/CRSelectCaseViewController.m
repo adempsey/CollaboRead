@@ -16,6 +16,7 @@
 #import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
+#import "CRErrorAlertService.h"
 
 @interface CRSelectCaseViewController()
 {
@@ -51,10 +52,21 @@
 	[self.view addSubview:self.activityIndicator];
 
     //Get lecturers cases and reload view with that information
-	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer.userID block:^(NSArray *caseSets) {
-		self.caseSets = caseSets;
-		[self.activityIndicator removeFromSuperview];
-        [self.collectionView reloadData];//Maybe put back on main thread?
+	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer.userID block:^(NSArray *caseSets, NSError *error) {
+		if (!error) {
+			self.caseSets = caseSets;
+			[self.activityIndicator removeFromSuperview];
+			[self.collectionView reloadData];//Maybe put back on main thread?
+		} else {
+			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
+				if (self != self.navigationController.viewControllers[0]) {
+					[self.navigationController popViewControllerAnimated:YES];
+				} else if (self.presentingViewController) {
+					[self dismissViewControllerAnimated:YES completion:nil];
+				}
+			}];
+			[self presentViewController:alertController animated:YES completion:nil];
+		}
 	}];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
     

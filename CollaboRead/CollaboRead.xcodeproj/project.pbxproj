@@ -42,6 +42,7 @@
 		8DD664E81A75F878002C379E /* CRSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DD664E61A75F878002C379E /* CRSlice.m */; };
 		8DE0B26019FF2FD300760434 /* CRCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B25F19FF2FD300760434 /* CRCase.m */; };
 		8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B26219FF306900760434 /* CRCaseSet.m */; };
+		8DE3FB041A930BED0002776F /* CRErrorAlertService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE3FB031A930BED0002776F /* CRErrorAlertService.m */; };
 		8DEBB0561A86AA1600DC0FCA /* CRSubmitButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEBB0551A86AA1600DC0FCA /* CRSubmitButton.m */; };
 		8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */; };
 		BB4D35C81A882F9A00F4EA57 /* CRToolPanelZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */; };
@@ -134,6 +135,8 @@
 		8DE0B25F19FF2FD300760434 /* CRCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCase.m; sourceTree = "<group>"; };
 		8DE0B26119FF306900760434 /* CRCaseSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRCaseSet.h; sourceTree = "<group>"; };
 		8DE0B26219FF306900760434 /* CRCaseSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCaseSet.m; sourceTree = "<group>"; };
+		8DE3FB021A930BED0002776F /* CRErrorAlertService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRErrorAlertService.h; sourceTree = "<group>"; };
+		8DE3FB031A930BED0002776F /* CRErrorAlertService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRErrorAlertService.m; sourceTree = "<group>"; };
 		8DEBB0541A86AA1600DC0FCA /* CRSubmitButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSubmitButton.h; sourceTree = "<group>"; };
 		8DEBB0551A86AA1600DC0FCA /* CRSubmitButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSubmitButton.m; sourceTree = "<group>"; };
 		8DEE5ADA19F63EFB0090AF0B /* NSArray+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+CRAdditions.h"; sourceTree = "<group>"; };
@@ -194,6 +197,8 @@
 		8D16E93319EF438A00DAFEC0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8DE3FB021A930BED0002776F /* CRErrorAlertService.h */,
+				8DE3FB031A930BED0002776F /* CRErrorAlertService.m */,
 				8DCF9CB11A2BF8FB000D42C5 /* CRAnswerSubmissionService.h */,
 				8DCF9CB21A2BF8FB000D42C5 /* CRAnswerSubmissionService.m */,
 				8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */,
@@ -603,6 +608,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DE3FB041A930BED0002776F /* CRErrorAlertService.m in Sources */,
 				8DD360171A0B366200E572D1 /* CRToolPanelViewController.m in Sources */,
 				36ED59531A2D3CEE00F61D7B /* CRPatientInfoViewController.m in Sources */,
 				BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */,

@@ -13,6 +13,7 @@
 #import "CRCaseSet.h"
 #import "CRCase.h"
 #import "CRViewSizeMacros.h"
+#import "CRErrorAlertService.h"
 
 @interface CRSelectLecturerViewController ()
 {
@@ -48,10 +49,21 @@
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"LecturerCell"];
     
     //Get Lecturers to display and display when possible
-    [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers) {
-        self.lecturers = lecturers;
-		[self.activityIndicator removeFromSuperview];
-        [self.collectionView reloadData];
+    [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers, NSError *error) {
+		if (!error) {
+			self.lecturers = lecturers;
+			[self.activityIndicator removeFromSuperview];
+			[self.collectionView reloadData];
+		} else {
+			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
+				if (self != self.navigationController.viewControllers[0]) {
+					[self.navigationController popViewControllerAnimated:YES];
+				} else if (self.presentingViewController) {
+					[self dismissViewControllerAnimated:YES completion:nil];
+				}
+			}];
+			[self presentViewController:alertController animated:YES completion:nil];
+		}
     }];
 }
 

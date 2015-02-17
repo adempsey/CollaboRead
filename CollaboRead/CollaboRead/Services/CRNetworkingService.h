@@ -28,8 +28,8 @@
  @param params
  A dictionary of the parameters to include along the request
  @param completionBlock
- Completion block to be executed once the response is received from the server, which passes the response data
+ Completion block to be executed once the response is received from the server, which passes the response data. Error is non-nil if the request was unsuccessful
  */
-- (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock;
+- (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*, NSError*))completionBlock;
 
 @end
