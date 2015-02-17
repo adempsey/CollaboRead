@@ -41,7 +41,6 @@
 	self.patientInfoTextView.text = self.infoText;
 	self.patientInfoTextView.textColor = [UIColor whiteColor];
 	self.patientInfoTextView.font = [UIFont systemFontOfSize:kTEXT_VIEW_FONT_SIZE];
-	self.patientInfoTextView.textAlignment = NSTextAlignmentRight;
 	self.patientInfoTextView.backgroundColor = [UIColor clearColor];
 	self.patientInfoTextView.editable = NO;
 	[self.view addSubview:self.patientInfoTextView];
