@@ -35,9 +35,6 @@
 @property (nonatomic, strong) UIImageView *drawView;
 @property (nonatomic, strong) UIImageView *caseImage;
 
-
-@property (nonatomic, strong) UIImageView *zoomView;
-@property (nonatomic, assign) CGFloat currZoom;
 @property (nonatomic, assign) CGFloat lastZoom;
 @property (nonatomic, assign) CGPoint lastTranslation;
 
@@ -49,8 +46,6 @@
 
 
 -(void)toggleScansMenu;
--(void)zoomImageToScale:(CGFloat)scale;
--(void)panZoom:(CGPoint)translation;
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)removePointFromAnswer:(CRAnswerPoint *)pt;
@@ -98,13 +93,17 @@
     self.lecturerID = self.user.userID;//TODO:this seems wrong or unnecessary
     
     //Add image views
-	[self.view addSubview:self.caseImage];
-	[self.view addSubview:self.drawView];
+	[self.limView addSubview:self.caseImage];
+	[self.limView addSubview:self.drawView];
     self.limView.clipsToBounds = YES;
-    self.limView.hidden = YES;
+    //self.limView.hidden = YES;
     [self.view addSubview:self.limView];
-    [self.limView addSubview:self.zoomView];
+    //[self.limView addSubview:self.zoomView];
     [self.view addSubview:self.scrollBarController.view];
+    
+    self.currZoom = kMIN_ZOOM;
+    self.lastZoom = self.currZoom;
+    self.lastTranslation = CGPointMake(0, 0);
     
     
     //Create tool panel and it's accompanying views
@@ -197,49 +196,25 @@
 	}];
 }
 
--(void) toggleZoom {
-    if(self.limView.hidden) {
-        UIGraphicsBeginImageContext(self.limView.frame.size);//Draw only in image
-        [self.caseImage.image drawInRect:CGRectMake(0, 0, self.limView.frame.size.width, self.limView.frame.size.height)];
-        
-        //Set up to draw line
-        CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.lineRedComp, self.lineGreenComp, self.lineBlueComp, 1.0);
-        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
-        NSArray *ans = [self.undoStack layerForSlice: ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID ofScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
-        for (int i = 1; i < [ans count]; i++) {
-            CRAnswerPoint *beg = [ans objectAtIndex:i - 1];
-            if (!beg.isEndPoint) {
-                CRAnswerPoint *fin = [ans objectAtIndex:i];
-                CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
-                CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
-                [self drawLineFrom:beg to:fin];
-            }
-        }
-        CGContextStrokePath(UIGraphicsGetCurrentContext());
-
-        self.zoomView.image = UIGraphicsGetImageFromCurrentImageContext();
-        self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        self.currZoom = 1;
-        
-    }
+#pragma mark - Zoom Methods
+-(void) zoomOut {
     [UIView animateWithDuration:0.25 animations:^{
-        self.zoomView.frame = CGRectMake(0, 0, self.limView.frame.size.width, self.limView.frame.size.height);
+        self.drawView.frame = CGRectMake(0, 0, self.limFrame.size.width, self.limFrame.size.height);
+        self.caseImage.frame = CGRectMake(0, 0, self.limFrame.size.width, self.limFrame.size.height);
     } completion:^(BOOL finished) {
-        self.limView.hidden = !self.limView.hidden;
-        self.scrollBarController.view.alpha = self.limView.hidden ? 1.0 : 0.5;
+        self.lastTranslation = CGPointMake(0, 0);
+        self.currZoom = kMIN_ZOOM;
+        self.lastZoom = kMIN_ZOOM;
+        self.imgFrame = self.limFrame;
     }];
     
     //self.scrollBarController.view.opaque = !self.scrollBarController.view.opaque;
     self.scrollBarController.view.userInteractionEnabled = !self.scrollBarController.view.userInteractionEnabled;
 }
 
-#pragma mark - Tool Methods
 -(void)zoomImageToScale:(CGFloat)scale {
     self.currZoom = scale;
-    CGRect origFrame = self.limView.frame;
-    CGRect currFrame = self.zoomView.frame;
+    CGRect currFrame = self.drawView.frame;
     if (self.currZoom > kMAX_ZOOM) {
         self.currZoom = kMAX_ZOOM;
     }
@@ -247,28 +222,37 @@
         self.currZoom = kMIN_ZOOM;
     }
     
-    CGFloat newWidth = origFrame.size.width*self.currZoom;
-    CGFloat newHeight = origFrame.size.height*self.currZoom;
+    CGFloat newWidth = self.limFrame.size.width*self.currZoom;
+    CGFloat newHeight = self.limFrame.size.height*self.currZoom;
     
-    CGFloat moveLeft = (origFrame.size.width - newWidth)/2 + (currFrame.origin.x - (origFrame.size.width - currFrame.size.width)/2) * newWidth / currFrame.size.width;
-    CGFloat moveUp = (origFrame.size.height - newHeight)/2 + (currFrame.origin.y - (origFrame.size.height - currFrame.size.height)/2) * newHeight / currFrame.size.height;
-    if (origFrame.size.width > moveLeft + newWidth) {
-        moveLeft = origFrame.size.width - newWidth;
+    self.lastTranslation = CGPointMake(self.lastTranslation.x * newWidth / currFrame.size.width, self.lastTranslation.y * newHeight / currFrame.size.height);
+    
+    CGFloat moveLeft = (self.limFrame.size.width - newWidth)/2 + self.lastTranslation.x;
+    CGFloat moveUp = (self.limFrame.size.height - newHeight)/2 + self.lastTranslation.y * newHeight / currFrame.size.height;
+    
+    
+    
+    if (self.limFrame.size.width > moveLeft + newWidth) {
+        moveLeft = self.limFrame.size.width - newWidth;
     } else if (moveLeft > 0) {
         moveLeft = 0;
     }
-    if (origFrame.size.height > moveUp + newHeight) {
-        moveUp = origFrame.size.height - newHeight;
+    if (self.limFrame.size.height > moveUp + newHeight) {
+        moveUp = self.limFrame.size.height - newHeight;
     } else if (moveUp > 0) {
         moveUp = 0;
     }
     CGRect newFrame = CGRectMake(moveLeft, moveUp, newWidth, newHeight);
-    self.zoomView.frame = newFrame;
+    self.caseImage.frame = newFrame;
+    self.drawView.frame = newFrame;
+    self.imgFrame = newFrame;
+    self.lastTranslation = CGPointMake(moveLeft - (self.limFrame.size.width - newWidth)/2, moveUp - (self.limFrame.size.height - newHeight)/2);
 }
+
 -(void)panZoom:(CGPoint)translation {
-    CGRect origFrame = self.zoomView.frame;
-    CGFloat origX = (self.limView.frame.size.width - origFrame.size.width)/2;
-    CGFloat origY = (self.limView.frame.size.height - origFrame.size.height)/2;
+    CGRect origFrame = self.imgFrame;
+    CGFloat origX = (self.limFrame.size.width - origFrame.size.width)/2;
+    CGFloat origY = (self.limFrame.size.height - origFrame.size.height)/2;
     CGFloat newX = origX + translation.x;
     CGFloat newY = origY + translation.y;
     if (newX > 0 || newX + origFrame.size.width < self.limView.frame.size.width) {
@@ -278,10 +262,12 @@
         newY = origFrame.origin.y;
     }
     CGRect newFrame = CGRectMake(newX, newY, origFrame.size.width, origFrame.size.height);
-    //NSLog(@"%@ \n\t%@", NSStringFromCGRect(origFrame), NSStringFromCGRect(newFrame));
-    self.zoomView.frame = newFrame;
+    self.caseImage.frame = newFrame;
+    self.drawView.frame = newFrame;
+    self.imgFrame = newFrame;
 }
 
+#pragma mark - Tool Methods
 //Pops from answer stack and redraws previous answer
 -(void)undoEdit {
     CRScan *scan = self.caseChosen.scans[self.scanIndex];
@@ -296,32 +282,33 @@
 }
 
 //Only clears image, does not affect saved data
--(void)clearDrawing
-{
+-(void)clearDrawing {
     self.drawView.image = [[UIImage alloc] init];
     self.drawView.frame = self.caseImage.frame;
 }
 
 #pragma mark - Drawing Methods
-
--(void)drawAnswer:(NSArray *)ans inRed:(CGFloat)r Green:(CGFloat)g Blue:(CGFloat)b
-{
+-(void)drawAnswer:(NSArray *)ans inRed:(CGFloat)r Green:(CGFloat)g Blue:(CGFloat)b {
 
     //Make region drawable
-    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
-    [self.drawView.image drawAtPoint:CGPointMake(0, 0)];
+    UIGraphicsBeginImageContext(self.imgFrame.size);//Drawing is same size as underlying image
+    if (abs((int)(self.drawView.image.size.width - self.drawView.frame.size.width)) > 0 && self.drawView.image.size.width != 0) {
+        [self.drawView.image drawInRect:CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)];//Using drawInRect necessary here because image is being scaled to view but is not always same size if have zoomed before drawing.
+    } else {
+        [self.drawView.image drawAtPoint:CGPointMake(0, 0)];//Using drawInRect blurs previous lines for currently unknown reason
+    }
     
     //Set up to draw lines
     //Could use drawLineFrom:to:, but is much slower than displaying in one go
-    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
+    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 3.0 * self.currZoom);
     CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), r, g, b, 1.0);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
     for (int i = 1; i < [ans count]; i++) {
         CRAnswerPoint *beg = ans[i - 1];
         if (!beg.isEndPoint) {
             CRAnswerPoint *fin = [ans objectAtIndex:i];
-            CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
-            CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
+            CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x * self.currZoom, beg.coordinate.y * self.currZoom);
+            CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x * self.currZoom, fin.coordinate.y * self.currZoom);
         }
     }
     CGContextStrokePath(UIGraphicsGetCurrentContext());
@@ -330,8 +317,73 @@
     UIGraphicsEndImageContext();
 }
 
+-(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
+    //Make region drawable
+    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw in size of image
+    if (abs((int)(self.drawView.image.size.width - self.drawView.frame.size.width)) > 0 && self.drawView.image.size.width != 0) {
+        [self.drawView.image drawInRect:CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)];//Using drawInRect necessary here because image is being scaled to view but is not always same size if have zoomed before drawing.
+    } else {
+        [self.drawView.image drawAtPoint:CGPointMake(0, 0)];//Using drawInRect blurs previous lines for currently unknown reason
+    }
+    
+    //Set up to draw line
+    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 3.0 * self.currZoom);
+    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.lineRedComp, self.lineGreenComp, self.lineBlueComp, 1.0);
+    CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
+    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x * self.currZoom, beg.coordinate.y * self.currZoom);
+    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x * self.currZoom, fin.coordinate.y * self.currZoom);
+    
+    
+    //Add line to image and draw
+    CGContextStrokePath(UIGraphicsGetCurrentContext());
+    self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
+    [self.drawView setAlpha:1.0];
+    UIGraphicsEndImageContext();
+}
 
+-(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
+    //Make region drawable
+    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw in size of image
+    if (abs((int)(self.drawView.image.size.width - self.drawView.frame.size.width)) > 0 && self.drawView.image.size.width != 0) {
+        [self.drawView.image drawInRect:CGRectMake(0, 0, self.drawView.frame.size.width, self.drawView.frame.size.height)];//Using drawInRect necessary here because image is being scaled to view but is not always same size if have zoomed before drawing.
+    } else {
+        [self.drawView.image drawAtPoint:CGPointMake(0, 0)];//Using drawInRect blurs previous lines for currently unknown reason
+    }
+
+    //Set up to draw line
+    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 20.0 * self.currZoom);
+    CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeClear);
+    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x * self.currZoom, beg.coordinate.y * self.currZoom);
+    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x * self.currZoom, fin.coordinate.y * self.currZoom);
+    
+    
+    //Add line to image and draw
+    CGContextStrokePath(UIGraphicsGetCurrentContext());
+    self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
+    [self.drawView setAlpha:1.0];
+    UIGraphicsEndImageContext();
+}
+
+//Remove all points within erase range from answer array, setting endpoints appropriately
+-(void)removePointFromAnswer:(CRAnswerPoint *)pt {
+    //Find which to remove
+    NSIndexSet *toRemove = [self.currentDrawing indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [pt isInTouchRange:obj];
+    }];
+    //Set endpoints of precending points to points to remove
+    [toRemove enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        if (idx != 0) {
+            ((CRAnswerPoint *)[self.currentDrawing objectAtIndex:idx - 1]).isEndPoint = YES;
+        }
+    }];
+    //Remove points
+    [self.currentDrawing removeObjectsAtIndexes:toRemove];
+}
+
+
+#pragma mark - Image Loading Methods
 -(void)swapImage {
+    [self zoomOut];
     CRScan *scan = self.caseChosen.scans[self.scanIndex];
     [self loadAndScaleImage:((CRSlice *)((CRScan *) scan).slices[self.sliceIndex]).image];
     self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
@@ -346,7 +398,6 @@
         self.caseImage = [[UIImageView alloc] init];
         self.drawView = [[UIImageView alloc] init];
         self.limView = [[UIView alloc] init];
-        self.zoomView = [[UIImageView alloc] init];
     }
     self.caseImage.image = img;
     CGRect newFrame = CGRectMake(0, 0, img.size.width, img.size.height);
@@ -386,39 +437,39 @@
             newFrame.origin.x = (viewFrame.size.width - newFrame.size.width)/2;
         }
     }
-    self.imgFrame = newFrame;
+    self.limFrame = newFrame;
+    self.imgFrame = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
     self.scrollBarController.view.frame = CGRectMake(newFrame.origin.x, CR_TOP_BAR_HEIGHT, newFrame.size.width, self.scrollBarController.view.frame.size.height);
-    [self.caseImage setFrame:newFrame];
+    [self.caseImage setFrame:self.imgFrame];
     [self clearDrawing];
-    [self.limView setFrame:newFrame];
-    [self.zoomView setFrame:CGRectMake(0, 0, newFrame.size.width, newFrame.size.height)];
+    [self.limView setFrame:self.limFrame];
 }
 
-#pragma mark Gesture methods
+#pragma mark - Gesture methods
 -(void)drawTouch:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    CGPoint touchPt = [gestureRecognizer locationInView:self.limView];
-    if (CGRectContainsPoint(self.limView.bounds, touchPt)) {
+    if (CGRectContainsPoint(self.limView.bounds, [gestureRecognizer locationInView:self.limView])) {
+        CGPoint touchPt = [gestureRecognizer locationInView:self.drawView];
         if (self.selectedTool == kCR_PANEL_TOOL_PEN && lastPoint != nil) {
-            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: touchPt end:NO];
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: CGPointMake(touchPt.x / self.currZoom, touchPt.y / self.currZoom) end:NO];
             [self drawLineFrom:lastPoint to:currentPoint];
             [self.currentDrawing addObject:currentPoint];
             lastPoint = currentPoint;
         }
         else if (self.selectedTool == kCR_PANEL_TOOL_PEN)
         {
-            lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:CGPointMake(touchPt.x / self.currZoom, touchPt.y / self.currZoom) end:NO];
             [self.currentDrawing addObject:lastPoint];
         }
         
         else if (self.selectedTool == kCR_PANEL_TOOL_ERASER && lastPoint != nil) {
-            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: touchPt end:NO];
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: CGPointMake(touchPt.x / self.currZoom, touchPt.y / self.currZoom) end:NO];
             [self eraseLineFrom:lastPoint to:currentPoint];
             [self removePointFromAnswer:currentPoint];
             lastPoint = currentPoint;
         }
         else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
-            lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:CGPointMake(touchPt.x / self.currZoom, touchPt.y / self.currZoom) end:NO];
             [self removePointFromAnswer:lastPoint];
         }
     }
@@ -429,6 +480,7 @@
         }
     }
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
+        lastPoint.isEndPoint = YES;
         CRScan *scan = self.caseChosen.scans[self.scanIndex];
         [self.undoStack addLayer:self.currentDrawing forSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID];
         self.currentDrawing = [[NSMutableArray alloc] initWithArray:self.currentDrawing copyItems:YES];
@@ -439,7 +491,7 @@
 -(void)zoomTouch:(UIPinchGestureRecognizer *)gestureRecognizer
 {
     CGPoint touchPt = [gestureRecognizer locationInView:self.limView];
-    if (self.selectedTool == kCR_PANEL_TOOL_ZOOM && CGRectContainsPoint(self.limView.bounds, touchPt)) {
+    if (CGRectContainsPoint(self.limView.bounds, touchPt)) {
         [self zoomImageToScale: self.lastZoom + (gestureRecognizer.scale - 1)];
     }
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
@@ -450,12 +502,12 @@
 -(void)panTouch:(UIPanGestureRecognizer *)gestureRecognizer
 {
     CGPoint touchPt = [gestureRecognizer locationInView:self.limView];
-    if (self.selectedTool == kCR_PANEL_TOOL_ZOOM && CGRectContainsPoint(self.limView.bounds, touchPt)) {
+    if (CGRectContainsPoint(self.limView.bounds, touchPt)) {
         CGPoint translation =[gestureRecognizer translationInView:self.limView];
         [self panZoom:CGPointMake(translation.x + self.lastTranslation.x, translation.y + self.lastTranslation.y)];
     }
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
-        CGRect frame = self.zoomView.frame;
+        CGRect frame = self.drawView.frame;
         CGFloat x = frame.origin.x - (self.limView.frame.size.width - frame.size.width)/2;
         CGFloat y = frame.origin.y - (self.limView.frame.size.height - frame.size.height)/2;
         self.lastTranslation = CGPointMake(x, y);
@@ -466,61 +518,6 @@
     
 }
 
--(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
-    //Make region drawable
-    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
-    [self.drawView.image drawAtPoint:CGPointMake(0, 0)];//Using drawInRect blurs previous lines for currently unknown reason
-    
-    //Set up to draw line
-    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.lineRedComp, self.lineGreenComp, self.lineBlueComp, 1.0);
-    CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
-    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
-    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
-    
-    
-    //Add line to image and draw
-    CGContextStrokePath(UIGraphicsGetCurrentContext());
-    self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
-    [self.drawView setAlpha:1.0];
-    UIGraphicsEndImageContext();
-}
-
--(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
-    //Make region drawable
-    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
-    [self.drawView.image drawAtPoint:CGPointMake(0, 0)]; //Doesn't use drawInRect to keep consistent with drawing lines and prevent blurring that ocurred for unknown reason
-    
-    //Set up to draw line
-    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 20.0);
-    CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeClear);
-    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
-    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
-    
-    
-    //Add line to image and draw
-    CGContextStrokePath(UIGraphicsGetCurrentContext());
-    self.drawView.image = UIGraphicsGetImageFromCurrentImageContext();
-    [self.drawView setAlpha:1.0];
-    UIGraphicsEndImageContext();
-}
-
-//Remove all points within erase range from answer array, setting endpoints appropriately
--(void)removePointFromAnswer:(CRAnswerPoint *)pt
-{
-    //Find which to remove
-    NSIndexSet *toRemove = [self.currentDrawing indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        return [pt isInTouchRange:obj];
-    }];
-    //Set endpoints of precending points to points to remove
-    [toRemove enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        if (idx != 0) {
-            ((CRAnswerPoint *)[self.currentDrawing objectAtIndex:idx - 1]).isEndPoint = YES;
-        }
-    }];
-    //Remove points
-    [self.currentDrawing removeObjectsAtIndexes:toRemove];
-}
 
 -(void)toggleScansMenu
 {
@@ -566,23 +563,15 @@
         case kCR_PANEL_TOOL_SCANS:
             [self toggleScansMenu];
             self.selectedTool = tool;
-            break;
-        case kCR_PANEL_TOOL_ZOOM:
-            self.selectedTool = tool;
-            [self toggleZoom];
+        default:
             break;
 	}
 }
 
 -(void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didDeselectTool:(NSInteger)tool
 {
-    switch (tool) {
-        case kCR_PANEL_TOOL_SCANS:
-            [self toggleScansMenu];
-            break;
-        case kCR_PANEL_TOOL_ZOOM:
-            [self toggleZoom];
-        break;
+    if (tool == kCR_PANEL_TOOL_SCANS) {
+        [self toggleScansMenu];
     }
 }
 

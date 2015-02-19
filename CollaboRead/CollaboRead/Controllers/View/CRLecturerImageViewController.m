@@ -66,8 +66,8 @@
                     CRAnswerPoint *beg = [line.data objectAtIndex:i - 1];
                     if (!beg.isEndPoint) {
                         CRAnswerPoint *fin = [line.data objectAtIndex:i];
-                        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x, beg.coordinate.y);
-                        CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x, fin.coordinate.y);
+                        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x * self.currZoom, beg.coordinate.y * self.currZoom);
+                        CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x * self.currZoom, fin.coordinate.y * self.currZoom);
                     }
                 }
                 CGContextStrokePath(UIGraphicsGetCurrentContext());
@@ -95,7 +95,7 @@
     [super viewDidLoad];
     self.studentAnswerView = [[UIImageView alloc] init];
     self.studentAnswerView.frame = self.imgFrame;
-    [self.view insertSubview:self.studentAnswerView belowSubview:super.limView];
+    [self.limView addSubview:self.studentAnswerView];
 	self.view.autoresizesSubviews = NO;
 
 	// Should pass array of CRUsers that have submitted answers
@@ -164,9 +164,19 @@
 
 }
 
--(void)toggleZoom {
-    [super toggleZoom];
-    self.studentAnswerView.hidden = !self.studentAnswerView.hidden;
+-(void)zoomOut {
+    [super zoomOut];
+    self.studentAnswerView.frame = self.imgFrame;
+}
+
+-(void)panZoom:(CGPoint)translation {
+    [super panZoom:translation];
+    self.studentAnswerView.frame = self.imgFrame;
+}
+
+-(void)zoomImageToScale:(CGFloat)scale {
+    [super zoomImageToScale:scale];
+    self.studentAnswerView.frame = self.imgFrame;
 }
 
 #pragma mark - CRStudentAnswerTable Delegate Methods

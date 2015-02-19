@@ -147,27 +147,6 @@
                 break;
             case kCR_PANEL_TOOL_PEN:
             case kCR_PANEL_TOOL_ERASER:
-            case kCR_PANEL_TOOL_ZOOM:
-                [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
-                //unzoom if another button is pressed
-                self.selectedTool = indexPath;
-            default:
-                break;
-        }
-    } else if (self.selectedTool.row == kCR_PANEL_TOOL_ZOOM) {
-        switch (indexPath.row) {
-            case kCR_PANEL_TOOL_UNDO:
-            case kCR_PANEL_TOOL_CLEAR:
-                [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
-            case kCR_PANEL_TOOL_ZOOM:
-                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-                self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
-                [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
-                [self.delegate toolPanelViewController:self didSelectTool:self.selectedTool.row];
-                break;
-            case kCR_PANEL_TOOL_PEN:
-            case kCR_PANEL_TOOL_ERASER:
-            case kCR_PANEL_TOOL_SCANS:
                 [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
                 //unzoom if another button is pressed
                 self.selectedTool = indexPath;
@@ -202,9 +181,6 @@
 		case kCR_PANEL_TOOL_CLEAR:
 			title = @"CRToolPanelClear.png";
 			break;
-        case kCR_PANEL_TOOL_ZOOM:
-            title = @"CRToolPanelZoom.png";
-            break;
         case kCR_PANEL_TOOL_SCANS:
             title = @"CRToolPanelScan.png";
             break;

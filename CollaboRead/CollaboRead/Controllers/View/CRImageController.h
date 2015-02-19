@@ -26,6 +26,8 @@
 @property (nonatomic, assign) CGFloat lineGreenComp;
 
 @property (nonatomic, assign) CGRect imgFrame;
+@property (nonatomic, assign) CGRect limFrame;
+@property (nonatomic, assign) CGFloat currZoom;
 
 @property (nonatomic, strong) CRUser *user;
 @property (nonatomic, strong) CRCase *caseChosen;//Case information
@@ -54,7 +56,9 @@
 //Clears all drawings from screen without affecting any stored information
 -(void)clearDrawing;
 
--(void)toggleZoom;
+-(void)zoomOut;
+-(void)zoomImageToScale:(CGFloat)scale;
+-(void)panZoom:(CGPoint)translation;
 
 @end
 
