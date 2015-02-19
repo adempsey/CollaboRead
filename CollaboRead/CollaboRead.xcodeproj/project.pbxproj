@@ -54,6 +54,9 @@
 		BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */; };
 		BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */; };
 		BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */; };
+		BBB97BCD1A96722B007715B1 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB97BCC1A96722B007715B1 /* iCarousel.m */; };
+		BBB97BCF1A967241007715B1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB97BCE1A967241007715B1 /* QuartzCore.framework */; };
+		BBB97BD21A967A80007715B1 /* CRCarouselCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB97BD11A967A80007715B1 /* CRCarouselCell.m */; };
 		BBCCEDE11A71991800782507 /* CRToolPanelScan.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCCEDE01A71991800782507 /* CRToolPanelScan.png */; };
 		BBCCEDE71A719F3300782507 /* CRScansMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */; };
 		BBD3135819F2E2040017B96A /* CRSelectLecturerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3135719F2E2040017B96A /* CRSelectLecturerViewController.m */; };
@@ -161,6 +164,11 @@
 		BBA2EBD619EEE54B0093044E /* CRTitledImageCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRTitledImageCollectionCell.h; sourceTree = "<group>"; };
 		BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRTitledImageCollectionCell.m; sourceTree = "<group>"; };
 		BBA2EBDB19EEF3340093044E /* CRCaseKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRCaseKeys.h; sourceTree = "<group>"; };
+		BBB97BCB1A96722B007715B1 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		BBB97BCC1A96722B007715B1 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+		BBB97BCE1A967241007715B1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		BBB97BD01A967A80007715B1 /* CRCarouselCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRCarouselCell.h; sourceTree = "<group>"; };
+		BBB97BD11A967A80007715B1 /* CRCarouselCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCarouselCell.m; sourceTree = "<group>"; };
 		BBCCEDE01A71991800782507 /* CRToolPanelScan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelScan.png; sourceTree = "<group>"; };
 		BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRScansMenuViewController.h; path = ../../../CRScansMenuViewController.h; sourceTree = "<group>"; };
 		BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRScansMenuViewController.m; path = ../../../CRScansMenuViewController.m; sourceTree = "<group>"; };
@@ -177,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB97BCF1A967241007715B1 /* QuartzCore.framework in Frameworks */,
 				8DCF9CAF1A2BF07B000D42C5 /* Foundation.framework in Frameworks */,
 				8DCF9CAD1A2BF076000D42C5 /* Security.framework in Frameworks */,
 				8DCF9CAB1A2BF071000D42C5 /* CFNetwork.framework in Frameworks */,
@@ -214,6 +223,7 @@
 		8D6BC2461A2BEF0500DB76D0 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				BBB97BCA1A96722B007715B1 /* iCarousel */,
 				8D6BC2471A2BEF1C00DB76D0 /* SocketRocket */,
 			);
 			path = Libraries;
@@ -232,6 +242,7 @@
 		8DA5DE1319E6064A002EA706 = {
 			isa = PBXGroup;
 			children = (
+				BBB97BCE1A967241007715B1 /* QuartzCore.framework */,
 				8DA5DE1E19E6064A002EA706 /* CollaboRead */,
 				8DA5DE3819E6064B002EA706 /* CollaboReadTests */,
 				8DA5DE1D19E6064A002EA706 /* Products */,
@@ -417,6 +428,8 @@
 				8DD360191A0B3E8900E572D1 /* CRToolPanelCell.m */,
 				BBA2EBD619EEE54B0093044E /* CRTitledImageCollectionCell.h */,
 				BBA2EBD719EEE54B0093044E /* CRTitledImageCollectionCell.m */,
+				BBB97BD01A967A80007715B1 /* CRCarouselCell.h */,
+				BBB97BD11A967A80007715B1 /* CRCarouselCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -496,6 +509,15 @@
 				BBA2EBD319EED5F80093044E /* CRSelectCaseViewController.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		BBB97BCA1A96722B007715B1 /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				BBB97BCB1A96722B007715B1 /* iCarousel.h */,
+				BBB97BCC1A96722B007715B1 /* iCarousel.m */,
+			);
+			path = iCarousel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -629,6 +651,7 @@
 				8DD664E81A75F878002C379E /* CRSlice.m in Sources */,
 				8DEBB0561A86AA1600DC0FCA /* CRSubmitButton.m in Sources */,
 				8DE0B26019FF2FD300760434 /* CRCase.m in Sources */,
+				BBB97BCD1A96722B007715B1 /* iCarousel.m in Sources */,
 				8D9830BC1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m in Sources */,
 				8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
@@ -639,6 +662,7 @@
 				BBA0C59D1A89427F009E53EC /* CRImageScrollBarController.m in Sources */,
 				8DA5DE2219E6064B002EA706 /* main.m in Sources */,
 				8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */,
+				BBB97BD21A967A80007715B1 /* CRCarouselCell.m in Sources */,
 				8DCF9CA51A2BEF6A000D42C5 /* SRWebSocket.m in Sources */,
 				8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */,
 				BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */,

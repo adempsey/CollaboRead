@@ -19,7 +19,8 @@
 #import "CRViewSizeMacros.h"
 #import "CRDrawingPreserver.h"
 #import "CRUserKeys.h"
-#import "CRImageScrollBarController.h"
+#import "CRCarouselCell.h"
+#import "CRColors.h"
 #import "CRAnswerLine.h"
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
@@ -42,6 +43,7 @@
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
 
 @property (nonatomic, readwrite, strong) UIButton *toggleButton;
+
 
 
 
@@ -77,12 +79,14 @@
     
     self.scanIndex = 0;
     self.sliceIndex = 0;
-    
-    //Initialize scroll bar before setting images so that it's size can be set to the width of the image views
-    self.scrollBarController = [[CRImageScrollBarController alloc] init];
-    self.scrollBarController.delegate = self;
-    [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:nil];
 
+    self.scrollBar = [[iCarousel alloc] init];
+    self.scrollBar.dataSource = self;
+    self.scrollBar.delegate = self;
+    self.scrollBar.type = iCarouselTypeLinear;
+    self.scrollBar.frame = CGRectMake(CR_TOP_BAR_HEIGHT, 0, kCR_CAROUSEL_CELL_HEIGHT, kCR_CAROUSEL_CELL_HEIGHT);
+    self.scrollBar.backgroundColor = CR_COLOR_PRIMARY;
+    
     //Initialize image views
 	[self loadAndScaleImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).image];
 
@@ -96,10 +100,8 @@
 	[self.limView addSubview:self.caseImage];
 	[self.limView addSubview:self.drawView];
     self.limView.clipsToBounds = YES;
-    //self.limView.hidden = YES;
     [self.view addSubview:self.limView];
-    //[self.limView addSubview:self.zoomView];
-    [self.view addSubview:self.scrollBarController.view];
+    [self.view addSubview:self.scrollBar];
     
     self.currZoom = kMIN_ZOOM;
     self.lastZoom = self.currZoom;
@@ -207,9 +209,6 @@
         self.lastZoom = kMIN_ZOOM;
         self.imgFrame = self.limFrame;
     }];
-    
-    //self.scrollBarController.view.opaque = !self.scrollBarController.view.opaque;
-    self.scrollBarController.view.userInteractionEnabled = !self.scrollBarController.view.userInteractionEnabled;
 }
 
 -(void)zoomImageToScale:(CGFloat)scale {
@@ -403,7 +402,7 @@
     CGRect newFrame = CGRectMake(0, 0, img.size.width, img.size.height);
     
     //Determine boundaries based on iOS version
-    CGFloat topBarHeight = CR_TOP_BAR_HEIGHT + self.scrollBarController.view.frame.size.height;
+    CGFloat topBarHeight = CR_TOP_BAR_HEIGHT + kCR_CAROUSEL_CELL_HEIGHT;
     CGRect viewFrame = CR_LANDSCAPE_FRAME;
     
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
@@ -439,7 +438,7 @@
     }
     self.limFrame = newFrame;
     self.imgFrame = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
-    self.scrollBarController.view.frame = CGRectMake(newFrame.origin.x, CR_TOP_BAR_HEIGHT, newFrame.size.width, self.scrollBarController.view.frame.size.height);
+    self.scrollBar.frame= CGRectMake(newFrame.origin.x, CR_TOP_BAR_HEIGHT, newFrame.size.width, kCR_CAROUSEL_CELL_HEIGHT);
     [self.caseImage setFrame:self.imgFrame];
     [self clearDrawing];
     [self.limView setFrame:self.limFrame];
@@ -554,7 +553,6 @@
 			[self undoEdit];
 			break;
 		case kCR_PANEL_TOOL_CLEAR:
-            //CRScan *scan = self.caseChosen.scans[self.scanIndex];
             [self.undoStack addLayer:[[NSArray alloc] init] forSlice: ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID ofScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
             self.currentDrawing = [[NSMutableArray alloc] init];
 			[self clearDrawing];
@@ -583,7 +581,7 @@
             if (idx != self.scanIndex) {
                 self.scanIndex = idx;
                 self.sliceIndex = 0;
-                [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:nil];
+                [self.scrollBar reloadData];
                 [self swapImage];
             }
             *stop = true;
@@ -591,16 +589,28 @@
     }];
 }
 
-#pragma mark - CRImageScrollBarController Delegate Methods
+#pragma mark - iCarousel Data Source Methods
 
--(void) imageScroller:(CRImageScrollBarController *)imageScroller didChangePosition:(NSUInteger)newIndex {
-    self.sliceIndex = newIndex;
+- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel {
+    return ((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count;
+}
+
+-(UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
+    CRCarouselCell *cView = (CRCarouselCell *)view;
+    if (cView == nil) {
+        cView = [[CRCarouselCell alloc] init];
+    }
+    [cView setImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[index]).image];
+    return cView;
+}
+
+#pragma mark - iCarousel Delegate Methods
+
+-(void) carouselCurrentItemIndexDidChange:(iCarousel *)carousel {
+    self.sliceIndex = carousel.currentItemIndex;
     [self swapImage];
 }
--(void) imageScroller:(CRImageScrollBarController *)imageScroller didStopAtPosition:(NSUInteger)newIndex {
-    self.sliceIndex = newIndex;
-    [self swapImage];
-}
+
 
 
 @end

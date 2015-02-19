@@ -16,9 +16,9 @@
 #import "CRToolPanelViewController.h"
 #import "CRScansMenuViewController.h"
 #import "CRUndoStack.h"
-#import "CRImageScrollBarController.h"
+#import "iCarousel.h"
 
-@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate, CRImageScrollBarControllerDelegate>
+@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate, iCarouselDataSource, iCarouselDelegate>
 
 //The following define drawing color used by user
 @property (nonatomic, assign) CGFloat lineRedComp;
@@ -44,7 +44,7 @@
 
 @property (nonatomic, strong) UIView *limView;
 @property (nonatomic, strong) CRScansMenuViewController *scansMenuController;
-@property (nonatomic, strong) CRImageScrollBarController *scrollBarController;
+@property (nonatomic, strong) iCarousel *scrollBar;
 
 
 //Loads the image to be drawn over into the view and scales it to fit the screen.

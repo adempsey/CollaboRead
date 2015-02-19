@@ -15,6 +15,7 @@
 #import "CRSlice.h"
 #import "CRAnswerRefreshService.h"
 #import "CRErrorAlertService.h"
+#import "CRCarouselCell.h"
 
 #define studentColors @[@{@"red":@0, @"green": @255, @"blue" : @0}, \
                         @{@"red":@0, @"green": @0, @"blue" : @255}, \
@@ -105,7 +106,6 @@
 	[self.view addSubview:self.studentAnswerTableViewController.view];
     self.studentAnswerTableViewController.allUsers = self.allUsers;
     
-    [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:[self.caseChosen answerSlicesForScan: ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID]];
     NSArray *scanHighlights = [self.caseChosen answerScans];
     self.scansMenuController.highlights = scanHighlights;
 
@@ -138,6 +138,7 @@
 				[students addObject:((CRAnswer *)obj).owners];
 			}];
 			self.studentAnswerTableViewController.students = students;
+            [self.scrollBar reloadData];
 		} else {
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:^(UIAlertAction* action) {
 				if (self != self.navigationController.viewControllers[0]) {
@@ -203,13 +204,14 @@
 
 -(void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase{
     self.caseChosen.answers = refreshedCase.answers;
+    [self.scrollBar reloadData];
 }
 
 -(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
 {
     [super scansMenuViewControllerDidSelectScan:scanId];
-    [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:[self.caseChosen answerSlicesForScan: ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID]];
     self.studentAnswerView.frame = self.imgFrame;
+    [self.scrollBar reloadData];
     [self drawStudentAnswers];
 }
 
@@ -219,9 +221,24 @@
     [self drawStudentAnswers];
 }
 
--(void) imageScroller:(CRImageScrollBarController *)imageScroller didStopAtPosition:(NSUInteger)newIndex {
-    [super imageScroller:imageScroller didStopAtPosition:newIndex];
-    self.studentAnswerView.frame = self.imgFrame;
+-(UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
+    CRCarouselCell *cView = (CRCarouselCell *)view;
+    if (cView == nil) {
+        cView = [[CRCarouselCell alloc] init];
+    }
+    [cView setImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[index]).image];
+    if ([[self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID] containsObject:@(index)]) {
+        cView.isHighlighted = YES;
+    } else {
+        cView.isHighlighted = NO;
+    }
+    return cView;
+}
+
+#pragma mark - iCarousel Delegate Methods
+
+-(void) carouselCurrentItemIndexDidChange:(iCarousel *)carousel {
+    [super carouselCurrentItemIndexDidChange:carousel];
     [self drawStudentAnswers];
 }
 
