@@ -25,7 +25,7 @@
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
 #define ZOOM_FRACTION 0.1
-#define kMAX_ZOOM 2
+#define kMAX_ZOOM 3
 #define kMIN_ZOOM 1
 
 @interface CRImageController ()
@@ -38,6 +38,8 @@
 
 @property (nonatomic, strong) UIImageView *zoomView;
 @property (nonatomic, assign) CGFloat currZoom;
+@property (nonatomic, assign) CGFloat lastZoom;
+@property (nonatomic, assign) CGPoint lastTranslation;
 
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
@@ -47,12 +49,17 @@
 
 
 -(void)toggleScansMenu;
--(void)zoomImageWithTouches:(UITouch *)touchA and:(UITouch *)touchB;
--(void)panZoom:(UITouch *)touch;
+-(void)zoomImageToScale:(CGFloat)scale;
+-(void)panZoom:(CGPoint)translation;
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
 -(void)removePointFromAnswer:(CRAnswerPoint *)pt;
 -(void)swapImage;
+
+-(void)drawTouch:(UIPanGestureRecognizer *)gestureRecognizer;
+-(void)zoomTouch:(UIPinchGestureRecognizer *)gestureRecognizer;
+-(void)panTouch:(UIPanGestureRecognizer *)gestureRecognizer;
+-(void)scrollTouch:(UIPanGestureRecognizer *)gestureRecognizer;
 
 @end
 
@@ -76,18 +83,21 @@
     self.scanIndex = 0;
     self.sliceIndex = 0;
     
+    //Initialize scroll bar before setting images so that it's size can be set to the width of the image views
     self.scrollBarController = [[CRImageScrollBarController alloc] init];
     self.scrollBarController.delegate = self;
     [self.scrollBarController setPartitions:((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count andHighlights:nil];
 
+    //Initialize image views
 	[self loadAndScaleImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).image];
 
 	// Invisible now so that the image fades in once the view appears
 	self.caseImage.alpha = 0.0;
     self.drawView.alpha = 0.0;
     
-    self.lecturerID = self.user.userID;//TODO:this seems wrong
+    self.lecturerID = self.user.userID;//TODO:this seems wrong or unnecessary
     
+    //Add image views
 	[self.view addSubview:self.caseImage];
 	[self.view addSubview:self.drawView];
     self.limView.clipsToBounds = YES;
@@ -96,6 +106,8 @@
     [self.limView addSubview:self.zoomView];
     [self.view addSubview:self.scrollBarController.view];
     
+    
+    //Create tool panel and it's accompanying views
 	self.toolPanelViewController = [[CRToolPanelViewController alloc] init];
 	self.toolPanelViewController.delegate = self;
 
@@ -118,9 +130,7 @@
     [self.view addSubview:self.toolPanelViewController.view];
     [self.view addSubview:self.toggleButton];
     
-    self.lineRedComp = 255;
-    self.lineBlueComp = 0;
-    self.lineGreenComp = 0;
+    
     self.patientInfo = self.caseChosen.patientInfo;
     
     //Try to load drawings from previous viewing during session or make new undo stack
@@ -143,10 +153,30 @@
         }
         [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
     }
+    //Set up current drawing
+    self.lineRedComp = 255;
+    self.lineBlueComp = 0;
+    self.lineGreenComp = 0;
     CRScan *scan = self.caseChosen.scans[self.scanIndex];
     self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
     [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
     lastPoint = nil;
+    
+    //Set up Gesture Recognizers
+    UIPanGestureRecognizer *drawGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(drawTouch:)];
+    drawGesture.minimumNumberOfTouches = 1;
+    drawGesture.maximumNumberOfTouches = 1;
+    [self.view addGestureRecognizer:drawGesture];
+    
+    UIPinchGestureRecognizer *zoomGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomTouch:)];
+    [self.view addGestureRecognizer:zoomGesture];
+    
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panTouch:)];
+    panGesture.minimumNumberOfTouches = 3;
+    panGesture.maximumNumberOfTouches = 3;
+    [zoomGesture requireGestureRecognizerToFail:panGesture];
+    [self.view addGestureRecognizer:panGesture];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -206,16 +236,10 @@
 }
 
 #pragma mark - Tool Methods
--(void)zoomImageWithTouches:(UITouch *)touchA and:(UITouch *)touchB {
-    CGPoint ptA = [touchA locationInView:self.limView];
-    CGPoint ptB = [touchB locationInView:self.limView];
-    CGPoint lastA = [touchA previousLocationInView:self.limView];
-    CGPoint lastB = [touchB previousLocationInView:self.limView];
-    CGFloat change = hypotf(abs((int)(ptA.x - ptB.x)), abs((int)(ptA.y - ptB.y))) - hypotf(abs((int)(lastA.x - lastB.x)), abs((int)(lastA.y - lastB.y)));
+-(void)zoomImageToScale:(CGFloat)scale {
+    self.currZoom = scale;
     CGRect origFrame = self.limView.frame;
     CGRect currFrame = self.zoomView.frame;
-    CGFloat changePercent = (change / origFrame.size.width * 5)* ZOOM_FRACTION;
-    self.currZoom = self.currZoom + changePercent;
     if (self.currZoom > kMAX_ZOOM) {
         self.currZoom = kMAX_ZOOM;
     }
@@ -241,16 +265,21 @@
     CGRect newFrame = CGRectMake(moveLeft, moveUp, newWidth, newHeight);
     self.zoomView.frame = newFrame;
 }
--(void)panZoom:(UITouch *)touch {
-    CGPoint touchPt = [touch locationInView:self.limView];
-    CGPoint lastPt = [touch previousLocationInView:self.limView];
-    if (CGRectContainsPoint(self.limView.bounds, touchPt)) {
-        CGRect origFrame = self.zoomView.frame;
-        CGRect newFrame = CGRectMake(origFrame.origin.x + touchPt.x - lastPt.x, origFrame.origin.y + touchPt.y - lastPt.y, origFrame.size.width, origFrame.size.height);
-        if (newFrame.origin.x <= 0 && newFrame.origin.y <= 0 && newFrame.origin.x + newFrame.size.width> self.limView.frame.size.width && newFrame.origin.y + newFrame.size.height> self.limView.frame.size.height) {
-            self.zoomView.frame = newFrame;
-        }
+-(void)panZoom:(CGPoint)translation {
+    CGRect origFrame = self.zoomView.frame;
+    CGFloat origX = (self.limView.frame.size.width - origFrame.size.width)/2;
+    CGFloat origY = (self.limView.frame.size.height - origFrame.size.height)/2;
+    CGFloat newX = origX + translation.x;
+    CGFloat newY = origY + translation.y;
+    if (newX > 0 || newX + origFrame.size.width < self.limView.frame.size.width) {
+        newX = origFrame.origin.x;
     }
+    if (newY > 0 || newY + origFrame.size.height < self.limView.frame.size.height) {
+        newY = origFrame.origin.y;
+    }
+    CGRect newFrame = CGRectMake(newX, newY, origFrame.size.width, origFrame.size.height);
+    //NSLog(@"%@ \n\t%@", NSStringFromCGRect(origFrame), NSStringFromCGRect(newFrame));
+    self.zoomView.frame = newFrame;
 }
 
 //Pops from answer stack and redraws previous answer
@@ -365,106 +394,77 @@
     [self.zoomView setFrame:CGRectMake(0, 0, newFrame.size.width, newFrame.size.height)];
 }
 
-//Prepares undostack, begins appropriate draw action
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    touches = event.allTouches;
-    if (touches.count == 1) {
-        CGPoint touchPt = [[touches anyObject] locationInView:self.drawView];
-        if (CGRectContainsPoint(self.drawView.bounds, touchPt)) {
-            if (self.selectedTool == kCR_PANEL_TOOL_PEN) {
-                lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
-                [self.currentDrawing addObject:lastPoint];
-            }
-            
-            else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
-                lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
-                [self removePointFromAnswer:lastPoint];
-            }
+#pragma mark Gesture methods
+-(void)drawTouch:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    CGPoint touchPt = [gestureRecognizer locationInView:self.limView];
+    if (CGRectContainsPoint(self.limView.bounds, touchPt)) {
+        if (self.selectedTool == kCR_PANEL_TOOL_PEN && lastPoint != nil) {
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: touchPt end:NO];
+            [self drawLineFrom:lastPoint to:currentPoint];
+            [self.currentDrawing addObject:currentPoint];
+            lastPoint = currentPoint;
+        }
+        else if (self.selectedTool == kCR_PANEL_TOOL_PEN)
+        {
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
+            [self.currentDrawing addObject:lastPoint];
         }
         
-    }
-}
-
-//Continues appropriate draw action, changing undostack as necessary
--(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    touches = event.allTouches;
-    if (self.selectedTool == kCR_PANEL_TOOL_ZOOM) {
-        if (touches.count == 1) {
-            [self panZoom:touches.anyObject];
+        else if (self.selectedTool == kCR_PANEL_TOOL_ERASER && lastPoint != nil) {
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: touchPt end:NO];
+            [self eraseLineFrom:lastPoint to:currentPoint];
+            [self removePointFromAnswer:currentPoint];
+            lastPoint = currentPoint;
         }
-        else if (touches.count == 2) {
-            [self zoomImageWithTouches:touches.allObjects[0] and:touches.allObjects[1]];
+        else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
+            [self removePointFromAnswer:lastPoint];
         }
     }
-    else if (touches.count == 1) {
-        CGPoint touchPt = [[touches anyObject] locationInView:self.drawView];
-        if (CGRectContainsPoint(self.drawView.bounds, touchPt)) {
-            if (self.selectedTool == kCR_PANEL_TOOL_PEN && lastPoint != nil) {
-                CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
-                [self drawLineFrom:lastPoint to:currentPoint];
-                [self.currentDrawing addObject:currentPoint];
-                lastPoint = currentPoint;
-            }
-            else if (self.selectedTool == kCR_PANEL_TOOL_PEN)
-            {
-                lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
-                [self.currentDrawing addObject:lastPoint];
-            }
-            
-            else if (self.selectedTool == kCR_PANEL_TOOL_ERASER && lastPoint != nil) {
-                CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:NO];
-                [self eraseLineFrom:lastPoint to:currentPoint];
-                [self removePointFromAnswer:currentPoint];
-                lastPoint = currentPoint;
-            }
-            else if (self.selectedTool == kCR_PANEL_TOOL_ERASER) {
-                lastPoint = [[CRAnswerPoint alloc] initWithPoint:touchPt end:NO];
-                [self removePointFromAnswer:lastPoint];
-            }
-        }
-        else {
-            if (lastPoint != nil) {
-                lastPoint.isEndPoint = YES;
-                lastPoint = nil;
-            }
+    else {
+        if (lastPoint != nil) {
+            lastPoint.isEndPoint = YES;
+            lastPoint = nil;
         }
     }
-    
-}
-
-//Finishes appropriate drawing action, updates record of drawing on image
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    touches = event.allTouches;
-    if (self.selectedTool == kCR_PANEL_TOOL_ZOOM) {
-        if (touches.count == 1) {
-            [self panZoom:touches.anyObject];
-        }
-        else if (touches.count == 2) {
-            [self zoomImageWithTouches:touches.allObjects[0] and:touches.allObjects[1]];
-        }
-    }
-    else if (touches.count == 1) {
-        CGPoint touchPt = [[touches anyObject] locationInView:self.drawView];
-        if (CGRectContainsPoint(self.drawView.bounds, touchPt)) {
-            if (self.selectedTool == kCR_PANEL_TOOL_PEN && lastPoint != nil) {
-                CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
-                [self drawLineFrom:lastPoint to:currentPoint];
-                [self.currentDrawing addObject:currentPoint];
-            }
-            else if (self.selectedTool == kCR_PANEL_TOOL_ERASER && lastPoint != nil) {
-                CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: [[touches anyObject] locationInView:self.drawView] end:YES];
-                [self eraseLineFrom:lastPoint to:currentPoint];
-                [self removePointFromAnswer:currentPoint];
-            }
-            CRScan *scan = self.caseChosen.scans[self.scanIndex];
-            [self.undoStack addLayer:self.currentDrawing forSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID];
-            self.currentDrawing = [[NSMutableArray alloc] initWithArray:self.currentDrawing copyItems:YES];
-        }
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
+        CRScan *scan = self.caseChosen.scans[self.scanIndex];
+        [self.undoStack addLayer:self.currentDrawing forSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID];
+        self.currentDrawing = [[NSMutableArray alloc] initWithArray:self.currentDrawing copyItems:YES];
         lastPoint = nil;
     }
-    
 }
 
+-(void)zoomTouch:(UIPinchGestureRecognizer *)gestureRecognizer
+{
+    CGPoint touchPt = [gestureRecognizer locationInView:self.limView];
+    if (self.selectedTool == kCR_PANEL_TOOL_ZOOM && CGRectContainsPoint(self.limView.bounds, touchPt)) {
+        [self zoomImageToScale: self.lastZoom + (gestureRecognizer.scale - 1)];
+    }
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
+        self.lastZoom = self.currZoom;
+    }
+}
+
+-(void)panTouch:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    CGPoint touchPt = [gestureRecognizer locationInView:self.limView];
+    if (self.selectedTool == kCR_PANEL_TOOL_ZOOM && CGRectContainsPoint(self.limView.bounds, touchPt)) {
+        CGPoint translation =[gestureRecognizer translationInView:self.limView];
+        [self panZoom:CGPointMake(translation.x + self.lastTranslation.x, translation.y + self.lastTranslation.y)];
+    }
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
+        CGRect frame = self.zoomView.frame;
+        CGFloat x = frame.origin.x - (self.limView.frame.size.width - frame.size.width)/2;
+        CGFloat y = frame.origin.y - (self.limView.frame.size.height - frame.size.height)/2;
+        self.lastTranslation = CGPointMake(x, y);
+    }
+}
+-(void)scrollTouch:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    
+}
 
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin {
     //Make region drawable
