@@ -214,7 +214,7 @@
         self.lastTranslation = CGPointMake(0, 0);
         self.currZoom = kMIN_ZOOM;
         self.lastZoom = kMIN_ZOOM;
-        self.imgFrame = self.limFrame;
+        self.imgFrame = self.caseImage.frame;
     }];
 }
 
@@ -604,8 +604,8 @@
                 self.scanIndex = idx;
                 self.sliceIndex = 0;
                 [self.scrollBar reloadData];
-                self.scrollBar.frame= CGRectMake(self.limFrame.origin.x, CR_TOP_BAR_HEIGHT, self.limFrame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
-                self.scrollBar.bounds = self.scrollBar.frame;
+                //self.scrollBar.frame= CGRectMake(self.limFrame.origin.x, CR_TOP_BAR_HEIGHT, self.limFrame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
+                //self.scrollBar.bounds = self.scrollBar.frame;
                 [self swapImage];
             }
             *stop = true;
