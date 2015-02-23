@@ -9,6 +9,10 @@
 #import "CRSlice.h"
 #import "CRCaseKeys.h"
 
+@interface CRSlice ()
+@property (nonatomic, strong) UIImage *image;
+@end
+
 @implementation CRSlice
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
@@ -24,9 +28,16 @@
 // Implicitly sets value of image property
 - (void)setImageURL:(NSURL *)url
 {
-	NSData *imageData = [NSData dataWithContentsOfURL:url];
-	_image = [UIImage imageWithData:imageData];
+    _image = nil;
 	_imageURL = url;
+}
+
+-(UIImage *)image {
+    if (_image == nil) {
+        NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL];
+        _image = [UIImage imageWithData:imageData];
+    }
+    return _image;
 }
 
 @end

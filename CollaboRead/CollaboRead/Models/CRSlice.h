@@ -30,7 +30,8 @@
 /*!
  @brief Slice image (set implicitly by imageURL)
  */
-@property (nonatomic, readonly, strong) UIImage *image;
+//@property (nonatomic, readonly, strong) UIImage *image;
+-(UIImage *)image;
 
 /*!
  @brief True if slice has at least one answer drawing
@@ -44,5 +45,6 @@
  Dictionary with keys and values containing slice data
  */
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
+
 
 @end

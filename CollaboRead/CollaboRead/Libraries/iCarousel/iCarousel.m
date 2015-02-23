@@ -129,6 +129,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 @implementation iCarousel
 
+-(void)drawRect:(CGRect)rect {
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    CGContextFillRect(context, CGRectMake(self.frame.origin.x + (self.frame.size.width - 10)/2, self.frame.origin.y + self.frame.size.height - 10, 10, 10));
+}
+
 #pragma mark -
 #pragma mark Initialisation
 

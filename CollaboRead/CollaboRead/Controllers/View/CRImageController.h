@@ -18,7 +18,7 @@
 #import "CRUndoStack.h"
 #import "iCarousel.h"
 
-@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate, iCarouselDataSource, iCarouselDelegate>
+@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate, iCarouselDataSource, iCarouselDelegate, UIGestureRecognizerDelegate>
 
 //The following define drawing color used by user
 @property (nonatomic, assign) CGFloat lineRedComp;

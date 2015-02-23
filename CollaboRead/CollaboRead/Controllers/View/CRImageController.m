@@ -38,14 +38,14 @@
 
 @property (nonatomic, assign) CGFloat lastZoom;
 @property (nonatomic, assign) CGPoint lastTranslation;
+@property (nonatomic, assign) CGFloat pastScroll;
 
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
 
 @property (nonatomic, readwrite, strong) UIButton *toggleButton;
 
-
-
+@property (nonatomic, strong) UIPinchGestureRecognizer *zoomGesture;
 
 -(void)toggleScansMenu;
 -(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
@@ -76,6 +76,7 @@
 
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.title = self.caseChosen.name;
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
     
     self.scanIndex = 0;
     self.sliceIndex = 0;
@@ -84,8 +85,9 @@
     self.scrollBar.dataSource = self;
     self.scrollBar.delegate = self;
     self.scrollBar.type = iCarouselTypeLinear;
-    self.scrollBar.frame = CGRectMake(CR_TOP_BAR_HEIGHT, 0, kCR_CAROUSEL_CELL_HEIGHT, kCR_CAROUSEL_CELL_HEIGHT);
+    self.scrollBar.frame = CGRectMake(CR_TOP_BAR_HEIGHT, 0, kCR_CAROUSEL_CELL_HEIGHT, kCR_CAROUSEL_CELL_HEIGHT + 10);
     self.scrollBar.backgroundColor = CR_COLOR_PRIMARY;
+    self.scrollBar.clipsToBounds = YES;
     
     //Initialize image views
 	[self loadAndScaleImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).image];
@@ -169,14 +171,19 @@
     drawGesture.maximumNumberOfTouches = 1;
     [self.view addGestureRecognizer:drawGesture];
     
-    UIPinchGestureRecognizer *zoomGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomTouch:)];
-    [self.view addGestureRecognizer:zoomGesture];
+    self.zoomGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomTouch:)];
+    self.zoomGesture.delegate = self;
+    [self.view addGestureRecognizer:self.zoomGesture];
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panTouch:)];
     panGesture.minimumNumberOfTouches = 3;
     panGesture.maximumNumberOfTouches = 3;
-    [zoomGesture requireGestureRecognizerToFail:panGesture];
     [self.view addGestureRecognizer:panGesture];
+    
+    UIPanGestureRecognizer *scrollGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(scrollTouch:)];
+    scrollGesture.minimumNumberOfTouches = 2;
+    scrollGesture.maximumNumberOfTouches = 2;
+    [self.view addGestureRecognizer:scrollGesture];
     
 }
 
@@ -402,7 +409,8 @@
     CGRect newFrame = CGRectMake(0, 0, img.size.width, img.size.height);
     
     //Determine boundaries based on iOS version
-    CGFloat topBarHeight = CR_TOP_BAR_HEIGHT + kCR_CAROUSEL_CELL_HEIGHT;
+    CGFloat topBarHeight = CR_TOP_BAR_HEIGHT + kCR_CAROUSEL_CELL_HEIGHT + 20;
+    CGFloat sideBar = kToolPanelTableViewWidth;
     CGRect viewFrame = CR_LANDSCAPE_FRAME;
     
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
@@ -416,35 +424,44 @@
     
     //If the image doesn't already fit as much as the view as possible
     if (newFrame.size.height != viewFrame.size.height - topBarHeight &&
-        newFrame.size.width != viewFrame.size.width) {
+        newFrame.size.width != viewFrame.size.width - sideBar * 2) {
         
         double scale = (viewFrame.size.height - topBarHeight)/newFrame.size.height;
-        
         //Determine whether having image expand to sides will cut off top and bottom. If it does, expand to top and bottom. If it doesn't expanding to top and bottom would have either caused the sides to be cut off or it fits the screen exactly and it doesn't matter which to use as scale.
         //Each case expands and centers image appropriately
-        if (newFrame.size.width * scale > viewFrame.size.width) {
-            scale = viewFrame.size.width/newFrame.size.width;
+        if (newFrame.size.width * scale > viewFrame.size.width - sideBar * 2) {
+            scale = (viewFrame.size.width - sideBar * 2)/newFrame.size.width;
             newFrame.size.width *= scale;
             newFrame.size.height *= scale;
-            newFrame.origin.y = (viewFrame.size.height - newFrame.size.height)/2;
-            newFrame.origin.x = 0;
+            newFrame.origin.y = (viewFrame.size.height - topBarHeight - newFrame.size.height)/2 + topBarHeight;
+            newFrame.origin.x = sideBar;
         }
         else {
             newFrame.size.width *= scale;
             newFrame.size.height *= scale;
             newFrame.origin.y = topBarHeight;
-            newFrame.origin.x = (viewFrame.size.width - newFrame.size.width)/2;
+            newFrame.origin.x = (viewFrame.size.width - sideBar * 2 - newFrame.size.width)/2 + sideBar;
         }
     }
     self.limFrame = newFrame;
     self.imgFrame = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
-    self.scrollBar.frame= CGRectMake(newFrame.origin.x, CR_TOP_BAR_HEIGHT, newFrame.size.width, kCR_CAROUSEL_CELL_HEIGHT);
+    self.scrollBar.frame= CGRectMake(newFrame.origin.x, CR_TOP_BAR_HEIGHT, newFrame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
+    self.scrollBar.bounds = self.scrollBar.frame;
     [self.caseImage setFrame:self.imgFrame];
     [self clearDrawing];
     [self.limView setFrame:self.limFrame];
 }
 
 #pragma mark - Gesture methods
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer == self.navigationController.interactivePopGestureRecognizer) {
+        return NO;
+    } else if (gestureRecognizer == self.zoomGesture && gestureRecognizer.numberOfTouches > 2) {
+        return NO;
+    }
+    return YES;
+}
 -(void)drawTouch:(UIPanGestureRecognizer *)gestureRecognizer
 {
     if (CGRectContainsPoint(self.limView.bounds, [gestureRecognizer locationInView:self.limView])) {
@@ -514,7 +531,12 @@
 }
 -(void)scrollTouch:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        self.pastScroll = 0;
+    }
+    NSInteger translation = self.pastScroll - ([gestureRecognizer translationInView:self.view].x);
+    [self.scrollBar scrollByOffset:translation/10 duration:0];
+    self.pastScroll = [gestureRecognizer translationInView:self.view].x;
 }
 
 
@@ -582,6 +604,8 @@
                 self.scanIndex = idx;
                 self.sliceIndex = 0;
                 [self.scrollBar reloadData];
+                self.scrollBar.frame= CGRectMake(self.limFrame.origin.x, CR_TOP_BAR_HEIGHT, self.limFrame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
+                self.scrollBar.bounds = self.scrollBar.frame;
                 [self swapImage];
             }
             *stop = true;
@@ -611,6 +635,13 @@
     [self swapImage];
 }
 
+-(CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
+{
+    if (option == iCarouselOptionWrap) {
+        return 0.0;
+    }
+    return value;
+}
 
 
 @end

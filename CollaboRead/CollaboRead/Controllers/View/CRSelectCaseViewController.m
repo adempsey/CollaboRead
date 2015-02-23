@@ -37,6 +37,12 @@
 	}
 	return self;
 }
+-(void)viewWillDisappear:(BOOL)animated {
+    if ([self.activityIndicator isDescendantOfView:self.view]) {
+        [self.activityIndicator removeFromSuperview];
+        self.collectionView.userInteractionEnabled = YES;
+    }
+}
 
 -(void)viewDidLoad
 {
@@ -111,6 +117,8 @@
         segID = @"LecturerSelectedCase";
     }
     selectedPath = indexPath;
+    [self.view addSubview:self.activityIndicator];
+    self.collectionView.userInteractionEnabled = NO;
     [self performSegueWithIdentifier:segID sender:self];
 }
 
