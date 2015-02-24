@@ -9,13 +9,15 @@
 #import "CRStudentImageViewController.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
-#import "CRPatientInfoViewController.h"
 #import "CRSubmitButton.h"
 #import "CRErrorAlertService.h"
 
+#define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Patient Info"
+#define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Patient Info"
+
 @interface CRStudentImageViewController ()
 
-@property (nonatomic, strong) UIBarButtonItem *togglePatientInfoButton;
+@property (nonatomic, readwrite, strong) UIBarButtonItem *togglePatientInfoButton;
 @property (nonatomic, readwrite, strong) CRPatientInfoViewController *patientInfoViewController;
 @property (nonatomic, readwrite, strong) CRSubmitButton *submitButton;
 
@@ -29,13 +31,15 @@
 
     CGRect frame = CR_LANDSCAPE_FRAME; //Use iOS version appropriate bounds
 
-	self.togglePatientInfoButton= [[UIBarButtonItem alloc] initWithTitle:@"Patient Info"
+	self.togglePatientInfoButton= [[UIBarButtonItem alloc] initWithTitle:kCR_SIDE_BAR_TOGGLE_HIDE
 																   style:UIBarButtonItemStylePlain
 																  target:nil
 																  action:nil];
+	self.togglePatientInfoButton.possibleTitles = [NSSet setWithArray:@[kCR_SIDE_BAR_TOGGLE_HIDE, kCR_SIDE_BAR_TOGGLE_SHOW]];
 	self.navigationItem.rightBarButtonItem = self.togglePatientInfoButton;
 
 	self.patientInfoViewController = [[CRPatientInfoViewController alloc] initWithPatientInfo:self.patientInfo];
+	self.patientInfoViewController.delegate = self;
 	self.patientInfoViewController.toggleButton = self.togglePatientInfoButton;
     [self.view addSubview:self.patientInfoViewController.view];
 
@@ -90,6 +94,13 @@
 		}
 	}];
 	return hasSubmitted;
+}
+
+#pragma mark - CRSideBarViewController Delegate Methods
+
+- (void)CRSideBarViewController:(CRSideBarViewController *)sideBarViewController didChangeVisibility:(BOOL)visible
+{
+	self.togglePatientInfoButton.title = visible ? kCR_SIDE_BAR_TOGGLE_HIDE : kCR_SIDE_BAR_TOGGLE_SHOW;
 }
 
 @end

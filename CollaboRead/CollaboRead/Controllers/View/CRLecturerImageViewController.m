@@ -33,6 +33,9 @@
                         @{@"red":@0, @"green": @150, @"blue" : @150}, \
                         @{@"red":@150, @"green": @100, @"blue" : @100}]
 
+#define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Answer Table"
+#define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Answer Table"
+
 @interface CRLecturerImageViewController ()
 
 @property (nonatomic, strong) UIButton *showButton;
@@ -41,7 +44,6 @@
 @property (nonatomic, strong) NSArray *selectedAnswers;
 @property (nonatomic, strong) NSArray *selectedColors;
 @property (nonatomic, strong) UIBarButtonItem *toggleStudentAnswerTableButton;
-@property (nonatomic, strong) UIBarButtonItem *toggleStudentRefreshAnswerTableButton;
 @property (nonatomic, strong) UIImageView *studentAnswerView;
 
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerTableViewController;
@@ -109,9 +111,10 @@
     NSArray *scanHighlights = [self.caseChosen answerScans];
     self.scansMenuController.highlights = scanHighlights;
 
-	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:@"Answers" style:UIBarButtonItemStylePlain target:nil action:nil];
-	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
+	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:kCR_SIDE_BAR_TOGGLE_HIDE style:UIBarButtonItemStylePlain target:nil action:nil];
+	self.toggleStudentAnswerTableButton.possibleTitles = [NSSet setWithArray:@[kCR_SIDE_BAR_TOGGLE_HIDE, kCR_SIDE_BAR_TOGGLE_SHOW]];
 	self.studentAnswerTableViewController.toggleButton = self.toggleStudentAnswerTableButton;
+	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
 
 	[[CRAnswerRefreshService sharedInstance] setUpdateBlock:^{
 		[self refreshAnswers];
@@ -240,6 +243,13 @@
 -(void) carouselCurrentItemIndexDidChange:(iCarousel *)carousel {
     [super carouselCurrentItemIndexDidChange:carousel];
     [self drawStudentAnswers];
+}
+
+#pragma mark - CRSideBarViewController Delegate Methods
+
+- (void)CRSideBarViewController:(CRSideBarViewController *)sideBarViewController didChangeVisibility:(BOOL)visible
+{
+	self.toggleStudentAnswerTableButton.title = visible ? kCR_SIDE_BAR_TOGGLE_HIDE : kCR_SIDE_BAR_TOGGLE_SHOW;
 }
 
 @end

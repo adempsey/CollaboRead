@@ -15,10 +15,19 @@ typedef NS_ENUM(NSUInteger, CR_SIDE_BAR_SIDES) {
 
 @interface CRSideBarViewController : UIViewController
 
+@property (nonatomic, readwrite, weak) id delegate;
+
 @property (nonatomic, readwrite, assign) NSUInteger side;
 @property (nonatomic, readwrite, assign) CGFloat width;
 @property (nonatomic, readwrite, assign) BOOL visible;
 
 @property (nonatomic, readwrite, strong) id toggleButton;
+
+@end
+
+@protocol CRSideBarViewControllerDelegate <NSObject>
+
+@optional
+- (void)CRSideBarViewController:(CRSideBarViewController*)sideBarViewController didChangeVisibility:(BOOL)visible;
 
 @end

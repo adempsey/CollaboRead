@@ -81,6 +81,10 @@
 	CGFloat originXDestination = self.visible ? kSIDE_BAR_ORIGIN_X_SHOWN : kSIDE_BAR_ORIGIN_X_HIDDEN;
 	frame.origin.x = originXDestination;
 	self.view.frame = frame;
+	
+	if ([self.delegate respondsToSelector:@selector(CRSideBarViewController:didChangeVisibility:)]) {
+		[self.delegate CRSideBarViewController:self didChangeVisibility:visible];
+	}
 }
 
 - (void)setToggleButton:(id)toggleButton
