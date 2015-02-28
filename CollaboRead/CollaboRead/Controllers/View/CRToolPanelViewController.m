@@ -134,7 +134,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[self.delegate toolPanelViewController:self didSelectTool:indexPath.row];
-    if(self.selectedTool.row ==kCR_PANEL_TOOL_SCANS) {
+    if(self.selectedTool.row == kCR_PANEL_TOOL_SCANS) {
         switch (indexPath.row) {
             case kCR_PANEL_TOOL_UNDO:
             case kCR_PANEL_TOOL_CLEAR:
@@ -148,7 +148,6 @@
             case kCR_PANEL_TOOL_PEN:
             case kCR_PANEL_TOOL_ERASER:
                 [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
-                //unzoom if another button is pressed
                 self.selectedTool = indexPath;
             default:
                 break;

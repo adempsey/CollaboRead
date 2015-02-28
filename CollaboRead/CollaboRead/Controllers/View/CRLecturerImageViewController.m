@@ -139,6 +139,8 @@
 			}];
 			self.studentAnswerTableViewController.students = students;
             [self.scrollBar reloadData];
+            NSArray *scanHighlights = [self.caseChosen answerScans];
+            self.scansMenuController.highlights = scanHighlights;
 		} else {
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:^(UIAlertAction* action) {
 				if (self != self.navigationController.viewControllers[0]) {
@@ -222,11 +224,7 @@
 }
 
 -(UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
-    CRCarouselCell *cView = (CRCarouselCell *)view;
-    if (cView == nil) {
-        cView = [[CRCarouselCell alloc] init];
-    }
-    [cView setImage:((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[index]).image];
+    CRCarouselCell *cView = (CRCarouselCell *)[super carousel:carousel viewForItemAtIndex:index reusingView:view];
     if ([[self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID] containsObject:@(index)]) {
         cView.isHighlighted = YES;
     } else {

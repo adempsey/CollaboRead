@@ -28,6 +28,7 @@
 #define ZOOM_FRACTION 0.1
 #define kMAX_ZOOM 3
 #define kMIN_ZOOM 1
+#define kCAROUSEL_HEIGHT kCR_CAROUSEL_CELL_HEIGHT + 20
 
 @interface CRImageController ()
 {
@@ -85,8 +86,8 @@
     self.scrollBar.dataSource = self;
     self.scrollBar.delegate = self;
     self.scrollBar.type = iCarouselTypeLinear;
-    self.scrollBar.frame = CGRectMake(CR_TOP_BAR_HEIGHT, 0, kCR_CAROUSEL_CELL_HEIGHT, kCR_CAROUSEL_CELL_HEIGHT + 10);
-    self.scrollBar.backgroundColor = CR_COLOR_PRIMARY;
+    self.scrollBar.frame = CGRectMake(CR_TOP_BAR_HEIGHT, 0, kCR_CAROUSEL_CELL_HEIGHT, kCAROUSEL_HEIGHT);
+    self.scrollBar.backgroundColor = [UIColor blackColor];
     self.scrollBar.clipsToBounds = YES;
     
     //Initialize image views
@@ -409,10 +410,12 @@
     CGRect newFrame = CGRectMake(0, 0, img.size.width, img.size.height);
     
     //Determine boundaries based on iOS version
-    CGFloat topBarHeight = CR_TOP_BAR_HEIGHT + kCR_CAROUSEL_CELL_HEIGHT + 20;
+    CGFloat heightBlocked = CR_TOP_BAR_HEIGHT + kCAROUSEL_HEIGHT;
     CGFloat sideBar = kToolPanelTableViewWidth;
     CGRect viewFrame = CR_LANDSCAPE_FRAME;
     
+    //Code below is to rotate an image. It seems that we do not want this to happen, but is being left commented out until that is confirmed.
+    /*
     //If image is portrait orientation, make it landscape so it can appear larger on the screen
     if (newFrame.size.height > newFrame.size.width) {
         self.caseImage.image = [[UIImage alloc] initWithCGImage:self.caseImage.image.CGImage scale:1.0 orientation:UIImageOrientationLeft];
@@ -420,32 +423,32 @@
         CGFloat temp = newFrame.size.width;
         newFrame.size.width = newFrame.size.height;
         newFrame.size.height = temp;
-    }
+    }*/
     
     //If the image doesn't already fit as much as the view as possible
-    if (newFrame.size.height != viewFrame.size.height - topBarHeight &&
+    if (newFrame.size.height != viewFrame.size.height - heightBlocked &&
         newFrame.size.width != viewFrame.size.width - sideBar * 2) {
         
-        double scale = (viewFrame.size.height - topBarHeight)/newFrame.size.height;
+        double scale = (viewFrame.size.height - heightBlocked)/newFrame.size.height;
         //Determine whether having image expand to sides will cut off top and bottom. If it does, expand to top and bottom. If it doesn't expanding to top and bottom would have either caused the sides to be cut off or it fits the screen exactly and it doesn't matter which to use as scale.
         //Each case expands and centers image appropriately
         if (newFrame.size.width * scale > viewFrame.size.width - sideBar * 2) {
             scale = (viewFrame.size.width - sideBar * 2)/newFrame.size.width;
             newFrame.size.width *= scale;
             newFrame.size.height *= scale;
-            newFrame.origin.y = (viewFrame.size.height - topBarHeight - newFrame.size.height)/2 + topBarHeight;
+            newFrame.origin.y = (viewFrame.size.height - heightBlocked - newFrame.size.height)/2 + (CR_TOP_BAR_HEIGHT);
             newFrame.origin.x = sideBar;
         }
         else {
             newFrame.size.width *= scale;
             newFrame.size.height *= scale;
-            newFrame.origin.y = topBarHeight;
+            newFrame.origin.y = CR_TOP_BAR_HEIGHT;
             newFrame.origin.x = (viewFrame.size.width - sideBar * 2 - newFrame.size.width)/2 + sideBar;
         }
     }
     self.limFrame = newFrame;
     self.imgFrame = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
-    self.scrollBar.frame= CGRectMake(newFrame.origin.x, CR_TOP_BAR_HEIGHT, newFrame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
+    self.scrollBar.frame = CGRectMake(newFrame.origin.x, newFrame.origin.y + newFrame.size.height, newFrame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
     self.scrollBar.bounds = self.scrollBar.frame;
     [self.caseImage setFrame:self.imgFrame];
     [self clearDrawing];

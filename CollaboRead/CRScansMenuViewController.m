@@ -92,6 +92,9 @@ static NSString * const reuseIdentifier = @"scanCell";
         cell.layer.borderColor = [CR_COLOR_ANSWER_INDICATOR CGColor];
         cell.layer.borderWidth = 3.0;
     }
+    else {
+        cell.layer.borderWidth = 0;
+    }
     return cell;
 }
 
