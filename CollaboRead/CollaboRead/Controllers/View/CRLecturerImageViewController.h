@@ -9,6 +9,6 @@
 #import "CRImageController.h"
 #import "CRStudentAnswerTableViewController.h"
 
-@interface CRLecturerImageViewController : CRImageController <CRStudentAnswerTableViewDelegate>
+@interface CRLecturerImageViewController : CRImageController <CRStudentAnswerTableViewDelegate, CRSideBarViewControllerDelegate>
 
 @end

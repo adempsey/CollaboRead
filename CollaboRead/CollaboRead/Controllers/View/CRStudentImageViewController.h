@@ -7,7 +7,8 @@
 //
 
 #import "CRImageController.h"
+#import "CRPatientInfoViewController.h"
 
-@interface CRStudentImageViewController : CRImageController
+@interface CRStudentImageViewController : CRImageController <CRSideBarViewControllerDelegate>
 
 @end
