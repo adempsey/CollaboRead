@@ -20,6 +20,7 @@
 #define kHTTP_METHOD_POST @"POST"
 
 #define kCR_API_ENDPOINT_LOGIN kCR_API_ENDPOINT(@"login")
+#define kCR_API_ENDPOINT_USER_CHECK kCR_API_ENDPOINT(@"usercheck")
 #define kCR_API_ENDPOINT_USERS kCR_API_ENDPOINT(@"users")
 #define kCR_API_ENDPOINT_LECTURERS kCR_API_ENDPOINT(@"lecturers")
 #define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"casesets")
@@ -32,6 +33,8 @@
 #define kCR_API_QUERY_PARAMETER_CASE_ID @"caseID"
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS @"owners"
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS @"drawings"
+
+#define kCR_API_QUERY_PARAMETER_USER_LIST @"users"
 
 #define kCR_API_QUERY_PARAMETER_USER_EMAIL @"email"
 #define kCR_API_QUERY_PARAMETER_USER_PASSWORD @"password"
@@ -48,7 +51,7 @@
 	return sharedInstance;
 }
 
-#pragma mark - User Authentication
+#pragma mark - User Account Methods
 
 - (void)loginUserWithEmail:(NSString *)email password:(NSString *)password block:(void (^)(CRUser*, NSError*))block
 {
@@ -64,6 +67,22 @@
 			block(user, nil);
 		} else {
 			block(nil, error);
+		}
+	}];
+}
+
+- (void)verifyUsersExist:(NSArray*)users block:(void (^)(NSArray*, NSArray*))block
+{
+	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_USER_LIST: users.jsonString};
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_USER_CHECK usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
+		if (!error) {
+			NSArray *existingUsersList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+			NSSet *existingUsersSet = [NSSet setWithArray:existingUsersList];
+			
+			NSMutableSet *nonExistingUsersSet = [NSMutableSet setWithArray:users];
+			[nonExistingUsersSet minusSet:existingUsersSet];
+			
+			block([existingUsersSet allObjects], [nonExistingUsersSet allObjects]);
 		}
 	}];
 }
