@@ -22,6 +22,10 @@
 
 + (CRAPIClientService*)sharedInstance;
 
+#pragma mark - User Account Methods
+
+- (void)loginUserWithEmail:(NSString*)email password:(NSString*)password block:(void (^)(CRUser*, NSError*))block;
+
 #pragma mark - Retrieval Methods
 
 /*!

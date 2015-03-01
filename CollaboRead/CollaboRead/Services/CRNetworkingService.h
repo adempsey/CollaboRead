@@ -32,4 +32,6 @@
  */
 - (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*, NSError*))completionBlock;
 
+- (void)performAuthenticatedRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*, NSError*))completionBlock;
+
 @end

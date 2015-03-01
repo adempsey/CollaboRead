@@ -8,26 +8,33 @@
 
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
+#import "CRAuthenticationService.h"
 
 #import "NSArray+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
 
 #define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
+#define kCR_API_ENDPOINT(endpoint) [kCR_API_ADDRESS stringByAppendingString:endpoint]
 
 #define kHTTP_METHOD_GET @"GET"
 #define kHTTP_METHOD_POST @"POST"
 
-#define kCR_API_ENDPOINT_USERS @"users"
-#define kCR_API_ENDPOINT_LECTURERS @"lecturers"
-#define kCR_API_ENDPOINT_CASE_SET @"casesets"
-#define kCR_API_ENDPOINT_SUBMIT_ANSWER @"submitanswer"
+#define kCR_API_ENDPOINT_LOGIN kCR_API_ENDPOINT(@"login")
+#define kCR_API_ENDPOINT_USERS kCR_API_ENDPOINT(@"users")
+#define kCR_API_ENDPOINT_LECTURERS kCR_API_ENDPOINT(@"lecturers")
+#define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"casesets")
+#define kCR_API_ENDPOINT_SUBMIT_ANSWER kCR_API_ENDPOINT(@"submitanswer")
 
 #define kCR_API_QUERY_PARAMETER_ID @"id"
 #define kCR_API_QUERY_PARAMETER_LECTURER_ID @"lecturerID"
+
 #define kCR_API_QUERY_PARAMETER_CASE_SET_ID @"setID"
 #define kCR_API_QUERY_PARAMETER_CASE_ID @"caseID"
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS @"owners"
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS @"drawings"
+
+#define kCR_API_QUERY_PARAMETER_USER_EMAIL @"email"
+#define kCR_API_QUERY_PARAMETER_USER_PASSWORD @"password"
 
 @implementation CRAPIClientService
 
@@ -41,7 +48,27 @@
 	return sharedInstance;
 }
 
-#pragma mark - Public API Interface Methods
+#pragma mark - User Authentication
+
+- (void)loginUserWithEmail:(NSString *)email password:(NSString *)password block:(void (^)(CRUser*, NSError*))block
+{
+	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_USER_EMAIL: email, kCR_API_QUERY_PARAMETER_USER_PASSWORD: password};
+	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_LOGIN usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
+		if (!error) {
+			
+			NSDictionary *retrievedUserData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+			CRUser *user = [[CRUser alloc] initWithDictionary:retrievedUserData];
+			
+			[[CRAuthenticationService sharedInstance] setEmail:email];
+			[[CRAuthenticationService sharedInstance] setPassword:password];
+			block(user, nil);
+		} else {
+			block(nil, error);
+		}
+	}];
+}
+
+#pragma mark - Public Database Retrieval Methods
 
 - (void)retrieveUsersWithBlock:(void (^)(NSArray*, NSError*))block
 {
@@ -130,10 +157,8 @@
 		block(caseSets, error);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturerID};
-
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_CASE_SET usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
 }
 
 #pragma mark - Private API Interface Methods
@@ -158,10 +183,8 @@
 		block(retrievedItem, error);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_ID: idNumber};
-
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:endpoint usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
 }
 
 /*!
@@ -182,8 +205,7 @@
 		block(list, error);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:kHTTP_METHOD_GET withParams:nil completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:endpoint usingMethod:kHTTP_METHOD_GET withParams:nil completionBlock:completionBlock];
 }
 
 #pragma mark - Public Submission Methods
@@ -198,8 +220,6 @@
 		}
 		block(caseSet, error);
 	};
-
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
 	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: answer.jsonDictionary];
 	params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS] = ((NSDictionary *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS]).jsonString;
@@ -207,7 +227,7 @@
 	params[kCR_API_QUERY_PARAMETER_CASE_SET_ID] = setID;
 	params[kCR_API_QUERY_PARAMETER_CASE_ID] = caseID;
 	
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_SUBMIT_ANSWER usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:completionBlock];
 }
 
 @end

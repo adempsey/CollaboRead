@@ -7,9 +7,13 @@
 //
 
 #import "CRNetworkingService.h"
+#import "CRAuthenticationService.h"
 
 #define kHTTP_METHOD_GET @"GET"
 #define kHTTP_METHOD_POST @"POST"
+
+#define kCR_API_QUERY_PARAMETER_USER_EMAIL @"email"
+#define kCR_API_QUERY_PARAMETER_USER_PASSWORD @"password"
 
 @implementation CRNetworkingService
 
@@ -49,6 +53,22 @@
 	[NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error ) {
 		completionBlock(data, error);
 	}];
+}
+
+- (void)performAuthenticatedRequestForResource:(NSString *)resource usingMethod:(NSString *)method withParams:(NSDictionary *)params completionBlock:(void (^)(NSData *, NSError *))completionBlock
+{
+	NSMutableDictionary *authenticatedParams;
+ 
+	if (params) {
+		authenticatedParams = [params mutableCopy];
+	} else {
+		authenticatedParams = [[NSMutableDictionary alloc] init];
+	}
+
+	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_EMAIL] = [[CRAuthenticationService sharedInstance] email];
+	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_PASSWORD] = [[CRAuthenticationService sharedInstance] password];
+	
+	[self performRequestForResource:resource usingMethod:method withParams:authenticatedParams completionBlock:completionBlock];
 }
 
 #pragma mark - Helper Methods

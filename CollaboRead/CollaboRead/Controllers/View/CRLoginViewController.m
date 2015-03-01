@@ -36,7 +36,6 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 -(IBAction)loginPressed:(id)sender; //Triggers login attempt based on button press
 -(IBAction)exitTextField:(id)sender; //Dismisses keyboard when appropriate
--(void)attemptLogin:(NSArray *)users; //Checks validity of information against users in database
 
 @end
 
@@ -60,60 +59,41 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	self.loginButton.userInteractionEnabled = YES;
 }
 
-//Checks credentials in fields against users retrieved from database
--(void)attemptLogin:(NSArray *)users
+-(void)attemptLogin
 {
-    //Try to authenticate users
-    CRUser *currUser;
-    if ([users count] > 0) {
-        //Find matching user from list
-        currUser = [users objectAtIndex:0];
-		for (int i = 1; i < [users count] && ![currUser.email isEqualToString:self.emailField.text]; i++) {
-            currUser = [users objectAtIndex:i];
-        }
-        //Check that user was found, (list didn't run out)
-		if ([currUser.email isEqualToString:self.emailField.text]) {
-            //Check password
-			if ([currUser.password isEqualToString:self.passwordField.text]) {
-
-				[self showSuccess];
-
-                UIViewController *newController;
-                //Check type of user and make appropriate view
-                
-				if ([currUser.type isEqualToString:CR_USER_TYPE_LECTURER]) {
-                    UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"caseNavController"];
-                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = currUser;
-                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
-                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).allUsers = users;
-                    newController = navController;
-                }
-                else if([currUser.type isEqualToString:CR_USER_TYPE_STUDENT]) {
-                    UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
-                    ((CRSelectLecturerViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
-                    newController = navController;
-                }
-
-				dispatch_async(dispatch_get_main_queue(), ^{
-					// Delay view controller presentation by a bit
-					[UIView animateWithDuration:.5 animations:^{
-						self.loginButton.alpha = 0.99;
-					} completion:^(BOOL finished) {
-						[self presentViewController:newController animated:YES completion:nil];
-					}];
-				});
-            }
-            //Password was incorrect
-            else{
-				[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
-            }
-        }
-        //Username was incorrect
-        else {
+	[[CRAPIClientService sharedInstance] loginUserWithEmail:self.emailField.text password:self.passwordField.text block:^(CRUser *user, NSError *error) {
+		if (error) {
 			[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
-        }
-    }
-}  
+		} else {
+			[self showSuccess];
+
+			UIViewController *newController;
+			//Check type of user and make appropriate view
+
+			if ([user.type isEqualToString:CR_USER_TYPE_LECTURER]) {
+				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"caseNavController"];
+				((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = user;
+				((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).user = user;
+//				((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).allUsers = users;
+				newController = navController;
+				
+			} else if([user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
+				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
+				((CRSelectLecturerViewController *)[navController.childViewControllers objectAtIndex:0]).user = user;
+				newController = navController;
+			}
+
+			dispatch_async(dispatch_get_main_queue(), ^{
+				// Delay view controller presentation by a bit
+				[UIView animateWithDuration:.5 animations:^{
+					self.loginButton.alpha = 0.99;
+				} completion:^(BOOL finished) {
+					[self presentViewController:newController animated:YES completion:nil];
+				}];
+			});
+		}
+	}];
+}
 
 //Start attempt to login with api call
 -(IBAction)loginPressed:(id)sender
@@ -124,14 +104,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	[self.activityIndicator startAnimating];
 	self.activityIndicator.hidden = NO;
 
-    //When the information comes back, execute attemptLogin: with it
-	[[CRAPIClientService sharedInstance] retrieveUsersWithBlock:^(NSArray* users, NSError *error) {
-		if (!error) {
-			[self attemptLogin:users];
-		} else {
-			[self showError:kCR_LOGIN_ERROR_NETWORK];
-		}
-	}];
+	[self attemptLogin];
 }
 
 //Dismiss keyboard from a tap outside text fields or end of editting
