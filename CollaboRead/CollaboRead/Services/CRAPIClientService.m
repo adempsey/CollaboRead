@@ -76,13 +76,18 @@
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_USER_LIST: users.jsonString};
 	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_USER_CHECK usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
 		if (!error) {
+			
 			NSArray *existingUsersList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-			NSSet *existingUsersSet = [NSSet setWithArray:existingUsersList];
+			NSMutableSet *existingEmails = [[NSMutableSet alloc] init];
 			
-			NSMutableSet *nonExistingUsersSet = [NSMutableSet setWithArray:users];
-			[nonExistingUsersSet minusSet:existingUsersSet];
+			for (NSDictionary *user in existingUsersList) {
+				[existingEmails addObject:user[kCR_API_QUERY_PARAMETER_USER_EMAIL]];
+			}
 			
-			block([existingUsersSet allObjects], [nonExistingUsersSet allObjects]);
+			NSMutableSet *nonExistingUsers = [NSMutableSet setWithArray:users];
+			[nonExistingUsers minusSet:existingEmails];
+			
+			block(existingUsersList, [nonExistingUsers allObjects]);
 		}
 	}];
 }
