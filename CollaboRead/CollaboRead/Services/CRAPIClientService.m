@@ -9,6 +9,7 @@
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
 #import "CRAuthenticationService.h"
+#import "CRUserKeys.h"
 
 #import "NSArray+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
@@ -36,8 +37,8 @@
 
 #define kCR_API_QUERY_PARAMETER_USER_LIST @"users"
 
-#define kCR_API_QUERY_PARAMETER_USER_EMAIL @"email"
-#define kCR_API_QUERY_PARAMETER_USER_PASSWORD @"password"
+#define kCR_API_QUERY_PARAMETER_USER_EMAIL CR_DB_USER_EMAIL
+#define kCR_API_QUERY_PARAMETER_USER_PASSWORD CR_DB_USER_PASSWORD
 
 @implementation CRAPIClientService
 
