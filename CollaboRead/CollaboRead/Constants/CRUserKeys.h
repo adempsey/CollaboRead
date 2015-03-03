@@ -10,7 +10,7 @@
 #define CollaboRead_UserKeys_h
 
 //Relevant to all
-#define CR_DB_USER_ID @"userID"
+#define CR_DB_USER_ID @"_id"
 #define CR_DB_USER_NAME @"name"
 #define CR_DB_USER_TYPE @"type"
 #define CR_DB_USER_TITLE @"title"

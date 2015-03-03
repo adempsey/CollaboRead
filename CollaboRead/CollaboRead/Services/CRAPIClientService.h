@@ -26,6 +26,8 @@
 
 - (void)loginUserWithEmail:(NSString*)email password:(NSString*)password block:(void (^)(CRUser*, NSError*))block;
 
+- (void)verifyUsersExist:(NSArray*)users block:(void (^)(NSArray*, NSArray*))block;
+
 #pragma mark - Retrieval Methods
 
 /*!
