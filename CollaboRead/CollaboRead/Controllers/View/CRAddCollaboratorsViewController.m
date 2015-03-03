@@ -11,7 +11,7 @@
 @interface CRAddCollaboratorsViewController ()
 
 @property (nonatomic, strong) NSMutableArray *collaborators;
-@property (nonatomic, strong) UITableView *table;
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *enterField;
 
 -(void)addStudent;
@@ -22,12 +22,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.collaborators = [[NSMutableArray alloc] init];
+    self.tableView = [[UITableView alloc]init];//TODO:change to w/frame
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.userInteractionEnabled = NO; //TODO:test to see if still need to implement methods to prevent selection
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)addStudent {
+    NSString *studentEmail = self.enterField.text;
+    [_collaborators addObject: studentEmail];
+    
+}
+
+-(NSArray *)collaborators {
+    return (NSArray *)_collaborators;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.collaborators.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CollabCell"];
+    
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CollabCell"];
+    }
+    
+    cell.textLabel.text = self.collaborators[indexPath.row];
+    return cell;
 }
 
 /*
