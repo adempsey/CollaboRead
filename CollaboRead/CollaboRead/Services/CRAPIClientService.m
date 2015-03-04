@@ -21,6 +21,7 @@
 #define kHTTP_METHOD_POST @"POST"
 
 #define kCR_API_ENDPOINT_LOGIN kCR_API_ENDPOINT(@"login")
+#define kCR_API_ENDPOINT_REGISTER kCR_API_ENDPOINT(@"register")
 #define kCR_API_ENDPOINT_USER_CHECK kCR_API_ENDPOINT(@"usercheck")
 #define kCR_API_ENDPOINT_USERS kCR_API_ENDPOINT(@"users")
 #define kCR_API_ENDPOINT_LECTURERS kCR_API_ENDPOINT(@"lecturers")
@@ -69,6 +70,28 @@
 		} else {
 			block(nil, error);
 		}
+	}];
+}
+
+- (void)registerUser:(CRUser *)user block:(void (^)(NSError *))block
+{
+	if (!user.name || !user.type || !user.year || !user.email || !user.password) {
+		NSError *parameterError = [NSError errorWithDomain:@"Missing required parameters" code:0 userInfo:nil];
+		block(parameterError);
+		return;
+	}
+	
+	NSDictionary *params = @{
+							 CR_DB_USER_NAME: user.name,
+							 CR_DB_USER_TYPE: user.type,
+							 CR_DB_USER_TITLE: user.title ? : @"",
+							 CR_DB_USER_YEAR: user.year,
+							 CR_DB_USER_PICTURE: user.imageURL ? : @"",
+							 CR_DB_USER_EMAIL: user.email,
+							 CR_DB_USER_PASSWORD: user.password
+							 };
+	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_REGISTER usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
+		block(error);
 	}];
 }
 
