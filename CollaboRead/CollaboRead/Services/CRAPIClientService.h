@@ -24,6 +24,17 @@
 
 #pragma mark - User Account Methods
 
+/*!
+ Attempts to log a user in
+ @param email
+ email to use as a username
+ 
+ @param password
+ password corresponding to username
+ 
+ @param block
+ completion block to execute with retrieved user information
+ */
 - (void)loginUserWithEmail:(NSString*)email password:(NSString*)password block:(void (^)(CRUser*, NSError*))block;
 
 - (void)verifyUsersExist:(NSArray*)users block:(void (^)(NSArray*, NSArray*))block;

@@ -10,7 +10,9 @@
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
 #import "CRSubmitButton.h"
+#import "CRAddCollaboratorsViewController.h"
 #import "CRErrorAlertService.h"
+#import "CRCollaboratorList.h"
 
 #define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Patient Info"
 #define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Patient Info"
@@ -20,6 +22,7 @@
 @property (nonatomic, readwrite, strong) UIBarButtonItem *togglePatientInfoButton;
 @property (nonatomic, readwrite, strong) CRPatientInfoViewController *patientInfoViewController;
 @property (nonatomic, readwrite, strong) CRSubmitButton *submitButton;
+@property (nonatomic, readwrite, strong) CRAddCollaboratorsViewController *collaboratorsView;
 
 @end
 
@@ -52,13 +55,17 @@
 	}
 	
 	[self.view addSubview:self.submitButton];
+    
+    self.collaboratorsView = [[CRAddCollaboratorsViewController alloc] init];
+    [self.collaboratorsView setViewFrame:CGRectMake((frame.size.width - 300)/2, (frame.size.height - 400)/2, 300, 400)];
+    [self.view addSubview:self.collaboratorsView.view];
 }
 
 //Perform action of submitting answer, provide user status update
 -(void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
-    NSArray *students = [[NSArray alloc]initWithObjects:self.user.userID, nil];
+    NSArray *students = [[CRCollaboratorList sharedInstance] collaboratorIds];
 
     //Prepare and send answer
 	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students];
