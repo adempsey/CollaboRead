@@ -618,7 +618,7 @@
 
 #pragma mark - iCarousel Data Source Methods
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel {
+- (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel {
     return ((CRScan *)self.caseChosen.scans[self.scanIndex]).slices.count;
 }
 

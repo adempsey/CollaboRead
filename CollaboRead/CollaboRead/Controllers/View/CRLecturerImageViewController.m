@@ -134,7 +134,6 @@
 			CRCaseSet *selectedCaseSet = array[self.indexPath.section];
 			self.caseChosen = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
 			
-			NSMutableArray *students = [[NSMutableArray alloc] init];
 			NSArray *answers = self.caseChosen.answers;
             NSArray *scanHighlights = [self.caseChosen answerScans];
             dispatch_async(dispatch_get_main_queue(), ^{

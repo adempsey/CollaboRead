@@ -51,7 +51,7 @@
 			[drawingDescriptions addObject:((CRAnswerLine*)obj).jsonDictionary];
 		}
 	}];
-#warning wrong date
+
 	return @{CR_DB_ANSWER_ID: self.answerID,
 			 CR_DB_ANSWER_OWNERS: self.owners,
 			 CR_DB_ANSWER_GROUP_NAME: self.answerName,
