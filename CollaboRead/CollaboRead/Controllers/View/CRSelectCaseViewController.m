@@ -25,25 +25,11 @@
 }
 
 @property (nonatomic, strong) NSArray *caseSets;
-@property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, readwrite, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation CRSelectCaseViewController
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-	if (self = [super initWithCoder:aDecoder]) {
-		self.activityIndicator = [[UIActivityIndicatorView alloc] init];
-	}
-	return self;
-}
--(void)viewWillDisappear:(BOOL)animated {
-    if ([self.activityIndicator isDescendantOfView:self.view]) {
-        [self.activityIndicator removeFromSuperview];
-        self.collectionView.userInteractionEnabled = YES;
-    }
-}
 
 -(void)viewDidLoad
 {
@@ -53,17 +39,13 @@
 	
 	self.navigationItem.title = self.lecturer.name;
 
-    CGRect frame = CR_LANDSCAPE_FRAME;
-	self.activityIndicator.frame = CGRectMake((frame.size.width - 50.0)/2, (frame.size.height - 50.0)/2, 50.0, 50.0);
-	[self.activityIndicator startAnimating];
-	[self.view addSubview:self.activityIndicator];
-
     //Get lecturers cases and reload view with that information
 	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer.userID block:^(NSArray *caseSets, NSError *error) {
 		if (!error) {
 			self.caseSets = caseSets;
-			[self.activityIndicator removeFromSuperview];
-			[self.collectionView reloadData];//Maybe put back on main thread?
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
 		} else {
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
 				if (self != self.navigationController.viewControllers[0]) {
@@ -72,7 +54,11 @@
 					[self dismissViewControllerAnimated:YES completion:nil];
 				}
 			}];
-			[self presentViewController:alertController animated:YES completion:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self presentViewController:alertController animated:YES completion:nil];
+            });
+
+
 		}
 	}];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];

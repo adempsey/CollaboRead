@@ -66,7 +66,10 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 		if (error) {
 			[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
 		} else {
-			[self showSuccess];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showSuccess];
+            });
+
 
 			UIViewController *newController;
 			//Check type of user and make appropriate view

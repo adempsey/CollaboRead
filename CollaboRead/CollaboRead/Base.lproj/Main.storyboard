@@ -17,10 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Izm-HQ-S4h">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Izm-HQ-S4h">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="email@example.com" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PaA-gF-0Iv">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="email@example.com" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PaA-gF-0Iv">
                                         <rect key="frame" x="266" y="187" width="230" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" keyboardAppearance="alert" returnKeyType="next"/>
@@ -28,13 +28,7 @@
                                             <outlet property="delegate" destination="b6e-ah-R2q" id="bRV-Ps-vUV"/>
                                         </connections>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eaw-lV-pVx">
-                                        <rect key="frame" x="211" y="190" width="47" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Last" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S5r-Z5-ew5">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Last" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S5r-Z5-ew5">
                                         <rect key="frame" x="266" y="225" width="230" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="next"/>
@@ -55,6 +49,9 @@
                                             <segment title="Lecturer"/>
                                         </segments>
                                         <color key="tintColor" red="0.67843137249999996" green="0.89411764709999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="switchRole:" destination="b6e-ah-R2q" eventType="valueChanged" id="oQy-gB-67k"/>
+                                        </connections>
                                     </segmentedControl>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Role:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9iQ-cI-Dg5">
                                         <rect key="frame" x="218" y="266" width="40" height="21"/>
@@ -62,10 +59,10 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iCx-Wu-YOH">
-                                        <rect key="frame" x="266" y="299" width="97" height="30"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iCx-Wu-YOH">
+                                        <rect key="frame" x="266" y="299" width="230" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numberPad" keyboardAppearance="alert"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="numberPad" keyboardAppearance="alert" returnKeyType="next"/>
                                         <connections>
                                             <outlet property="delegate" destination="b6e-ah-R2q" id="uma-JH-J3g"/>
                                         </connections>
@@ -76,10 +73,10 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vka-Sn-yvl">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vka-Sn-yvl">
                                         <rect key="frame" x="266" y="337" width="230" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" secureTextEntry="YES"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="next" secureTextEntry="YES"/>
                                         <connections>
                                             <outlet property="delegate" destination="b6e-ah-R2q" id="vLm-zi-VTh"/>
                                         </connections>
@@ -90,10 +87,10 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tST-to-Fah">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tST-to-Fah">
                                         <rect key="frame" x="266" y="375" width="230" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" secureTextEntry="YES"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" secureTextEntry="YES"/>
                                         <connections>
                                             <outlet property="delegate" destination="b6e-ah-R2q" id="x8Y-cq-UeE"/>
                                         </connections>
@@ -115,7 +112,32 @@
                                         </connections>
                                     </button>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gel-g8-6d4">
-                                        <rect key="frame" x="105" y="417" width="391" height="21"/>
+                                        <rect key="frame" x="119" y="417" width="391" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="RCv-vd-LsM">
+                                        <rect key="frame" x="290" y="451" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dj2-b4-eAI">
+                                        <rect key="frame" x="277" y="446" width="46" height="30"/>
+                                        <state key="normal" title="Done">
+                                            <color key="titleColor" red="0.67843137249999996" green="0.89411764709999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="done:" destination="b6e-ah-R2q" eventType="touchUpInside" id="iZz-eG-Bta"/>
+                                        </connections>
+                                    </button>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jXU-g1-YVR">
+                                        <rect key="frame" x="220" y="302" width="38" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eaw-lV-pVx">
+                                        <rect key="frame" x="211" y="190" width="47" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -124,17 +146,27 @@
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Izm-HQ-S4h" firstAttribute="height" secondItem="789-J8-REo" secondAttribute="height" id="pka-aZ-mGo"/>
+                            <constraint firstItem="Izm-HQ-S4h" firstAttribute="width" secondItem="789-J8-REo" secondAttribute="width" id="yTX-TJ-aMY"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Create an Account" id="K09-K2-VFb">
                         <barButtonItem key="backBarButtonItem" title="Cancel" id="9ua-SO-GMC"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="RCv-vd-LsM" id="7wz-QT-X8G"/>
+                        <outlet property="doneButton" destination="Dj2-b4-eAI" id="kob-Dn-vKw"/>
                         <outlet property="emailField" destination="PaA-gF-0Iv" id="Q1X-vN-vbD"/>
                         <outlet property="errorLabel" destination="gel-g8-6d4" id="okp-bV-u3c"/>
                         <outlet property="nameField" destination="S5r-Z5-ew5" id="8MH-yI-xfJ"/>
                         <outlet property="passwordCheckField" destination="tST-to-Fah" id="7jH-gM-fIK"/>
                         <outlet property="passwordField" destination="Vka-Sn-yvl" id="iGe-yX-vIW"/>
+                        <outlet property="registerButton" destination="2tY-OB-yK7" id="hus-Za-KyO"/>
                         <outlet property="roleSelector" destination="bpD-bt-s4j" id="ykj-HO-ogF"/>
+                        <outlet property="scrollView" destination="Izm-HQ-S4h" id="28M-vz-I2r"/>
+                        <outlet property="titleLabel" destination="jXU-g1-YVR" id="DGz-qi-Qjd"/>
+                        <outlet property="yearLabel" destination="gxf-vO-bcH" id="1ua-5h-Oqb"/>
                         <outlet property="yearTitleField" destination="iCx-Wu-YOH" id="EJj-mC-yMs"/>
                     </connections>
                 </viewController>
@@ -205,6 +237,16 @@
                                     <constraint firstAttribute="width" constant="258" id="a3V-Bx-xZ7"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Yx-65-4wr">
+                                <rect key="frame" x="231" y="534" width="138" height="30"/>
+                                <state key="normal" title="Create an Account">
+                                    <color key="titleColor" red="0.67843137249999996" green="0.89411764709999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="5Pw-8h-RPP" kind="presentation" id="xua-BC-7pe"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.10980392156862745" green="0.10588235294117647" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -214,6 +256,7 @@
                             <constraint firstItem="8Mf-Dt-Hi5" firstAttribute="top" secondItem="rUL-K3-HMX" secondAttribute="bottom" constant="6" id="Z0v-Sr-Fdj"/>
                             <constraint firstAttribute="centerX" secondItem="rUL-K3-HMX" secondAttribute="centerX" constant="-0.5" id="gru-MT-9A4"/>
                             <constraint firstAttribute="centerX" secondItem="wEI-KF-4qq" secondAttribute="centerX" id="hAM-xa-wrY"/>
+                            <constraint firstAttribute="centerX" secondItem="4Yx-65-4wr" secondAttribute="centerX" id="ivu-4s-C6t"/>
                             <constraint firstItem="rUL-K3-HMX" firstAttribute="top" secondItem="TdW-jK-dRP" secondAttribute="bottom" constant="38" id="oRM-44-geh"/>
                             <constraint firstAttribute="centerX" secondItem="8Mf-Dt-Hi5" secondAttribute="centerX" id="sHC-BU-CER"/>
                         </constraints>

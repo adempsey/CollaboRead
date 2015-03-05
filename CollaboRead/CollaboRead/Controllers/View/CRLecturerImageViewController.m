@@ -136,13 +136,12 @@
 			
 			NSMutableArray *students = [[NSMutableArray alloc] init];
 			NSArray *answers = self.caseChosen.answers;
-			[answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-				[students addObject:((CRAnswer *)obj).owners];
-			}];
-			self.studentAnswerTableViewController.answerList = students;
-            [self.scrollBar reloadData];
             NSArray *scanHighlights = [self.caseChosen answerScans];
-            self.scansMenuController.highlights = scanHighlights;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.studentAnswerTableViewController.answerList = answers;
+                [self.scrollBar reloadData];
+                self.scansMenuController.highlights = scanHighlights;
+            });
 		} else {
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:^(UIAlertAction* action) {
 				if (self != self.navigationController.viewControllers[0]) {
@@ -151,7 +150,10 @@
 					[self dismissViewControllerAnimated:YES completion:nil];
 				}
 			}];
-			[self presentViewController:alertController animated:YES completion:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self presentViewController:alertController animated:YES completion:nil];
+            });
+
 		}
 	}];
 }

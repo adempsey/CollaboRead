@@ -101,10 +101,12 @@
     self.activityIndicator.hidden = NO;
     self.validateButton.hidden = YES;
     [[CRCollaboratorList sharedInstance] verifyCollaborators:^{
-        [self.activityIndicator stopAnimating];
-        self.activityIndicator.hidden = YES;
-        self.validateButton.hidden = NO;
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.activityIndicator stopAnimating];
+            self.activityIndicator.hidden = YES;
+            self.validateButton.hidden = NO;
+            [self.tableView reloadData];
+        });
     }];
 }
 
