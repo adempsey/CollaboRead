@@ -12,7 +12,6 @@
 #import <UIKit/UIKit.h>
 
 #import "CRCase.h"
-#import "CRUser.h"
 #import "CRToolPanelViewController.h"
 #import "CRScansMenuViewController.h"
 #import "CRUndoStack.h"

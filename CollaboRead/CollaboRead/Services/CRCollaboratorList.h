@@ -12,6 +12,8 @@
 
 @interface CRCollaboratorList : NSObject
 
+@property (nonatomic, strong) NSString *groupName;
+
 +(instancetype)sharedInstance;
 -(void)setOwner:(NSString *)email withName:(NSString *)name andID:(NSString *)ID;
 -(void)verifyCollaborators:(void (^)())block;

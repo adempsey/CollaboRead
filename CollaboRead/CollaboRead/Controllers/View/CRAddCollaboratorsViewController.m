@@ -16,6 +16,7 @@
 @interface CRAddCollaboratorsViewController ()
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITextField *groupName;
 @property (nonatomic, strong) UITextField *enterField;
 @property (nonatomic, strong) UIButton *validateButton;
 
@@ -30,9 +31,11 @@
 
 -(void)setViewFrame:(CGRect)rect {
     self.view.frame = rect;
-    self.tableView.frame = CGRectMake(0, ELEMENT_HEIGHT + 2 * ELEMENT_PADDING, self.view.frame.size.width, self.view.frame.size.height - (2 * ELEMENT_HEIGHT + 4 * ELEMENT_PADDING));
+    self.groupName.frame = CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT);
     
-    self.enterField.frame = CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT);
+    self.enterField.frame = CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING + self.groupName.frame.origin.y + self.groupName.frame.size.height, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT);
+    
+    self.tableView.frame = CGRectMake(0, ELEMENT_PADDING + self.enterField.frame.origin.y + self.enterField.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (ELEMENT_HEIGHT + 3 * ELEMENT_PADDING + self.enterField.frame.origin.y + self.enterField.frame.size.height));
     
     self.validateButton.frame = CGRectMake((self.view.frame.size.width - BUTTON_WIDTH)/2, self.tableView.frame.origin.y + self.tableView.frame.size.height + ELEMENT_PADDING, (self.view.frame.size.width - BUTTON_WIDTH) / 2, ELEMENT_HEIGHT);
     
@@ -45,11 +48,31 @@
     self.view.backgroundColor = CR_COLOR_PRIMARY;
     self.view.layer.borderColor = (CR_COLOR_TINT).CGColor;
     self.view.layer.borderWidth = 3;
+    
+    
+    self.groupName = [[UITextField alloc] initWithFrame:CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT)];
+    self.groupName.borderStyle = UITextBorderStyleRoundedRect;
+    self.groupName.placeholder = @"Group Name";
+    self.groupName.text = [CRCollaboratorList sharedInstance].groupName;
+    self.groupName.returnKeyType = UIReturnKeyDone;
+    self.groupName.keyboardAppearance = UIKeyboardAppearanceDark;
+    self.groupName.delegate = self;
+    [self.view addSubview:self.groupName];
+    
+    self.enterField = [[UITextField alloc] initWithFrame:CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING + self.groupName.frame.origin.y + self.groupName.frame.size.height, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT)];
+    self.enterField.borderStyle = UITextBorderStyleRoundedRect;
+    self.enterField.placeholder = @"Username";
+    self.enterField.returnKeyType = UIReturnKeyDone;
+    self.enterField.keyboardType = UIKeyboardTypeEmailAddress;
+    self.enterField.keyboardAppearance = UIKeyboardAppearanceDark;
+    self.enterField.delegate = self;
+    [self.view addSubview:self.enterField];
+    
     self.tableView = [[UITableView alloc] init];//TODO:change to w/frame
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setTableFooterView:[[UIImageView alloc] initWithFrame:CGRectZero]]; //eliminate empty rows
-    self.tableView.frame = CGRectMake(0, ELEMENT_HEIGHT + 2 * ELEMENT_PADDING, self.view.frame.size.width, self.view.frame.size.height - (2 * ELEMENT_HEIGHT + 4 * ELEMENT_PADDING));
+    self.tableView.frame = CGRectMake(0, ELEMENT_PADDING + self.enterField.frame.origin.y + self.enterField.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (2 * ELEMENT_HEIGHT + 4 * ELEMENT_PADDING));
     self.tableView.backgroundColor = CR_COLOR_PRIMARY;
     self.tableView.userInteractionEnabled = YES;
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
@@ -60,16 +83,7 @@
         [self.tableView setLayoutMargins:UIEdgeInsetsZero]; //ios 8
     }
     [self.view addSubview:self.tableView];
-    
-    self.enterField = [[UITextField alloc] initWithFrame:CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT)];
-    self.enterField.borderStyle = UITextBorderStyleRoundedRect;
-    //self.enterField.backgroundColor = [UIColor whiteColor];
-    self.enterField.placeholder = @"Username";
-    self.enterField.returnKeyType = UIReturnKeyDone;
-    self.enterField.keyboardType = UIKeyboardTypeEmailAddress;
-    self.enterField.keyboardAppearance = UIKeyboardAppearanceDark;
-    self.enterField.delegate = self;
-    [self.view addSubview:self.enterField];
+
     
     self.validateButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - BUTTON_WIDTH)/2, self.tableView.frame.origin.y + self.tableView.frame.size.height + ELEMENT_PADDING, (self.view.frame.size.width - BUTTON_WIDTH) / 2, ELEMENT_HEIGHT)];
     [self.validateButton setTitle:@"Validate" forState:UIControlStateNormal];
@@ -106,6 +120,8 @@
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     if ([textField isEqual:self.enterField]) {
         [self addStudent];
+    } else {
+        [CRCollaboratorList sharedInstance].groupName = ![self.groupName.text isEqualToString:@""] ? self.groupName.text : nil;
     }
 }
 

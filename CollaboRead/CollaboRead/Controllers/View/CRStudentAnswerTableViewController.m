@@ -170,7 +170,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 			return ((CRAnswer*)self.answerList[indexPath.row]).answerName;
 
 		} else {
-			return [NSString stringWithFormat:@"Student %ld", (long) indexPath.row + 1];
+			return [NSString stringWithFormat:@"Answer %ld", (long) indexPath.row + 1];
 		}
 	}
 	

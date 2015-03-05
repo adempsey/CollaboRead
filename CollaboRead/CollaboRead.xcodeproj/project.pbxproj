@@ -158,8 +158,8 @@
 		BB5017881AA74716000E9021 /* CRCollaboratorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCollaboratorList.m; sourceTree = "<group>"; };
 		BB6278C11A79480D002391FB /* CRUndoStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUndoStack.h; sourceTree = "<group>"; };
 		BB6278C21A79480D002391FB /* CRUndoStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUndoStack.m; sourceTree = "<group>"; };
-		BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAnswerPoint.h; sourceTree = "<group>"; };
-		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswerPoint.m; sourceTree = "<group>"; };
+		BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRAnswerPoint.h; path = ../Utilities/Drawing/CRAnswerPoint.h; sourceTree = "<group>"; };
+		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRAnswerPoint.m; path = ../Utilities/Drawing/CRAnswerPoint.m; sourceTree = "<group>"; };
 		BBA0C1111A1637F800FFA921 /* CRDrawingPreserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRDrawingPreserver.h; sourceTree = "<group>"; };
 		BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRDrawingPreserver.m; sourceTree = "<group>"; };
 		BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRImageScrollBarController.h; sourceTree = "<group>"; };
@@ -378,6 +378,8 @@
 		8DE0B25D19FF2F7A00760434 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */,
+				BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */,
 				8DD664E31A75F878002C379E /* CRScan.h */,
 				8DD664E41A75F878002C379E /* CRScan.m */,
 				8DD664E51A75F878002C379E /* CRSlice.h */,
@@ -472,8 +474,6 @@
 		8DEE5AE219F644610090AF0B /* Drawing */ = {
 			isa = PBXGroup;
 			children = (
-				BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */,
-				BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */,
 				BB6278C11A79480D002391FB /* CRUndoStack.h */,
 				BB6278C21A79480D002391FB /* CRUndoStack.m */,
 			);

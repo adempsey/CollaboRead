@@ -78,12 +78,10 @@
 -(void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
-#warning Add support here for multiple answer owners
-	NSArray *students = @[[CRAccountService sharedInstance].user.userID];
-//    NSArray *students = [[CRCollaboratorList sharedInstance] collaboratorIds];
+    NSArray *students = [[CRCollaboratorList sharedInstance] collaboratorIds];
 
     //Prepare and send answer
-	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students];
+	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students inGroup:[CRCollaboratorList sharedInstance].groupName];
 
     [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block, NSError *error) {//Provide submission success feedback
 		if (!error) {

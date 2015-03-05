@@ -55,7 +55,7 @@
 	return @{CR_DB_ANSWER_ID: self.answerID,
 			 CR_DB_ANSWER_OWNERS: self.owners,
 			 CR_DB_ANSWER_GROUP_NAME: self.answerName,
-			 CR_DB_ANSWER_SUBMISSION_DATE: @"january 25",
+             CR_DB_ANSWER_SUBMISSION_DATE: @"march 5",//[NSString stringWithFormat:@"%@", [NSDate date]],
 			 CR_DB_ANSWER_DRAWINGS: drawingDescriptions};
 }
 
