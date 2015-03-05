@@ -10,17 +10,25 @@
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
 #import "CRSubmitButton.h"
+#import "CRAddCollaboratorsViewController.h"
 #import "CRErrorAlertService.h"
 #import "CRAccountService.h"
+#import "CRCollaboratorList.h"
+#import "CRColors.h"
 
 #define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Patient Info"
 #define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Patient Info"
+
+#define kCR_COLLABORATOR_TOGGLE_SHOW @"Show Collaborators"
+#define kCR_COLLABORATOR_TOGGLE_HIDE @"Hide Collaborators"
 
 @interface CRStudentImageViewController ()
 
 @property (nonatomic, readwrite, strong) UIBarButtonItem *togglePatientInfoButton;
 @property (nonatomic, readwrite, strong) CRPatientInfoViewController *patientInfoViewController;
 @property (nonatomic, readwrite, strong) CRSubmitButton *submitButton;
+@property (nonatomic, readwrite, strong) CRAddCollaboratorsViewController *collaboratorsView;
+@property (nonatomic, readwrite, strong) UIButton *toggleCollaborators;
 
 @end
 
@@ -53,6 +61,17 @@
 	}
 	
 	[self.view addSubview:self.submitButton];
+    
+    self.toggleCollaborators = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 205, frame.size.height - 140, 180.0, 40.0)];
+    [self.toggleCollaborators setTitle:kCR_COLLABORATOR_TOGGLE_SHOW forState:UIControlStateNormal];
+    [self.toggleCollaborators setTitleColor:CR_COLOR_TINT forState:UIControlStateNormal];
+    [self.toggleCollaborators addTarget:self action:@selector(toggleCollaborators:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.toggleCollaborators];
+    
+    self.collaboratorsView = [[CRAddCollaboratorsViewController alloc] init];
+    [self.collaboratorsView setViewFrame:CGRectMake(self.toggleCollaborators.frame.origin.x, self.toggleCollaborators.frame.origin.y, 0, 0)];
+    self.collaboratorsView.view.hidden = YES;
+    [self.view addSubview:self.collaboratorsView.view];
 }
 
 //Perform action of submitting answer, provide user status update
@@ -61,6 +80,7 @@
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
 #warning Add support here for multiple answer owners
 	NSArray *students = @[[CRAccountService sharedInstance].user.userID];
+//    NSArray *students = [[CRCollaboratorList sharedInstance] collaboratorIds];
 
     //Prepare and send answer
 	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students];
@@ -79,6 +99,27 @@
 			[self presentViewController:alertController animated:YES completion:nil];
 		}
 	}];
+}
+
+-(void)toggleCollaborators:(UIButton *)sender {
+    BOOL show =[sender.currentTitle isEqualToString:kCR_COLLABORATOR_TOGGLE_SHOW];
+    if (show) {
+        self.collaboratorsView.view.hidden = NO;
+    }
+    CGRect frame = CGRectMake(self.toggleCollaborators.frame.origin.x, self.toggleCollaborators.frame.origin.y, 0, 0);
+    if (show) {
+        frame = CGRectMake((self.view.frame.size.width - 300)/2, (self.view.frame.size.height - 400)/2, 300, 400);
+    }
+    [UIView animateWithDuration:0.25 animations:^{
+        [self.collaboratorsView setViewFrame:frame];
+    } completion:^(BOOL finished) {
+        NSString* newTitle = kCR_COLLABORATOR_TOGGLE_HIDE;
+        if (!show) {
+            newTitle = kCR_COLLABORATOR_TOGGLE_SHOW;
+            self.collaboratorsView.view.hidden = YES;
+        }
+        [self.toggleCollaborators setTitle: newTitle forState:UIControlStateNormal];
+    }];
 }
 
 - (BOOL)userHasPreviouslySubmittedAnswer

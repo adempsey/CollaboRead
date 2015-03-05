@@ -8,6 +8,10 @@
 
 #import "CRCreateAccountViewController.h"
 #import "CRColors.h"
+#import "CRAPIClientService.h"
+#import "CRErrorAlertService.h"
+#import "CRUser.h"
+#import "CRUserKeys.h"
 
 @interface CRCreateAccountViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
@@ -37,7 +41,7 @@
 -(IBAction)registerAccount:(id)sender {
     self.errorLabel.hidden = YES;
     if ([self.emailField.text isEqualToString:@""] || ![self validEmail: self.emailField.text]) {
-        self.errorLabel.text = @"Invalid email";
+        self.errorLabel.text = @"Invalid email format";
         self.errorLabel.hidden = NO;
     } else if ([self.nameField.text isEqualToString:@""]) {
         self.errorLabel.text = @"Empty names are invalid";
@@ -49,7 +53,21 @@
         self.errorLabel.text = @"Passwords do not match";
         self.errorLabel.hidden = NO;
     } else {
-        //make call to register, do stuff with button
+        CRUser *user = [[CRUser alloc] init];
+        user.email = self.emailField.text;
+        user.name = self.nameField.text;
+        user.type = self.roleSelector.selectedSegmentIndex == 0 ? CR_USER_TYPE_STUDENT : CR_USER_TYPE_LECTURER;
+        user.year = self.roleSelector.selectedSegmentIndex == 0 ? self.yearTitleField.text : 0;
+        user.title = self.roleSelector.selectedSegmentIndex == 0 ? @"" : self.yearTitleField.text;
+		[[CRAPIClientService sharedInstance] registerUser:user password:self.passwordField.text block:^(NSError *error) {
+			
+		}];
+		
+//        user.password = self.passwordField.text;
+//        user.imageURL = @"";
+//        [[CRAPIClientService sharedInstance]registerUser: user block:^(NSError *error) {
+//            
+//        }];
     }
 }
 

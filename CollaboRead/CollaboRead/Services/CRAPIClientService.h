@@ -24,10 +24,35 @@
 
 #pragma mark - User Account Methods
 
+/*!
+ Attempts to log a user in
+ 
+ @param email
+ email to use as a username
+ @param password
+ password corresponding to username
+ 
+ @param block
+ completion block to execute with retrieved user information
+ */
 - (void)loginUserWithEmail:(NSString*)email password:(NSString*)password block:(void (^)(CRUser*, NSError*))block;
 
+/*!
+ Registers a user
+ 
+ @param user
+ user to attempt to register
+ @param block
+ completion block to execute at end of registration
+ */
 - (void)registerUser:(CRUser*)user password:(NSString*)password block:(void (^)(NSError*))block;
 
+/*!
+ Checks existance of users based on email (username)
+ 
+ @param block
+ completion block to execute with list of valid and list of invalid usernames
+ */
 - (void)verifyUsersExist:(NSArray*)users block:(void (^)(NSArray*, NSArray*))block;
 
 #pragma mark - Retrieval Methods

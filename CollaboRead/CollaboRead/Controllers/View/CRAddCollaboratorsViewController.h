@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CRAddCollaboratorsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface CRAddCollaboratorsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
--(NSArray *)collaborators;
+-(void)setViewFrame:(CGRect)rect;
 
 @end

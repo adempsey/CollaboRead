@@ -16,6 +16,7 @@
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
 #import "CRErrorAlertService.h"
+#import "CRCollaboratorList.h"
 
 #define kActivityIndicatorSize 30.0
 typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
@@ -76,6 +77,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 				newController = navController;
 				
 			} else if([user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
+                [[CRCollaboratorList sharedInstance] setOwner:user.email withName:user.name andID:user.userID];
 				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
 				newController = navController;
 			}
