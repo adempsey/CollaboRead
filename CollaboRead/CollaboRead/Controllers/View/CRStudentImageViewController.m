@@ -11,6 +11,7 @@
 #import "CRViewSizeMacros.h"
 #import "CRSubmitButton.h"
 #import "CRErrorAlertService.h"
+#import "CRAccountService.h"
 
 #define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Patient Info"
 #define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Patient Info"
@@ -58,7 +59,8 @@
 -(void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
-    NSArray *students = [[NSArray alloc]initWithObjects:self.user.userID, nil];
+#warning Add support here for multiple answer owners
+	NSArray *students = @[[CRAccountService sharedInstance].user.userID];
 
     //Prepare and send answer
 	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students];
@@ -87,7 +89,7 @@
 		if ([answerObj isKindOfClass:[CRAnswer class]]) {
 			CRAnswer *answer = (CRAnswer*)answerObj;
 			
-			if ([answer.owners containsObject:self.user.userID]) {
+			if ([answer.owners containsObject:[CRAccountService sharedInstance].user.userID]) {
 				hasSubmitted = YES;
 				*stop = YES;
 			}

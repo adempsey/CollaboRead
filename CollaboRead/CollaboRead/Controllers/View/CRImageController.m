@@ -22,6 +22,8 @@
 #import "CRCarouselCell.h"
 #import "CRColors.h"
 #import "CRAnswerLine.h"
+#import "CRAccountService.h"
+
 #define BUTTON_HEIGHT 50
 #define BUTTON_WIDTH 50
 #define BUTTON_SPACE 20
@@ -97,8 +99,8 @@
 	self.caseImage.alpha = 0.0;
     self.drawView.alpha = 0.0;
     
-    self.lecturerID = self.user.userID;//TODO:this seems wrong or unnecessary
-    
+//    self.lecturerID = self.user.userID;//TODO:this seems wrong or unnecessary
+	
     //Add image views
 	[self.limView addSubview:self.caseImage];
 	[self.limView addSubview:self.drawView];
@@ -137,22 +139,22 @@
     
     self.patientInfo = self.caseChosen.patientInfo;
     
-    //Try to load drawings from previous viewing during session or make new undo stack
-    self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID];
-    if (!self.undoStack) {
-        if ([self.user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
-            NSArray *answers = self.caseChosen.answers;
-            NSUInteger idx = [answers indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                return [((CRAnswer *)obj).owners indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                    return [(NSString *)obj isEqualToString:self.user.userID];
-                }] != NSNotFound;
-            }];
-            if(idx != NSNotFound) {
+	//Try to load drawings from previous viewing during session or make new undo stack
+	self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID];
+	if (!self.undoStack) {
+		if ([[CRAccountService sharedInstance].user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
+			NSArray *answers = self.caseChosen.answers;
+			NSUInteger idx = [answers indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+				return [((CRAnswer *)obj).owners indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+					return [(NSString *)obj isEqualToString:[CRAccountService sharedInstance].user.userID];
+				}] != NSNotFound;
+			}];
+			if(idx != NSNotFound) {
 				CRAnswer *answer = answers[idx];
-                self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
-            }
-        }
-        if (!self.undoStack) {
+				self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
+			}
+		}
+		if (!self.undoStack) {
             self.undoStack = [[CRUndoStack alloc] init];
         }
         [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];

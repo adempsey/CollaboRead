@@ -72,7 +72,6 @@
 //Pass along user and lecturer
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     CRSelectCaseViewController *nextController = [segue destinationViewController];
-    nextController.user = self.user;
     nextController.lecturer = self.lecturers[selectedPath.row];
 }
 

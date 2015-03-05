@@ -8,6 +8,7 @@
 
 #import "CRStudentAnswerTableViewController.h"
 #import "CRUser.h"
+#import "CRAnswer.h"
 
 typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewSections) {
 	kSECTION_OPTIONS = 0,
@@ -38,12 +39,12 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
 @implementation CRStudentAnswerTableViewController
 
-- (instancetype)initWithStudents:(NSArray*)students
+- (instancetype)initWithAnswerList:(NSArray*)answerList;
 {
 	if (self = [super init]) {
         self.shouldShowStudentNames = NO;
 		self.selectedStudents = [[NSMutableArray alloc] init];
-        _students = [[NSArray alloc] initWithArray:students];
+        _answerList = [[NSArray alloc] initWithArray:answerList];
 		self.side = CR_SIDE_BAR_SIDE_RIGHT;
 		self.width = kTableViewWidth;
 	}
@@ -62,9 +63,9 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	[self.view addSubview:self.tableView];
 }
 
--(void)setStudents:(NSArray *)students
+-(void)setAnswerList:(NSArray *)students
 {
-    _students = students;
+    _answerList = students;
     [self.tableView reloadData];
 }
 
@@ -87,7 +88,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 			return kOPTION_COUNT;
 			break;
 		case kSECTION_STUDENTS:
-			return self.students.count;
+			return self.answerList.count;
 			break;
 		default:
 			return 0;
@@ -120,16 +121,16 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	if (indexPath.section == kSECTION_OPTIONS) {
 		
 		if (indexPath.row == kOPTION_SHOW_ALL) {
-			self.selectedStudents = [self.students mutableCopy];
-			[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
+			self.selectedStudents = [self.answerList mutableCopy];
+			[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedStudents copy]];
 		} else if (indexPath.row == kOPTION_HIDE_ALL) {
 			[self.selectedStudents removeAllObjects];
-			[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
+			[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedStudents copy]];
 		} else if (indexPath.row == kOPTION_SHOW_NAMES) {
 			self.shouldShowStudentNames = !self.shouldShowStudentNames;
         }
 	} else if (indexPath.section == kSECTION_STUDENTS) {
-		id selectedStudent = self.students[indexPath.row];
+		id selectedStudent = self.answerList[indexPath.row];
 		if ([self.selectedStudents containsObject:selectedStudent]) {
 			[self.selectedStudents removeObject:selectedStudent];
 		} else {
@@ -137,7 +138,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 			
 		}
 		
-		[self.delegate studentAnswerTableView:self didChangeStudentSelection:[self.selectedStudents copy]];
+		[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedStudents copy]];
     }
 	
 	[self.tableView reloadData];
@@ -164,38 +165,13 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		}
 		
 	} else if (indexPath.section == kSECTION_STUDENTS) {
-		id owners = self.students[indexPath.row];
 
-		if ([owners isKindOfClass:[CRUser class]]) {
-			owners = [NSArray arrayWithObject:owners];
+		if (self.shouldShowStudentNames) {
+			return ((CRAnswer*)self.answerList[indexPath.row]).answerName;
+
+		} else {
+			return [NSString stringWithFormat:@"Student %ld", (long) indexPath.row + 1];
 		}
-
-		NSArray *ownersList = (NSArray*)owners;
-
-        if(self.shouldShowStudentNames){//TODO: FIND A BETTER WAY TO HAVE STUDENT IDS AND SHOW NAMES!!!!!!
-            NSMutableArray *ownerNames = [[NSMutableArray alloc] init];
-            [ownersList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-
-				if ([obj isKindOfClass:[NSString class]]) {
-                    NSString *userID = obj;
-					[self.allUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-						NSString *temp = ((CRUser*) obj).userID;
-						if ([userID isEqualToString:temp]){
-							[ownerNames addObject:((CRUser*) obj).name];
-							*stop = true;
-						}
-					}];
-				}
-            }];
-            NSMutableString *title = [NSMutableString stringWithString:ownerNames[0]];
-            for (int i = 1; i < [ownerNames count]; i ++) {
-                [title appendFormat:@", %@", ownerNames[i]];
-            }
-            return title;
-        }
-        else {
-            return [NSString stringWithFormat:@"Student %ld", (long) indexPath.row + 1];
-        }
 	}
 	
 	return @"";
@@ -211,7 +187,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		
 	} else if (indexPath.section == kSECTION_STUDENTS) {
 		
-		BOOL isSelected = [self.selectedStudents containsObject:self.students[indexPath.row]];
+		BOOL isSelected = [self.selectedStudents containsObject:self.answerList[indexPath.row]];
 		return isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 		
 	}

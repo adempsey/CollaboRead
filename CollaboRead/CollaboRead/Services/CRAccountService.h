@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CRUser.h"
 
-@interface CRAuthenticationService : NSObject
+@interface CRAccountService : NSObject
 
-+ (CRAuthenticationService*)sharedInstance;
++ (CRAccountService*)sharedInstance;
 
-@property (nonatomic, readwrite, strong) NSString *email;
+@property (nonatomic, readwrite, strong) CRUser *user;
 @property (nonatomic, readwrite, strong) NSString *password;
 
 @end

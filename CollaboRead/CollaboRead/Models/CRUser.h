@@ -61,13 +61,6 @@
  */
 @property (nonatomic, readonly, strong) UIImage *image;
 
-#warning - Only temporary. Should remove once authentication exists
-/*!
- @brief The user's password
- @warning Don't actually use this. This is only a temporary property while authentication is being developed
- */
-@property (nonatomic, readwrite, strong) NSString *password;
-
 /*!
  Initializes CRUser object with data from the supplied dictionary
  

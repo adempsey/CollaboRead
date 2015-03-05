@@ -7,7 +7,7 @@
 //
 
 #import "CRNetworkingService.h"
-#import "CRAuthenticationService.h"
+#import "CRAccountService.h"
 
 #define kHTTP_METHOD_GET @"GET"
 #define kHTTP_METHOD_POST @"POST"
@@ -65,8 +65,8 @@
 		authenticatedParams = [[NSMutableDictionary alloc] init];
 	}
 
-	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_EMAIL] = [[CRAuthenticationService sharedInstance] email];
-	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_PASSWORD] = [[CRAuthenticationService sharedInstance] password];
+	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_EMAIL] = [CRAccountService sharedInstance].user.email;
+	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_PASSWORD] = [CRAccountService sharedInstance].password;
 	
 	[self performRequestForResource:resource usingMethod:method withParams:authenticatedParams completionBlock:completionBlock];
 }

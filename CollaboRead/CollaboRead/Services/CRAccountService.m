@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 CollaboRead. All rights reserved.
 //
 
-#import "CRAuthenticationService.h"
+#import "CRAccountService.h"
 
-@implementation CRAuthenticationService
+@implementation CRAccountService
 
-+ (CRAuthenticationService*)sharedInstance
++ (CRAccountService*)sharedInstance
 {
 	static id sharedInstance = nil;
 	static dispatch_once_t onceToken;

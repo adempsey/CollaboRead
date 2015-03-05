@@ -95,7 +95,7 @@
             }
         }];
     }];
-    return [[CRAnswer alloc] initWithData:answerLines submissionDate:[NSDate dateWithTimeIntervalSinceNow:0] owners:owners answerID:@"replace_this"];
+    return [[CRAnswer alloc] initWithData:answerLines submissionDate:[NSDate dateWithTimeIntervalSinceNow:0] owners:owners answerName:nil answerID:@"replace_this"];
 }
 
 @end

@@ -73,13 +73,10 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 			if ([user.type isEqualToString:CR_USER_TYPE_LECTURER]) {
 				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"caseNavController"];
 				((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = user;
-				((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).user = user;
-//				((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).allUsers = users;
 				newController = navController;
 				
 			} else if([user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
 				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
-				((CRSelectLecturerViewController *)[navController.childViewControllers objectAtIndex:0]).user = user;
 				newController = navController;
 			}
 

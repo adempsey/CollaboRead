@@ -17,6 +17,7 @@
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
 #import "CRErrorAlertService.h"
+#import "CRAccountService.h"
 
 @interface CRSelectCaseViewController()
 {
@@ -112,10 +113,7 @@
 //When a cell is selected, remember its path to set the case for the next view
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *segID = @"StudentSelectedCase";
-    if ([self.user.title isEqualToString: @"lecturer"]) {
-        segID = @"LecturerSelectedCase";
-    }
+	NSString *segID = [[CRAccountService sharedInstance].user.type isEqualToString:@"lecturer"] ? @"LecturerSelectedCase" : @"StudentSelectedCase";
     selectedPath = indexPath;
     [self.view addSubview:self.activityIndicator];
     self.collectionView.userInteractionEnabled = NO;
@@ -141,7 +139,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	CRImageController *nextController = segue.destinationViewController;
-	nextController.user = self.user;
 
 	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
     NSArray *caseArray = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
@@ -150,7 +147,7 @@
     //selectedCaseSet.cases.allKeys[selectedPath.row];
 	nextController.caseChosen = selectedCase;
 	nextController.caseGroup = selectedCaseSet.setID;
-    nextController.allUsers = self.allUsers;
+
     nextController.lecturerID = self.lecturer.userID;
     nextController.indexPath = selectedPath;
 }

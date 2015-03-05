@@ -32,7 +32,6 @@
 		self.imageURL = dictionary[CR_DB_USER_PICTURE];
 		self.year = dictionary[CR_DB_USER_YEAR];
 		self.caseSetIDs = dictionary[CR_DB_USER_CASE_SETS];
-		self.password = dictionary[CR_DB_USER_PASSWORD];
 	}
 	return self;
 }

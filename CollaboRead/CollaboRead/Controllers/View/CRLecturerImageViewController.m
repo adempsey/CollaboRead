@@ -106,8 +106,7 @@
     [self loadStudents];
 	self.studentAnswerTableViewController.delegate = self;
 	[self.view addSubview:self.studentAnswerTableViewController.view];
-    self.studentAnswerTableViewController.allUsers = self.allUsers;
-    
+
     NSArray *scanHighlights = [self.caseChosen answerScans];
     self.scansMenuController.highlights = scanHighlights;
 
@@ -140,7 +139,7 @@
 			[answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 				[students addObject:((CRAnswer *)obj).owners];
 			}];
-			self.studentAnswerTableViewController.students = students;
+			self.studentAnswerTableViewController.answerList = students;
             [self.scrollBar reloadData];
             NSArray *scanHighlights = [self.caseChosen answerScans];
             self.scansMenuController.highlights = scanHighlights;
@@ -166,7 +165,7 @@
         [allStudents addObject:((CRAnswer *)obj).owners];
     }];
     self.allStudents = allStudents;
-    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithStudents:self.allStudents];
+    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:answers];
 
 }
 
@@ -186,23 +185,16 @@
 }
 
 #pragma mark - CRStudentAnswerTable Delegate Methods
-- (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeStudentSelection:(NSArray *)students
+- (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeAnswerSelection:(NSArray *)answers
 {
-    NSMutableArray *selectedAnswers = [[NSMutableArray alloc] init];;
+    self.selectedAnswers = answers;
+	
 	NSMutableArray *colors = [[NSMutableArray alloc] init];
-
-    [self.caseChosen.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger ansIdx, BOOL *stop) {
-        CRAnswer *currAnswer = obj;
-        [students enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            NSArray *currOwners = obj;
-            if ([currAnswer.owners isEqualToArray:currOwners]){
-                [selectedAnswers addObject:currAnswer];
-                [colors addObject:studentColors[ansIdx % 15]];
-                *stop = true;
-            }
-        }];
-    }];
-    self.selectedAnswers = selectedAnswers;
+#warning colors are inconsistent
+	for (id obj in answers) {
+		[colors addObject:studentColors[0]];
+	}
+	
     self.selectedColors = colors;
     [self drawStudentAnswers];
 }

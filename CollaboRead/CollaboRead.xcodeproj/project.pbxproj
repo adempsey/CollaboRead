@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		36ED59531A2D3CEE00F61D7B /* CRPatientInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */; };
-		8D0FA3C01AA28E76004AD7E4 /* CRAuthenticationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D0FA3BF1AA28E76004AD7E4 /* CRAuthenticationService.m */; };
+		8D0FA3C01AA28E76004AD7E4 /* CRAccountService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D0FA3BF1AA28E76004AD7E4 /* CRAccountService.m */; };
 		8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */; };
 		8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93819EF553F00DAFEC0 /* CRAPIClientService.m */; };
 		8D34C1401A15FC37007BC6CB /* shapiro.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8D34C13F1A15FC37007BC6CB /* shapiro.jpg */; };
@@ -81,8 +81,8 @@
 /* Begin PBXFileReference section */
 		36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRPatientInfoViewController.h; sourceTree = "<group>"; };
 		36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRPatientInfoViewController.m; sourceTree = "<group>"; };
-		8D0FA3BE1AA28E76004AD7E4 /* CRAuthenticationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAuthenticationService.h; sourceTree = "<group>"; };
-		8D0FA3BF1AA28E76004AD7E4 /* CRAuthenticationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAuthenticationService.m; sourceTree = "<group>"; };
+		8D0FA3BE1AA28E76004AD7E4 /* CRAccountService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAccountService.h; sourceTree = "<group>"; };
+		8D0FA3BF1AA28E76004AD7E4 /* CRAccountService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAccountService.m; sourceTree = "<group>"; };
 		8D16E93419EF440500DAFEC0 /* CRNetworkingService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNetworkingService.h; sourceTree = "<group>"; };
 		8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNetworkingService.m; sourceTree = "<group>"; };
 		8D16E93719EF553F00DAFEC0 /* CRAPIClientService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAPIClientService.h; sourceTree = "<group>"; };
@@ -215,8 +215,8 @@
 		8D16E93319EF438A00DAFEC0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				8D0FA3BE1AA28E76004AD7E4 /* CRAuthenticationService.h */,
-				8D0FA3BF1AA28E76004AD7E4 /* CRAuthenticationService.m */,
+				8D0FA3BE1AA28E76004AD7E4 /* CRAccountService.h */,
+				8D0FA3BF1AA28E76004AD7E4 /* CRAccountService.m */,
 				8DE3FB021A930BED0002776F /* CRErrorAlertService.h */,
 				8DE3FB031A930BED0002776F /* CRErrorAlertService.m */,
 				8DCF9CB11A2BF8FB000D42C5 /* CRAnswerRefreshService.h */,
@@ -653,7 +653,7 @@
 				BBA0C5A01A8952C4009E53EC /* CRImageScrollBar.m in Sources */,
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */,
-				8D0FA3C01AA28E76004AD7E4 /* CRAuthenticationService.m in Sources */,
+				8D0FA3C01AA28E76004AD7E4 /* CRAccountService.m in Sources */,
 				BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */,
 				8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */,
 				8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */,

@@ -8,7 +8,7 @@
 
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
-#import "CRAuthenticationService.h"
+#import "CRAccountService.h"
 #import "CRUserKeys.h"
 
 #import "NSArray+CRAdditions.h"
@@ -64,8 +64,8 @@
 			NSDictionary *retrievedUserData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 			CRUser *user = [[CRUser alloc] initWithDictionary:retrievedUserData];
 			
-			[[CRAuthenticationService sharedInstance] setEmail:email];
-			[[CRAuthenticationService sharedInstance] setPassword:password];
+			[CRAccountService sharedInstance].user = user;
+			[CRAccountService sharedInstance].password = password;
 			block(user, nil);
 		} else {
 			block(nil, error);
@@ -73,9 +73,9 @@
 	}];
 }
 
-- (void)registerUser:(CRUser *)user block:(void (^)(NSError *))block
+- (void)registerUser:(CRUser *)user password:(NSString *)password block:(void (^)(NSError *))block
 {
-	if (!user.name || !user.type || !user.year || !user.email || !user.password) {
+	if (!user.name || !user.type || !user.year || !user.email || !password) {
 		NSError *parameterError = [NSError errorWithDomain:@"Missing required parameters" code:0 userInfo:nil];
 		block(parameterError);
 		return;
@@ -88,7 +88,7 @@
 							 CR_DB_USER_YEAR: user.year,
 							 CR_DB_USER_PICTURE: user.imageURL ? : @"",
 							 CR_DB_USER_EMAIL: user.email,
-							 CR_DB_USER_PASSWORD: user.password
+							 CR_DB_USER_PASSWORD: password
 							 };
 	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_REGISTER usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
 		block(error);
