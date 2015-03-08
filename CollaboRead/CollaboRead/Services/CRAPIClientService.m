@@ -8,28 +8,38 @@
 
 #import "CRAPIClientService.h"
 #import "CRNetworkingService.h"
-#import "CRAnswerLine.h"
-#import "CRAnswerPoint.h"
+#import "CRAccountService.h"
+#import "CRUserKeys.h"
 
 #import "NSArray+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
 
 #define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
+#define kCR_API_ENDPOINT(endpoint) [kCR_API_ADDRESS stringByAppendingString:endpoint]
 
 #define kHTTP_METHOD_GET @"GET"
 #define kHTTP_METHOD_POST @"POST"
 
-#define kCR_API_ENDPOINT_USERS @"users"
-#define kCR_API_ENDPOINT_LECTURERS @"lecturers"
-#define kCR_API_ENDPOINT_CASE_SET @"casesets"
-#define kCR_API_ENDPOINT_SUBMIT_ANSWER @"submitanswer"
+#define kCR_API_ENDPOINT_LOGIN kCR_API_ENDPOINT(@"login")
+#define kCR_API_ENDPOINT_REGISTER kCR_API_ENDPOINT(@"register")
+#define kCR_API_ENDPOINT_USER_CHECK kCR_API_ENDPOINT(@"usercheck")
+#define kCR_API_ENDPOINT_USERS kCR_API_ENDPOINT(@"users")
+#define kCR_API_ENDPOINT_LECTURERS kCR_API_ENDPOINT(@"lecturers")
+#define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"casesets")
+#define kCR_API_ENDPOINT_SUBMIT_ANSWER kCR_API_ENDPOINT(@"submitanswer")
 
 #define kCR_API_QUERY_PARAMETER_ID @"id"
 #define kCR_API_QUERY_PARAMETER_LECTURER_ID @"lecturerID"
+
 #define kCR_API_QUERY_PARAMETER_CASE_SET_ID @"setID"
 #define kCR_API_QUERY_PARAMETER_CASE_ID @"caseID"
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS @"owners"
 #define kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS @"drawings"
+
+#define kCR_API_QUERY_PARAMETER_USER_LIST @"users"
+
+#define kCR_API_QUERY_PARAMETER_USER_EMAIL CR_DB_USER_EMAIL
+#define kCR_API_QUERY_PARAMETER_USER_PASSWORD CR_DB_USER_PASSWORD
 
 @implementation CRAPIClientService
 
@@ -43,84 +53,160 @@
 	return sharedInstance;
 }
 
-#pragma mark - Public API Interface Methods
+#pragma mark - User Account Methods
 
-- (void)retrieveUsersWithBlock:(void (^)(NSArray*))block
+- (void)loginUserWithEmail:(NSString *)email password:(NSString *)password block:(void (^)(CRUser*, NSError*))block
 {
-	[self retrieveItemListFromEndpoint:kCR_API_ENDPOINT_USERS completionBlock:^(NSArray *list) {
-		NSMutableArray *userList = [[NSMutableArray alloc] init];
-
-		[list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-			if ([obj isKindOfClass:[NSDictionary class]]) {
-				CRUser *user = [[CRUser alloc] initWithDictionary:obj];
-				[userList addObject:user];
-			}
-		}];
-
-		block(userList);
+	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_USER_EMAIL: email, kCR_API_QUERY_PARAMETER_USER_PASSWORD: password};
+	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_LOGIN usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
+		if (!error) {
+			
+			NSDictionary *retrievedUserData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+			CRUser *user = [[CRUser alloc] initWithDictionary:retrievedUserData];
+			
+			[CRAccountService sharedInstance].user = user;
+			[CRAccountService sharedInstance].password = password;
+			block(user, nil);
+		} else {
+			block(nil, error);
+		}
 	}];
 }
 
-- (void)retrieveLecturersWithBlock:(void (^)(NSArray*))block
+- (void)registerUser:(CRUser *)user password:(NSString *)password block:(void (^)(NSError *))block
 {
-	[self retrieveItemListFromEndpoint:kCR_API_ENDPOINT_LECTURERS completionBlock:^(NSArray *list) {
+	if (!user.name || !user.type || !user.year || !user.email || !password) {
+		NSError *parameterError = [NSError errorWithDomain:@"Missing required parameters" code:0 userInfo:nil];
+		block(parameterError);
+		return;
+	}
+	
+	NSDictionary *params = @{
+							 CR_DB_USER_NAME: user.name,
+							 CR_DB_USER_TYPE: user.type,
+							 CR_DB_USER_TITLE: user.title ? : @"",
+							 CR_DB_USER_YEAR: user.year,
+							 CR_DB_USER_PICTURE: user.imageURL ? : @"",
+							 CR_DB_USER_EMAIL: user.email,
+							 CR_DB_USER_PASSWORD: password
+							 };
+	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_REGISTER usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
+		block(error);
+	}];
+}
+
+- (void)verifyUsersExist:(NSArray*)users block:(void (^)(NSArray*, NSArray*))block
+{
+	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_USER_LIST: users.jsonString};
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_USER_CHECK usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
+		if (!error) {
+			
+			NSArray *existingUsersList = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+			NSMutableSet *existingEmails = [[NSMutableSet alloc] init];
+			
+			for (NSDictionary *user in existingUsersList) {
+				[existingEmails addObject:user[kCR_API_QUERY_PARAMETER_USER_EMAIL]];
+			}
+			
+			NSMutableSet *nonExistingUsers = [NSMutableSet setWithArray:users];
+			[nonExistingUsers minusSet:existingEmails];
+			
+			block(existingUsersList, [nonExistingUsers allObjects]);
+		}
+	}];
+}
+
+#pragma mark - Public Database Retrieval Methods
+
+- (void)retrieveUsersWithBlock:(void (^)(NSArray*, NSError*))block
+{
+	[self retrieveItemListFromEndpoint:kCR_API_ENDPOINT_USERS completionBlock:^(NSArray *list, NSError *error) {
+		NSMutableArray *userList = [[NSMutableArray alloc] init];
+		
+		if (!error) {
+			[list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+				if ([obj isKindOfClass:[NSDictionary class]]) {
+					CRUser *user = [[CRUser alloc] initWithDictionary:obj];
+					[userList addObject:user];
+				}
+			}];
+		}
+
+		block(userList, error);
+	}];
+}
+
+- (void)retrieveLecturersWithBlock:(void (^)(NSArray*, NSError*))block
+{
+	[self retrieveItemListFromEndpoint:kCR_API_ENDPOINT_LECTURERS completionBlock:^(NSArray *list, NSError *error) {
 		NSMutableArray *lecturerList = [[NSMutableArray alloc] init];
 
-		[list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-			if ([obj isKindOfClass:[NSDictionary class]]) {
-				CRUser *user = [[CRUser alloc] initWithDictionary:obj];
-				[lecturerList addObject:user];
-			}
-		}];
+		if (!error) {
+			[list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+				if ([obj isKindOfClass:[NSDictionary class]]) {
+					CRUser *user = [[CRUser alloc] initWithDictionary:obj];
+					[lecturerList addObject:user];
+				}
+			}];
+		}
 
-		block(lecturerList);
+		block(lecturerList, error);
 	}];
 }
 
-- (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(CRUser*))block
+- (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(CRUser*, NSError*))block
 {
-	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_LECTURERS withID:lecturerID completionBlock:^(NSDictionary *userDictionary) {
-		CRUser *lecturer = [[CRUser alloc] initWithDictionary:userDictionary];
-		block(lecturer);
+	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_LECTURERS withID:lecturerID completionBlock:^(NSDictionary *userDictionary, NSError *error) {
+		CRUser *lecturer;
+		if (!error) {
+			lecturer = [[CRUser alloc] initWithDictionary:userDictionary];
+		}
+		block(lecturer, error);
 	}];
 }
 
-- (void)retrieveStudentWithID:(NSString*)studentID block:(void (^)(CRUser*))block
+- (void)retrieveStudentWithID:(NSString*)studentID block:(void (^)(CRUser*, NSError*))block
 {
-    [self retrieveItemFromEndpoint:kCR_API_ENDPOINT_USERS withID:studentID completionBlock:^(NSDictionary *userDictionary) {
-        CRUser *student = [[CRUser alloc] initWithDictionary:userDictionary];
-        block(student);
+    [self retrieveItemFromEndpoint:kCR_API_ENDPOINT_USERS withID:studentID completionBlock:^(NSDictionary *userDictionary, NSError *error) {
+		CRUser *student;
+		if (!error) {
+			student = [[CRUser alloc] initWithDictionary:userDictionary];
+		}
+        block(student, error);
     }];
 }
 
-- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*))block
+- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*, NSError*))block
 {
-	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_CASE_SET withID:caseSetID completionBlock:^(NSDictionary *caseSetDictionary) {
-		CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:caseSetDictionary];
-		block(caseSet);
+	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_CASE_SET withID:caseSetID completionBlock:^(NSDictionary *caseSetDictionary, NSError *error) {
+		CRCaseSet *caseSet;
+		if (!error) {
+			caseSet = [[CRCaseSet alloc] initWithDictionary:caseSetDictionary];
+		}
+		block(caseSet, error);
 	}];
 }
 
-- (void)retrieveCaseSetsWithLecturer:(NSString *)lecturerID block:(void (^)(NSArray *))block
+- (void)retrieveCaseSetsWithLecturer:(NSString *)lecturerID block:(void (^)(NSArray*, NSError*))block
 {
-	void (^completionBlock)(NSData*) = ^void(NSData *json) {
-		NSArray *retrievedItems = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
 		NSMutableArray *caseSets = [[NSMutableArray alloc] init];
 
-		[retrievedItems enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-			if ([obj isKindOfClass:[NSDictionary class]]) {
-				CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:obj];
-				[caseSets addObject:caseSet];
-			}
-		}];
+		if (!error) {
+			NSArray *retrievedItems = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+			[retrievedItems enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+				if ([obj isKindOfClass:[NSDictionary class]]) {
+					CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:obj];
+					[caseSets addObject:caseSet];
+				}
+			}];
+		}
 
-		block(caseSets);
+		block(caseSets, error);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_CASE_SET];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturerID};
-
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_CASE_SET usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
 }
 
 #pragma mark - Private API Interface Methods
@@ -135,17 +221,18 @@
  @param block
  completion block to execute with item retrieved from the API
  */
-- (void)retrieveItemFromEndpoint:(NSString*)endpoint withID:(NSString*)idNumber completionBlock:(void (^)(NSDictionary*))block
+- (void)retrieveItemFromEndpoint:(NSString*)endpoint withID:(NSString*)idNumber completionBlock:(void (^)(NSDictionary*, NSError*))block
 {
-	void (^completionBlock)(NSData*) = ^void(NSData *json) {
-		NSDictionary *retrievedItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
-		block(retrievedItem);
+	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
+		NSDictionary *retrievedItem;
+		if (!error) {
+			retrievedItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+		}
+		block(retrievedItem, error);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
 	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_ID: idNumber};
-
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:endpoint usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
 }
 
 /*!
@@ -156,28 +243,31 @@
  @param block
  completion block to execute with item list retrieved from the API
  */
-- (void)retrieveItemListFromEndpoint:(NSString*)endpoint completionBlock:(void (^)(NSArray*))block
+- (void)retrieveItemListFromEndpoint:(NSString*)endpoint completionBlock:(void (^)(NSArray*, NSError*))block
 {
-	void (^completionBlock)(NSData*) = ^void(NSData *json) {
-		NSArray *list = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
-		block(list);
+	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
+		NSArray *list;
+		if (!error) {
+			list = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+		}
+		block(list, error);
 	};
 
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:endpoint];
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:kHTTP_METHOD_GET withParams:nil completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:endpoint usingMethod:kHTTP_METHOD_GET withParams:nil completionBlock:completionBlock];
 }
 
 #pragma mark - Public Submission Methods
 
-- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*))block
+- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*, NSError*))block
 {
-	void (^completionBlock)(NSData*) = ^void(NSData *json) {
-		NSDictionary *caseItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
-		CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:caseItem];
-		block(caseSet);
+	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
+		CRCaseSet *caseSet;
+		if (!error) {
+			NSDictionary *caseItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+			caseSet = [[CRCaseSet alloc] initWithDictionary:caseItem];
+		}
+		block(caseSet, error);
 	};
-
-	NSString *resource = [kCR_API_ADDRESS stringByAppendingString:kCR_API_ENDPOINT_SUBMIT_ANSWER];
 	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: answer.jsonDictionary];
 	params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS] = ((NSDictionary *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS]).jsonString;
@@ -185,7 +275,7 @@
 	params[kCR_API_QUERY_PARAMETER_CASE_SET_ID] = setID;
 	params[kCR_API_QUERY_PARAMETER_CASE_ID] = caseID;
 	
-	[[CRNetworkingService sharedInstance] performRequestForResource:resource usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_SUBMIT_ANSWER usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:completionBlock];
 }
 
 @end

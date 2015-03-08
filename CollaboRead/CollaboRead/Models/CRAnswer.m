@@ -9,6 +9,7 @@
 #import "CRAnswer.h"
 #import "CRAnswerLine.h"
 #import "CRCaseKeys.h"
+#import "CRAccountService.h"
 
 @implementation CRAnswer
 
@@ -17,6 +18,7 @@
 	if (self = [super init]) {
 		self.answerID = dictionary[CR_DB_ANSWER_ID];
 		self.owners = dictionary[CR_DB_ANSWER_OWNERS];
+		self.answerName = dictionary[CR_DB_ANSWER_GROUP_NAME] ? : [CRAccountService sharedInstance].user.name;
 		self.submissionDate = dictionary[CR_DB_ANSWER_SUBMISSION_DATE];
 		
 		NSMutableArray *drawings = [[NSMutableArray alloc] init];
@@ -29,13 +31,14 @@
 	return self;
 }
 
-- (instancetype)initWithData:(NSArray*)drawings submissionDate:(NSDate*)date owners:(NSArray*)owners answerID:(NSString*)answerID
+- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners answerName:(NSString*)answerName answerID:(NSString*)answerID
 {
 	if (self = [super init]) {
 		self.answerID = answerID;
-		self.drawings = drawings;
+		self.drawings = answerData;
 		self.submissionDate = date;
 		self.owners = owners;
+		self.answerName = answerName ? : [CRAccountService sharedInstance].user.name;
 	}
 	return self;
 }
@@ -48,10 +51,11 @@
 			[drawingDescriptions addObject:((CRAnswerLine*)obj).jsonDictionary];
 		}
 	}];
-#warning wrong date
+
 	return @{CR_DB_ANSWER_ID: self.answerID,
 			 CR_DB_ANSWER_OWNERS: self.owners,
-			 CR_DB_ANSWER_SUBMISSION_DATE: @"january 25",
+			 CR_DB_ANSWER_GROUP_NAME: self.answerName,
+             CR_DB_ANSWER_SUBMISSION_DATE: [NSString stringWithFormat:@"%@", self.submissionDate],
 			 CR_DB_ANSWER_DRAWINGS: drawingDescriptions};
 }
 

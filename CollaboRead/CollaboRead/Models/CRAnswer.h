@@ -36,6 +36,12 @@
 @property (nonatomic, readwrite, strong) NSArray *owners;
 
 /*!
+ @brief The name displayed if lecturer chooses to reveal identities behind answers
+If not explicitly set, default's to the current user's name
+ */
+@property (nonatomic, readwrite, strong) NSString *answerName;
+
+/*!
  Initializes CRAnswer object with data from the supplied dictionary
  
  @param dictionary
@@ -55,7 +61,7 @@
  @param answerID
  Answer's ID number
  */
-- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners answerID:(NSString*)answerID;
+- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners answerName:(NSString*)answerName answerID:(NSString*)answerID;
 
 /*!
  Converts object into a dictionary, i.e. JSON representation

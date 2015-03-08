@@ -37,9 +37,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	CGFloat viewOriginY = STATUS_BAR_HEIGHT;
-    CGFloat topBar = TOP_BAR_HEIGHT;
-    CGRect screenFrame = LANDSCAPE_FRAME;
+	CGFloat viewOriginY = CR_STATUS_BAR_HEIGHT;
+    CGFloat topBar = CR_TOP_BAR_HEIGHT;
+    CGRect screenFrame = CR_LANDSCAPE_FRAME;
     
 	CGRect viewFrame = CGRectMake(0,
 								  viewOriginY,
@@ -48,7 +48,7 @@
 	self.view.frame = viewFrame;
 	self.view.backgroundColor = [UIColor clearColor];
 	
-	self.tableView.frame = self.view.frame;
+    self.tableView.frame = CGRectMake(0, 0, viewFrame.size.width, viewFrame.size.height);
 	self.tableView.separatorColor = [UIColor clearColor];
 
 	[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -134,20 +134,32 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[self.delegate toolPanelViewController:self didSelectTool:indexPath.row];
-	
-	if (indexPath.row == kCR_PANEL_TOOL_UNDO || indexPath.row == kCR_PANEL_TOOL_CLEAR) {
+    if(self.selectedTool.row == kCR_PANEL_TOOL_SCANS) {
+        switch (indexPath.row) {
+            case kCR_PANEL_TOOL_UNDO:
+            case kCR_PANEL_TOOL_CLEAR:
+                [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
+            case kCR_PANEL_TOOL_SCANS:
+                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+                self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
+                [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
+                [self.delegate toolPanelViewController:self didSelectTool:self.selectedTool.row];
+                break;
+            case kCR_PANEL_TOOL_PEN:
+            case kCR_PANEL_TOOL_ERASER:
+                [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
+                self.selectedTool = indexPath;
+            default:
+                break;
+        }
+    } else if (indexPath.row == kCR_PANEL_TOOL_UNDO || indexPath.row == kCR_PANEL_TOOL_CLEAR) {
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 		[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
-	} else if (indexPath.row == kCR_PANEL_TOOL_SCANS && self.selectedTool.row ==kCR_PANEL_TOOL_SCANS) {
-            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-            self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
-            [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
+	} else {
+        self.selectedTool = indexPath;
     }
-    else
-    {
-            self.selectedTool = indexPath;
-    }
+
 }
 
 #pragma mark - Extra TableView Methods

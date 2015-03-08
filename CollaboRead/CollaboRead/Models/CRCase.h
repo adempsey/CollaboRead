@@ -55,6 +55,23 @@
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
 /*!
+ Method to determine indices of slices with answers for given scan
+ 
+ @param scanID
+ Scan to search for answers on
+ 
+ @return Array of indices of slices with answers for scan
+ */
+- (NSArray *)answerSlicesForScan:(NSString *)scanID;
+
+/*!
+ Method to determine indices of scans with answers
+
+ @return Array of indices of scans with answers
+ */
+-(NSArray *)answerScans;
+
+/*!
  Method used to sort cases by date
  
  @param other

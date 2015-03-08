@@ -12,6 +12,8 @@
 #import "CRCaseKeys.h"
 #import "CRAnswer.h"
 #import "CRScan.h"
+#import "CRAnswerLine.h"
+#import "CRSlice.h"
 
 #import "NSDate+CRAdditions.h"
 
@@ -60,6 +62,49 @@
 	}];
 
 	_answers = caseAnswers;
+}
+
+-(NSArray *)answerSlicesForScan:(NSString *)scanID {
+    NSMutableSet *sliceIds = [[NSMutableSet alloc] init];
+    [self.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        CRAnswer *ans = obj;
+        [ans.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            CRAnswerLine *line = obj;
+            if ([line.scanID isEqualToString:scanID]) {
+                [sliceIds addObject:line.sliceID];
+            }
+        }];
+    }];
+    NSMutableArray *idxs = [[NSMutableArray alloc] init];
+    [self.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([((CRScan *)obj).scanID isEqualToString:scanID]) {
+            [((CRScan *)obj).slices enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                if ([sliceIds containsObject:((CRSlice *)obj).sliceID]) {
+                    [idxs addObject:[NSNumber numberWithUnsignedInteger:idx]];
+                }
+            }];
+            *stop = YES;
+        }
+    }];
+    return idxs;
+}
+
+-(NSArray *)answerScans {
+    NSMutableSet *scanIds = [[NSMutableSet alloc] init];
+    [self.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        CRAnswer *ans = obj;
+        [ans.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            CRAnswerLine *line = obj;
+            [scanIds addObject:line.scanID];
+        }];
+    }];
+    NSMutableArray *idxs = [[NSMutableArray alloc] init];
+    [self.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([scanIds containsObject:((CRScan *)obj).scanID]) {
+            [idxs addObject:[NSNumber numberWithUnsignedInteger:idx]];
+        }
+    }];
+    return idxs;
 }
 
 - (NSInteger)compareDates:(CRCase *)other

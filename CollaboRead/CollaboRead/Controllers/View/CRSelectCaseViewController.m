@@ -16,6 +16,8 @@
 #import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
+#import "CRErrorAlertService.h"
+#import "CRAccountService.h"
 
 @interface CRSelectCaseViewController()
 {
@@ -23,19 +25,11 @@
 }
 
 @property (nonatomic, strong) NSArray *caseSets;
-@property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, readwrite, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation CRSelectCaseViewController
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-	if (self = [super initWithCoder:aDecoder]) {
-		self.activityIndicator = [[UIActivityIndicatorView alloc] init];
-	}
-	return self;
-}
 
 -(void)viewDidLoad
 {
@@ -45,16 +39,27 @@
 	
 	self.navigationItem.title = self.lecturer.name;
 
-    CGRect frame = LANDSCAPE_FRAME;
-	self.activityIndicator.frame = CGRectMake((frame.size.width - 50.0)/2, (frame.size.height - 50.0)/2, 50.0, 50.0);
-	[self.activityIndicator startAnimating];
-	[self.view addSubview:self.activityIndicator];
-
     //Get lecturers cases and reload view with that information
-	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer.userID block:^(NSArray *caseSets) {
-		self.caseSets = caseSets;
-		[self.activityIndicator removeFromSuperview];
-        [self.collectionView reloadData];//Maybe put back on main thread?
+	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer.userID block:^(NSArray *caseSets, NSError *error) {
+		if (!error) {
+			self.caseSets = caseSets;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
+		} else {
+			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
+				if (self != self.navigationController.viewControllers[0]) {
+					[self.navigationController popViewControllerAnimated:YES];
+				} else if (self.presentingViewController) {
+					[self dismissViewControllerAnimated:YES completion:nil];
+				}
+			}];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self presentViewController:alertController animated:YES completion:nil];
+            });
+
+
+		}
 	}];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
     
@@ -94,11 +99,10 @@
 //When a cell is selected, remember its path to set the case for the next view
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *segID = @"StudentSelectedCase";
-    if ([self.user.title isEqualToString: @"lecturer"]) {
-        segID = @"LecturerSelectedCase";
-    }
+	NSString *segID = [[CRAccountService sharedInstance].user.type isEqualToString:@"lecturer"] ? @"LecturerSelectedCase" : @"StudentSelectedCase";
     selectedPath = indexPath;
+    [self.view addSubview:self.activityIndicator];
+    self.collectionView.userInteractionEnabled = NO;
     [self performSegueWithIdentifier:segID sender:self];
 }
 
@@ -121,7 +125,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	CRImageController *nextController = segue.destinationViewController;
-	nextController.user = self.user;
 
 	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
     NSArray *caseArray = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
@@ -130,7 +133,7 @@
     //selectedCaseSet.cases.allKeys[selectedPath.row];
 	nextController.caseChosen = selectedCase;
 	nextController.caseGroup = selectedCaseSet.setID;
-    nextController.allUsers = self.allUsers;
+
     nextController.lecturerID = self.lecturer.userID;
     nextController.indexPath = selectedPath;
 }

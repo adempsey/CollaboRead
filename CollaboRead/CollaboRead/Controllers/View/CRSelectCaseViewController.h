@@ -12,9 +12,5 @@
 @interface CRSelectCaseViewController : UICollectionViewController
 
 @property (nonatomic, strong) CRUser *lecturer;
-@property (nonatomic, strong) CRUser *user;
-@property (nonatomic, strong) NSArray *allUsers;
-
-
 
 @end

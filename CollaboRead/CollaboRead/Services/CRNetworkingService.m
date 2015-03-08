@@ -7,9 +7,13 @@
 //
 
 #import "CRNetworkingService.h"
+#import "CRAccountService.h"
 
 #define kHTTP_METHOD_GET @"GET"
 #define kHTTP_METHOD_POST @"POST"
+
+#define kCR_API_QUERY_PARAMETER_USER_EMAIL @"email"
+#define kCR_API_QUERY_PARAMETER_USER_PASSWORD @"password"
 
 @implementation CRNetworkingService
 
@@ -23,7 +27,7 @@
 	return sharedInstance;
 }
 
-- (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*))completionBlock
+- (void)performRequestForResource:(NSString*)resource usingMethod:(NSString*)method withParams:(NSDictionary*)params completionBlock:(void (^)(NSData*, NSError*))completionBlock
 {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
 
@@ -47,8 +51,24 @@
 	[request setHTTPMethod:method];
 
 	[NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error ) {
-		completionBlock(data);
+		completionBlock(data, error);
 	}];
+}
+
+- (void)performAuthenticatedRequestForResource:(NSString *)resource usingMethod:(NSString *)method withParams:(NSDictionary *)params completionBlock:(void (^)(NSData *, NSError *))completionBlock
+{
+	NSMutableDictionary *authenticatedParams;
+ 
+	if (params) {
+		authenticatedParams = [params mutableCopy];
+	} else {
+		authenticatedParams = [[NSMutableDictionary alloc] init];
+	}
+
+	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_EMAIL] = [CRAccountService sharedInstance].user.email;
+	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_PASSWORD] = [CRAccountService sharedInstance].password;
+	
+	[self performRequestForResource:resource usingMethod:method withParams:authenticatedParams completionBlock:completionBlock];
 }
 
 #pragma mark - Helper Methods

@@ -15,10 +15,13 @@
 #import "CRSelectLecturerViewController.h"
 #import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
+#import "CRErrorAlertService.h"
+#import "CRCollaboratorList.h"
 
 #define kActivityIndicatorSize 30.0
 typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
-	kCR_LOGIN_ERROR_CREDENTIALS = 0
+	kCR_LOGIN_ERROR_CREDENTIALS = 0,
+	kCR_LOGIN_ERROR_NETWORK
 };
 
 @interface CRLoginViewController ()
@@ -34,7 +37,6 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 -(IBAction)loginPressed:(id)sender; //Triggers login attempt based on button press
 -(IBAction)exitTextField:(id)sender; //Dismisses keyboard when appropriate
--(void)attemptLogin:(NSArray *)users; //Checks validity of information against users in database
 
 @end
 
@@ -44,67 +46,56 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-	CGRect screenBounds = LANDSCAPE_FRAME;
+	CGRect screenBounds = CR_LANDSCAPE_FRAME;
 	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((screenBounds.size
         .width - kActivityIndicatorSize)/2, self.loginButton.frame.origin.y, kActivityIndicatorSize,
         kActivityIndicatorSize)];
 	[self.view addSubview:self.activityIndicator];
 }
 
-//Checks credentials in fields against users retrieved from database
--(void)attemptLogin:(NSArray *)users
+- (void)viewWillAppear:(BOOL)animated
 {
-    //Try to authenticate users
-    CRUser *currUser;
-    if ([users count] > 0) {
-        //Find matching user from list
-        currUser = [users objectAtIndex:0];
-		for (int i = 1; i < [users count] && ![currUser.email isEqualToString:self.emailField.text]; i++) {
-            currUser = [users objectAtIndex:i];
-        }
-        //Check that user was found, (list didn't run out)
-		if ([currUser.email isEqualToString:self.emailField.text]) {
-            //Check password
-			if ([currUser.password isEqualToString:self.passwordField.text]) {
+	[super viewWillAppear:animated];
+	self.loginButton.titleLabel.text = @"Login";
+	self.loginButton.userInteractionEnabled = YES;
+}
 
-				[self showSuccess];
-
-                UIViewController *newController;
-                //Check type of user and make appropriate view
-                
-				if ([currUser.type isEqualToString:CR_USER_TYPE_LECTURER]) {
-                    UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"caseNavController"];
-                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = currUser;
-                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
-                    ((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).allUsers = users;
-                    newController = navController;
-                }
-                else if([currUser.type isEqualToString:CR_USER_TYPE_STUDENT]) {
-                    UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
-                    ((CRSelectLecturerViewController *)[navController.childViewControllers objectAtIndex:0]).user = currUser;
-                    newController = navController;
-                }
-
-				dispatch_async(dispatch_get_main_queue(), ^{
-					// Delay view controller presentation by a bit
-					[UIView animateWithDuration:.5 animations:^{
-						self.loginButton.alpha = 0.99;
-					} completion:^(BOOL finished) {
-						[self presentViewController:newController animated:YES completion:nil];
-					}];
-				});
-            }
-            //Password was incorrect
-            else{
-				[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
-            }
-        }
-        //Username was incorrect
-        else {
+-(void)attemptLogin
+{
+	[[CRAPIClientService sharedInstance] loginUserWithEmail:self.emailField.text password:self.passwordField.text block:^(CRUser *user, NSError *error) {
+		if (error) {
 			[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
-        }
-    }
-}  
+		} else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showSuccess];
+            });
+
+
+			UIViewController *newController;
+			//Check type of user and make appropriate view
+
+			if ([user.type isEqualToString:CR_USER_TYPE_LECTURER]) {
+				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"caseNavController"];
+				((CRSelectCaseViewController *)[navController.childViewControllers objectAtIndex:0]).lecturer = user;
+				newController = navController;
+				
+			} else if([user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
+                [[CRCollaboratorList sharedInstance] setOwner:user.email withName:user.name andID:user.userID];
+				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
+				newController = navController;
+			}
+
+			dispatch_async(dispatch_get_main_queue(), ^{
+				// Delay view controller presentation by a bit
+				[UIView animateWithDuration:.5 animations:^{
+					self.loginButton.alpha = 0.99;
+				} completion:^(BOOL finished) {
+					[self presentViewController:newController animated:YES completion:nil];
+				}];
+			});
+		}
+	}];
+}
 
 //Start attempt to login with api call
 -(IBAction)loginPressed:(id)sender
@@ -115,10 +106,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	[self.activityIndicator startAnimating];
 	self.activityIndicator.hidden = NO;
 
-    //When the information comes back, execute attemptLogin: with it
-	[[CRAPIClientService sharedInstance] retrieveUsersWithBlock:^(NSArray* users) {
-		[self attemptLogin:users];
-	}];
+	[self attemptLogin];
 }
 
 //Dismiss keyboard from a tap outside text fields or end of editting
@@ -135,6 +123,12 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 //Adjust desplay to give user feedback on login credentials
 - (void)showSuccess
 {
+	if (self.errorLabel.alpha > 0.0) {
+		[UIView animateWithDuration:0.25 animations:^{
+			self.errorLabel.alpha = 0.0;
+		}];
+	}
+	
 	NSString *unicodeCheckMark = @"\u2713";
 	self.loginButton.titleLabel.text = unicodeCheckMark;
 
@@ -146,11 +140,25 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 -(void)showError:(NSUInteger)error
 {
-	NSString *errorString = @"Error: ";
-	if (error == kCR_LOGIN_ERROR_CREDENTIALS) {
-		errorString = [errorString stringByAppendingString:@"Incorrect username or password"];
+	if (self.errorLabel.alpha > 0.0) {
+		[UIView animateWithDuration:0.25 animations:^{
+			self.errorLabel.alpha = 0.0;
+		}];
 	}
 
+	NSString *errorString = @"Error: ";
+	switch (error) {
+		case kCR_LOGIN_ERROR_CREDENTIALS:
+			errorString = [errorString stringByAppendingString:@"Incorrect username or password."];
+			break;
+		case kCR_LOGIN_ERROR_NETWORK:
+			errorString = [errorString stringByAppendingString:@"Unable to access network. Please try again in a few minutes."];
+			break;
+		default:
+			errorString = @"";
+			break;
+	}
+	
 	self.errorLabel.text = errorString;
 
 	[self.activityIndicator stopAnimating];

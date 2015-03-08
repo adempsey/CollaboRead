@@ -82,7 +82,7 @@
     return nil;
 }
 
--(CRAnswer *)answersFromStackForOwners:(NSArray *)owners
+-(CRAnswer *)answersFromStackForOwners:(NSArray *)owners inGroup:(NSString *)group
 {
     NSMutableArray *answerLines = [[NSMutableArray alloc] init];
     [self.stacks.allKeys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -95,7 +95,7 @@
             }
         }];
     }];
-    return [[CRAnswer alloc] initWithData:answerLines submissionDate:[NSDate dateWithTimeIntervalSinceNow:0] owners:owners answerID:@"replace_this"];
+    return [[CRAnswer alloc] initWithData:answerLines submissionDate:[NSDate dateWithTimeIntervalSinceNow:0] owners:owners answerName:group answerID:@"replace_this"];
 }
 
 @end

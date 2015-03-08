@@ -7,26 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CRCase.h"
+#import "CRSideBarViewController.h"
 
-@interface CRStudentAnswerTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
+@interface CRStudentAnswerTableViewController : CRSideBarViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, readwrite, weak) id delegate;
 
-@property (nonatomic, readwrite, strong) NSArray *students;
+/*!
+ @brief A list of the answers submitted to the case to use for displaying the names of groups/students.
+ */
+@property (nonatomic, readwrite, strong) NSArray *answerList;
 
-@property (nonatomic, readwrite, strong) NSArray *allUsers;
-
-- (instancetype)initWithStudents:(NSArray*)students;
-- (void)toggleTable;
-- (void)updateAnswers:(NSArray*)answers;
+- (instancetype)initWithAnswerList:(NSArray*)answerList;
 
 @end
 
 @protocol CRStudentAnswerTableViewDelegate <NSObject>
 
 @required
-- (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didChangeStudentSelection:(NSArray*)selectedStudents ;
-
+- (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didChangeAnswerSelection:(NSArray*)answers;
 
 @end

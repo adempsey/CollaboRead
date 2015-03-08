@@ -22,6 +22,39 @@
 
 + (CRAPIClientService*)sharedInstance;
 
+#pragma mark - User Account Methods
+
+/*!
+ Attempts to log a user in
+ 
+ @param email
+ email to use as a username
+ @param password
+ password corresponding to username
+ 
+ @param block
+ completion block to execute with retrieved user information
+ */
+- (void)loginUserWithEmail:(NSString*)email password:(NSString*)password block:(void (^)(CRUser*, NSError*))block;
+
+/*!
+ Registers a user
+ 
+ @param user
+ user to attempt to register
+ @param block
+ completion block to execute at end of registration
+ */
+- (void)registerUser:(CRUser*)user password:(NSString*)password block:(void (^)(NSError*))block;
+
+/*!
+ Checks existance of users based on email (username)
+ 
+ @param block
+ completion block to execute with list of valid and list of invalid usernames
+ */
+- (void)verifyUsersExist:(NSArray*)users block:(void (^)(NSArray*, NSArray*))block;
+
 #pragma mark - Retrieval Methods
 
 /*!
@@ -30,7 +63,7 @@
  @param block
  completion block to execute with list of users
  */
-- (void)retrieveUsersWithBlock:(void (^)(NSArray*))block;
+- (void)retrieveUsersWithBlock:(void (^)(NSArray*, NSError*))block;
 
 /*!
  Retrieves a list of all lecturers from the API
@@ -38,7 +71,7 @@
  @param block
  completion block to execute with list of lecturers
  */
-- (void)retrieveLecturersWithBlock:(void (^)(NSArray*))block;
+- (void)retrieveLecturersWithBlock:(void (^)(NSArray*, NSError*))block;
 
 /*!
  Retrieves a specific lecturer from the API
@@ -48,7 +81,7 @@
  @param block
  completion block to execute with CRUser object for retrieved lecturer
  */
-- (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(CRUser*))block;
+- (void)retrieveLecturerWithID:(NSString*)lecturerID block:(void (^)(CRUser*, NSError*))block;
 
 /*!
  Retrieves a specific student from the API
@@ -58,7 +91,7 @@
  @param block
  completion block to execute with CRUser object for retrieved student
  */
-- (void)retrieveStudentWithID:(NSString*)studentID block:(void (^)(CRUser*))block;
+- (void)retrieveStudentWithID:(NSString*)studentID block:(void (^)(CRUser*, NSError*))block;
 
 /*!
  Retrieves a specific case set from the API
@@ -68,7 +101,7 @@
  @param block
  completion block to execute with CRCaseSet object for retrieved case set
  */
-- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*))block;
+- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*, NSError*))block;
 
 /*!
  Retrieves a list of case sets belonging to the given lecturer from the API
@@ -77,7 +110,7 @@
  @param block
  completion block to execute with list of case sets retrieved from the API
  */
-- (void)retrieveCaseSetsWithLecturer:(NSString*)lecturerID block:(void (^)(NSArray*))block;
+- (void)retrieveCaseSetsWithLecturer:(NSString*)lecturerID block:(void (^)(NSArray*, NSError*))block;
 
 #pragma mark - Submission Methods
 
@@ -93,6 +126,6 @@
  @param block
  completion block to execute with updated case set retrieved from the API
  */
-- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*))block;
+- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*, NSError*))block;
 
 @end

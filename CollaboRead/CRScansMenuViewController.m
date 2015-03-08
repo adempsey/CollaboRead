@@ -33,6 +33,11 @@ static NSString * const reuseIdentifier = @"scanCell";
     return self;
 }
 
+-(void) setHighlights:(NSArray *)highlights {
+    _highlights = highlights;
+    [self.collectionView reloadData];
+}
+
 -(void) setViewFrame:(CGRect)frame {
     self.view.frame = frame;
     [self.collectionView reloadData];
@@ -83,6 +88,13 @@ static NSString * const reuseIdentifier = @"scanCell";
     // Configure the cell
     cell.name.text = ((CRScan *)self.scans[indexPath.row]).name;
     cell.image.image = ((CRSlice *)((CRScan *)self.scans[indexPath.row]).slices[0]).image;
+    if ([self.highlights containsObject:[NSNumber numberWithInteger:indexPath.row]]) {
+        cell.layer.borderColor = [CR_COLOR_ANSWER_INDICATOR CGColor];
+        cell.layer.borderWidth = 3.0;
+    }
+    else {
+        cell.layer.borderWidth = 0;
+    }
     return cell;
 }
 

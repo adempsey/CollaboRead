@@ -13,6 +13,7 @@
 #import "CRCaseSet.h"
 #import "CRCase.h"
 #import "CRViewSizeMacros.h"
+#import "CRErrorAlertService.h"
 
 @interface CRSelectLecturerViewController ()
 {
@@ -20,19 +21,11 @@
 }
 
 @property (nonatomic, strong) NSArray *lecturers; //Lecturers in database
-@property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, readwrite, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation CRSelectLecturerViewController
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-	if (self = [super initWithCoder:aDecoder]) {
-		self.activityIndicator = [[UIActivityIndicatorView alloc] init];
-	}
-	return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,18 +33,27 @@
     //Set up display with placeholder, iOS version appropriately
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.title = @"Select Lecturer";
-    CGRect frame = LANDSCAPE_FRAME;
-	self.activityIndicator.frame = CGRectMake((frame.size.width - 50.0)/2, (frame.size.height - 50.0)/2, 50.0, 50.0);
-	[self.activityIndicator startAnimating];
-	[self.view addSubview:self.activityIndicator];
     
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"LecturerCell"];
     
     //Get Lecturers to display and display when possible
-    [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers) {
-        self.lecturers = lecturers;
-		[self.activityIndicator removeFromSuperview];
-        [self.collectionView reloadData];
+    [[CRAPIClientService sharedInstance]retrieveLecturersWithBlock:^(NSArray* lecturers, NSError *error) {
+		if (!error) {
+			self.lecturers = lecturers;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
+
+		} else {
+			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
+				if (self != self.navigationController.viewControllers[0]) {
+					[self.navigationController popViewControllerAnimated:YES];
+				} else if (self.presentingViewController) {
+					[self dismissViewControllerAnimated:YES completion:nil];
+				}
+			}];
+			[self presentViewController:alertController animated:YES completion:nil];
+		}
     }];
 }
 
@@ -60,7 +62,6 @@
 //Pass along user and lecturer
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     CRSelectCaseViewController *nextController = [segue destinationViewController];
-    nextController.user = self.user;
     nextController.lecturer = self.lecturers[selectedPath.row];
 }
 
