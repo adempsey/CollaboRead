@@ -13,11 +13,12 @@
 #import "CRUser.h"
 #import "CRUserKeys.h"
 
+#import "UILabel+CRAdditions.h"
+
 @interface CRCreateAccountViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *roleSelector;
-@property (weak, nonatomic) IBOutlet UITextField *yearTitleField;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *yearSelector;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordCheckField;
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
@@ -28,6 +29,9 @@
 @property (weak, nonatomic) UITextField *activeField;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *yearLabel;
+@property (weak, nonatomic) IBOutlet UILabel *successCheckMark;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
+@property (weak, nonatomic) IBOutlet UILabel *successMessage;
 
 - (IBAction)registerAccount:(id)sender;
 - (IBAction)switchRole:(UISegmentedControl *)sender;
@@ -43,23 +47,21 @@
 
 @implementation CRCreateAccountViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.errorLabel.textColor = CR_COLOR_ERROR;
     self.errorLabel.hidden = YES;
     [self registerForKeyboardNotifications];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
--(IBAction)done:(id)sender {
+- (IBAction)done:(id)sender
+{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(IBAction)switchRole:(UISegmentedControl *)sender {
+- (IBAction)switchRole:(UISegmentedControl *)sender
+{
     if (sender.selectedSegmentIndex == 0) {
         self.titleLabel.hidden = YES;
         self.yearLabel.hidden = NO;
@@ -69,7 +71,8 @@
     }
 }
 
--(void)toggleActivityIndicator {
+- (void)toggleActivityIndicator
+{
     if (self.activityIndicator.hidden) {
         [self.activityIndicator startAnimating];
     } else {
@@ -77,20 +80,21 @@
     }
 }
 
--(IBAction)registerAccount:(id)sender {
-    self.errorLabel.hidden = YES;
+- (IBAction)registerAccount:(id)sender
+{
+	[self.view endEditing:YES];
     if ([self.emailField.text isEqualToString:@""] || ![self validEmail: self.emailField.text]) {
-        self.errorLabel.text = @"Invalid email format";
-        self.errorLabel.hidden = NO;
+		[self.errorLabel animateTransitionToText:@"Invalid email format"];
+		
     } else if ([self.nameField.text isEqualToString:@""]) {
-        self.errorLabel.text = @"Empty names are invalid";
-        self.errorLabel.hidden = NO;
+		[self.errorLabel animateTransitionToText:@"Empty names are invalid"];
+		
     } else if ([self.passwordField.text isEqualToString:@""]) {
-        self.errorLabel.text = @"Empty passwords are invalid";
-        self.errorLabel.hidden = NO;
+		[self.errorLabel animateTransitionToText:@"Empty passwords are invalid"];
+		
     } else if (![self.passwordField.text isEqualToString:self.passwordCheckField.text]) {
-        self.errorLabel.text = @"Passwords do not match";
-        self.errorLabel.hidden = NO;
+		[self.errorLabel animateTransitionToText:@"Passwords do not match"];
+		
     } else {
         self.registerButton.hidden = YES;
         [self performSelector:@selector(toggleActivityIndicator) withObject:nil afterDelay:0.0];
@@ -98,36 +102,49 @@
     }
 }
 
--(void)performRegistration {
+- (void)performRegistration {
     CRUser *user = [[CRUser alloc] init];
     user.email = self.emailField.text;
     user.name = self.nameField.text;
-    user.type = self.roleSelector.selectedSegmentIndex == 0 ? CR_USER_TYPE_STUDENT : CR_USER_TYPE_LECTURER;
-    user.year = self.roleSelector.selectedSegmentIndex == 0 ? self.yearTitleField.text : @"0";
-    user.title = self.roleSelector.selectedSegmentIndex == 0 ? CR_USER_TYPE_STUDENT : self.yearTitleField.text;
-    user.type = self.roleSelector.selectedSegmentIndex == 0 ? CR_USER_TYPE_STUDENT : CR_USER_TYPE_LECTURER;
+    user.type = CR_USER_TYPE_STUDENT;
+	user.year = [NSString stringWithFormat:@"%ld", (long) self.yearSelector.selectedSegmentIndex + 1];
+	user.title = @"";
+
     [[CRAPIClientService sharedInstance] registerUser:user password:self.passwordField.text block:^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            // Delay view controller presentation by a bit
+
             [self toggleActivityIndicator];
             if (error) {
                 self.registerButton.hidden = NO;
-                self.errorLabel.text = @"Registration unsuccessful";
-                self.errorLabel.hidden = NO;
-                //do error stuff
+				[self.errorLabel animateTransitionToText:@"Registration unsuccessful. Please try again later."];
+
             } else {
-                self.errorLabel.textColor = [UIColor whiteColor];
-                self.errorLabel.text = @"Account successfully registered";
-                self.errorLabel.hidden = NO;
-                self.doneButton.hidden = NO;
+				
+				[UIView animateWithDuration:0.25 animations:^{
+					self.scrollView.alpha = 0.0;
+				} completion:^(BOOL finished) {
+					[self showSuccessInfo];
+				}];
             }
             
         });
     }];
-
 }
 
--(BOOL)validEmail:(NSString *)email {
+- (void)showSuccessInfo
+{
+	self.successCheckMark.hidden = NO;
+	self.doneButton.hidden = NO;
+	self.successMessage.hidden = NO;
+	[self.navigationItem setLeftBarButtonItem:nil animated:YES];
+	[UIView animateWithDuration:0.25 animations:^{
+		self.successCheckMark.alpha = 1.0;
+		self.doneButton.alpha = 1.0;
+		self.successMessage.alpha = 1.0;
+	}];
+}
+
+- (BOOL)validEmail:(NSString *)email {
     if ([email componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].count < 2) {
         NSArray *halves = [email componentsSeparatedByString:@"@"];
         if (halves.count == 2) {
@@ -139,24 +156,20 @@
     return NO;
 }
 
--(void)textFieldDidBeginEditing:(UITextField *)textField {
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.activeField = textField;
 }
--(void)textFieldDidEndEditing:(UITextField *)textField {
+- (void)textFieldDidEndEditing:(UITextField *)textField {
     self.activeField = nil;
 }
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if ([textField isEqual:self.emailField]) {
         [textField resignFirstResponder];
         [self.nameField becomeFirstResponder];
     }
     else if ([textField isEqual:self.nameField]) {
         [textField resignFirstResponder];
-    }
-    else if ([textField isEqual:self.yearTitleField]) {
-        [textField resignFirstResponder];
-        [self.passwordField becomeFirstResponder];
     }
     else if ([textField isEqual:self.passwordField]) {
         [textField resignFirstResponder];
@@ -210,15 +223,5 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
     
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
