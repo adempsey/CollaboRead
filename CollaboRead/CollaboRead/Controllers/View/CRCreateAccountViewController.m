@@ -53,6 +53,10 @@
     self.errorLabel.textColor = CR_COLOR_ERROR;
     self.errorLabel.hidden = YES;
     [self registerForKeyboardNotifications];
+    self.navigationController.view.layer.borderColor = CR_COLOR_TINT.CGColor;
+    self.view.layer.borderColor = CR_COLOR_TINT.CGColor;
+    self.navigationController.view.layer.borderWidth = 3.0;
+    self.view.layer.borderWidth = 3.0;
 }
 
 - (IBAction)done:(id)sender
