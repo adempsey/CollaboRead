@@ -9,6 +9,7 @@
 #import "CRStudentAnswerTableViewController.h"
 #import "CRUser.h"
 #import "CRAnswer.h"
+#import "CRColors.h"
 
 typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewSections) {
 	kSECTION_OPTIONS = 0,
@@ -106,7 +107,12 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	}
 	
 	cell.textLabel.text = [self titleForCellAtIndexPath:indexPath];
-	cell.textLabel.textColor = [UIColor whiteColor];
+    NSDictionary *color = studentColors[indexPath.row];
+    if (indexPath.section == kSECTION_STUDENTS) {
+        cell.textLabel.textColor = [UIColor colorWithRed: [color[@"red"] floatValue] green: [color[@"green"] floatValue] blue:[color[@"blue"] floatValue] alpha:1.0];
+    } else {
+        cell.textLabel.textColor = [UIColor whiteColor];
+    }
 	cell.textLabel.adjustsFontSizeToFitWidth = YES;
 	
 	cell.accessoryType = [self accessoryTypeForCellAtIndexPath:indexPath];
