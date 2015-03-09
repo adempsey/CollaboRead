@@ -37,8 +37,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	CGFloat viewOriginY = CR_STATUS_BAR_HEIGHT;
-    CGFloat topBar = CR_TOP_BAR_HEIGHT;
+	CGFloat viewOriginY = CR_TOP_BAR_HEIGHT;
     CGRect screenFrame = CR_LANDSCAPE_FRAME;
     
 	CGRect viewFrame = CGRectMake(0,
@@ -53,7 +52,7 @@
 
 	[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
 	self.tableView.scrollEnabled = NO;
-	self.tableView.contentInset = UIEdgeInsetsMake((self.view.frame.size.height - topBar - kCR_PANEL_TOOL_COUNT * kToolPanelTableViewWidth) / 2.0, 0, 0, 0);
+	self.tableView.contentInset = UIEdgeInsetsMake((kToolPanelTableViewWidth - kToolPanelButtonDimension)/ 2.0, 0, 0, 0);
 
 	UIView *tableViewBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
 	tableViewBackgroundView.backgroundColor = CR_COLOR_PRIMARY;
@@ -118,7 +117,6 @@
 	if (!cell) {
 		cell = [[CRToolPanelCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PanelCell"];
 	}
-	
 	cell.imageView.image = [self imageForCellAtIndexPath:indexPath];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
@@ -128,7 +126,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return kToolPanelTableViewWidth;
+    return tableView.frame.size.height / (kCR_PANEL_TOOL_COUNT + 1);
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -145,8 +144,30 @@
                 [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
                 [self.delegate toolPanelViewController:self didSelectTool:self.selectedTool.row];
                 break;
+            case kCR_PANEL_TOOL_PATIENT_INFO:
             case kCR_PANEL_TOOL_PEN:
             case kCR_PANEL_TOOL_ERASER:
+            case kCR_PANEL_TOOL_POINTER:
+                [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
+                self.selectedTool = indexPath;
+            default:
+                break;
+        }
+    } else if(self.selectedTool.row == kCR_PANEL_TOOL_PATIENT_INFO) {
+        switch (indexPath.row) {
+            case kCR_PANEL_TOOL_UNDO:
+            case kCR_PANEL_TOOL_CLEAR:
+                [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
+            case kCR_PANEL_TOOL_PATIENT_INFO:
+                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+                self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
+                [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
+                [self.delegate toolPanelViewController:self didSelectTool:self.selectedTool.row];
+                break;
+            case kCR_PANEL_TOOL_SCANS:
+            case kCR_PANEL_TOOL_PEN:
+            case kCR_PANEL_TOOL_ERASER:
+            case kCR_PANEL_TOOL_POINTER:
                 [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
                 self.selectedTool = indexPath;
             default:
@@ -180,8 +201,14 @@
 		case kCR_PANEL_TOOL_CLEAR:
 			title = @"CRToolPanelClear.png";
 			break;
+        case kCR_PANEL_TOOL_POINTER:
+            title = @"CRToolPanelPointer.png";//Change to correct icon when available
+            break;
         case kCR_PANEL_TOOL_SCANS:
             title = @"CRToolPanelScan.png";
+            break;
+        case kCR_PANEL_TOOL_PATIENT_INFO:
+            title = @"CRToolPanelPatientInfo.png";//Change to correct icon when available
             break;
 	}
 	

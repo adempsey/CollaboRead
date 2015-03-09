@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "CRSideBarViewController.h"
 
-@interface CRPatientInfoViewController : CRSideBarViewController
+@interface CRPatientInfoViewController : UIViewController
 
 @property (nonatomic, readwrite, strong) NSString *infoText;
 
 - (instancetype)initWithPatientInfo:(NSString *)patientInfo;
+
+-(void)setViewFrame:(CGRect)frame;
 
 @end

@@ -37,7 +37,6 @@
 @property (nonatomic, strong) NSMutableArray *currentDrawing;
 @property (nonatomic, strong) NSString *lecturerID;//Lecturer who own's case
 @property (nonatomic, strong) NSIndexPath *indexPath;
-@property (nonatomic, strong) NSString *patientInfo;
 
 @property (nonatomic, strong) UIView *limView;
 @property (nonatomic, strong) CRScansMenuViewController *scansMenuController;

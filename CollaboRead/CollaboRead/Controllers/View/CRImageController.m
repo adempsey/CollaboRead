@@ -31,6 +31,7 @@
 #define kMAX_ZOOM 3
 #define kMIN_ZOOM 1
 #define kCAROUSEL_HEIGHT kCR_CAROUSEL_CELL_HEIGHT + 20
+#define kPATIENT_INFO_DIMENSION (CR_LANDSCAPE_FRAME).size.height/3
 
 @interface CRImageController ()
 {
@@ -45,21 +46,23 @@
 
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
 @property (nonatomic, readwrite, assign) NSUInteger selectedTool;
+@property (nonatomic, readwrite, strong) UITextView *patientInfo;
 
 @property (nonatomic, readwrite, strong) UIButton *toggleButton;
 
 @property (nonatomic, strong) UIPinchGestureRecognizer *zoomGesture;
 
--(void)toggleScansMenu;
--(void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
--(void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
--(void)removePointFromAnswer:(CRAnswerPoint *)pt;
--(void)swapImage;
+- (void)toggleScansMenu;
+- (void)togglePatientInfo;
+- (void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
+- (void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
+- (void)removePointFromAnswer:(CRAnswerPoint *)pt;
+- (void)swapImage;
 
--(void)drawTouch:(UIPanGestureRecognizer *)gestureRecognizer;
--(void)zoomTouch:(UIPinchGestureRecognizer *)gestureRecognizer;
--(void)panTouch:(UIPanGestureRecognizer *)gestureRecognizer;
--(void)scrollTouch:(UIPanGestureRecognizer *)gestureRecognizer;
+- (void)drawTouch:(UIPanGestureRecognizer *)gestureRecognizer;
+- (void)zoomTouch:(UIPinchGestureRecognizer *)gestureRecognizer;
+- (void)panTouch:(UIPanGestureRecognizer *)gestureRecognizer;
+- (void)scrollTouch:(UIPanGestureRecognizer *)gestureRecognizer;
 
 @end
 
@@ -88,7 +91,7 @@
     self.scrollBar.dataSource = self;
     self.scrollBar.delegate = self;
     self.scrollBar.type = iCarouselTypeLinear;
-    self.scrollBar.frame = CGRectMake(CR_TOP_BAR_HEIGHT, 0, kCR_CAROUSEL_CELL_HEIGHT, kCAROUSEL_HEIGHT);
+    self.scrollBar.frame = CGRectMake(CR_TOP_BAR_HEIGHT, 0, kCR_CAROUSEL_CELL_HEIGHT, kCAROUSEL_HEIGHT + 20);
     self.scrollBar.backgroundColor = [UIColor blackColor];
     self.scrollBar.clipsToBounds = YES;
     
@@ -118,26 +121,35 @@
 	self.toolPanelViewController.delegate = self;
 
     CGRect frame = CR_LANDSCAPE_FRAME; //Frame adjusted based on iOS 7 or 8
-	self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
+    
+    //TODO:confirm that no toggling toolbar is ok
+	/*self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
 										 frame.size.height - 60.0 - 10.0,
 										 60.0,
 										 60.0);
 	UIImage *toggleButtonImage = [UIImage imageNamed:@"CRToolPanelToggle.png"];
 	[self.toggleButton setImage:toggleButtonImage forState:UIControlStateNormal];
-	[self.toggleButton addTarget:self action:@selector(toggleToolPanel) forControlEvents:UIControlEventTouchUpInside];
+	[self.toggleButton addTarget:self action:@selector(toggleToolPanel) forControlEvents:UIControlEventTouchUpInside];*/
     
     self.scansMenuController = [[CRScansMenuViewController alloc] initWithScans:self.caseChosen.scans];
     self.scansMenuController.delegate = self;
     self.scansMenuController.highlights = [[NSArray alloc] init];
-    [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - kButtonDimension, 0, 0)];
+    [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0)];
     self.scansMenuController.view.hidden = YES;
     
+    self.patientInfo = [[UITextView alloc] initWithFrame:CGRectMake(- kPATIENT_INFO_DIMENSION, kPATIENT_INFO_DIMENSION + (CR_TOP_BAR_HEIGHT), kPATIENT_INFO_DIMENSION, kPATIENT_INFO_DIMENSION)];
+    self.patientInfo.text = self.caseChosen.patientInfo;
+    self.patientInfo.textColor = [UIColor whiteColor];
+    self.patientInfo.backgroundColor = CR_COLOR_PRIMARY;
+    self.patientInfo.layer.borderColor = CR_COLOR_TINT.CGColor;
+    self.patientInfo.layer.borderWidth = 3.0;
+    self.patientInfo.hidden = YES;
+    
+    [self.view addSubview:self.patientInfo];
     [self.view addSubview:self.scansMenuController.view];
     [self.view addSubview:self.toolPanelViewController.view];
-    [self.view addSubview:self.toggleButton];
-    
-    
-    self.patientInfo = self.caseChosen.patientInfo;
+    //TODO:confirm that no toggling toolbar is ok
+    //[self.view addSubview:self.toggleButton];
     
 	//Try to load drawings from previous viewing during session or make new undo stack
 	self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID];
@@ -199,14 +211,15 @@
 	}];
 }
 
-- (void)toggleToolPanel {
+//TODO:confirm that no toggling toolbar is ok
+/*- (void)toggleToolPanel {
 	CGFloat buttonAlpha = self.toolPanelViewController.toolPanelIsVisible ? 0.5: 1.0;
 	[self.toolPanelViewController toggleToolPanel];
 
 	[UIView animateWithDuration:0.25 animations:^{
 		self.toggleButton.alpha = buttonAlpha;
 	}];
-}
+}*/
 
 #pragma mark - Zoom Methods
 -(void) zoomOut {
@@ -493,19 +506,34 @@
             lastPoint = [[CRAnswerPoint alloc] initWithPoint:CGPointMake(touchPt.x / self.currZoom, touchPt.y / self.currZoom) end:NO];
             [self removePointFromAnswer:lastPoint];
         }
+        if (self.selectedTool == kCR_PANEL_TOOL_POINTER && lastPoint != nil) {
+            CRAnswerPoint *currentPoint = [[CRAnswerPoint alloc] initWithPoint: CGPointMake(touchPt.x / self.currZoom, touchPt.y / self.currZoom) end:NO];
+            [self drawLineFrom:lastPoint to:currentPoint];
+            lastPoint = currentPoint;
+        }
+        else if (self.selectedTool == kCR_PANEL_TOOL_POINTER)
+        {
+            lastPoint = [[CRAnswerPoint alloc] initWithPoint:CGPointMake(touchPt.x / self.currZoom, touchPt.y / self.currZoom) end:NO];
+        }
     }
     else {
-        if (lastPoint != nil) {
+        if (lastPoint != nil && self.selectedTool != kCR_PANEL_TOOL_POINTER) {
             lastPoint.isEndPoint = YES;
             lastPoint = nil;
         }
     }
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
-        lastPoint.isEndPoint = YES;
-        CRScan *scan = self.caseChosen.scans[self.scanIndex];
-        [self.undoStack addLayer:self.currentDrawing forSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID];
-        self.currentDrawing = [[NSMutableArray alloc] initWithArray:self.currentDrawing copyItems:YES];
-        lastPoint = nil;
+        if (self.selectedTool == kCR_PANEL_TOOL_PEN || self.selectedTool == kCR_PANEL_TOOL_ERASER) {
+            lastPoint.isEndPoint = YES;
+            CRScan *scan = self.caseChosen.scans[self.scanIndex];
+            [self.undoStack addLayer:self.currentDrawing forSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID];
+            self.currentDrawing = [[NSMutableArray alloc] initWithArray:self.currentDrawing copyItems:YES];
+            lastPoint = nil;
+        } else if (self.selectedTool == kCR_PANEL_TOOL_POINTER) {
+            [self clearDrawing];
+            [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+            lastPoint = nil;
+        }
     }
 }
 
@@ -551,18 +579,35 @@
     if (self.scansMenuController.view.hidden) {
         self.scansMenuController.view.hidden = NO;
         CGFloat size = self.toolPanelViewController.view.frame.size.height * 0.75;
-        frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - size - kButtonDimension, size, size);
+        frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - size - self.scrollBar.frame.size.height, size, size);
         [UIView animateWithDuration:0.25 animations:^{
             [self.scansMenuController setViewFrame: frame];
         } completion:^(BOOL finished) {}];
     }
     else {
-        frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - kButtonDimension, 0, 0);
+        frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0);
     
         [UIView animateWithDuration:0.25 animations:^{
             [self.scansMenuController setViewFrame: frame];
         } completion:^(BOOL finished) {
             self.scansMenuController.view.hidden = YES;
+        }];
+    }
+}
+- (void)togglePatientInfo {
+    CGRect frame = self.patientInfo.frame;
+    if (self.patientInfo.hidden) {
+        self.patientInfo.hidden = NO;
+        frame = CGRectMake(self.toolPanelViewController.view.frame.size.width, frame.origin.y, frame.size.width, frame.size.height);
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.patientInfo setFrame: frame];
+        } completion:^(BOOL finished) {}];
+    } else {
+        frame = CGRectMake(-kPATIENT_INFO_DIMENSION, frame.origin.y, frame.size.width, frame.size.height);
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.patientInfo setFrame: frame];
+        } completion:^(BOOL finished) {
+            self.patientInfo.hidden = YES;
         }];
     }
 }
@@ -574,6 +619,7 @@
 	switch (tool) {
 		case kCR_PANEL_TOOL_PEN:
 		case kCR_PANEL_TOOL_ERASER:
+        case kCR_PANEL_TOOL_POINTER:
 			self.selectedTool = tool;
 			break;
 		case kCR_PANEL_TOOL_UNDO:
@@ -587,6 +633,9 @@
             break;
         case kCR_PANEL_TOOL_SCANS:
             [self toggleScansMenu];
+            self.selectedTool = tool;
+        case kCR_PANEL_TOOL_PATIENT_INFO:
+            [self togglePatientInfo];
             self.selectedTool = tool;
         default:
             break;

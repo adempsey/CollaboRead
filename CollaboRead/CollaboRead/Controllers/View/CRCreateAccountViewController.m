@@ -29,7 +29,9 @@
 @property (weak, nonatomic) UITextField *activeField;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *yearLabel;
+@property (weak, nonatomic) IBOutlet UILabel *successCheckMark;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
+@property (weak, nonatomic) IBOutlet UILabel *successMessage;
 
 - (IBAction)registerAccount:(id)sender;
 - (IBAction)switchRole:(UISegmentedControl *)sender;
@@ -111,12 +113,12 @@
 
     [[CRAPIClientService sharedInstance] registerUser:user password:self.passwordField.text block:^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
+
             [self toggleActivityIndicator];
             if (error) {
                 self.registerButton.hidden = NO;
-                self.errorLabel.text = @"Registration unsuccessful";
-                self.errorLabel.hidden = NO;
-                self.cancelButton.enabled = YES;
+				[self.errorLabel animateTransitionToText:@"Registration unsuccessful. Please try again later."];
+
             } else {
 				
 				[UIView animateWithDuration:0.25 animations:^{

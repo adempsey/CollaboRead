@@ -100,22 +100,26 @@
     self.studentAnswerView.frame = self.imgFrame;
     [self.limView addSubview:self.studentAnswerView];
 	self.view.autoresizesSubviews = NO;
-
+    [self loadStudents];
 	// Should pass array of CRUsers that have submitted answers
 	// This workflow will need to be adjusted in the future, since this list will change as students submit answers
-    [self loadStudents];
+    
 	self.studentAnswerTableViewController.delegate = self;
+    self.studentAnswerTableViewController.visible = NO;
 	[self.view addSubview:self.studentAnswerTableViewController.view];
 
     NSArray *scanHighlights = [self.caseChosen answerScans];
     self.scansMenuController.highlights = scanHighlights;
 
-	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:kCR_SIDE_BAR_TOGGLE_HIDE style:UIBarButtonItemStylePlain target:nil action:nil];
+	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:kCR_SIDE_BAR_TOGGLE_SHOW style:UIBarButtonItemStylePlain target:nil action:nil];
 	self.toggleStudentAnswerTableButton.possibleTitles = [NSSet setWithArray:@[kCR_SIDE_BAR_TOGGLE_HIDE, kCR_SIDE_BAR_TOGGLE_SHOW]];
 	self.studentAnswerTableViewController.toggleButton = self.toggleStudentAnswerTableButton;
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
-
-	[[CRAnswerRefreshService sharedInstance] setUpdateBlock:^{
+    if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
+        //TODO:ADD BADGE
+    }
+	
+    [[CRAnswerRefreshService sharedInstance] setUpdateBlock:^{
 		[self refreshAnswers];
 	}];
 	
@@ -140,6 +144,10 @@
                 self.studentAnswerTableViewController.answerList = answers;
                 [self.scrollBar reloadData];
                 self.scansMenuController.highlights = scanHighlights;
+                if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
+                    //TODO: ADD BADGE
+                }
+                
             });
 		} else {
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:^(UIAlertAction* action) {
@@ -167,7 +175,6 @@
     }];
     self.allStudents = allStudents;
     self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:answers];
-
 }
 
 -(void)zoomOut {
@@ -191,9 +198,8 @@
     self.selectedAnswers = answers;
 	
 	NSMutableArray *colors = [[NSMutableArray alloc] init];
-#warning colors are inconsistent
 	for (id obj in answers) {
-		[colors addObject:studentColors[0]];
+		[colors addObject:studentColors[[self.caseChosen.answers indexOfObject:obj]]];
 	}
 	
     self.selectedColors = colors;
@@ -209,6 +215,11 @@
 {
     [super scansMenuViewControllerDidSelectScan:scanId];
     self.studentAnswerView.frame = self.imgFrame;
+    if ([self.caseChosen answerSlicesForScan:scanId].count > 0) {
+        //TODO: ADD BADGE
+    } else {
+        //TODO: NO BADGE
+    }
     [self.scrollBar reloadData];
     [self drawStudentAnswers];
 }
@@ -240,6 +251,7 @@
 
 - (void)CRSideBarViewController:(CRSideBarViewController *)sideBarViewController didChangeVisibility:(BOOL)visible
 {
+    //TODO: NO BADGE if visible
 	self.toggleStudentAnswerTableButton.title = visible ? kCR_SIDE_BAR_TOGGLE_HIDE : kCR_SIDE_BAR_TOGGLE_SHOW;
 }
 

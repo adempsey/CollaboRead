@@ -12,6 +12,7 @@
 #define ELEMENT_PADDING 10
 #define ELEMENT_HEIGHT 30
 #define BUTTON_WIDTH 100
+#define kVIEW_WIDTH 230.0
 
 @interface CRAddCollaboratorsViewController ()
 
@@ -29,21 +30,9 @@
 
 @implementation CRAddCollaboratorsViewController
 
--(void)setViewFrame:(CGRect)rect {
-    self.view.frame = rect;
-    self.groupName.frame = CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT);
-    
-    self.enterField.frame = CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING + self.groupName.frame.origin.y + self.groupName.frame.size.height, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT);
-    
-    self.tableView.frame = CGRectMake(0, ELEMENT_PADDING + self.enterField.frame.origin.y + self.enterField.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (ELEMENT_HEIGHT + 3 * ELEMENT_PADDING + self.enterField.frame.origin.y + self.enterField.frame.size.height));
-    
-    self.validateButton.frame = CGRectMake((self.view.frame.size.width - BUTTON_WIDTH)/2, self.tableView.frame.origin.y + self.tableView.frame.size.height + ELEMENT_PADDING, (self.view.frame.size.width - BUTTON_WIDTH) / 2, ELEMENT_HEIGHT);
-    
-    self.activityIndicator.frame = CGRectMake((self.view.frame.size.width - ELEMENT_HEIGHT)/2, self.validateButton.frame.origin.y, ELEMENT_HEIGHT, ELEMENT_HEIGHT);
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.width = kVIEW_WIDTH;
     self.view.clipsToBounds = YES;
     self.view.backgroundColor = CR_COLOR_PRIMARY;
     self.view.layer.borderColor = (CR_COLOR_TINT).CGColor;

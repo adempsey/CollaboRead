@@ -51,6 +51,8 @@
 		BB4D35C81A882F9A00F4EA57 /* CRToolPanelZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */; };
 		BB5017891AA74716000E9021 /* CRCollaboratorList.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5017881AA74716000E9021 /* CRCollaboratorList.m */; };
 		BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6278C21A79480D002391FB /* CRUndoStack.m */; };
+		BB86F5CB1AAE274D004DB6DF /* CRToolPanelPatientInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */; };
+		BB86F5CD1AAE276A004DB6DF /* CRToolPanelPointer.png in Resources */ = {isa = PBXBuildFile; fileRef = BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */; };
 		BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */; };
 		BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */; };
 		BBA0C59D1A89427F009E53EC /* CRImageScrollBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */; };
@@ -161,6 +163,8 @@
 		BB5017881AA74716000E9021 /* CRCollaboratorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCollaboratorList.m; sourceTree = "<group>"; };
 		BB6278C11A79480D002391FB /* CRUndoStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUndoStack.h; sourceTree = "<group>"; };
 		BB6278C21A79480D002391FB /* CRUndoStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUndoStack.m; sourceTree = "<group>"; };
+		BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelPatientInfo.png; sourceTree = "<group>"; };
+		BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelPointer.png; sourceTree = "<group>"; };
 		BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRAnswerPoint.h; path = ../Utilities/Drawing/CRAnswerPoint.h; sourceTree = "<group>"; };
 		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRAnswerPoint.m; path = ../Utilities/Drawing/CRAnswerPoint.m; sourceTree = "<group>"; };
 		BBA0C1111A1637F800FFA921 /* CRDrawingPreserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRDrawingPreserver.h; sourceTree = "<group>"; };
@@ -367,6 +371,8 @@
 		8DD3600C1A0B343A00E572D1 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */,
+				BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */,
 				BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */,
 				BBCCEDE01A71991800782507 /* CRToolPanelScan.png */,
 				8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */,
@@ -627,6 +633,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB86F5CB1AAE274D004DB6DF /* CRToolPanelPatientInfo.png in Resources */,
 				8D34C1401A15FC37007BC6CB /* shapiro.jpg in Resources */,
 				8D48119A1A0B47AB004329AE /* CRToolPanelClear.png in Resources */,
 				8D48119C1A0B47AB004329AE /* CRToolPanelPen.png in Resources */,
@@ -639,6 +646,7 @@
 				8DA5DE2D19E6064B002EA706 /* Images.xcassets in Resources */,
 				8DD3600A1A0AC93D00E572D1 /* CRLogo.png in Resources */,
 				8D48119D1A0B47AB004329AE /* CRToolPanelUndo.png in Resources */,
+				BB86F5CD1AAE276A004DB6DF /* CRToolPanelPointer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

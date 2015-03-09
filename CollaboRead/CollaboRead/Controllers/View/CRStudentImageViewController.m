@@ -16,19 +16,17 @@
 #import "CRCollaboratorList.h"
 #import "CRColors.h"
 
-#define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Patient Info"
-#define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Patient Info"
-
 #define kCR_COLLABORATOR_TOGGLE_SHOW @"Show Collaborators"
 #define kCR_COLLABORATOR_TOGGLE_HIDE @"Hide Collaborators"
 
+
+
 @interface CRStudentImageViewController ()
 
-@property (nonatomic, readwrite, strong) UIBarButtonItem *togglePatientInfoButton;
-@property (nonatomic, readwrite, strong) CRPatientInfoViewController *patientInfoViewController;
+@property (nonatomic, readwrite, strong) UIBarButtonItem *toggleCollaboratorsButton;
 @property (nonatomic, readwrite, strong) CRSubmitButton *submitButton;
 @property (nonatomic, readwrite, strong) CRAddCollaboratorsViewController *collaboratorsView;
-@property (nonatomic, readwrite, strong) UIButton *toggleCollaborators;
+
 
 @end
 
@@ -40,17 +38,13 @@
 
     CGRect frame = CR_LANDSCAPE_FRAME; //Use iOS version appropriate bounds
 
-	self.togglePatientInfoButton= [[UIBarButtonItem alloc] initWithTitle:kCR_SIDE_BAR_TOGGLE_HIDE
+	self.toggleCollaboratorsButton= [[UIBarButtonItem alloc] initWithTitle:kCR_COLLABORATOR_TOGGLE_SHOW
 																   style:UIBarButtonItemStylePlain
 																  target:nil
 																  action:nil];
-	self.togglePatientInfoButton.possibleTitles = [NSSet setWithArray:@[kCR_SIDE_BAR_TOGGLE_HIDE, kCR_SIDE_BAR_TOGGLE_SHOW]];
-	self.navigationItem.rightBarButtonItem = self.togglePatientInfoButton;
-
-	self.patientInfoViewController = [[CRPatientInfoViewController alloc] initWithPatientInfo:self.patientInfo];
-	self.patientInfoViewController.delegate = self;
-	self.patientInfoViewController.toggleButton = self.togglePatientInfoButton;
-    [self.view addSubview:self.patientInfoViewController.view];
+	self.toggleCollaboratorsButton.possibleTitles = [NSSet setWithArray:@[kCR_COLLABORATOR_TOGGLE_SHOW, kCR_COLLABORATOR_TOGGLE_HIDE]];
+	self.navigationItem.rightBarButtonItem = self.toggleCollaboratorsButton;
+	
 
 	self.submitButton = [[CRSubmitButton alloc] init];
 	[self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
@@ -62,15 +56,11 @@
 	
 	[self.view addSubview:self.submitButton];
     
-    self.toggleCollaborators = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 205, frame.size.height - 140, 180.0, 40.0)];
-    [self.toggleCollaborators setTitle:kCR_COLLABORATOR_TOGGLE_SHOW forState:UIControlStateNormal];
-    [self.toggleCollaborators setTitleColor:CR_COLOR_TINT forState:UIControlStateNormal];
-    [self.toggleCollaborators addTarget:self action:@selector(toggleCollaborators:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.toggleCollaborators];
-    
     self.collaboratorsView = [[CRAddCollaboratorsViewController alloc] init];
-    [self.collaboratorsView setViewFrame:CGRectMake(self.toggleCollaborators.frame.origin.x, self.toggleCollaborators.frame.origin.y, 0, 0)];
-    self.collaboratorsView.view.hidden = YES;
+    self.collaboratorsView.delegate = self;
+    self.collaboratorsView.toggleButton = self.toggleCollaboratorsButton;
+    self.collaboratorsView.visible = NO;
+    self.collaboratorsView.side = CR_SIDE_BAR_SIDE_RIGHT;
     [self.view addSubview:self.collaboratorsView.view];
 }
 
@@ -99,27 +89,6 @@
 	}];
 }
 
--(void)toggleCollaborators:(UIButton *)sender {
-    BOOL show =[sender.currentTitle isEqualToString:kCR_COLLABORATOR_TOGGLE_SHOW];
-    if (show) {
-        self.collaboratorsView.view.hidden = NO;
-    }
-    CGRect frame = CGRectMake(self.toggleCollaborators.frame.origin.x, self.toggleCollaborators.frame.origin.y, 0, 0);
-    if (show) {
-        frame = CGRectMake((self.view.frame.size.width - 300)/2, (self.view.frame.size.height - 400)/2, 300, 400);
-    }
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.collaboratorsView setViewFrame:frame];
-    } completion:^(BOOL finished) {
-        NSString* newTitle = kCR_COLLABORATOR_TOGGLE_HIDE;
-        if (!show) {
-            newTitle = kCR_COLLABORATOR_TOGGLE_SHOW;
-            self.collaboratorsView.view.hidden = YES;
-        }
-        [self.toggleCollaborators setTitle: newTitle forState:UIControlStateNormal];
-    }];
-}
-
 - (BOOL)userHasPreviouslySubmittedAnswer
 {
 	BOOL __block hasSubmitted = NO;
@@ -141,7 +110,7 @@
 
 - (void)CRSideBarViewController:(CRSideBarViewController *)sideBarViewController didChangeVisibility:(BOOL)visible
 {
-	self.togglePatientInfoButton.title = visible ? kCR_SIDE_BAR_TOGGLE_HIDE : kCR_SIDE_BAR_TOGGLE_SHOW;
+	self.toggleCollaboratorsButton.title = visible ? kCR_COLLABORATOR_TOGGLE_HIDE : kCR_COLLABORATOR_TOGGLE_SHOW;
 }
 
 @end

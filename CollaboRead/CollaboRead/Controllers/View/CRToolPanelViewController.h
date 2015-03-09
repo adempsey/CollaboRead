@@ -10,14 +10,16 @@
 
 #define kToolPanelTableViewWidth 90.0
 #define kToolPanelTableViewMargin (kToolPanelTableViewWidth/8)
-#define kButtonDimension 60.0
+#define kToolPanelButtonDimension 60.0
 
 typedef NS_ENUM(NSUInteger, kPanelSections) {
 	kCR_PANEL_TOOL_PEN = 0,
 	kCR_PANEL_TOOL_ERASER,
 	kCR_PANEL_TOOL_UNDO,
 	kCR_PANEL_TOOL_CLEAR,
+    kCR_PANEL_TOOL_POINTER,
     kCR_PANEL_TOOL_SCANS,
+    kCR_PANEL_TOOL_PATIENT_INFO,
 	kCR_PANEL_TOOL_COUNT
 };
 

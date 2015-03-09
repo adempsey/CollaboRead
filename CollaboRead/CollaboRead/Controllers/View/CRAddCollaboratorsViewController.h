@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CRSideBarViewController.h"
 
-@interface CRAddCollaboratorsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
-
--(void)setViewFrame:(CGRect)rect;
+@interface CRAddCollaboratorsViewController : CRSideBarViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @end
