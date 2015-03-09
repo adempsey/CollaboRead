@@ -28,6 +28,7 @@
 @property (weak, nonatomic) UITextField *activeField;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *yearLabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
 
 - (IBAction)registerAccount:(id)sender;
 - (IBAction)switchRole:(UISegmentedControl *)sender;
@@ -93,6 +94,7 @@
         self.errorLabel.hidden = NO;
     } else {
         self.registerButton.hidden = YES;
+        self.cancelButton.enabled = NO;
         [self performSelector:@selector(toggleActivityIndicator) withObject:nil afterDelay:0.0];
         [self performSelector:@selector(performRegistration) withObject:nil afterDelay:0.0];
     }
@@ -108,13 +110,12 @@
     user.type = self.roleSelector.selectedSegmentIndex == 0 ? CR_USER_TYPE_STUDENT : CR_USER_TYPE_LECTURER;
     [[CRAPIClientService sharedInstance] registerUser:user password:self.passwordField.text block:^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            // Delay view controller presentation by a bit
             [self toggleActivityIndicator];
             if (error) {
                 self.registerButton.hidden = NO;
                 self.errorLabel.text = @"Registration unsuccessful";
                 self.errorLabel.hidden = NO;
-                //do error stuff
+                self.cancelButton.enabled = YES;
             } else {
                 self.errorLabel.textColor = [UIColor whiteColor];
                 self.errorLabel.text = @"Account successfully registered";
