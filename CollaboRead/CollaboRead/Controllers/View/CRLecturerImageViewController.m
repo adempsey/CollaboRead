@@ -17,18 +17,18 @@
 #import "CRErrorAlertService.h"
 #import "CRCarouselCell.h"
 #import "CRColors.h"
+#import "BBBadgeBarButtonItem.h"
 
 #define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Answer Table"
 #define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Answer Table"
 
 @interface CRLecturerImageViewController ()
 
-@property (nonatomic, strong) UIButton *showButton;
-@property (nonatomic, strong) UIButton *hideButton;
 @property (nonatomic, strong) NSArray *allStudents;
 @property (nonatomic, strong) NSArray *selectedAnswers;
 @property (nonatomic, strong) NSArray *selectedColors;
-@property (nonatomic, strong) UIBarButtonItem *toggleStudentAnswerTableButton;
+@property (nonatomic, strong) UIButton *subToggleButton;
+@property (nonatomic, strong) BBBadgeBarButtonItem *toggleStudentAnswerTableButton;
 @property (nonatomic, strong) UIImageView *studentAnswerView;
 
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerTableViewController;
@@ -96,12 +96,16 @@
     NSArray *scanHighlights = [self.caseChosen answerScans];
     self.scansMenuController.highlights = scanHighlights;
 
-	self.toggleStudentAnswerTableButton = [[UIBarButtonItem alloc] initWithTitle:kCR_SIDE_BAR_TOGGLE_SHOW style:UIBarButtonItemStylePlain target:nil action:nil];
-	self.toggleStudentAnswerTableButton.possibleTitles = [NSSet setWithArray:@[kCR_SIDE_BAR_TOGGLE_HIDE, kCR_SIDE_BAR_TOGGLE_SHOW]];
-	self.studentAnswerTableViewController.toggleButton = self.toggleStudentAnswerTableButton;
+    self.subToggleButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 175, 20)];
+    [self.subToggleButton setTitle:kCR_SIDE_BAR_TOGGLE_SHOW forState:UIControlStateNormal];
+    [self.subToggleButton setTitleColor:CR_COLOR_TINT forState:UIControlStateNormal];
+    self.toggleStudentAnswerTableButton = [[BBBadgeBarButtonItem alloc] initWithCustomUIButton:self.subToggleButton];
+    self.studentAnswerTableViewController.toggleButton = self.subToggleButton; //as per example, sub button actually handles clicks
 	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
+    self.toggleStudentAnswerTableButton.badgeBGColor = CR_COLOR_ANSWER_INDICATOR;
+    self.toggleStudentAnswerTableButton.badgeOriginX = 170;
     if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
-        //TODO:ADD BADGE
+        self.toggleStudentAnswerTableButton.badgeValue = @"!";
     }
 	
     [[CRAnswerRefreshService sharedInstance] setUpdateBlock:^{
@@ -131,7 +135,7 @@
                 self.scansMenuController.highlights = scanHighlights;
                 [self drawStudentAnswers];
                 if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
-                    //TODO: ADD BADGE
+                    self.toggleStudentAnswerTableButton.badgeValue = @"!";
                 }
                 
             });
@@ -202,9 +206,9 @@
     [super scansMenuViewControllerDidSelectScan:scanId];
     self.studentAnswerView.frame = self.imgFrame;
     if ([self.caseChosen answerSlicesForScan:scanId].count > 0) {
-        //TODO: ADD BADGE
+        self.toggleStudentAnswerTableButton.badgeValue = @"!";
     } else {
-        //TODO: NO BADGE
+        self.toggleStudentAnswerTableButton.badgeValue = @"";
     }
     [self.scrollBar reloadData];
     [self drawStudentAnswers];
@@ -237,8 +241,10 @@
 
 - (void)CRSideBarViewController:(CRSideBarViewController *)sideBarViewController didChangeVisibility:(BOOL)visible
 {
-    //TODO: NO BADGE if visible
-	self.toggleStudentAnswerTableButton.title = visible ? kCR_SIDE_BAR_TOGGLE_HIDE : kCR_SIDE_BAR_TOGGLE_SHOW;
+    if (visible) {
+        self.toggleStudentAnswerTableButton.badgeValue = @"";
+    }
+    [self.subToggleButton setTitle:visible ? kCR_SIDE_BAR_TOGGLE_HIDE : kCR_SIDE_BAR_TOGGLE_SHOW forState:UIControlStateNormal];
 }
 
 @end

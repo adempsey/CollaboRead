@@ -31,6 +31,10 @@
 
 @implementation CRSelectCaseViewController
 
+-(void)viewDidAppear:(BOOL)animated {
+    self.collectionView.userInteractionEnabled = YES;
+}
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];

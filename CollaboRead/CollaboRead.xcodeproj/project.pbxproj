@@ -72,6 +72,7 @@
 		BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */; };
 		BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */; };
 		BBE8DCCF1A77EA8500B09C4F /* CRImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* CRImageController.m */; };
+		BBEBF16A1AAF758C001778F3 /* BBBadgeBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BBEBF1691AAF758C001778F3 /* BBBadgeBarButtonItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -202,6 +203,8 @@
 		BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRStudentImageViewController.m; sourceTree = "<group>"; };
 		BBD3B03619F5B64200C18A6A /* CRLecturerImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRLecturerImageViewController.h; sourceTree = "<group>"; };
 		BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRLecturerImageViewController.m; sourceTree = "<group>"; };
+		BBEBF1681AAF758C001778F3 /* BBBadgeBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBBadgeBarButtonItem.h; sourceTree = "<group>"; };
+		BBEBF1691AAF758C001778F3 /* BBBadgeBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBadgeBarButtonItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -251,6 +254,7 @@
 		8D6BC2461A2BEF0500DB76D0 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				BBEBF1671AAF758C001778F3 /* BBBadgeBarButtonItem */,
 				BBB97BCA1A96722B007715B1 /* iCarousel */,
 				8D6BC2471A2BEF1C00DB76D0 /* SocketRocket */,
 			);
@@ -559,6 +563,15 @@
 			path = iCarousel;
 			sourceTree = "<group>";
 		};
+		BBEBF1671AAF758C001778F3 /* BBBadgeBarButtonItem */ = {
+			isa = PBXGroup;
+			children = (
+				BBEBF1681AAF758C001778F3 /* BBBadgeBarButtonItem.h */,
+				BBEBF1691AAF758C001778F3 /* BBBadgeBarButtonItem.m */,
+			);
+			path = BBBadgeBarButtonItem;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -687,6 +700,7 @@
 				8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */,
 				BBA9FB5F1A96AE5200E891E6 /* CRCreateAccountViewController.m in Sources */,
 				BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */,
+				BBEBF16A1AAF758C001778F3 /* BBBadgeBarButtonItem.m in Sources */,
 				8DD664E71A75F878002C379E /* CRScan.m in Sources */,
 				8D5508AB19FF509B00AF5302 /* CRUser.m in Sources */,
 				BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */,
