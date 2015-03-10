@@ -137,9 +137,12 @@
     [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0)];
     self.scansMenuController.view.hidden = YES;
     
-    self.patientInfo = [[UITextView alloc] initWithFrame:CGRectMake(- kPATIENT_INFO_DIMENSION, kPATIENT_INFO_DIMENSION + (CR_TOP_BAR_HEIGHT), kPATIENT_INFO_DIMENSION, kPATIENT_INFO_DIMENSION)];
+    self.patientInfo = [[UITextView alloc] initWithFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0)];
     self.patientInfo.text = self.caseChosen.patientInfo;
+    self.patientInfo.editable = NO;
+    self.patientInfo.textContainerInset = UIEdgeInsetsMake(5, 5, 5, 5);
     self.patientInfo.textColor = [UIColor whiteColor];
+    self.patientInfo.font = [self.patientInfo.font fontWithSize:17.0];
     self.patientInfo.backgroundColor = CR_COLOR_PRIMARY;
     self.patientInfo.layer.borderColor = CR_COLOR_TINT.CGColor;
     self.patientInfo.layer.borderWidth = 3.0;
@@ -572,6 +575,7 @@
     self.pastScroll = [gestureRecognizer translationInView:self.view].x;
 }
 
+#pragma mark - View Toggle Methods
 
 -(void)toggleScansMenu
 {
@@ -595,15 +599,15 @@
     }
 }
 - (void)togglePatientInfo {
-    CGRect frame = self.patientInfo.frame;
+    CGRect frame = CR_LANDSCAPE_FRAME;
     if (self.patientInfo.hidden) {
         self.patientInfo.hidden = NO;
-        frame = CGRectMake(self.toolPanelViewController.view.frame.size.width, frame.origin.y, frame.size.width, frame.size.height);
+        frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - (kPATIENT_INFO_DIMENSION) - self.scrollBar.frame.size.height, kPATIENT_INFO_DIMENSION, kPATIENT_INFO_DIMENSION);
         [UIView animateWithDuration:0.25 animations:^{
             [self.patientInfo setFrame: frame];
         } completion:^(BOOL finished) {}];
     } else {
-        frame = CGRectMake(-kPATIENT_INFO_DIMENSION, frame.origin.y, frame.size.width, frame.size.height);
+        frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0);
         [UIView animateWithDuration:0.25 animations:^{
             [self.patientInfo setFrame: frame];
         } completion:^(BOOL finished) {
@@ -634,9 +638,11 @@
         case kCR_PANEL_TOOL_SCANS:
             [self toggleScansMenu];
             self.selectedTool = tool;
+            break;
         case kCR_PANEL_TOOL_PATIENT_INFO:
             [self togglePatientInfo];
             self.selectedTool = tool;
+            break;
         default:
             break;
 	}
@@ -644,8 +650,14 @@
 
 -(void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didDeselectTool:(NSInteger)tool
 {
-    if (tool == kCR_PANEL_TOOL_SCANS) {
-        [self toggleScansMenu];
+    switch (tool) {
+        case kCR_PANEL_TOOL_SCANS:
+            [self toggleScansMenu];
+            break;
+        case kCR_PANEL_TOOL_PATIENT_INFO:
+            [self togglePatientInfo];
+        default:
+            break;
     }
 }
 
