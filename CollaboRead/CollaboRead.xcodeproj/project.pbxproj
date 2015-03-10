@@ -534,12 +534,12 @@
 		BBA2EBD519EED7C40093044E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8D06A5AF1AAEA40F007E9B07 /* CRForgotPasswordViewController.h */,
-				8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */,
 				BBA0C59A1A894218009E53EC /* ImageEditingViews */,
 				BBA0C5991A894201009E53EC /* SubViews */,
 				BBA9FB5D1A96AE5200E891E6 /* CRCreateAccountViewController.h */,
 				BBA9FB5E1A96AE5200E891E6 /* CRCreateAccountViewController.m */,
+				8D06A5AF1AAEA40F007E9B07 /* CRForgotPasswordViewController.h */,
+				8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */,
 				BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */,
 				BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */,
 				BBD3135619F2E2040017B96A /* CRSelectLecturerViewController.h */,

@@ -31,6 +31,10 @@
 {
     [super viewDidLoad];
 	self.activityIndicator.hidden = YES;
+    self.navigationController.view.layer.borderColor = CR_COLOR_TINT.CGColor;
+    self.view.layer.borderColor = CR_COLOR_TINT.CGColor;
+    self.navigationController.view.layer.borderWidth = 3.0;
+    self.view.layer.borderWidth = 3.0;
 }
 
 - (IBAction)dismiss:(id)sender
