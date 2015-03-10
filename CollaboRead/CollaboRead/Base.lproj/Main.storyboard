@@ -563,7 +563,13 @@
                             <outlet property="delegate" destination="CoA-IA-OLj" id="xqU-zC-NOz"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="3vQ-nK-qYO"/>
+                    <navigationItem key="navigationItem" id="3vQ-nK-qYO">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="sSL-Tx-4NI">
+                            <connections>
+                                <action selector="dismiss:" destination="CoA-IA-OLj" id="9Ud-Xf-yVg"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="collectionView" destination="gMe-YN-zDz" id="eh4-Rp-K7z"/>
@@ -638,7 +644,13 @@
                             <outlet property="delegate" destination="YKS-bg-0N7" id="VaB-SH-SbL"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="q17-rS-kRi"/>
+                    <navigationItem key="navigationItem" id="q17-rS-kRi">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="JnH-7e-sKu">
+                            <connections>
+                                <action selector="dismiss:" destination="YKS-bg-0N7" id="GKd-JG-47s"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="6Yd-V2-tBb" kind="show" identifier="LecturerSelected" id="mDl-dN-x7E"/>
                     </connections>
@@ -806,7 +818,9 @@
                             <outlet property="delegate" destination="6Yd-V2-tBb" id="umB-Q1-qZN"/>
                         </connections>
                     </collectionView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="4uy-Ph-lMY"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="xtu-yR-6FK" id="nEy-y7-wiY"/>
                         <segue destination="0uI-dL-o7c" kind="show" identifier="StudentSelectedCase" id="jar-Pw-0k8"/>

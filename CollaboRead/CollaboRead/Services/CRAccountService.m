@@ -7,6 +7,7 @@
 //
 
 #import "CRAccountService.h"
+#import "CRDrawingPreserver.h"
 
 @implementation CRAccountService
 
@@ -18,6 +19,13 @@
 		sharedInstance = [[self alloc] init];
 	});
 	return sharedInstance;
+}
+
+- (void)logout
+{
+	self.user = nil;
+	self.password = nil;
+	[[CRDrawingPreserver sharedInstance] clearDrawings];
 }
 
 @end

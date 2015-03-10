@@ -14,6 +14,7 @@
 #import "CRCase.h"
 #import "CRViewSizeMacros.h"
 #import "CRErrorAlertService.h"
+#import "CRAccountService.h"
 
 @interface CRSelectLecturerViewController ()
 {
@@ -65,6 +66,11 @@
     nextController.lecturer = self.lecturers[selectedPath.row];
 }
 
+- (IBAction)dismiss:(id)sender
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
+	[[CRAccountService sharedInstance] logout];
+}
 
 #pragma mark <UICollectionViewDataSource>
 

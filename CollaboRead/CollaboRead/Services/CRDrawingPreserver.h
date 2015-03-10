@@ -14,12 +14,14 @@
 
 @interface CRDrawingPreserver : NSObject
 
-+(CRDrawingPreserver *) sharedInstance;
++ (CRDrawingPreserver *) sharedInstance;
 
 //Gives the undoStack for image if found or nil otherwise
--(CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID;
+- (CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID;
 
 //Adds or updates drawing history for a case
--(void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID;
+- (void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID;
+
+- (void)clearDrawings;
 
 @end
