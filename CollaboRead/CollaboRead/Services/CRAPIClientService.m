@@ -22,6 +22,7 @@
 
 #define kCR_API_ENDPOINT_LOGIN kCR_API_ENDPOINT(@"login")
 #define kCR_API_ENDPOINT_REGISTER kCR_API_ENDPOINT(@"register")
+#define kCR_API_ENDPOINT_FORGOT kCR_API_ENDPOINT(@"forgot")
 #define kCR_API_ENDPOINT_USER_CHECK kCR_API_ENDPOINT(@"usercheck")
 #define kCR_API_ENDPOINT_USERS kCR_API_ENDPOINT(@"users")
 #define kCR_API_ENDPOINT_LECTURERS kCR_API_ENDPOINT(@"lecturers")
@@ -91,6 +92,14 @@
 							 CR_DB_USER_PASSWORD: password
 							 };
 	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_REGISTER usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
+		block(error);
+	}];
+}
+
+- (void)resetPasswordForAccountWithEmail:(NSString *)email block:(void (^)(NSError *))block
+{
+	NSDictionary *params = @{CR_DB_USER_EMAIL: email};
+	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_FORGOT usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:^(NSData *data, NSError *error) {
 		block(error);
 	}];
 }

@@ -48,6 +48,16 @@
 - (void)registerUser:(CRUser*)user password:(NSString*)password block:(void (^)(NSError*))block;
 
 /*!
+ Sends an email to the user's account allowing them to reset their account
+ 
+ @param email
+ email address of the user who forgot their password
+ @param block
+ completion block to execute when response is received from server used to indicate if an error occurred
+ */
+- (void)resetPasswordForAccountWithEmail:(NSString*)email block:(void (^)(NSError*))block;
+
+/*!
  Checks existance of users based on email (username)
  
  @param block
