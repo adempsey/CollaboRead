@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		36ED59531A2D3CEE00F61D7B /* CRPatientInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */; };
+		8D06A5B11AAEA40F007E9B07 /* CRForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */; };
+		8D06A5B61AAEC3E0007E9B07 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D06A5B51AAEC3E0007E9B07 /* dot.png */; };
 		8D0FA3C01AA28E76004AD7E4 /* CRAccountService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D0FA3BF1AA28E76004AD7E4 /* CRAccountService.m */; };
 		8D113F3C1AACC72200EA3A34 /* UILabel+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D113F3B1AACC72200EA3A34 /* UILabel+CRAdditions.m */; };
 		8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */; };
@@ -85,6 +87,9 @@
 /* Begin PBXFileReference section */
 		36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRPatientInfoViewController.h; sourceTree = "<group>"; };
 		36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRPatientInfoViewController.m; sourceTree = "<group>"; };
+		8D06A5AF1AAEA40F007E9B07 /* CRForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRForgotPasswordViewController.h; sourceTree = "<group>"; };
+		8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRForgotPasswordViewController.m; sourceTree = "<group>"; };
+		8D06A5B51AAEC3E0007E9B07 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 		8D0FA3BE1AA28E76004AD7E4 /* CRAccountService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAccountService.h; sourceTree = "<group>"; };
 		8D0FA3BF1AA28E76004AD7E4 /* CRAccountService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAccountService.m; sourceTree = "<group>"; };
 		8D113F3A1AACC72200EA3A34 /* UILabel+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+CRAdditions.h"; sourceTree = "<group>"; };
@@ -362,6 +367,7 @@
 		8DD3600B1A0B343000E572D1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8D06A5B51AAEC3E0007E9B07 /* dot.png */,
 				8D34C13F1A15FC37007BC6CB /* shapiro.jpg */,
 				8DD360091A0AC93D00E572D1 /* CRLogo.png */,
 			);
@@ -528,6 +534,8 @@
 		BBA2EBD519EED7C40093044E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8D06A5AF1AAEA40F007E9B07 /* CRForgotPasswordViewController.h */,
+				8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */,
 				BBA0C59A1A894218009E53EC /* ImageEditingViews */,
 				BBA0C5991A894201009E53EC /* SubViews */,
 				BBA9FB5D1A96AE5200E891E6 /* CRCreateAccountViewController.h */,
@@ -636,6 +644,7 @@
 				BB86F5CB1AAE274D004DB6DF /* CRToolPanelPatientInfo.png in Resources */,
 				8D34C1401A15FC37007BC6CB /* shapiro.jpg in Resources */,
 				8D48119A1A0B47AB004329AE /* CRToolPanelClear.png in Resources */,
+				8D06A5B61AAEC3E0007E9B07 /* dot.png in Resources */,
 				8D48119C1A0B47AB004329AE /* CRToolPanelPen.png in Resources */,
 				8D7530A51A11EA6E0077A01C /* CRToolPanelToggle.png in Resources */,
 				8DA5DE2B19E6064B002EA706 /* Main.storyboard in Resources */,
@@ -694,6 +703,7 @@
 				8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
 				8DCF9CB31A2BF8FB000D42C5 /* CRAnswerRefreshService.m in Sources */,
+				8D06A5B11AAEA40F007E9B07 /* CRForgotPasswordViewController.m in Sources */,
 				8DD3601A1A0B3E8900E572D1 /* CRToolPanelCell.m in Sources */,
 				8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */,
 				BB0E0C721A9A5F87004D7521 /* CRAddCollaboratorsViewController.m in Sources */,

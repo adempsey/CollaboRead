@@ -107,13 +107,19 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	}
 	
 	cell.textLabel.text = [self titleForCellAtIndexPath:indexPath];
-    NSDictionary *color = studentColors[indexPath.row];
-    if (indexPath.section == kSECTION_STUDENTS) {
-        cell.textLabel.textColor = [UIColor colorWithRed: [color[@"red"] floatValue] green: [color[@"green"] floatValue] blue:[color[@"blue"] floatValue] alpha:1.0];
-    } else {
-        cell.textLabel.textColor = [UIColor whiteColor];
-    }
+	cell.textLabel.textColor = [UIColor whiteColor];
 	cell.textLabel.adjustsFontSizeToFitWidth = YES;
+
+
+	if (indexPath.section == kSECTION_STUDENTS) {
+		NSDictionary *color = studentColors[indexPath.row];
+		UIImage *dot = [UIImage imageNamed:@"dot.png"];
+		dot = [dot imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		cell.imageView.image = dot;
+        cell.imageView.tintColor = [UIColor colorWithRed: [color[@"red"] floatValue] green: [color[@"green"] floatValue] blue:[color[@"blue"] floatValue] alpha:1.0];
+    } else {
+        cell.imageView.tintColor = [UIColor whiteColor];
+    }
 	
 	cell.accessoryType = [self accessoryTypeForCellAtIndexPath:indexPath];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;

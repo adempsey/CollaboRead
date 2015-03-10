@@ -58,6 +58,9 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	[super viewWillAppear:animated];
 	self.loginButton.titleLabel.text = @"Login";
 	self.loginButton.userInteractionEnabled = YES;
+	
+	self.emailField.text = @"";
+	self.passwordField.text = @"";
 }
 
 -(void)attemptLogin

@@ -17,7 +17,7 @@
 
 @implementation CRDrawingPreserver
 
-+(CRDrawingPreserver *) sharedInstance
++ (CRDrawingPreserver *) sharedInstance
 {
     static CRDrawingPreserver *sharedInstance = nil;
     static dispatch_once_t onceToken;
@@ -28,14 +28,20 @@
     return sharedInstance;
 }
 
--(CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID
+- (CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID
 {
     return [self.drawings objectForKey:caseID];
 }
 
--(void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID
+- (void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID
 {
     [self.drawings setObject:drawing forKey:caseID];
+}
+
+- (void)clearDrawings
+{
+	self.drawings = nil;
+	self.drawings = [[NSMutableDictionary alloc] init];
 }
 
 @end

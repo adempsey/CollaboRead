@@ -16,4 +16,6 @@
 @property (nonatomic, readwrite, strong) CRUser *user;
 @property (nonatomic, readwrite, strong) NSString *password;
 
+- (void)logout;
+
 @end

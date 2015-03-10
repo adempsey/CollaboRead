@@ -65,6 +65,12 @@
     
 }
 
+- (IBAction)dismiss:(id)sender
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
+	[[CRAccountService sharedInstance] logout];
+}
+
 #pragma mark - UICollectionViewDataSource
 //Set the number of cases per section to be the number of cases in the group it was formed from
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
