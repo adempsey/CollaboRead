@@ -512,6 +512,10 @@
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
+                        <activityIndicatorView key="backgroundView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" id="oEE-qP-ZcY">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CaseCell" id="7DX-Hg-q9c" userLabel="Titled Image Collection Cell" customClass="CRTitledImageCollectionCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -572,6 +576,7 @@
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="oEE-qP-ZcY" id="Qx9-wv-ndk"/>
                         <outlet property="collectionView" destination="gMe-YN-zDz" id="eh4-Rp-K7z"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="LecturerSelectedCase" id="KxF-Rg-7dt"/>
                     </connections>
@@ -594,6 +599,10 @@
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
+                        <activityIndicatorView key="backgroundView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" id="QLl-sf-1P0">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LecturerCell" id="I7G-bh-6rY" customClass="CRTitledImageCollectionCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -652,6 +661,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="QLl-sf-1P0" id="UJf-sq-ZgM"/>
                         <segue destination="6Yd-V2-tBb" kind="show" identifier="LecturerSelected" id="mDl-dN-x7E"/>
                     </connections>
                 </collectionViewController>
@@ -767,6 +777,10 @@
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
+                        <activityIndicatorView key="backgroundView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" id="t8v-Ek-Fic">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CaseCell" id="yV4-uZ-mIi" userLabel="Titled Image Collection Cell" customClass="CRTitledImageCollectionCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -822,6 +836,7 @@
                     <navigationItem key="navigationItem" id="4uy-Ph-lMY"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="t8v-Ek-Fic" id="80R-Dm-4Ta"/>
                         <outlet property="collectionView" destination="xtu-yR-6FK" id="nEy-y7-wiY"/>
                         <segue destination="0uI-dL-o7c" kind="show" identifier="StudentSelectedCase" id="jar-Pw-0k8"/>
                     </connections>

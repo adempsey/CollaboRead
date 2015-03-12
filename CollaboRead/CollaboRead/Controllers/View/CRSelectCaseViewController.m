@@ -48,6 +48,7 @@
 		if (!error) {
 			self.caseSets = caseSets;
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.activityIndicator stopAnimating];
                 [self.collectionView reloadData];
             });
 		} else {

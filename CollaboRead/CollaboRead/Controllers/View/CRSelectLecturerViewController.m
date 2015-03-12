@@ -42,6 +42,7 @@
 		if (!error) {
 			self.lecturers = lecturers;
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.activityIndicator stopAnimating];
                 [self.collectionView reloadData];
             });
 
