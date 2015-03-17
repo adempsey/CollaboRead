@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "CRSideBarViewController.h"
+#import "CRUserSuggestionTableViewController.h"
 
-@interface CRAddCollaboratorsViewController : CRSideBarViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface CRAddCollaboratorsViewController : CRSideBarViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, CRUserSuggestionTableViewControllerDelegate>
 
 @end

@@ -7,21 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CRUser.h"
 
-#define CR_INVALID_COLLABORATOR @"Invalid Email"
+//#define CR_INVALID_COLLABORATOR @"Invalid Email"
 
 @interface CRCollaboratorList : NSObject
 
 @property (nonatomic, strong) NSString *groupName;
 
 +(instancetype)sharedInstance;
--(void)setOwner:(NSString *)email withName:(NSString *)name andID:(NSString *)ID;
--(void)verifyCollaborators:(void (^)())block;
--(void)addCollaborator:(NSString *)email;
+//-(void)setOwner:(NSString *)email withName:(NSString *)name andID:(NSString *)ID;
+//-(void)verifyCollaborators:(void (^)())block;
+-(void)addCollaborator:(CRUser *)user;
 -(NSArray *)collaboratorIds;
 -(NSUInteger)collaboratorCount;
--(NSString *)collaboratorForIndex:(NSUInteger)index;
--(NSString *)nameForCollaborator:(NSString *)email;
+-(NSString *)collaboratorNameForIndex:(NSUInteger)index;
+-(NSString *)collaboratorEmailForIndex:(NSUInteger)index;
 -(void)removeCollaboratorAtIndex:(NSUInteger)index;
 
 @end

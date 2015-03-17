@@ -9,6 +9,8 @@
 #import "CRAddCollaboratorsViewController.h"
 #import "CRColors.h"
 #import "CRCollaboratorList.h"
+#import "CRUserSuggestionTableViewController.h"
+
 #define ELEMENT_PADDING 10
 #define ELEMENT_HEIGHT 30
 #define BUTTON_WIDTH 100
@@ -19,12 +21,10 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *groupName;
 @property (nonatomic, strong) UITextField *enterField;
-@property (nonatomic, strong) UIButton *validateButton;
+@property (nonatomic, strong) CRUserSuggestionTableViewController *userSuggester;
 
 @property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
 
--(void)addStudent;
--(void)validateButtonPressed:(UIButton *)sender;
 
 @end
 
@@ -50,12 +50,19 @@
     
     self.enterField = [[UITextField alloc] initWithFrame:CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING + self.groupName.frame.origin.y + self.groupName.frame.size.height, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT)];
     self.enterField.borderStyle = UITextBorderStyleRoundedRect;
-    self.enterField.placeholder = @"Username";
+    self.enterField.placeholder = @"Search for Collaborator";
     self.enterField.returnKeyType = UIReturnKeyDone;
     self.enterField.keyboardType = UIKeyboardTypeEmailAddress;
     self.enterField.keyboardAppearance = UIKeyboardAppearanceDark;
+    self.enterField.clearsOnBeginEditing = YES;
     self.enterField.delegate = self;
     [self.view addSubview:self.enterField];
+    
+    self.userSuggester = [[CRUserSuggestionTableViewController alloc] init];
+    self.userSuggester.view.frame = CGRectMake(ELEMENT_PADDING, self.enterField.frame.origin.y + ELEMENT_HEIGHT, self.enterField.frame.size.width, self.enterField.frame.size.width);
+    self.userSuggester.delegate = self;
+    self.userSuggester.view.hidden = YES;
+    [self addChildViewController:self.userSuggester];
     
     self.tableView = [[UITableView alloc] init];//TODO:change to w/frame
     self.tableView.delegate = self;
@@ -72,45 +79,27 @@
         [self.tableView setLayoutMargins:UIEdgeInsetsZero]; //ios 8
     }
     [self.view addSubview:self.tableView];
-
+    [self.view addSubview:self.userSuggester.view];
     
-    self.validateButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - BUTTON_WIDTH)/2, self.tableView.frame.origin.y + self.tableView.frame.size.height + ELEMENT_PADDING, (self.view.frame.size.width - BUTTON_WIDTH) / 2, ELEMENT_HEIGHT)];
-    [self.validateButton setTitle:@"Validate" forState:UIControlStateNormal];
-    [self.validateButton setTitleColor:CR_COLOR_TINT forState:UIControlStateNormal];
-    [self.validateButton addTarget:self action:@selector(validateButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.validateButton];
-    
-    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - ELEMENT_HEIGHT)/2, self.validateButton.frame.origin.y, ELEMENT_HEIGHT, ELEMENT_HEIGHT)];
-    self.activityIndicator.hidden = YES;
-    [self.view addSubview:self.activityIndicator];
 }
 
--(void)validateButtonPressed:(UIButton *)sender {
-    [self.activityIndicator startAnimating];
-    self.activityIndicator.hidden = NO;
-    self.validateButton.hidden = YES;
-    [[CRCollaboratorList sharedInstance] verifyCollaborators:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.activityIndicator stopAnimating];
-            self.activityIndicator.hidden = YES;
-            self.validateButton.hidden = NO;
-            [self.tableView reloadData];
-        });
-    }];
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if ([textField isEqual:self.enterField]) {
+        self.userSuggester.prefix = [self.enterField.text stringByReplacingCharactersInRange:range withString:string];
+    }
+    return YES;
 }
 
--(void)addStudent {
-    NSString *studentEmail = self.enterField.text;
-    if (![self.enterField.text isEqualToString: @""]) {
-        [[CRCollaboratorList sharedInstance] addCollaborator:studentEmail];
-        [self.tableView reloadData];
-        self.enterField.text = @"";
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if ([textField isEqual:self.enterField]) {
+        self.userSuggester.prefix = @"";
+        self.userSuggester.view.hidden = NO;
     }
 }
 
--(void)textFieldDidEndEditing:(UITextField *)textField {
+- (void)textFieldDidEndEditing:(UITextField *)textField {
     if ([textField isEqual:self.enterField]) {
-        [self addStudent];
+        self.userSuggester.view.hidden = YES;
     } else {
         [CRCollaboratorList sharedInstance].groupName = ![self.groupName.text isEqualToString:@""] ? self.groupName.text : nil;
     }
@@ -136,9 +125,9 @@
     }
     cell.backgroundColor = CR_COLOR_PRIMARY;
     cell.textLabel.textColor = [UIColor whiteColor];
-    cell.textLabel.text = [[CRCollaboratorList sharedInstance] collaboratorForIndex:indexPath.row];
-    cell.detailTextLabel.text = [[CRCollaboratorList sharedInstance] nameForCollaborator:cell.textLabel.text];
-    cell.detailTextLabel.textColor = [cell.detailTextLabel.text isEqualToString:CR_INVALID_COLLABORATOR] ? CR_COLOR_ERROR : [UIColor whiteColor];
+    cell.detailTextLabel.textColor = [UIColor whiteColor];
+    cell.textLabel.text = [[CRCollaboratorList sharedInstance] collaboratorNameForIndex:indexPath.row];
+    cell.detailTextLabel.text = [[CRCollaboratorList sharedInstance] collaboratorEmailForIndex:indexPath.row];
     
     if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
         [cell setLayoutMargins:UIEdgeInsetsZero]; //ios 8
@@ -161,14 +150,10 @@
     }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)suggestionSelected:(CRUser *)user {
+    [[CRCollaboratorList sharedInstance] addCollaborator:user];
+    [self.tableView reloadData];
+    [self textFieldShouldReturn:self.enterField];
 }
-*/
 
 @end
