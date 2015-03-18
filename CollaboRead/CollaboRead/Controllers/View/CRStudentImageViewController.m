@@ -32,36 +32,41 @@
 
 @implementation CRStudentImageViewController
 
-//Set up student specific view elements
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
+- (void)loadView {
+    [super loadView];
+    
     CGRect frame = CR_LANDSCAPE_FRAME; //Use iOS version appropriate bounds
-
-	self.toggleCollaboratorsButton= [[UIBarButtonItem alloc] initWithTitle:kCR_COLLABORATOR_TOGGLE_SHOW
-																   style:UIBarButtonItemStylePlain
-																  target:nil
-																  action:nil];
-	self.toggleCollaboratorsButton.possibleTitles = [NSSet setWithArray:@[kCR_COLLABORATOR_TOGGLE_SHOW, kCR_COLLABORATOR_TOGGLE_HIDE]];
-	self.navigationItem.rightBarButtonItem = self.toggleCollaboratorsButton;
-	
-
-	self.submitButton = [[CRSubmitButton alloc] init];
-	[self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
-	[self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
-	
-	if ([self userHasPreviouslySubmittedAnswer]) {
-		self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
-	}
-	
-	[self.view addSubview:self.submitButton];
+    
+    self.toggleCollaboratorsButton= [[UIBarButtonItem alloc] initWithTitle:kCR_COLLABORATOR_TOGGLE_SHOW
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:nil
+                                                                    action:nil];
+    self.toggleCollaboratorsButton.possibleTitles = [NSSet setWithArray:@[kCR_COLLABORATOR_TOGGLE_SHOW, kCR_COLLABORATOR_TOGGLE_HIDE]];
+    self.navigationItem.rightBarButtonItem = self.toggleCollaboratorsButton;
+    
+    
+    self.submitButton = [[CRSubmitButton alloc] init];
+    [self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
+    [self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([self userHasPreviouslySubmittedAnswer]) {
+        self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
+    }
+    
+    [super.view addSubview:self.submitButton];
     
     self.collaboratorsView = [[CRAddCollaboratorsViewController alloc] init];
     self.collaboratorsView.delegate = self;
     self.collaboratorsView.toggleButton = self.toggleCollaboratorsButton;
     self.collaboratorsView.visible = NO;
     self.collaboratorsView.side = CR_SIDE_BAR_SIDE_RIGHT;
-    [self.view addSubview:self.collaboratorsView.view];
+    [self addChildViewController:self.collaboratorsView];
+    [super.view addSubview:self.collaboratorsView.view];
+    self.view = super.view;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
 }
 
 //Perform action of submitting answer, provide user status update
@@ -71,7 +76,7 @@
     NSArray *students = [[CRCollaboratorList sharedInstance] collaboratorIds];
 
     //Prepare and send answer
-	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students inGroup:[CRCollaboratorList sharedInstance].groupName];
+	CRAnswer *answer = [self.imageMarkup.undoStack answersFromStackForOwners:students inGroup:[CRCollaboratorList sharedInstance].groupName];
 
     [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block, NSError *error) {//Provide submission success feedback
 		if (!error) {

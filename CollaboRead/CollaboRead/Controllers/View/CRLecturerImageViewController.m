@@ -24,100 +24,80 @@
 
 @interface CRLecturerImageViewController ()
 
-@property (nonatomic, strong) NSArray *allStudents;
 @property (nonatomic, strong) NSArray *selectedAnswers;
 @property (nonatomic, strong) NSArray *selectedColors;
 @property (nonatomic, strong) UIButton *subToggleButton;
 @property (nonatomic, strong) BBBadgeBarButtonItem *toggleStudentAnswerTableButton;
-@property (nonatomic, strong) UIImageView *studentAnswerView;
 
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerTableViewController;
 
 @end
 
+//TODO: CASECHOSEN MAY NEED CUSTOM SETTER
 @implementation CRLecturerImageViewController
 
--(void)drawStudentAnswers
-{
-    NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
-    NSString *sliceID = ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID;
-    UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
-    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-    [self.selectedAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSDictionary* color = self.selectedColors[idx];
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), [color[@"red"] floatValue], [color[@"green"] floatValue], [color[@"blue"] floatValue], 1.0);
-        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
-        [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            CRAnswerLine *line = obj;
-            if ([line.scanID isEqualToString: scanID] && [line.sliceID isEqualToString:sliceID]) {
-                for (int i = 1; i < [line.data count]; i++) {
-                    CRAnswerPoint *beg = [line.data objectAtIndex:i - 1];
-                    if (!beg.isEndPoint) {
-                        CRAnswerPoint *fin = [line.data objectAtIndex:i];
-                        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x * self.currZoom, beg.coordinate.y * self.currZoom);
-                        CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x * self.currZoom, fin.coordinate.y * self.currZoom);
-                    }
-                }
-                CGContextStrokePath(UIGraphicsGetCurrentContext());
-                *stop = true;
-            }
-        }];
-
-        
-    }];
+- (void)loadView {
+    [super loadView];
+    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:self.caseChosen.answers];
     
-    self.studentAnswerView.image = UIGraphicsGetImageFromCurrentImageContext();
-    [self.studentAnswerView setAlpha:1.0];
-    UIGraphicsEndImageContext();
-}
-
--(void)loadAndScaleImage:(UIImage *)img {
-    [super loadAndScaleImage:img];
-    if (self.studentAnswerView == nil) {
-        self.studentAnswerView = [[UIImageView alloc] init];
-    }
-    self.studentAnswerView.frame = self.imgFrame;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.studentAnswerView = [[UIImageView alloc] init];
-    self.studentAnswerView.frame = self.imgFrame;
-    [self.limView addSubview:self.studentAnswerView];
-	self.view.autoresizesSubviews = NO;
-    [self loadStudents];
-	// Should pass array of CRUsers that have submitted answers
-	// This workflow will need to be adjusted in the future, since this list will change as students submit answers
-    
-	self.studentAnswerTableViewController.delegate = self;
+    self.studentAnswerTableViewController.delegate = self;
     self.studentAnswerTableViewController.visible = NO;
-	[self.view addSubview:self.studentAnswerTableViewController.view];
-
-    NSArray *scanHighlights = [self.caseChosen answerScans];
-    self.scansMenuController.highlights = scanHighlights;
-
+    [self addChildViewController:self.studentAnswerTableViewController];
+    [super.view addSubview:self.studentAnswerTableViewController.view];
+    
     self.subToggleButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 175, 20)];
     [self.subToggleButton setTitle:kCR_SIDE_BAR_TOGGLE_SHOW forState:UIControlStateNormal];
     [self.subToggleButton setTitleColor:CR_COLOR_TINT forState:UIControlStateNormal];
     self.toggleStudentAnswerTableButton = [[BBBadgeBarButtonItem alloc] initWithCustomUIButton:self.subToggleButton];
     self.studentAnswerTableViewController.toggleButton = self.subToggleButton; //as per example, sub button actually handles clicks
-	self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
+    self.navigationItem.rightBarButtonItem = self.toggleStudentAnswerTableButton;
+    
+    self.view = super.view;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	self.view.autoresizesSubviews = NO;
+
+    NSArray *scanHighlights = [self.caseChosen answerScans];
+    self.scansMenuController.highlights = scanHighlights;
+
     self.toggleStudentAnswerTableButton.badgeBGColor = CR_COLOR_ANSWER_INDICATOR;
     self.toggleStudentAnswerTableButton.badgeOriginX = 170;
+}
+
+-(void)viewWillAppear:(BOOL)animated {
     if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
         self.toggleStudentAnswerTableButton.badgeValue = @"!";
     }
-	
     [[CRAnswerRefreshService sharedInstance] setUpdateBlock:^{
-		[self refreshAnswers];
-	}];
-	
-	[[CRAnswerRefreshService sharedInstance] initiateConnectionWithCase:self.caseChosen];
+        [self refreshAnswers];
+    }];
+    
+    [[CRAnswerRefreshService sharedInstance] initiateConnectionWithCase:self.caseChosen];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	[[CRAnswerRefreshService sharedInstance] disconnect];
+}
+
+-(void)drawStudentAnswers
+{
+    NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
+    NSString *sliceID = ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID;
+    NSMutableArray *answerLines = [[NSMutableArray alloc] init];
+    [self.selectedAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            CRAnswerLine *line = obj;
+            if ([line.scanID isEqualToString: scanID] && [line.sliceID isEqualToString:sliceID]) {
+                [answerLines addObject:line];
+                *stop = true;
+            }
+        }];
+    }];
+    [self.imageMarkup drawPermenantAnswers:answerLines inColors:self.selectedColors];
+    
 }
 
 - (void)refreshAnswers
@@ -155,32 +135,7 @@
 	}];
 }
 
-- (void)loadStudents
-{
-    NSMutableArray *allStudents = [[NSMutableArray alloc] init];;
-    NSArray *answers = self.caseChosen.answers;
-    
-    [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [allStudents addObject:((CRAnswer *)obj).owners];
-    }];
-    self.allStudents = allStudents;
-    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:answers];
-}
 
--(void)zoomOut {
-    [super zoomOut];
-    self.studentAnswerView.frame = self.imgFrame;
-}
-
--(void)panZoom:(CGPoint)translation {
-    [super panZoom:translation];
-    self.studentAnswerView.frame = self.imgFrame;
-}
-
--(void)zoomImageToScale:(CGFloat)scale {
-    [super zoomImageToScale:scale];
-    self.studentAnswerView.frame = self.imgFrame;
-}
 
 #pragma mark - CRStudentAnswerTable Delegate Methods
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeAnswerSelection:(NSArray *)answers
@@ -196,7 +151,8 @@
     [self drawStudentAnswers];
 }
 
--(void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase{
+//MAY NOT BE NEEDED
+-(void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase {
     self.caseChosen.answers = refreshedCase.answers;
     [self.scrollBar reloadData];
 }
@@ -204,7 +160,6 @@
 -(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
 {
     [super scansMenuViewControllerDidSelectScan:scanId];
-    self.studentAnswerView.frame = self.imgFrame;
     if ([self.caseChosen answerSlicesForScan:scanId].count > 0) {
         self.toggleStudentAnswerTableButton.badgeValue = @"!";
     } else {

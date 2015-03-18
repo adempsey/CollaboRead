@@ -68,6 +68,7 @@
 	self.backgroundView.frame = kSIDE_BAR_BACKGROUND_VIEW_FRAME;
 }
 
+//View needs to be adjusted after changing frame settings
 - (void)setSide:(NSUInteger)side
 {
 	_side = side;
@@ -89,6 +90,7 @@
 	}
 }
 
+//Setting the toggle button should set its action to toggle the bar
 - (void)setToggleButton:(id)toggleButton
 {
 	_toggleButton = toggleButton;
@@ -108,7 +110,7 @@
 {
     [UIView animateWithDuration:kSIDE_BAR_SLIDE_ANIMATION_LENGTH animations:^{
 		self.visible = !self.visible;
-	} completion:^(BOOL finished) {}];
+	} completion:nil];
 }
 
 @end
