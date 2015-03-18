@@ -58,16 +58,20 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	return self;
 }
 
+-(void)loadView {
+    [super loadView];
+    CGRect tableViewFrame = CGRectMake(0, 0, kTableViewWidth, super.view.frame.size.height);
+    self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.backgroundColor = [UIColor clearColor];
+    [super.view addSubview:self.tableView];
+    self.view = super.view;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
-	CGRect tableViewFrame = CGRectMake(0, 0, kTableViewWidth, super.view.frame.size.height);
-	self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
-	self.tableView.delegate = self;
-	self.tableView.dataSource = self;
-	self.tableView.backgroundColor = [UIColor clearColor];
-	[self.view addSubview:self.tableView];
 }
 
 //Setting the list of answers should cause the table to update

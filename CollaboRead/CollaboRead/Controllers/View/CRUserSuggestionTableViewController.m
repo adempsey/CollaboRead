@@ -26,6 +26,14 @@
 
 @implementation CRUserSuggestionTableViewController
 
+- (void)loadView {
+    [super loadView];
+    super.tableView.backgroundColor = [UIColor whiteColor];
+    [super.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"SuggestionCell"];
+    self.tableView = super.tableView;
+    self.view = super.view;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.suggestionList = [[NSArray alloc] init];
@@ -35,8 +43,6 @@
             self.users = users;
         }
     }];
-    self.tableView.backgroundColor = [UIColor whiteColor];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"SuggestionCell"];
 }
 
 - (void)didReceiveMemoryWarning {

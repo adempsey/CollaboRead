@@ -40,25 +40,25 @@
 
 @implementation CRAddCollaboratorsViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.width = kVIEW_WIDTH;
-    self.view.clipsToBounds = YES;
-    self.view.backgroundColor = CR_COLOR_PRIMARY;
-    self.view.layer.borderColor = (CR_COLOR_TINT).CGColor;
-    self.view.layer.borderWidth = 3;
+- (void)loadView {
+    [super loadView];
+    super.width = kVIEW_WIDTH;
+    super.view.clipsToBounds = YES;
+    super.view.backgroundColor = CR_COLOR_PRIMARY;
+    super.view.layer.borderColor = (CR_COLOR_TINT).CGColor;
+    super.view.layer.borderWidth = 3;
     
     
-    self.groupName = [[UITextField alloc] initWithFrame:CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT)];
+    self.groupName = [[UITextField alloc] initWithFrame:CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING, super.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT)];
     self.groupName.borderStyle = UITextBorderStyleRoundedRect;
     self.groupName.placeholder = @"Group Name";
     self.groupName.text = [CRCollaboratorList sharedInstance].groupName;
     self.groupName.returnKeyType = UIReturnKeyDone;
     self.groupName.keyboardAppearance = UIKeyboardAppearanceDark;
     self.groupName.delegate = self;
-    [self.view addSubview:self.groupName];
+    [super.view addSubview:self.groupName];
     
-    self.enterField = [[UITextField alloc] initWithFrame:CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING + self.groupName.frame.origin.y + self.groupName.frame.size.height, self.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT)];
+    self.enterField = [[UITextField alloc] initWithFrame:CGRectMake(ELEMENT_PADDING, ELEMENT_PADDING + self.groupName.frame.origin.y + self.groupName.frame.size.height, super.view.frame.size.width - 2 * ELEMENT_PADDING, ELEMENT_HEIGHT)];
     self.enterField.borderStyle = UITextBorderStyleRoundedRect;
     self.enterField.placeholder = @"Search for Collaborator";
     self.enterField.returnKeyType = UIReturnKeyDone;
@@ -66,7 +66,7 @@
     self.enterField.keyboardAppearance = UIKeyboardAppearanceDark;
     self.enterField.clearsOnBeginEditing = YES;
     self.enterField.delegate = self;
-    [self.view addSubview:self.enterField];
+    [super.view addSubview:self.enterField];
     
     self.userSuggester = [[CRUserSuggestionTableViewController alloc] init];
     self.userSuggester.view.frame = CGRectMake(ELEMENT_PADDING, self.enterField.frame.origin.y + ELEMENT_HEIGHT, self.enterField.frame.size.width, self.enterField.frame.size.width);
@@ -74,11 +74,9 @@
     self.userSuggester.view.hidden = YES;
     [self addChildViewController:self.userSuggester];
     
-    self.tableView = [[UITableView alloc] init];//TODO:change to w/frame
-    self.tableView.delegate = self;
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, ELEMENT_PADDING + self.enterField.frame.origin.y + self.enterField.frame.size.height, super.view.frame.size.width, super.view.frame.size.height - (2 * ELEMENT_HEIGHT + 4 * ELEMENT_PADDING))];    self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setTableFooterView:[[UIImageView alloc] initWithFrame:CGRectZero]]; //eliminate empty rows
-    self.tableView.frame = CGRectMake(0, ELEMENT_PADDING + self.enterField.frame.origin.y + self.enterField.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (2 * ELEMENT_HEIGHT + 4 * ELEMENT_PADDING));
     self.tableView.backgroundColor = CR_COLOR_PRIMARY;
     self.tableView.userInteractionEnabled = YES;
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
@@ -89,9 +87,13 @@
         [self.tableView setLayoutMargins:UIEdgeInsetsZero]; //ios 8
     }
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"CollabCell"];
-    [self.view addSubview:self.tableView];
-    [self.view addSubview:self.userSuggester.view];
-    
+    [super.view addSubview:self.tableView];
+    [super.view addSubview:self.userSuggester.view];
+    self.view = super.view;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
 }
 
 //Editting the text field needs to change the prefix for autocompletion

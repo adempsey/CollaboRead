@@ -40,6 +40,29 @@ static NSString * const reuseIdentifier = @"scanCell";
     return self;
 }
 
+- (void)loadView {
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = CR_COLOR_TINT;
+    
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(kScanMenuMargin, kScanMenuMargin, view.frame.size.width - 2 * kScanMenuMargin, view.frame.size.height - 2 * kScanMenuMargin) collectionViewLayout:layout];
+    self.collectionView.dataSource = self;
+    self.collectionView.delegate = self;
+    self.collectionView.backgroundColor = CR_COLOR_PRIMARY;
+    // Register cell classes
+    [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    
+    [view addSubview:self.collectionView];
+    self.view = view;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if (self.scans == nil) {
+        self.scans = [[NSArray alloc] init];
+    }
+}
+
 -(void) setHighlights:(NSArray *)highlights {
     _highlights = highlights;
     [self.collectionView reloadData];
@@ -50,24 +73,6 @@ static NSString * const reuseIdentifier = @"scanCell";
     [self.collectionView reloadData];
     self.collectionView.frame = CGRectMake(kScanMenuMargin, kScanMenuMargin, frame.size.width - 2 * kScanMenuMargin, frame.size.height - 2 * kScanMenuMargin);
     [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone]; //Reset selected item because changing size may have changed the amount of items and therefore selection
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = CR_COLOR_TINT;
-
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(kScanMenuMargin, kScanMenuMargin, self.view.frame.size.width - 2 * kScanMenuMargin, self.view.frame.size.height - 2 * kScanMenuMargin) collectionViewLayout:layout];
-    self.collectionView.dataSource = self;
-    self.collectionView.delegate = self;
-    self.collectionView.backgroundColor = CR_COLOR_PRIMARY;
-    // Register cell classes
-    [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
-    [self.view addSubview:self.collectionView];
-    if (self.scans == nil) {
-        self.scans = [[NSArray alloc] init];
-    }
 }
 
 - (void)didReceiveMemoryWarning {

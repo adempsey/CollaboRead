@@ -29,42 +29,42 @@
 - (instancetype)init
 {
 	if (self = [super init]) {
-		self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStyleGrouped];
-		self.tableView.dataSource = self;
-		self.tableView.delegate = self;
-		
-		self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
+		_selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
 	}
 	return self;
 }
 
+-(void)loadView {
+    CGFloat viewOriginY = CR_TOP_BAR_HEIGHT;
+    CGRect screenFrame = CR_LANDSCAPE_FRAME;
+    CGRect viewFrame = CGRectMake(0,
+                                  viewOriginY,
+                                  kToolPanelTableViewWidth,
+                                  screenFrame.size.height - viewOriginY);
+    UIView *view = [[UIView alloc] initWithFrame:viewFrame];
+    
+    view.backgroundColor = [UIColor clearColor];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, viewFrame.size.width, viewFrame.size.height) style:UITableViewStyleGrouped];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.separatorColor = [UIColor clearColor];
+    
+    [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
+    self.tableView.scrollEnabled = NO;
+    self.tableView.contentInset = UIEdgeInsetsMake((kToolPanelTableViewWidth - kToolPanelButtonDimension)/ 2.0, 0, 0, 0);
+    
+    [view addSubview:self.tableView];
+    self.view = view;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
-	CGFloat viewOriginY = CR_TOP_BAR_HEIGHT;
-    CGRect screenFrame = CR_LANDSCAPE_FRAME;
-    
-	CGRect viewFrame = CGRectMake(0,
-								  viewOriginY,
-								  kToolPanelTableViewWidth,
-								  screenFrame.size.height - viewOriginY);
-	self.view.frame = viewFrame;
-	self.view.backgroundColor = [UIColor clearColor];
-	
-    self.tableView.frame = CGRectMake(0, 0, viewFrame.size.width, viewFrame.size.height);
-	self.tableView.separatorColor = [UIColor clearColor];
-
-	[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
-	self.tableView.scrollEnabled = NO;
-	self.tableView.contentInset = UIEdgeInsetsMake((kToolPanelTableViewWidth - kToolPanelButtonDimension)/ 2.0, 0, 0, 0);
-
-	UIView *tableViewBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-	tableViewBackgroundView.backgroundColor = CR_COLOR_PRIMARY;
-	tableViewBackgroundView.alpha = 0.8;
-	self.tableView.backgroundColor = [UIColor clearColor];
-	self.tableView.backgroundView = tableViewBackgroundView;
-
-	[self.view addSubview:self.tableView];
+    //This might not be done in a nib, so it's in viewDidLoad
+    UIView *tableViewBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    tableViewBackgroundView.backgroundColor = CR_COLOR_PRIMARY;
+    tableViewBackgroundView.alpha = 0.8;
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.backgroundView = tableViewBackgroundView;
 }
 
 #pragma mark - UITableView Data Source

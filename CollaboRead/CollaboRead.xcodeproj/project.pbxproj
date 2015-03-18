@@ -88,8 +88,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRPatientInfoViewController.h; sourceTree = "<group>"; };
-		36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRPatientInfoViewController.m; sourceTree = "<group>"; };
+		36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRPatientInfoViewController.h; path = Controllers/View/CRPatientInfoViewController.h; sourceTree = "<group>"; };
+		36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRPatientInfoViewController.m; path = Controllers/View/CRPatientInfoViewController.m; sourceTree = "<group>"; };
 		8D06A5AF1AAEA40F007E9B07 /* CRForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRForgotPasswordViewController.h; sourceTree = "<group>"; };
 		8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRForgotPasswordViewController.m; sourceTree = "<group>"; };
 		8D06A5B51AAEC3E0007E9B07 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
@@ -511,6 +511,8 @@
 		BB083DC91AB9EADE0061C081 /* Not In Use */ = {
 			isa = PBXGroup;
 			children = (
+				36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */,
+				36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */,
 				BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */,
 				BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */,
 				BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */,
@@ -532,8 +534,6 @@
 				BB2090E81AB876A600E33ACE /* CRUserSuggestionTableViewController.m */,
 				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
 				BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */,
-				36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */,
-				36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */,
 				8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */,
 				8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */,
 			);

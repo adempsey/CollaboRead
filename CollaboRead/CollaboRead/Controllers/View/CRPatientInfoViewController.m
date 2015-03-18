@@ -37,20 +37,24 @@
 	return self;
 }
 
+- (void)loadView {
+    UIView *view = [[UIView alloc] init];
+    self.patientInfoTextView = [[UITextView alloc] initWithFrame:CGRectMake(0,
+                                                                            0,
+                                                                            self.view.frame.size.width,
+                                                                            self.view.frame.size.height)];
+    self.patientInfoTextView.text = self.infoText;
+    self.patientInfoTextView.textColor = [UIColor whiteColor];
+    self.patientInfoTextView.font = [UIFont systemFontOfSize:kTEXT_VIEW_FONT_SIZE];
+    self.patientInfoTextView.backgroundColor = [UIColor clearColor];
+    self.patientInfoTextView.editable = NO;
+    [view addSubview:self.patientInfoTextView];
+    self.view = view;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
-	self.patientInfoTextView = [[UITextView alloc] initWithFrame:CGRectMake(0,
-																			0,
-																			self.view.frame.size.width,
-																			self.view.frame.size.height)];
-	self.patientInfoTextView.text = self.infoText;
-	self.patientInfoTextView.textColor = [UIColor whiteColor];
-	self.patientInfoTextView.font = [UIFont systemFontOfSize:kTEXT_VIEW_FONT_SIZE];
-	self.patientInfoTextView.backgroundColor = [UIColor clearColor];
-	self.patientInfoTextView.editable = NO;
-	[self.view addSubview:self.patientInfoTextView];
 }
 
 //Adjusts text view text when infoText is updated
