@@ -21,10 +21,19 @@
 
 @interface CRSelectCaseViewController()
 {
-    NSIndexPath *selectedPath; //Allows the view to pass the selected case in the segue prep function
+    /*!
+     @brief Path that determines selected case to pass along in segue prep
+     */
+    NSIndexPath *selectedPath;
 }
 
+/*!
+ @brief Sets of cases to select from
+ */
 @property (nonatomic, strong) NSArray *caseSets;
+/*!
+ @brief Activity indicator to show loading cases activity
+ */
 @property (nonatomic, readwrite, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
@@ -48,8 +57,8 @@
 		if (!error) {
 			self.caseSets = caseSets;
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.activityIndicator stopAnimating];
                 [self.collectionView reloadData];
+                [self.activityIndicator stopAnimating];
             });
 		} else {
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
@@ -69,7 +78,11 @@
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
     
 }
-
+/*!
+ Dismiss view controller
+ @param sender
+ UIElement that triggered method, unused
+ */
 - (IBAction)dismiss:(id)sender
 {
 	[self dismissViewControllerAnimated:YES completion:nil];
@@ -140,8 +153,6 @@
 	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
     NSArray *caseArray = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
 	CRCase *selectedCase = caseArray[selectedPath.row];
-    //NSString *selectedCaseKey = [selectedCaseSet.cases allKeysForObject:selectedCase][0];//[selectedCaseSet.cases keysSortedByValueUsingSelector:@selector(compareDates:)][selectedPath.row];
-    //selectedCaseSet.cases.allKeys[selectedPath.row];
 	nextController.caseChosen = selectedCase;
 	nextController.caseGroup = selectedCaseSet.setID;
 

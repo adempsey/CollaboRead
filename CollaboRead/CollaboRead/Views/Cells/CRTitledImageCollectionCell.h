@@ -9,10 +9,20 @@
 //
 
 #import <UIKit/UIKit.h>
-
+/*!
+ @class CRTitledImageCollectionCell
+ 
+ @discussion A collection view cell to display an image with a title underneath
+ */
 @interface CRTitledImageCollectionCell : UICollectionViewCell
 
+/*!
+ @brief ImageView to display image
+ */
 @property (nonatomic, strong) IBOutlet UIImageView *image;
+/*!
+ @brief Title of the cell
+ */
 @property (nonatomic, strong) IBOutlet UILabel *name;
 
 

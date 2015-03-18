@@ -9,21 +9,38 @@
 #import <UIKit/UIKit.h>
 #import "CRSideBarViewController.h"
 
+/*!
+ @class CRStudentAnswerTableViewController
+ @discussion A side bar to display and adjust visibility of answer submissions
+ */
 @interface CRStudentAnswerTableViewController : CRSideBarViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, readwrite, weak) id delegate;
 
 /*!
- @brief A list of the answers submitted to the case to use for displaying the names of groups/students.
+ @brief A list of the CRAnswers submitted to the case
  */
 @property (nonatomic, readwrite, strong) NSArray *answerList;
 
+/*!
+ Initializes controller with an answerList
+ 
+ @param answerList
+ Array of CRAnswers to set answerList property to
+ */
 - (instancetype)initWithAnswerList:(NSArray*)answerList;
 
 @end
 
 @protocol CRStudentAnswerTableViewDelegate <NSObject>
 
+/*!
+ Called when the selection of answers in the table is updated
+ @param studentAnswerTableViewController
+ View controller whose selection was updated
+ @param answers
+ Currently selected answers
+ */
 @required
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController*)studentAnswerTableView didChangeAnswerSelection:(NSArray*)answers;
 

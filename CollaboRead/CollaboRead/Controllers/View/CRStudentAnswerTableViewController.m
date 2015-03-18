@@ -29,12 +29,18 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
 @interface CRStudentAnswerTableViewController ()
 
+/*!
+ @brief Table view to display options and submitted answers' identifiers
+ */
 @property (nonatomic, readwrite, strong) UITableView *tableView;
+/*!
+ @brief Currently selected answers
+ */
 @property (nonatomic, readwrite, strong) NSMutableArray *selectedStudents;
+/*!
+ @brief Whether to show group names or generic identifier
+ */
 @property (nonatomic, readwrite, assign) BOOL shouldShowStudentNames;
-@property (nonatomic, readwrite, strong) NSIndexPath *tempIndexPath;
-@property (nonatomic, strong) NSArray *caseSets;
-@property (nonatomic, strong) NSString *userID;
 
 @end
 
@@ -64,6 +70,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	[self.view addSubview:self.tableView];
 }
 
+//Setting the list of answers should cause the table to update
 -(void)setAnswerList:(NSArray *)students
 {
     _answerList = students;
@@ -110,7 +117,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	cell.textLabel.textColor = [UIColor whiteColor];
 	cell.textLabel.adjustsFontSizeToFitWidth = YES;
 
-
+    //Correspond identifier to color of the drawing
 	if (indexPath.section == kSECTION_STUDENTS) {
 		NSDictionary *color = studentColors[indexPath.row];
 		UIImage *dot = [UIImage imageNamed:@"dot.png"];

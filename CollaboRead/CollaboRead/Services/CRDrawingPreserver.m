@@ -11,8 +11,10 @@
 
 @interface CRDrawingPreserver ()
 
-@property (nonatomic, strong) NSMutableDictionary *drawings;//Holds values of undo stack arrays keyed to case ids
-
+/*!
+ @brief Holds undo stacks mapped to case ids
+ */
+@property (nonatomic, strong) NSMutableDictionary *drawings;
 @end
 
 @implementation CRDrawingPreserver

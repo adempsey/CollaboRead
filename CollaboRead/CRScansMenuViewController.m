@@ -16,7 +16,13 @@
 
 @interface CRScansMenuViewController ()
 
+/*!
+ @brief View to display scans
+ */
 @property (nonatomic, strong) UICollectionView *collectionView;
+/*!
+ @brief Currently selected index in collection view
+ */
 @property (nonatomic, strong) NSIndexPath *selectedIndex;
 
 @end
@@ -29,6 +35,7 @@ static NSString * const reuseIdentifier = @"scanCell";
     self = [super init];
     if (self) {
         self.scans = scans;
+        self.selectedIndex = [NSIndexPath indexPathForItem:0 inSection:0];
     }
     return self;
 }
@@ -42,10 +49,7 @@ static NSString * const reuseIdentifier = @"scanCell";
     self.view.frame = frame;
     [self.collectionView reloadData];
     self.collectionView.frame = CGRectMake(kScanMenuMargin, kScanMenuMargin, frame.size.width - 2 * kScanMenuMargin, frame.size.height - 2 * kScanMenuMargin);
-    if (!self.selectedIndex) {
-        self.selectedIndex = [NSIndexPath indexPathForItem:0 inSection:0];
-    }
-    [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+    [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone]; //Reset selected item because changing size may have changed the amount of items and therefore selection
 }
 
 - (void)viewDidLoad {
@@ -106,14 +110,14 @@ static NSString * const reuseIdentifier = @"scanCell";
     [self.delegate scansMenuViewControllerDidSelectScan:((CRScan *)self.scans[indexPath.row]).scanID];
 }
 #pragma mark – UICollectionViewDelegateFlowLayout
-//Cells are all 100 x 100 pixels
+//Cells sized to fit 3 per row pixels
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*) collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat dim = (collectionView.frame.size.width - 40) / 4;
     return CGSizeMake(dim, dim);
 }
 
-//Cells are 30 pixels away from edge of view and 20 from each other?
+//Cells are 20 pixels away from edge of view and 15 from each other
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(20, 20, 20, 20);

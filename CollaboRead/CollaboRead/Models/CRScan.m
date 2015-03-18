@@ -23,6 +23,7 @@
 	return self;
 }
 
+//Custom setter turns slices into appropriate object from dictionary if needed
 - (void)setSlices:(NSArray *)slices
 {
 	NSMutableArray *finalArray = [[NSMutableArray alloc] init];
@@ -31,7 +32,9 @@
 		if ([obj isKindOfClass:[NSDictionary class]]) {
 			CRSlice *slice = [[CRSlice alloc] initWithDictionary:obj];
 			[finalArray addObject:slice];
-		}
+		} else if ([obj isKindOfClass:[CRSlice class]]) {
+            [finalArray addObject:obj];
+        }
 	}];
 	
 	_slices = finalArray;

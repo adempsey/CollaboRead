@@ -11,15 +11,20 @@
 #import "CRTitledImageCollectionCell.h"
 #import "CRColors.h"
 
+/*!
+ @define LABEL_HEIGHT Height of cell's title label
+ */
+#define LABEL_HEIGHT 21
+
 @implementation CRTitledImageCollectionCell
 
 -(id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height - 21)];
+        self.image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height - LABEL_HEIGHT)];
         [self.image setContentMode:UIViewContentModeScaleAspectFit];
-        self.name = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height - 21, frame.size.width, 21)];
+        self.name = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height - LABEL_HEIGHT, frame.size.width, LABEL_HEIGHT)];
         self.name.textAlignment = NSTextAlignmentCenter;
         self.name.textColor = [UIColor whiteColor];
         [self.contentView addSubview:self.image];

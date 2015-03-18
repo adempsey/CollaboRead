@@ -9,8 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "CRUser.h"
 
+/*!
+ @class CRSelectCaseViewController
+ 
+ @discussion View Controller for case selection
+ */
 @interface CRSelectCaseViewController : UICollectionViewController
 
+/*!
+ @brief Lecturer whose cases are being selected from
+ */
 @property (nonatomic, strong) CRUser *lecturer;
 
 @end

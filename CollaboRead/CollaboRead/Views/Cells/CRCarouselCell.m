@@ -11,6 +11,9 @@
 
 
 @interface CRCarouselCell ()
+/*!
+ @brief Image view to display the cell's image
+ */
 @property (nonatomic, strong) UIImageView *imgView;
 @end
 
@@ -39,6 +42,7 @@
     return self;
 }
 
+//If the highlight is changed, adjust the view as appropriate
 -(void)setIsHighlighted:(BOOL)isHighlighted {
     _isHighlighted = isHighlighted;
     if (isHighlighted) {
@@ -49,6 +53,7 @@
     }
 }
 
+//Sets the image view's image
 -(void)setImage:(UIImage *)image
 {
     self.imgView.image = image;

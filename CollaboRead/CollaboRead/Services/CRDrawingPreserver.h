@@ -12,16 +12,40 @@
 #import <Foundation/Foundation.h>
 #import "CRUndoStack.h"
 
+/*!
+ @class CRDrawingPreserver
+ 
+ @discussion Preserves undo stack for each case over a user session
+ */
 @interface CRDrawingPreserver : NSObject
 
 + (CRDrawingPreserver *) sharedInstance;
 
-//Gives the undoStack for image if found or nil otherwise
+/*!
+ Retrieves undo stack for a given case
+ 
+ @param caseID
+ Case to retrieve undo stack for
+ 
+ @return
+ Undo stack of the case, nil if no undo stack was saved for that case
+ */
 - (CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID;
 
-//Adds or updates drawing history for a case
+/*!
+ Sets or updats undo stack for a given case
+ 
+ @param caseID
+ Case to retrieve undo stack for
+ 
+ @param drawing
+ Undo stack of the case
+ */
 - (void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID;
 
+/*!
+ Clears all undo stacks, to be called upon user logout
+ */
 - (void)clearDrawings;
 
 @end

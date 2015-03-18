@@ -32,6 +32,7 @@
 	return self;
 }
 
+//Custom setter turns scans into appropriate object from dictionary if needed
 - (void)setScans:(NSArray *)scans
 {
 	NSMutableArray *finalArray = [[NSMutableArray alloc] init];
@@ -40,13 +41,15 @@
 		if ([obj isKindOfClass:[NSDictionary class]]) {
 			CRScan *scan = [[CRScan alloc] initWithDictionary:obj];
 			[finalArray addObject:scan];
-		}
+		} else if ([obj isKindOfClass:[CRScan class]]) {
+            [finalArray addObject:obj];
+        }
 	}];
 
 	_scans = finalArray;
 }
 
-//Custom setter translates answer json into answer object if needed
+//Custom setter turns answers into appropriate object from dictionary if needed
 - (void)setAnswers:(NSArray *)answers
 {
 	NSMutableArray *caseAnswers = [[NSMutableArray alloc] init];
@@ -66,6 +69,7 @@
 
 -(NSArray *)answerSlicesForScan:(NSString *)scanID {
     NSMutableSet *sliceIds = [[NSMutableSet alloc] init];
+    //Get ids of scans with answers
     [self.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         CRAnswer *ans = obj;
         [ans.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -75,6 +79,7 @@
             }
         }];
     }];
+    //Get indices for ids
     NSMutableArray *idxs = [[NSMutableArray alloc] init];
     [self.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([((CRScan *)obj).scanID isEqualToString:scanID]) {
@@ -91,6 +96,7 @@
 
 -(NSArray *)answerScans {
     NSMutableSet *scanIds = [[NSMutableSet alloc] init];
+    //Get ids for scans with answers
     [self.answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         CRAnswer *ans = obj;
         [ans.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -98,6 +104,7 @@
             [scanIds addObject:line.scanID];
         }];
     }];
+    //Get indices for ids
     NSMutableArray *idxs = [[NSMutableArray alloc] init];
     [self.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([scanIds containsObject:((CRScan *)obj).scanID]) {

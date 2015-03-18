@@ -14,6 +14,7 @@
 
 @implementation CRAnswerPoint
 
+//TODO: change string literals to constants
 -(id)initFromJSONDict:(NSDictionary *)dict
 {
     self = [super init];
@@ -24,7 +25,6 @@
     return self;
 }
 
-//Make a point with coordinate and endpoint boolean
 -(id)initWithPoint:(CGPoint)point end:(BOOL)end{
     self = [super init];
     if (self) {
@@ -34,7 +34,7 @@
     return self;
 }
 
-//Checks value equality of point and a passed object
+//Equality is defined as points at the same location
 -(BOOL)isEqual:(id)object
 {
     return [object isKindOfClass:[CRAnswerPoint class]] &&
@@ -42,7 +42,7 @@
             ((CRAnswerPoint *)object).coordinate.y == self.coordinate.y;
 }
 
-//Checks if an object is a CRAnswerPoint within a given range of another
+//A 20 px square centered on the point is the "touch range"
 -(BOOL)isInTouchRange:(id)object
 {
     return [object isKindOfClass:[CRAnswerPoint class]] &&
@@ -52,12 +52,12 @@
      ((CRAnswerPoint *)object).coordinate.y >= self.coordinate.y - 10;
 }
 
-//Make a deep copy
 -(id)copyWithZone:(NSZone *)zone
 {
     return [[CRAnswerPoint alloc] initWithPoint:self.coordinate end:self.isEndPoint];
 }
 
+//TODO: change string literals to constants
 -(NSDictionary *)jsonDictFromPoint
 {
     return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:self.coordinate.x], @"x", [NSNumber numberWithFloat:self.coordinate.y], @"y", [NSNumber numberWithFloat: self.isEndPoint], @"isEnd",nil];

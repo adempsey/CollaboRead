@@ -12,6 +12,9 @@
 
 @interface CRPatientInfoViewController ()
 
+/*!
+ @brief Text view to display patientInfo string
+ */
 @property (nonatomic, readwrite, strong) UITextView *patientInfoTextView;
 
 @end
@@ -50,6 +53,7 @@
 	[self.view addSubview:self.patientInfoTextView];
 }
 
+//Adjusts text view text when infoText is updated
 - (void)setInfoText:(NSString *)infoText
 {
 	_infoText = infoText;

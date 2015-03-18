@@ -18,12 +18,22 @@
 
 @interface CRAddCollaboratorsViewController ()
 
+/*!
+ @brief Table view to display selected collaborators
+ */
 @property (nonatomic, strong) UITableView *tableView;
+/*!
+ @brief Text field to enter group name
+ */
 @property (nonatomic, strong) UITextField *groupName;
+/*!
+ @brief Text field to search for another group member name
+ */
 @property (nonatomic, strong) UITextField *enterField;
+/*!
+ @brief View controller for view to present autocompletion suggestions for entered names in table form
+ */
 @property (nonatomic, strong) CRUserSuggestionTableViewController *userSuggester;
-
-@property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
 
 
 @end
@@ -78,11 +88,13 @@
     if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
         [self.tableView setLayoutMargins:UIEdgeInsetsZero]; //ios 8
     }
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"CollabCell"];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.userSuggester.view];
     
 }
 
+//Editting the text field needs to change the prefix for autocompletion
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if ([textField isEqual:self.enterField]) {
         self.userSuggester.prefix = [self.enterField.text stringByReplacingCharactersInRange:range withString:string];
@@ -90,6 +102,7 @@
     return YES;
 }
 
+//Beginning to edit the name entry field should clear it to match with cleared autocompletion suggestions
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     if ([textField isEqual:self.enterField]) {
         self.userSuggester.prefix = @"";
@@ -97,6 +110,7 @@
     }
 }
 
+//End of editting may update visibility of suggestion view or have an updated group name to handle
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if ([textField isEqual:self.enterField]) {
         self.userSuggester.view.hidden = YES;
@@ -110,6 +124,7 @@
     return YES;
 }
 
+#pragma mark - Table view data source
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -135,10 +150,12 @@
     return cell;
 }
 
+//Cannot delete self from collaborators
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return indexPath.row == 0 ? NO : YES;
 }
 
+//Can delete other collaborators
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewCellEditingStyleDelete;
 }
@@ -150,6 +167,7 @@
     }
 }
 
+//What to do when a collaborator has been selected from autocompletion view
 -(void)suggestionSelected:(CRUser *)user {
     [[CRCollaboratorList sharedInstance] addCollaborator:user];
     [self.tableView reloadData];

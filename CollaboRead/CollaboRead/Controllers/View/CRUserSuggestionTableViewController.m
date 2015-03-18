@@ -12,7 +12,13 @@
 
 @interface CRUserSuggestionTableViewController ()
 
+/*!
+ @brief List of suggested names as strings
+ */
 @property (nonatomic, strong) NSArray *suggestionList;
+/*!
+ @brief CRUsers available to suggest as autocompletions
+ */
 @property (nonatomic, strong) NSArray *users;
 
 
@@ -35,9 +41,9 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
+//Setting available users also adjusts names available for autocompletions in the user autocompletion service
 - (void) setUsers:(NSArray *)users {
     _users = users;
     NSMutableArray *names = [[NSMutableArray alloc] init];
@@ -47,6 +53,7 @@
     [[CRUserAutoCompletionService sharedInstance] insertList:names];
 }
 
+//Setting prefix should change list of names suggested
 - (void)setPrefix:(NSString *)prefix {
     self.suggestionList = [[CRUserAutoCompletionService sharedInstance] itemsWithPrefix:prefix];
     _prefix = prefix;

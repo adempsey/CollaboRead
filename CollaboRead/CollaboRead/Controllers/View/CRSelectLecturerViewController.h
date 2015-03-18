@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "CRUser.h"
 
+/*!
+ @class CRSelectLecturerViewController
+ 
+ @discussion View Controller for lecturer selection
+ */
+
 @interface CRSelectLecturerViewController : UICollectionViewController
 
 @end

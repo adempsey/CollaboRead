@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aTb-68-nBh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aTb-68-nBh">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
@@ -10,6 +10,7 @@
         <!--Create an Account-->
         <scene sceneID="NQC-dF-Nh4">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bbt-HN-wcd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="b6e-ah-R2q" customClass="CRCreateAccountViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PRG-Ad-8Ik"/>
@@ -134,15 +135,6 @@
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="RCv-vd-LsM">
                                         <rect key="frame" x="290" y="451" width="20" height="20"/>
                                     </activityIndicatorView>
-                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Title:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jXU-g1-YVR">
-                                        <rect key="frame" x="220" y="302" width="38" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="38" id="r7f-Zc-Y8a"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eaw-lV-pVx">
                                         <rect key="frame" x="211" y="190" width="47" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -190,7 +182,6 @@
                                     <constraint firstItem="PaA-gF-0Iv" firstAttribute="top" secondItem="Izm-HQ-S4h" secondAttribute="top" constant="187" id="PH3-5h-xJY"/>
                                     <constraint firstItem="S5r-Z5-ew5" firstAttribute="top" secondItem="PaA-gF-0Iv" secondAttribute="bottom" constant="8" symbolic="YES" id="PJ4-2K-W1f"/>
                                     <constraint firstItem="Vka-Sn-yvl" firstAttribute="trailing" secondItem="S5r-Z5-ew5" secondAttribute="trailing" id="S5G-a8-kC5"/>
-                                    <constraint firstItem="jXU-g1-YVR" firstAttribute="baseline" secondItem="gxf-vO-bcH" secondAttribute="baseline" id="Xgr-Pd-h0E"/>
                                     <constraint firstItem="Vka-Sn-yvl" firstAttribute="trailing" secondItem="tST-to-Fah" secondAttribute="trailing" id="Zcx-LG-lN7"/>
                                     <constraint firstItem="PaA-gF-0Iv" firstAttribute="baseline" secondItem="eaw-lV-pVx" secondAttribute="firstBaseline" id="ZfU-Kl-PVD"/>
                                     <constraint firstItem="PaA-gF-0Iv" firstAttribute="leading" secondItem="eaw-lV-pVx" secondAttribute="trailing" constant="8" id="aFp-Du-joi"/>
@@ -244,12 +235,10 @@
                         <outlet property="scrollView" destination="Izm-HQ-S4h" id="28M-vz-I2r"/>
                         <outlet property="successCheckMark" destination="3ma-Qj-4dD" id="Zob-ko-Wam"/>
                         <outlet property="successMessage" destination="gre-79-fNM" id="JFJ-9c-QFc"/>
-                        <outlet property="titleLabel" destination="jXU-g1-YVR" id="DGz-qi-Qjd"/>
                         <outlet property="yearLabel" destination="gxf-vO-bcH" id="1ua-5h-Oqb"/>
                         <outlet property="yearSelector" destination="giS-Uh-Qlj" id="3WF-hG-Zar"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Bbt-HN-wcd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="82" y="-1538"/>
         </scene>

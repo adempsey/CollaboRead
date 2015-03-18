@@ -18,10 +18,19 @@
 
 @interface CRSelectLecturerViewController ()
 {
+    /*!
+     @brief Path that determines selected lecturer to pass along in segue prep
+     */
     NSIndexPath *selectedPath;
 }
 
-@property (nonatomic, strong) NSArray *lecturers; //Lecturers in database
+/*!
+ @brief Lecturers to choose from
+ */
+@property (nonatomic, strong) NSArray *lecturers;
+/*!
+ @brief Activity indicator to show loading lecturers activity
+ */
 @property (nonatomic, readwrite, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
@@ -47,7 +56,7 @@
             });
 
 		} else {
-			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
+			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"lecturers" completionBlock:^(UIAlertAction *action) {
 				if (self != self.navigationController.viewControllers[0]) {
 					[self.navigationController popViewControllerAnimated:YES];
 				} else if (self.presentingViewController) {
@@ -67,6 +76,11 @@
     nextController.lecturer = self.lecturers[selectedPath.row];
 }
 
+/*!
+ Dismiss view controller
+ @param sender
+ UIElement that triggered method, unused
+ */
 - (IBAction)dismiss:(id)sender
 {
 	[self dismissViewControllerAnimated:YES completion:nil];

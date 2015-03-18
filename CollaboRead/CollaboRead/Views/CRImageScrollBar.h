@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 CollaboRead. All rights reserved.
 //
 
+/*****UNUSED IN APP RIGHT NOW, LEFT IN FOR REFERENCE BECAUSE IT WORKED**********/
+
 #import <UIKit/UIKit.h>
 
 @interface CRImageScrollBar : UIView

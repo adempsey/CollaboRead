@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+/*!
+ @class CRCreateAccountViewController
+ 
+ @discussion View Controller for account creation form
+ */
+
 @interface CRCreateAccountViewController : UIViewController <UITextFieldDelegate>
 
 

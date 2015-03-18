@@ -14,14 +14,52 @@
 
 @interface CRForgotPasswordViewController ()
 
+/*!
+ @brief Scroll view to move text fields above keyboard
+ */
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+/*!
+ @brief Label to notify user of instructions
+ */
 @property (weak, nonatomic) IBOutlet UILabel *instructionsLabel;
+/*!
+ @brief Field for user to enter email associated with an account
+ */
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+/*!
+ @brief Button to perform reset
+ */
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
+/*!
+ @brief Activity indicator to show attempt to reset
+ */
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+/*!
+ @brief Label to indicate successful reset
+ */
 @property (weak, nonatomic) IBOutlet UILabel *successMark;
+/*!
+ @brief Label to inform user of next steps
+ */
 @property (weak, nonatomic) IBOutlet UILabel *successInstructionsLabel;
+/*!
+ @brief Button to dismiss form upon completion
+ */
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
+
+/*!
+ Dismisses view controller
+ @param sender
+ UI element that triggered call, unused
+ */
+- (IBAction)dismiss:(id)sender;
+
+/*!
+ Attempts password reset
+ @param sender
+ UI element that triggered call, unused
+ */
+- (IBAction)reset:(id)sender;
 
 @end
 

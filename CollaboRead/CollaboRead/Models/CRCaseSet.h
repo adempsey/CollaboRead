@@ -27,6 +27,7 @@
 
 /*!
  @brief Dictionary of case objects, keyed by case ID number
+ Can be set with CRCases or JSON Dictionaries
  */
 @property (nonatomic, readwrite, strong) NSDictionary *cases;
 

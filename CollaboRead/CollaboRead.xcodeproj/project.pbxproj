@@ -181,10 +181,10 @@
 		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRAnswerPoint.m; path = ../Utilities/Drawing/CRAnswerPoint.m; sourceTree = "<group>"; };
 		BBA0C1111A1637F800FFA921 /* CRDrawingPreserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRDrawingPreserver.h; sourceTree = "<group>"; };
 		BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRDrawingPreserver.m; sourceTree = "<group>"; };
-		BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRImageScrollBarController.h; sourceTree = "<group>"; };
-		BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRImageScrollBarController.m; sourceTree = "<group>"; };
-		BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRImageScrollBar.h; sourceTree = "<group>"; };
-		BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRImageScrollBar.m; sourceTree = "<group>"; };
+		BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRImageScrollBarController.h; path = Controllers/View/CRImageScrollBarController.h; sourceTree = "<group>"; };
+		BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRImageScrollBarController.m; path = Controllers/View/CRImageScrollBarController.m; sourceTree = "<group>"; };
+		BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRImageScrollBar.h; path = Views/CRImageScrollBar.h; sourceTree = "<group>"; };
+		BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRImageScrollBar.m; path = Views/CRImageScrollBar.m; sourceTree = "<group>"; };
 		BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRLoginViewController.h; sourceTree = "<group>"; };
 		BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRLoginViewController.m; sourceTree = "<group>"; };
 		BBA2EBD019EECE270093044E /* CRUserKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRUserKeys.h; sourceTree = "<group>"; };
@@ -300,6 +300,7 @@
 		8DA5DE1E19E6064A002EA706 /* CollaboRead */ = {
 			isa = PBXGroup;
 			children = (
+				BB083DC91AB9EADE0061C081 /* Not In Use */,
 				8DEE5ADE19F642EA0090AF0B /* Views */,
 				8DEE5ADD19F642440090AF0B /* Controllers */,
 				8DEE5AD919F63EBC0090AF0B /* Categories */,
@@ -462,8 +463,6 @@
 			children = (
 				8DEBB0531A86A9D300DC0FCA /* Buttons */,
 				8DEE5ADF19F642F50090AF0B /* Cells */,
-				BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */,
-				BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -509,6 +508,17 @@
 			path = Drawing;
 			sourceTree = "<group>";
 		};
+		BB083DC91AB9EADE0061C081 /* Not In Use */ = {
+			isa = PBXGroup;
+			children = (
+				BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */,
+				BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */,
+				BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */,
+				BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */,
+			);
+			name = "Not In Use";
+			sourceTree = "<group>";
+		};
 		BBA0C5991A894201009E53EC /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,18 +526,16 @@
 				8D3916FD1A8D52E300B7523F /* CRSideBarViewController.m */,
 				8DD360151A0B366200E572D1 /* CRToolPanelViewController.h */,
 				8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */,
+				BB0E0C701A9A5F87004D7521 /* CRAddCollaboratorsViewController.h */,
+				BB0E0C711A9A5F87004D7521 /* CRAddCollaboratorsViewController.m */,
+				BB2090E71AB876A600E33ACE /* CRUserSuggestionTableViewController.h */,
+				BB2090E81AB876A600E33ACE /* CRUserSuggestionTableViewController.m */,
 				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
 				BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */,
 				36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */,
 				36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */,
 				8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */,
 				8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */,
-				BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */,
-				BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */,
-				BB0E0C701A9A5F87004D7521 /* CRAddCollaboratorsViewController.h */,
-				BB0E0C711A9A5F87004D7521 /* CRAddCollaboratorsViewController.m */,
-				BB2090E71AB876A600E33ACE /* CRUserSuggestionTableViewController.h */,
-				BB2090E81AB876A600E33ACE /* CRUserSuggestionTableViewController.m */,
 			);
 			name = SubViews;
 			sourceTree = "<group>";

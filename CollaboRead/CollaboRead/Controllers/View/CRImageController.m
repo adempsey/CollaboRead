@@ -432,17 +432,6 @@
     CGFloat sideBar = kToolPanelTableViewWidth;
     CGRect viewFrame = CR_LANDSCAPE_FRAME;
     
-    //Code below is to rotate an image. It seems that we do not want this to happen, but is being left commented out until that is confirmed.
-    /*
-    //If image is portrait orientation, make it landscape so it can appear larger on the screen
-    if (newFrame.size.height > newFrame.size.width) {
-        self.caseImage.image = [[UIImage alloc] initWithCGImage:self.caseImage.image.CGImage scale:1.0 orientation:UIImageOrientationLeft];
-        //Rotation doesn't adjust UIImageView's frame, so must be done manually.
-        CGFloat temp = newFrame.size.width;
-        newFrame.size.width = newFrame.size.height;
-        newFrame.size.height = temp;
-    }*/
-    
     //If the image doesn't already fit as much as the view as possible
     if (newFrame.size.height != viewFrame.size.height - heightBlocked &&
         newFrame.size.width != viewFrame.size.width - sideBar * 2) {

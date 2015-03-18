@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+/*!
+ @class CRForgotPasswordViewController
+ 
+ @discussion View Controller for password recovery form
+ */
+
 @interface CRForgotPasswordViewController : UIViewController
 
 @end

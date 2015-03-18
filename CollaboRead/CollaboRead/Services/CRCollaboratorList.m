@@ -12,6 +12,9 @@
 #import "CRAccountService.h"
 
 @interface CRCollaboratorList ()
+/*!
+ @brief Users currently working together. Currently logged in user is always at index 0.
+ */
 @property (nonatomic, strong) NSMutableArray *collaborators;
 @end
 @implementation CRCollaboratorList
@@ -22,7 +25,6 @@
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc] init];
         sharedInstance.collaborators = [[NSMutableArray alloc] init];
-        [sharedInstance.collaborators addObject:[[CRAccountService sharedInstance] user]];
     });
     return sharedInstance;
 }
@@ -54,6 +56,15 @@
     if (index > 0 && index < self.collaborators.count) {
         [self.collaborators removeObjectAtIndex: index];
     }
+}
+
+-(void)clearCollaborators {
+    self.collaborators = [[NSMutableArray alloc] init];
+    self.groupName = nil;
+}
+
+-(void)setOwner {
+    [self.collaborators addObject:[[CRAccountService sharedInstance] user]];
 }
 
 @end

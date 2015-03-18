@@ -13,7 +13,13 @@
 
 @interface CRToolPanelViewController ()
 
+/*!
+ @brief Table view to display tool buttons
+ */
 @property (nonatomic, readwrite, strong) UITableView *tableView;
+/*!
+ @brief Tool currently selected in table
+ */
 @property (nonatomic, readwrite, strong) NSIndexPath *selectedTool;
 
 @end
@@ -28,8 +34,6 @@
 		self.tableView.delegate = self;
 		
 		self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
-
-		self.toolPanelIsVisible = YES;
 	}
 	return self;
 }
@@ -61,41 +65,6 @@
 	self.tableView.backgroundView = tableViewBackgroundView;
 
 	[self.view addSubview:self.tableView];
-}
-
-// Reduces area of view when not visible
-// This allows the user to touch parts of the view below the panel when it's not shown
-- (void)setFullView:(BOOL)shouldBeFull
-{
-	CGRect viewFrame = self.view.frame;
-	viewFrame.size.width = shouldBeFull ? kToolPanelTableViewWidth : kToolPanelTableViewMargin;
-	self.view.frame = viewFrame;
-}
-
-- (void)toggleToolPanel
-{
-	CGRect currentTableFrame = self.tableView.frame;
-	currentTableFrame.origin.x = self.toolPanelIsVisible ? -kToolPanelTableViewWidth : 0;
-
-	if (!self.toolPanelIsVisible) {
-		[self setFullView:YES];
-		self.tableView.alpha = 1.0;
-	}
-    else if (self.selectedTool.row == kCR_PANEL_TOOL_SCANS) {
-        [self tableView:self.tableView didSelectRowAtIndexPath:self.selectedTool];
-    }
-
-	[UIView animateWithDuration:0.25 animations:^{
-		self.tableView.frame = currentTableFrame;
-	} completion:^(BOOL finished) {
-		if (finished) {
-			self.toolPanelIsVisible = !self.toolPanelIsVisible;
-			if (!self.toolPanelIsVisible) {
-				[self setFullView:NO];
-				self.tableView.alpha = 0.0;
-			}
-		}
-	}];
 }
 
 #pragma mark - UITableView Data Source
@@ -133,12 +102,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[self.delegate toolPanelViewController:self didSelectTool:indexPath.row];
-    if(self.selectedTool.row == kCR_PANEL_TOOL_SCANS) {
+    if(self.selectedTool.row == kCR_PANEL_TOOL_SCANS) { //May need to force deselect scans or transition to pen
         switch (indexPath.row) {
             case kCR_PANEL_TOOL_UNDO:
             case kCR_PANEL_TOOL_CLEAR:
+                //Deselect scans to toggle, also switch to pen by cascading
                 [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
             case kCR_PANEL_TOOL_SCANS:
+                //Delegate already knows it was selected again, so just deselect from table and move to pen
                 [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
                 self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
                 [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -148,17 +119,20 @@
             case kCR_PANEL_TOOL_PEN:
             case kCR_PANEL_TOOL_ERASER:
             case kCR_PANEL_TOOL_POINTER:
+                //Deselect to toggle, no need to specify other tool
                 [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
                 self.selectedTool = indexPath;
             default:
                 break;
         }
-    } else if(self.selectedTool.row == kCR_PANEL_TOOL_PATIENT_INFO) {
+    } else if(self.selectedTool.row == kCR_PANEL_TOOL_PATIENT_INFO) {//May need to force deselect patient info or transition to pen
         switch (indexPath.row) {
             case kCR_PANEL_TOOL_UNDO:
             case kCR_PANEL_TOOL_CLEAR:
+                //Deselect patient info to toggle, also switch to pen by cascading
                 [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
             case kCR_PANEL_TOOL_PATIENT_INFO:
+                //Delegate already knows it was selected again, so just deselect from table and move to pen
                 [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
                 self.selectedTool = [NSIndexPath indexPathForRow:kCR_PANEL_TOOL_PEN inSection:0];
                 [self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -168,12 +142,13 @@
             case kCR_PANEL_TOOL_PEN:
             case kCR_PANEL_TOOL_ERASER:
             case kCR_PANEL_TOOL_POINTER:
+                //Deselect to toggle, no need to specify other tool
                 [self.delegate toolPanelViewController:self didDeselectTool:self.selectedTool.row];
                 self.selectedTool = indexPath;
             default:
                 break;
         }
-    } else if (indexPath.row == kCR_PANEL_TOOL_UNDO || indexPath.row == kCR_PANEL_TOOL_CLEAR) {
+    } else if (indexPath.row == kCR_PANEL_TOOL_UNDO || indexPath.row == kCR_PANEL_TOOL_CLEAR) { //These tools do not remain selected and should return to previously selected tool, if not the patient info or scans
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 		[self.tableView selectRowAtIndexPath:self.selectedTool animated:NO scrollPosition:UITableViewScrollPositionNone];
 		
@@ -202,13 +177,13 @@
 			title = @"CRToolPanelClear.png";
 			break;
         case kCR_PANEL_TOOL_POINTER:
-            title = @"CRToolPanelPointer.png";//Change to correct icon when available
+            title = @"CRToolPanelPointer.png";
             break;
         case kCR_PANEL_TOOL_SCANS:
             title = @"CRToolPanelScan.png";
             break;
         case kCR_PANEL_TOOL_PATIENT_INFO:
-            title = @"CRToolPanelPatientInfo.png";//Change to correct icon when available
+            title = @"CRToolPanelPatientInfo.png";
             break;
 	}
 	

@@ -12,36 +12,114 @@
 #import "CRErrorAlertService.h"
 #import "CRUser.h"
 #import "CRUserKeys.h"
-
 #import "UILabel+CRAdditions.h"
 
 @interface CRCreateAccountViewController ()
+/*!
+ @brief Field for email entry
+ */
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
+/*!
+ @brief Field for name entry
+ */
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
+/*!
+ @brief Selection for student year
+ */
 @property (weak, nonatomic) IBOutlet UISegmentedControl *yearSelector;
+/*!
+ @brief Field for password entry
+ */
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
+/*!
+ @brief Field for password re-entry
+ */
 @property (weak, nonatomic) IBOutlet UITextField *passwordCheckField;
+/*!
+ @brief Label for entry errors
+ */
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
+/*!
+ @brief Button to trigger registration
+ */
 @property (weak, nonatomic) IBOutlet UIButton *registerButton;
+/*!
+ @brief Activity indicator for registation attempt
+ */
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+/*!
+ @brief Button to finish registration
+ */
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
+/*!
+ @brief Scroll view to raise text fields above keyboard;
+ */
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+/*!
+ @brief Text field currently being editted
+ */
 @property (weak, nonatomic) UITextField *activeField;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *yearLabel;
+/*!
+ @brief Label to indicate registration success
+ */
 @property (weak, nonatomic) IBOutlet UILabel *successCheckMark;
+/*!
+ @brief Button to exit without registering
+ */
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
+/*!
+ @brief Label to indicate next steps upon success
+ */
 @property (weak, nonatomic) IBOutlet UILabel *successMessage;
 
+/*!
+ Triggers attempt to register account
+ @param sender
+ UI element that triggered call, unused
+ */
 - (IBAction)registerAccount:(id)sender;
-- (IBAction)switchRole:(UISegmentedControl *)sender;
+/*!
+ Dismisses view controller
+ @param sender
+ UI element that triggered call, unused
+ */
 - (IBAction)done:(id)sender;
+/*!
+ Checks format of given email
+ @param email
+ Input to check format of
+ @return
+ YES if meets qualifications for an email address, otherwise NO
+ */
 - (BOOL)validEmail:(NSString *)email;
+/*!
+ Registers self to recieve notifications about keyboard
+ */
 - (void)registerForKeyboardNotifications;
+/*!
+ Adjusts location of fields down if needed
+ @param aNotification
+ Notification containing information about keyboard
+ */
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification;
+/*!
+ Adjusts location of fields to above keyboard if needed
+ @param aNotification
+ Notification containing information about keyboard
+ */
 - (void)keyboardWasShown:(NSNotification*)aNotification;
+/*!
+ Toggles visibility of activityIndicator
+ */
 - (void)toggleActivityIndicator;
+/*!
+ Performs registration request
+ */
 - (void)performRegistration;
+/*! 
+ Adjusts view appearance to reflect a successful registration
+ */
+- (void)showSuccessInfo;
 
 @end
 
@@ -62,17 +140,6 @@
 - (IBAction)done:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (IBAction)switchRole:(UISegmentedControl *)sender
-{
-    if (sender.selectedSegmentIndex == 0) {
-        self.titleLabel.hidden = YES;
-        self.yearLabel.hidden = NO;
-    } else {
-        self.yearLabel.hidden = YES;
-        self.titleLabel.hidden = NO;
-    }
 }
 
 - (void)toggleActivityIndicator

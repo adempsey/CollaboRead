@@ -26,8 +26,6 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 @interface CRLoginViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *serverField; //UNTIL WE GET TUFTS SERVER ONLY
-
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
@@ -35,8 +33,32 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 @property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
 
--(IBAction)loginPressed:(id)sender; //Triggers login attempt based on button press
--(IBAction)exitTextField:(id)sender; //Dismisses keyboard when appropriate
+/*!
+ Attempts login with information entered in fields
+ */
+- (void)attemptLogin;
+/*!
+ Triggers a login attempt
+ @param sender
+ UI element triggering method call, unused
+ */
+- (IBAction)loginPressed:(id)sender;
+/*!
+ Dismisses keyboard on touch
+ @param sender
+ UI element triggering method call, unused
+ */
+- (IBAction)exitTextField:(id)sender; //Dismisses keyboard when appropriate
+/*!
+ Adjusts UI to show successful login
+ */
+- (void)showSuccess;
+/*!
+ Adjusts UI to show login error
+ @param error
+ Error number to base response type on
+ */
+- (void)showError:(NSUInteger)error;
 
 @end
 
@@ -84,6 +106,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 				
 			} else if([user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
 				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
+                [[CRCollaboratorList sharedInstance] setOwner];
 				newController = navController;
 			}
 
@@ -99,7 +122,6 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	}];
 }
 
-//Start attempt to login with api call
 -(IBAction)loginPressed:(id)sender
 {
 	self.loginButton.userInteractionEnabled = NO;
@@ -117,6 +139,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
     [self.emailField resignFirstResponder];
     [self.passwordField resignFirstResponder];
 }
+
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     [textField resignFirstResponder];

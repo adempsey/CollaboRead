@@ -10,6 +10,11 @@
 #import "CRSideBarViewController.h"
 #import "CRUserSuggestionTableViewController.h"
 
+/*!
+ @class CRAddCollaboratorsViewController
+ 
+ @discussion Provides user interface to adjust the collaborators for answers
+ */
 @interface CRAddCollaboratorsViewController : CRSideBarViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, CRUserSuggestionTableViewControllerDelegate>
 
 @end

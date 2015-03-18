@@ -10,6 +10,10 @@
 #import "CRCaseKeys.h"
 
 @interface CRSlice ()
+/*!
+ @brief Image for the slice
+ @warning Don't set this property manually. It is lazily initialized from the imageURL
+ */
 @property (nonatomic, strong) UIImage *image;
 @end
 
@@ -25,13 +29,14 @@
 	return self;
 }
 
-// Implicitly sets value of image property
+//Sets the url, and clears the data of the image so that it will reflect the new URL at the next access
 - (void)setImageURL:(NSURL *)url
 {
     _image = nil;
 	_imageURL = url;
 }
 
+//Accesses the image, retrieving it from the URL if necessary
 -(UIImage *)image {
     if (_image == nil) {
         NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL];

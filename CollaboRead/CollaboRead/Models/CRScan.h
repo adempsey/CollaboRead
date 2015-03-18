@@ -13,6 +13,7 @@
  
  @discussion Object for storing data about an individual scan
  Scans represent one image set of a case - e.g., a set of slices from a sagittal view, etc.
+ It is expected that these will always come in json form from the api
  */
 @interface CRScan : NSObject
 
@@ -32,7 +33,7 @@
 @property (nonatomic, readwrite, assign) BOOL hasDrawing;
 
 /*!
- @brief List of CRSlices that compose the scan's images
+ @brief List of CRSlices that compose the scan's images. Can be set from CRSlice or dictionary objects
  */
 @property (nonatomic, readwrite, strong) NSArray *slices;
 

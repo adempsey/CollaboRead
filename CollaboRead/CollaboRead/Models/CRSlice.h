@@ -14,6 +14,7 @@
  
  @discussion Object for storing data about an individual image slice within a scan.
  Slices represent one individual image within a scan.
+ It is expected that these will always come in json form from the api
  */
 @interface CRSlice : NSObject
 
