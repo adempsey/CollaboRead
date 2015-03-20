@@ -54,7 +54,8 @@
     self.navigationItem.title = self.caseChosen.name;
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
     
-    UIView *view = [[UIView alloc] init];
+    UIView *view = [[UIView alloc] initWithFrame:CR_LANDSCAPE_FRAME];
+    view.backgroundColor = [UIColor blackColor];
     
     self.scrollBar = [[iCarousel alloc] init];
     self.scrollBar.dataSource = self;
