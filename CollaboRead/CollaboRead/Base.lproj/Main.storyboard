@@ -10,7 +10,6 @@
         <!--Create an Account-->
         <scene sceneID="NQC-dF-Nh4">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Bbt-HN-wcd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="b6e-ah-R2q" customClass="CRCreateAccountViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PRG-Ad-8Ik"/>
@@ -239,6 +238,7 @@
                         <outlet property="yearSelector" destination="giS-Uh-Qlj" id="3WF-hG-Zar"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bbt-HN-wcd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="82" y="-1538"/>
         </scene>
@@ -386,18 +386,24 @@
                                     <constraint firstAttribute="width" constant="258" id="Low-RC-ZvY"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" keyboardAppearance="alert" returnKeyType="next"/>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="317" y="143" width="258" height="30"/>
                                 </variation>
+                                <connections>
+                                    <outlet property="delegate" destination="aTb-68-nBh" id="IC0-Y3-7bT"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wEI-KF-4qq">
                                 <rect key="frame" x="171" y="339" width="258" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" secureTextEntry="YES"/>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="317" y="224" width="258" height="30"/>
                                 </variation>
+                                <connections>
+                                    <outlet property="delegate" destination="aTb-68-nBh" id="RLb-bf-0zU"/>
+                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yos-ON-6fb">
                                 <rect key="frame" x="277" y="377" width="46" height="30"/>

@@ -65,8 +65,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 @implementation CRLoginViewController
 
 //Sets up activity indicator, other setup done via storyboard
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
 	[super viewDidLoad];
 	CGRect screenBounds = CR_LANDSCAPE_FRAME;
 	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((screenBounds.size
@@ -75,8 +74,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	[self.view addSubview:self.activityIndicator];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.loginButton.titleLabel.text = @"Login";
 	self.loginButton.userInteractionEnabled = YES;
@@ -85,8 +83,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	self.passwordField.text = @"";
 }
 
--(void)attemptLogin
-{
+-(void)attemptLogin {
 	[[CRAPIClientService sharedInstance] loginUserWithEmail:self.emailField.text password:self.passwordField.text block:^(CRUser *user, NSError *error) {
 		if (error) {
 			[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
@@ -122,8 +119,8 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	}];
 }
 
--(IBAction)loginPressed:(id)sender
-{
+-(IBAction)loginPressed:(id)sender {
+    [self exitTextField:sender];
 	self.loginButton.userInteractionEnabled = NO;
 	self.loginButton.hidden = YES;
 
@@ -134,20 +131,21 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 }
 
 //Dismiss keyboard from a tap outside text fields or end of editting
--(IBAction)exitTextField:(id)sender
-{
+-(IBAction)exitTextField:(id)sender {
     [self.emailField resignFirstResponder];
     [self.passwordField resignFirstResponder];
 }
 
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
+    if ([textField isEqual:self.emailField]) {
+        [self.passwordField becomeFirstResponder];
+    }
+    return NO;
 }
 
 //Adjust desplay to give user feedback on login credentials
-- (void)showSuccess
-{
+- (void)showSuccess {
 	if (self.errorLabel.alpha > 0.0) {
 		[UIView animateWithDuration:0.25 animations:^{
 			self.errorLabel.alpha = 0.0;
@@ -163,8 +161,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	self.loginButton.hidden = NO;
 }
 
--(void)showError:(NSUInteger)error
-{
+-(void)showError:(NSUInteger)error {
 	if (self.errorLabel.alpha > 0.0) {
 		[UIView animateWithDuration:0.25 animations:^{
 			self.errorLabel.alpha = 0.0;

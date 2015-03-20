@@ -236,19 +236,12 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
     if ([textField isEqual:self.emailField]) {
-        [textField resignFirstResponder];
         [self.nameField becomeFirstResponder];
     }
-    else if ([textField isEqual:self.nameField]) {
-        [textField resignFirstResponder];
-    }
     else if ([textField isEqual:self.passwordField]) {
-        [textField resignFirstResponder];
         [self.passwordCheckField becomeFirstResponder];
-    }
-    else if ([textField isEqual:self.passwordCheckField]) {
-        [textField resignFirstResponder];
     }
     return NO;
 }
