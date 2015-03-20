@@ -49,14 +49,6 @@
 
 @implementation CRImageController
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-	if (self = [super initWithCoder:aDecoder]) {
-		self.toggleButton = [[UIButton alloc] init];
-	}
-	return self;
-}
-
 -(void)loadView {
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.title = self.caseChosen.name;
@@ -130,11 +122,6 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-    
-    //This caused layout issues when strictly in viewWillAppear, so it needs to be here, too
-    [self.imageMarkup swapImageToScan:self.scanIndex Slice:self.sliceIndex];
-    self.scrollBar.frame = CGRectMake(self.imageMarkup.view.frame.origin.x, self.imageMarkup.view.frame.origin.y + self.imageMarkup.view.frame.size.height, self.imageMarkup.view.frame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
-    self.scrollBar.bounds = self.scrollBar.frame;
 }
 
 //TODO:confirm that no toggling toolbar is ok

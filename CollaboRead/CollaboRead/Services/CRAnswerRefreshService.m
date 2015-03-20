@@ -36,7 +36,7 @@
 
 - (instancetype)init
 {
-	if (self == [super init]) {
+	if (self = [super init]) {
 		self.open = NO;
 	}
 	return self;

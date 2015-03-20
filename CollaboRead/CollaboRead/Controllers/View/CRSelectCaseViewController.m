@@ -41,6 +41,7 @@
 @implementation CRSelectCaseViewController
 
 -(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     self.collectionView.userInteractionEnabled = YES;
 }
 
