@@ -45,4 +45,9 @@
  */
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
+/*!
+ Asynchronously loads all scan images
+ */
+- (void)loadImagesAsync;
+
 @end

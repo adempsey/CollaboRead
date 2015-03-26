@@ -124,4 +124,10 @@
     return NSOrderedDescending;
 }
 
+- (void)loadImagesAsync {
+    [self.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [(CRScan *)obj loadImagesAsync];
+    }];
+}
+
 @end

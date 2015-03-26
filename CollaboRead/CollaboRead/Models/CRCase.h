@@ -84,4 +84,9 @@
  */
 - (NSInteger)compareDates:(CRCase *)other;
 
+/*!
+ Asynchronously loads all case images
+ */
+- (void)loadImagesAsync;
+
 @end

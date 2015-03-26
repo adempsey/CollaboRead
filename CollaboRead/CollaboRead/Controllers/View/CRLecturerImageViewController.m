@@ -38,7 +38,8 @@
 
 - (void)loadView {
     [super loadView];
-    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:self.caseChosen.answers];
+    
+    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:self.caseChosen.answers andScanID:((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID];
     
     self.studentAnswerTableViewController.delegate = self;
     self.studentAnswerTableViewController.visible = NO;
@@ -83,6 +84,21 @@
 	[[CRAnswerRefreshService sharedInstance] disconnect];
 }
 
+- (void)setSliceIndex:(NSUInteger)sliceIndex {
+    [super setSliceIndex:sliceIndex];
+    [self drawStudentAnswers];
+}
+
+- (void)setScanIndex:(NSUInteger)scanIndex {
+    [super setScanIndex:scanIndex];
+    self.studentAnswerTableViewController.scanId = ((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID;
+}
+
+- (void)setCaseChosen:(CRCase *)caseChosen {
+    [super setCaseChosen:caseChosen];
+    self.scansMenuController.highlights = [self.caseChosen answerScans];
+}
+
 -(void)drawStudentAnswers
 {
     NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
@@ -106,7 +122,7 @@
 	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array, NSError *error) {
 		if (!error) {
 			CRCaseSet *selectedCaseSet = array[self.indexPath.section];
-			self.caseChosen = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row];
+			self.caseChosen.answers = ((CRCase *)[selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row]).answers;
 			
 			NSArray *answers = self.caseChosen.answers;
             NSArray *scanHighlights = [self.caseChosen answerScans];
@@ -115,7 +131,7 @@
                 [self.scrollBar reloadData];
                 self.scansMenuController.highlights = scanHighlights;
                 [self drawStudentAnswers];
-                if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
+                if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0 && !self.studentAnswerTableViewController.visible) {
                     self.toggleStudentAnswerTableButton.badgeValue = @"!";
                 }
                 
@@ -155,19 +171,18 @@
 //MAY NOT BE NEEDED
 -(void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase {
     self.caseChosen.answers = refreshedCase.answers;
+    self.scansMenuController.highlights = [self.caseChosen answerScans];
     [self.scrollBar reloadData];
 }
 
 -(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
 {
     [super scansMenuViewControllerDidSelectScan:scanId];
-    if ([self.caseChosen answerSlicesForScan:scanId].count > 0) {
+    if ([self.caseChosen answerSlicesForScan:scanId].count > 0 && !self.studentAnswerTableViewController.visible) {
         self.toggleStudentAnswerTableButton.badgeValue = @"!";
     } else {
         self.toggleStudentAnswerTableButton.badgeValue = @"";
     }
-    [self.scrollBar reloadData];
-    [self drawStudentAnswers];
 }
 
 - (void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didSelectTool:(NSInteger)tool
@@ -190,7 +205,6 @@
 
 -(void) carouselCurrentItemIndexDidChange:(iCarousel *)carousel {
     [super carouselCurrentItemIndexDidChange:carousel];
-    [self drawStudentAnswers];
 }
 
 #pragma mark - CRSideBarViewController Delegate Methods

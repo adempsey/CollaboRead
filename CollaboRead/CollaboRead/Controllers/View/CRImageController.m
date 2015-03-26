@@ -31,7 +31,7 @@
 #define kCAROUSEL_HEIGHT kCR_CAROUSEL_CELL_HEIGHT + 20
 #define kPATIENT_INFO_DIMENSION (CR_LANDSCAPE_FRAME).size.height/3
 
-//TODO: CASECHOSEN MAY NEED CUSTOM SETTER
+//TODO: slice/scanID custom setters
 @interface CRImageController ()
 
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
@@ -66,9 +66,9 @@
     self.scrollBar.clipsToBounds = YES;
     
     self.imageMarkup = [[CRCaseImageMarkupViewController alloc] init];
-    self.imageMarkup.caseChosen = self.caseChosen;
     self.imageMarkup.maxFrame = CGRectMake(kToolPanelTableViewWidth, CR_TOP_BAR_HEIGHT, (CR_LANDSCAPE_FRAME).size.width - 2 * kToolPanelTableViewWidth, (CR_LANDSCAPE_FRAME).size.height - (CR_TOP_BAR_HEIGHT) - kCR_CAROUSEL_CELL_HEIGHT - 20);
-    self.imageMarkup.selectedTool = kCR_PANEL_TOOL_PEN;
+    self.imageMarkup.caseChosen = self.caseChosen;
+    self.imageMarkup.selectedTool = kCR_PANEL_TOOL_PEN; //In loadview because needed for loading imageMarkup view
     [self addChildViewController:self.imageMarkup];
     
     //Create tool panel and it's accompanying views
@@ -89,9 +89,9 @@
     
     self.scansMenuController = [[CRScansMenuViewController alloc] initWithScans:self.caseChosen.scans];
     self.scansMenuController.delegate = self;
-    self.scansMenuController.highlights = [[NSArray alloc] init];
     [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0)];
     self.scansMenuController.view.hidden = YES;
+    self.scansMenuController.highlights = [[NSArray alloc] init];
     [self addChildViewController:self.scansMenuController];
     
     self.patientInfo = [[UITextView alloc] initWithFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0)];
@@ -140,6 +140,37 @@
     [self.imageMarkup swapImageToScan:self.scanIndex Slice:self.sliceIndex];
     self.scrollBar.frame = CGRectMake(self.imageMarkup.view.frame.origin.x, self.imageMarkup.view.frame.origin.y + self.imageMarkup.view.frame.size.height, self.imageMarkup.view.frame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
     self.scrollBar.bounds = self.scrollBar.frame;
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    NSLog(@"appeared");
+}
+
+-(void) setSliceIndex:(NSUInteger)sliceIndex {
+    _sliceIndex = sliceIndex;
+    if(self.view) {
+        [self.scrollBar reloadData];
+        [self.imageMarkup swapImageToScan:self.scanIndex Slice:self.sliceIndex];
+        self.scrollBar.frame = CGRectMake(self.imageMarkup.view.frame.origin.x, self.imageMarkup.view.frame.origin.y + self.imageMarkup.view.frame.size.height, self.imageMarkup.view.frame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
+        self.scrollBar.bounds = self.scrollBar.frame;
+    }
+}
+
+-(void) setScanIndex:(NSUInteger)scanIndex {
+    _scanIndex = scanIndex;
+    self.sliceIndex = 0;
+    
+}
+
+-(void) setCaseChosen:(CRCase *)caseChosen {
+    _caseChosen = caseChosen;
+    if (self.view) {
+        self.imageMarkup.caseChosen = self.caseChosen;
+        self.scansMenuController.highlights = [[NSArray alloc] init];
+        self.scansMenuController.scans = self.caseChosen.scans;
+    }
+    [caseChosen loadImagesAsync];//Load images as efficiently as possible
+    self.scanIndex = 0;
 }
 
 #pragma mark - Gesture methods
@@ -251,11 +282,6 @@
         if ([((CRScan *)obj).scanID isEqualToString:scanId]) {
             if (idx != self.scanIndex) {
                 self.scanIndex = idx;
-                self.sliceIndex = 0;
-                [self.scrollBar reloadData];
-                [self.imageMarkup swapImageToScan:self.scanIndex Slice:self.sliceIndex];
-                self.scrollBar.frame = CGRectMake(self.imageMarkup.view.frame.origin.x, self.imageMarkup.view.frame.origin.y + self.imageMarkup.view.frame.size.height, self.imageMarkup.view.frame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
-                self.scrollBar.bounds = self.scrollBar.frame;
             }
             *stop = true;
         }
@@ -281,9 +307,6 @@
 
 -(void) carouselCurrentItemIndexDidChange:(iCarousel *)carousel {
     self.sliceIndex = carousel.currentItemIndex;
-    [self.imageMarkup swapImageToScan:self.scanIndex Slice:self.sliceIndex];
-    self.scrollBar.frame = CGRectMake(self.imageMarkup.view.frame.origin.x, self.imageMarkup.view.frame.origin.y + self.imageMarkup.view.frame.size.height, self.imageMarkup.view.frame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
-    self.scrollBar.bounds = self.scrollBar.frame;
 }
 
 -(CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value

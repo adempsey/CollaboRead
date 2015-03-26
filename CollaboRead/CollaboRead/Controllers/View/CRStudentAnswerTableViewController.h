@@ -23,12 +23,19 @@
 @property (nonatomic, readwrite, strong) NSArray *answerList;
 
 /*!
+ @brief Scan to list answers for
+ */
+@property (nonatomic, readwrite, strong) NSString *scanId;
+
+/*!
  Initializes controller with an answerList
  
  @param answerList
  Array of CRAnswers to set answerList property to
+ @param scanId
+ String to set scanId property to
  */
-- (instancetype)initWithAnswerList:(NSArray*)answerList;
+- (instancetype)initWithAnswerList:(NSArray*)answerList andScanID:(NSString *)scanId;
 
 @end
 

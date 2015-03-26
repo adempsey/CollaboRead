@@ -39,4 +39,9 @@
  */
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
+/*!
+ Asynchronously loads all images for cases in the set
+ */
+- (void)loadImagesAsync;
+
 @end

@@ -68,6 +68,11 @@ static NSString * const reuseIdentifier = @"scanCell";
     [self.collectionView reloadData];
 }
 
+-(void) setScans:(NSArray *)scans {
+    _scans = scans;
+    [self.collectionView reloadData];
+}
+
 -(void) setViewFrame:(CGRect)frame {
     self.view.frame = frame;
     [self.collectionView reloadData];
