@@ -76,6 +76,13 @@
 	}];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
 }
+
+- (void)prepSegue {
+    [self.activityIndicator stopAnimating]; //The view won't make this change until it also performs the segue, so it is ok to stop before the view loading occurs
+    NSString *segID = [[CRAccountService sharedInstance].user.type isEqualToString:@"lecturer"] ? @"LecturerSelectedCase" : @"StudentSelectedCase";
+    [self performSegueWithIdentifier:segID sender:self];
+}
+
 /*!
  Dismiss view controller
  @param sender
@@ -121,11 +128,10 @@
 //When a cell is selected, remember its path to set the case for the next view
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSString *segID = [[CRAccountService sharedInstance].user.type isEqualToString:@"lecturer"] ? @"LecturerSelectedCase" : @"StudentSelectedCase";
     selectedPath = indexPath;
-    [self.view addSubview:self.activityIndicator];
+    [self.activityIndicator startAnimating];
     self.collectionView.userInteractionEnabled = NO;
-    [self performSegueWithIdentifier:segID sender:self];
+    [self performSelector:@selector(prepSegue) withObject:nil afterDelay:0.01];//Delay is needed so that the view will render activity indicator before stopping it
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout

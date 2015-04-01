@@ -48,6 +48,7 @@ static NSString * const reuseIdentifier = @"scanCell";
 - (void)loadView {
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = CR_COLOR_TINT;
+    view.clipsToBounds = YES;
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(kScanMenuMargin, kScanMenuMargin, view.frame.size.width - 2 * kScanMenuMargin, view.frame.size.height - 2 * kScanMenuMargin) collectionViewLayout:layout];
@@ -56,8 +57,13 @@ static NSString * const reuseIdentifier = @"scanCell";
     self.collectionView.backgroundColor = CR_COLOR_PRIMARY;
     // Register cell classes
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
     [view addSubview:self.collectionView];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((view.frame.size.width - KActivitySize)/2, (view.frame.size.height - KActivitySize)/2, KActivitySize, KActivitySize)];
+    self.activityIndicator.hidesWhenStopped = YES;
+    [self.activityIndicator stopAnimating];
+    [view addSubview:self.activityIndicator];
+    
     self.view = view;
 }
 
@@ -68,27 +74,37 @@ static NSString * const reuseIdentifier = @"scanCell";
     }
 }
 
--(void) setHighlights:(NSArray *)highlights {
+- (void)setHighlights:(NSArray *)highlights {
     _highlights = highlights;
     [self.collectionView reloadData];
 }
 
--(void) setScans:(NSArray *)scans {
+- (void)setScans:(NSArray *)scans {
     _scans = scans;
     [self.collectionView reloadData];
 }
 
--(void) setViewFrame:(CGRect)frame animated:(BOOL)animated completion:(void (^)())block {
+- (void)setViewFrame:(CGRect)frame animated:(BOOL)animated completion:(void (^)())block {
+    [self toggleActivity];
     [UIView animateWithDuration:animated ? 0.25 : 0 animations:^{
         self.view.frame = frame;
         [self.collectionView reloadData];
         self.collectionView.frame = CGRectMake(kScanMenuMargin, kScanMenuMargin, frame.size.width - 2 * kScanMenuMargin, frame.size.height - 2 * kScanMenuMargin);
     } completion:^(BOOL finished) {
+        [self toggleActivity];
         [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone]; //Reset selected item because changing size may have changed the amount of items and therefore selection
         if (block) {
             block();
         }
     }];
+}
+
+- (void)toggleActivity {
+    if (self.activityIndicator.isAnimating) {
+        [self.activityIndicator stopAnimating];
+    } else {
+        [self.activityIndicator startAnimating];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
