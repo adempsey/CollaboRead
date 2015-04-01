@@ -72,10 +72,6 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self presentViewController:alertController animated:YES completion:nil];
             });
-
-            [caseSets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [(CRCaseSet *)obj loadImagesAsync];
-            }];
 		}
 	}];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
@@ -150,7 +146,6 @@
 //Give the case analysis view the appropriate case
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"begin seg");
 	CRImageController *nextController = segue.destinationViewController;
 	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
     NSArray *caseArray = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];

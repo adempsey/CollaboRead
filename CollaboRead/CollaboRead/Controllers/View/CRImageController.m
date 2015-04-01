@@ -142,10 +142,6 @@
     self.scrollBar.bounds = self.scrollBar.frame;
 }
 
--(void)viewDidAppear:(BOOL)animated {
-    NSLog(@"appeared");
-}
-
 -(void) setSliceIndex:(NSUInteger)sliceIndex {
     _sliceIndex = sliceIndex;
     if(self.view) {
