@@ -81,7 +81,6 @@
     self.scansMenuController = [[CRScansMenuViewController alloc] initWithScans:self.caseChosen.scans];
     self.scansMenuController.delegate = self;
     [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0) animated:NO completion:nil];
-    self.scansMenuController.view.hidden = YES;
     self.scansMenuController.highlights = [[NSArray alloc] init];
     [self addChildViewController:self.scansMenuController];
     
@@ -94,7 +93,6 @@
     self.patientInfo.backgroundColor = CR_COLOR_PRIMARY;
     self.patientInfo.layer.borderColor = CR_COLOR_TINT.CGColor;
     self.patientInfo.layer.borderWidth = 3.0;
-    self.patientInfo.hidden = YES;
     
     [view addSubview:self.imageMarkup.view];
     [view addSubview:self.scrollBar];
@@ -172,33 +170,27 @@
 -(void)toggleScansMenu
 {
     CGRect frame = CR_LANDSCAPE_FRAME;
-    if (self.scansMenuController.view.hidden) {
-        self.scansMenuController.view.hidden = NO;
+    if (self.scansMenuController.view.frame.size.width == 0) {
         CGFloat size = self.toolPanelViewController.view.frame.size.height * 0.75;
         frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - size - self.scrollBar.frame.size.height, size, size);
         [self.scansMenuController setViewFrame: frame animated:YES completion:nil];
     }
     else {
         frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0);
-        [self.scansMenuController setViewFrame: frame animated:YES completion:^{
-            self.scansMenuController.view.hidden = YES;
-        }];
+        [self.scansMenuController setViewFrame: frame animated:YES completion:nil];
     }
 }
 - (void)togglePatientInfo {
     CGRect frame = CR_LANDSCAPE_FRAME;
-    if (self.patientInfo.hidden) {
-        self.patientInfo.hidden = NO;
+    if (self.patientInfo.frame.size.width == 0) {
         frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - (kPATIENT_INFO_DIMENSION) - self.scrollBar.frame.size.height, kPATIENT_INFO_DIMENSION, kPATIENT_INFO_DIMENSION);
         [UIView animateWithDuration:0.25 animations:^{
             [self.patientInfo setFrame: frame];
-        } completion:^(BOOL finished) {}];
+        }];
     } else {
         frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0);
         [UIView animateWithDuration:0.25 animations:^{
             [self.patientInfo setFrame: frame];
-        } completion:^(BOOL finished) {
-            self.patientInfo.hidden = YES;
         }];
     }
 }

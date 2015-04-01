@@ -131,7 +131,7 @@
     selectedPath = indexPath;
     [self.activityIndicator startAnimating];
     self.collectionView.userInteractionEnabled = NO;
-    [self performSelector:@selector(prepSegue) withObject:nil afterDelay:0.01];//Delay is needed so that the view will render activity indicator before stopping it
+    [self performSelector:@selector(prepSegue) withObject:nil afterDelay:0];//"Delay" is needed so that the view will render activity indicator before stopping it
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout
