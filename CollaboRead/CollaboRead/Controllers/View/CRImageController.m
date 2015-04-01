@@ -78,18 +78,9 @@
     
     CGRect frame = CR_LANDSCAPE_FRAME; //Frame adjusted based on iOS 7 or 8
     
-    //TODO:confirm that no toggling toolbar is ok
-    /*self.toggleButton.frame = CGRectMake((kToolPanelTableViewWidth - 60.0)/2,
-     frame.size.height - 60.0 - 10.0,
-     60.0,
-     60.0);
-     UIImage *toggleButtonImage = [UIImage imageNamed:@"CRToolPanelToggle.png"];
-     [self.toggleButton setImage:toggleButtonImage forState:UIControlStateNormal];
-     [self.toggleButton addTarget:self action:@selector(toggleToolPanel) forControlEvents:UIControlEventTouchUpInside];*/
-    
     self.scansMenuController = [[CRScansMenuViewController alloc] initWithScans:self.caseChosen.scans];
     self.scansMenuController.delegate = self;
-    [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0)];
+    [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0) animated:NO completion:nil];
     self.scansMenuController.view.hidden = YES;
     self.scansMenuController.highlights = [[NSArray alloc] init];
     [self addChildViewController:self.scansMenuController];
@@ -110,8 +101,6 @@
     [view addSubview:self.patientInfo];
     [view addSubview:self.scansMenuController.view];
     [view addSubview:self.toolPanelViewController.view];
-    //TODO:confirm that no toggling toolbar is ok
-    //[self.view addSubview:self.toggleButton];
     
     UIPanGestureRecognizer *scrollGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(scrollTouch:)];
     scrollGesture.minimumNumberOfTouches = 2;
@@ -124,16 +113,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 }
-
-//TODO:confirm that no toggling toolbar is ok
-/*- (void)toggleToolPanel {
-	CGFloat buttonAlpha = self.toolPanelViewController.toolPanelIsVisible ? 0.5: 1.0;
-	[self.toolPanelViewController toggleToolPanel];
-
-	[UIView animateWithDuration:0.25 animations:^{
-		self.toggleButton.alpha = buttonAlpha;
-	}];
-}*/
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -197,16 +176,11 @@
         self.scansMenuController.view.hidden = NO;
         CGFloat size = self.toolPanelViewController.view.frame.size.height * 0.75;
         frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - size - self.scrollBar.frame.size.height, size, size);
-        [UIView animateWithDuration:0.25 animations:^{
-            [self.scansMenuController setViewFrame: frame];
-        } completion:^(BOOL finished) {}];
+        [self.scansMenuController setViewFrame: frame animated:YES completion:nil];
     }
     else {
         frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0);
-    
-        [UIView animateWithDuration:0.25 animations:^{
-            [self.scansMenuController setViewFrame: frame];
-        } completion:^(BOOL finished) {
+        [self.scansMenuController setViewFrame: frame animated:YES completion:^{
             self.scansMenuController.view.hidden = YES;
         }];
     }

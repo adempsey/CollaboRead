@@ -46,8 +46,12 @@
  Changing the view's frame should always be done through this method as it changes the number of items to display.
  @param frame
  The new frame for the view
+ @param animated
+ Whether to animate the transition
+ @param block
+ Block to execute after animation
  */
--(void) setViewFrame:(CGRect)frame;
+- (void)setViewFrame:(CGRect)frame animated:(BOOL)animated completion:(void(^)())block;
 
 @end
 

@@ -13,6 +13,7 @@
 #import "CRSlice.h"
 
 #define kScanMenuMargin 5
+#define KActivitySize 35
 
 @interface CRScansMenuViewController ()
 
@@ -24,6 +25,10 @@
  @brief Currently selected index in collection view
  */
 @property (nonatomic, strong) NSIndexPath *selectedIndex;
+/*!
+ @brief Activity indicator to display while collectionview loads
+ */
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -73,11 +78,17 @@ static NSString * const reuseIdentifier = @"scanCell";
     [self.collectionView reloadData];
 }
 
--(void) setViewFrame:(CGRect)frame {
-    self.view.frame = frame;
-    [self.collectionView reloadData];
-    self.collectionView.frame = CGRectMake(kScanMenuMargin, kScanMenuMargin, frame.size.width - 2 * kScanMenuMargin, frame.size.height - 2 * kScanMenuMargin);
-    [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone]; //Reset selected item because changing size may have changed the amount of items and therefore selection
+-(void) setViewFrame:(CGRect)frame animated:(BOOL)animated completion:(void (^)())block {
+    [UIView animateWithDuration:animated ? 0.25 : 0 animations:^{
+        self.view.frame = frame;
+        [self.collectionView reloadData];
+        self.collectionView.frame = CGRectMake(kScanMenuMargin, kScanMenuMargin, frame.size.width - 2 * kScanMenuMargin, frame.size.height - 2 * kScanMenuMargin);
+    } completion:^(BOOL finished) {
+        [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone]; //Reset selected item because changing size may have changed the amount of items and therefore selection
+        if (block) {
+            block();
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
