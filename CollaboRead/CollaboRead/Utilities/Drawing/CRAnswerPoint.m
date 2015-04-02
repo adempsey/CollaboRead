@@ -12,15 +12,18 @@
 #import "NSDictionary+CRAdditions.h"
 #import "CRCaseKeys.h"
 
+#define kXCoordKey @"x"
+#define kYCoordKey @"y"
+#define kEndKey @"isEnd"
+
 @implementation CRAnswerPoint
 
-//TODO: change string literals to constants
 -(id)initFromJSONDict:(NSDictionary *)dict
 {
     self = [super init];
     if (self) {
-        self.coordinate = CGPointMake([dict[@"x"] floatValue], [dict[@"y"] floatValue]);
-        self.isEndPoint = [dict[@"isEnd"] boolValue];
+        self.coordinate = CGPointMake([dict[kXCoordKey] floatValue], [dict[kYCoordKey] floatValue]);
+        self.isEndPoint = [dict[kEndKey] boolValue];
     }
     return self;
 }
@@ -57,10 +60,9 @@
     return [[CRAnswerPoint alloc] initWithPoint:self.coordinate end:self.isEndPoint];
 }
 
-//TODO: change string literals to constants
 -(NSDictionary *)jsonDictFromPoint
 {
-    return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:self.coordinate.x], @"x", [NSNumber numberWithFloat:self.coordinate.y], @"y", [NSNumber numberWithFloat: self.isEndPoint], @"isEnd",nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:self.coordinate.x], kXCoordKey, [NSNumber numberWithFloat:self.coordinate.y], kYCoordKey, [NSNumber numberWithFloat: self.isEndPoint], kEndKey,nil];
 }
 
 - (NSString*)jsonString

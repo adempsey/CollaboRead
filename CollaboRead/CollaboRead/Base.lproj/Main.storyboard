@@ -234,7 +234,6 @@
                         <outlet property="scrollView" destination="Izm-HQ-S4h" id="28M-vz-I2r"/>
                         <outlet property="successCheckMark" destination="3ma-Qj-4dD" id="Zob-ko-Wam"/>
                         <outlet property="successMessage" destination="gre-79-fNM" id="JFJ-9c-QFc"/>
-                        <outlet property="yearLabel" destination="gxf-vO-bcH" id="1ua-5h-Oqb"/>
                         <outlet property="yearSelector" destination="giS-Uh-Qlj" id="3WF-hG-Zar"/>
                     </connections>
                 </viewController>
