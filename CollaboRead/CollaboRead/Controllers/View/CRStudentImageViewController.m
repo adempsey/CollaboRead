@@ -15,6 +15,8 @@
 #import "CRAccountService.h"
 #import "CRCollaboratorList.h"
 #import "CRColors.h"
+#import "CRAnswerLine.h"
+#import "CRScan.h"
 
 #define kCR_COLLABORATOR_TOGGLE_SHOW @"Show Collaborators"
 #define kCR_COLLABORATOR_TOGGLE_HIDE @"Hide Collaborators"
@@ -39,7 +41,7 @@
  */
 -(void)submitAnswer:(UIButton *)submitButton;
 /*!
- Method to determine if an answer was already submitted
+ Method to determine if an answer was already submitted for the scan shown
  @return Yes if there was an answer already submitted, no otherwise
  */
 - (BOOL)userHasPreviouslySubmittedAnswer;
@@ -80,6 +82,13 @@
     self.view = super.view;
 }
 
+- (void)setScanIndex:(NSUInteger)scanIndex {
+    [super setScanIndex:scanIndex];
+    if (self.view) {
+        self.submitButton.buttonState = [self userHasPreviouslySubmittedAnswer] ?CR_SUBMIT_BUTTON_STATE_RESUBMIT : CR_SUBMIT_BUTTON_STATE_SUBMIT;
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 }
@@ -111,14 +120,18 @@
 - (BOOL)userHasPreviouslySubmittedAnswer
 {
 	BOOL __block hasSubmitted = NO;
-	
+    NSString *scanId = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
 	[self.caseChosen.answers enumerateObjectsUsingBlock:^(id answerObj, NSUInteger idx, BOOL *stop) {
 		if ([answerObj isKindOfClass:[CRAnswer class]]) {
 			CRAnswer *answer = (CRAnswer*)answerObj;
 			
             if ([answer.owners containsObject:[CRAccountService sharedInstance].user.userID]) {
-                //TODO:search scan as well
-				hasSubmitted = YES;
+                [answer.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    if ([((CRAnswerLine *)obj).scanID isEqualToString:scanId]) {
+                        hasSubmitted = YES;
+                        *stop = YES;
+                    }
+                }];
 				*stop = YES;
 			}
 		}
