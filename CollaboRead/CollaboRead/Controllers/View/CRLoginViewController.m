@@ -86,7 +86,12 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 -(void)attemptLogin {
 	[[CRAPIClientService sharedInstance] loginUserWithEmail:self.emailField.text password:self.passwordField.text block:^(CRUser *user, NSError *error) {
 		if (error) {
-			[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
+            if (error.code == -1012) {//error for bad auth, should be made more reliable
+                [self showError:kCR_LOGIN_ERROR_CREDENTIALS];
+            } else {
+                [self showError:kCR_LOGIN_ERROR_NETWORK];
+            }
+			
 		} else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self showSuccess];
