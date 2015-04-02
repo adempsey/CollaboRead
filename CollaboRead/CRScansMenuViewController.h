@@ -48,10 +48,8 @@
  The new frame for the view
  @param animated
  Whether to animate the transition
- @param block
- Block to execute after animation
  */
-- (void)setViewFrame:(CGRect)frame animated:(BOOL)animated completion:(void(^)())block;
+- (void)setViewFrame:(CGRect)frame animated:(BOOL)animated;
 
 @end
 

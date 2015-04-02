@@ -29,6 +29,12 @@
  @brief Activity indicator to display while collectionview loads
  */
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+/*!
+ Helper function to change view size in animated manner
+ @param params
+ Parameters passed to setFrame:animated
+ */
+-(void)changeFrame:(NSDictionary *) params;
 
 @end
 
@@ -84,27 +90,30 @@ static NSString * const reuseIdentifier = @"scanCell";
     [self.collectionView reloadData];
 }
 
-- (void)setViewFrame:(CGRect)frame animated:(BOOL)animated completion:(void (^)())block {
-    [self toggleActivity];
-    [UIView animateWithDuration:animated ? 0.25 : 0 animations:^{
-        self.view.frame = frame;
-        [self.collectionView reloadData];
-        self.collectionView.frame = CGRectMake(kScanMenuMargin, kScanMenuMargin, frame.size.width - 2 * kScanMenuMargin, frame.size.height - 2 * kScanMenuMargin);
-    } completion:^(BOOL finished) {
-        [self toggleActivity];
-        [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone]; //Reset selected item because changing size may have changed the amount of items and therefore selection
-        if (block) {
-            block();
-        }
-    }];
+- (void)setViewFrame:(CGRect)frame animated:(BOOL)animated {
+    [self.activityIndicator startAnimating];
+    self.activityIndicator.frame = CGRectMake((frame.size.width - KActivitySize)/2, (frame.size.width - KActivitySize)/2, KActivitySize, KActivitySize);
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:NSStringFromCGRect(frame), @"frame", [NSNumber numberWithBool:animated], @"animated", nil];
+    [self performSelector:@selector(changeFrame:) withObject:params afterDelay:0.01];
 }
 
-- (void)toggleActivity {
-    if (self.activityIndicator.isAnimating) {
+-(void)changeFrame:(NSDictionary *) params {
+    CGRect frame = CGRectFromString(params[@"frame"]);
+    BOOL animated = [params[@"animated"] boolValue];
+    BOOL shouldReloadFirst = frame.size.width == 0 || frame.size.height == 0;
+    [UIView animateWithDuration:animated ? 0.25 : 0 animations:^{
+        self.view.frame = frame;
+        if (shouldReloadFirst) {//Displays view before loading cells to allow for more responsive view
+            [self.collectionView reloadData];
+        }
+        self.collectionView.frame = CGRectMake(kScanMenuMargin, kScanMenuMargin, frame.size.width - 2 * kScanMenuMargin, frame.size.height - 2 * kScanMenuMargin);
+    } completion:^(BOOL finished) {
+        if (!shouldReloadFirst) {
+            [self.collectionView reloadData];
+        }
         [self.activityIndicator stopAnimating];
-    } else {
-        [self.activityIndicator startAnimating];
-    }
+        [self.collectionView selectItemAtIndexPath:self.selectedIndex animated:NO scrollPosition:UICollectionViewScrollPositionNone]; //Reset selected item because changing size may have changed the amount of items and therefore selection
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

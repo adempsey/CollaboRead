@@ -94,7 +94,7 @@
     
     self.scansMenuController = [[CRScansMenuViewController alloc] initWithScans:self.caseChosen.scans];
     self.scansMenuController.delegate = self;
-    [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0) animated:NO completion:nil];
+    [self.scansMenuController setViewFrame:CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0) animated:NO];
     self.scansMenuController.highlights = [[NSArray alloc] init];
     [self addChildViewController:self.scansMenuController];
     
@@ -192,11 +192,11 @@
     if (self.scansMenuController.view.frame.size.width == 0) {
         CGFloat size = self.toolPanelViewController.view.frame.size.height * 0.75;
         frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - size - self.scrollBar.frame.size.height, size, size);
-        [self.scansMenuController setViewFrame: frame animated:YES completion:nil];
+        [self.scansMenuController setViewFrame: frame animated:YES];
     }
     else {
         frame = CGRectMake(kToolPanelTableViewWidth, frame.size.height - self.scrollBar.frame.size.height, 0, 0);
-        [self.scansMenuController setViewFrame: frame animated:YES completion:nil];
+        [self.scansMenuController setViewFrame: frame animated:YES];
     }
 }
 - (void)togglePatientInfo {
