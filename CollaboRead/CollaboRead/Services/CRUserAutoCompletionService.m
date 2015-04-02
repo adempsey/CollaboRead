@@ -13,6 +13,15 @@
 @property (nonatomic, readwrite, strong) NSMutableDictionary *keys;
 @property (nonatomic, readwrite, assign) BOOL terminal;
 
+/*!
+ Finds all words for a given prefix and list
+ @param prefix
+ Prefix to find completion suggestions for
+ @param list
+ List to find suggestions from
+ @return Array of words with the prefix from the list
+ */
+- (NSArray*)wordsWithPrefix:(NSString*)prefix forList:(CRUserAutoCompletionService*)list;
 @end
 
 @implementation CRUserAutoCompletionService
@@ -76,6 +85,7 @@
 	return wordsWithPrefixes;
 }
 
+//Each dictionary key gives another list level, so this is used recursively to traverse all dictionary levels
 - (NSArray*)wordsWithPrefix:(NSString*)prefix forList:(CRUserAutoCompletionService*)list
 {
 	// Traverse prefix trie until we reach the final character of the prefix

@@ -15,11 +15,31 @@
 
 @interface CRAnswerRefreshService ()
 
+/*!
+ @brief Socket used for the connection
+ */
 @property (nonatomic, readwrite, strong) SRWebSocket *socket;
+/*!
+ @brief Whether the connection is open
+ */
 @property (nonatomic, readwrite, assign) BOOL open;
+/*!
+ @brief Last  message recieved
+ */
 @property (nonatomic, readwrite, strong) NSString *lastUpdate;
+/*!
+ @brief Timer to handle checks to maintain connection
+ */
 @property (nonatomic, readwrite, strong) NSTimer *refreshTimer;
 
+/*!
+ Recovers connection to current case, used when the socket fails
+ */
+- (void)recoverConnection;
+/*!
+ Pings the socket, used to check presence of a connection
+ */
+- (void)ping;
 @end
 
 @implementation CRAnswerRefreshService
@@ -99,7 +119,7 @@
 		}
 	}
 }
-
+//These make sure the connection is maintained
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
 	self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:kCR_REFRESH_RATE

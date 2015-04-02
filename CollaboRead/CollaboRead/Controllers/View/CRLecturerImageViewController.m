@@ -23,17 +23,38 @@
 #define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Answer Table"
 
 @interface CRLecturerImageViewController ()
-
+/*!
+ @brief Student answers to display as CRAnswerLines
+ */
 @property (nonatomic, strong) NSArray *selectedAnswers;
+/*!
+ @brief Colors of student answers as dictionary with keys r, g, b
+ */
 @property (nonatomic, strong) NSArray *selectedColors;
+/*!
+ @brief Button placed within toggle button to allow for a title with the badge
+ */
 @property (nonatomic, strong) UIButton *subToggleButton;
+/*!
+ @brief Button to toggle student answer table with badge indicating unviewed answers
+ */
 @property (nonatomic, strong) BBBadgeBarButtonItem *toggleStudentAnswerTableButton;
-
+/*!
+ @brief View controller to handle selection of student answers to display
+ */
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerTableViewController;
 
+/*!
+ Handles acquistion of new answers
+ */
+- (void)refreshAnswers;
+/*!
+ Draw selected student answers on the current image
+ */
+-(void)drawStudentAnswers;
 @end
 
-//TODO: CASECHOSEN MAY NEED CUSTOM SETTER
+//TODO:correspond socket to case changes
 @implementation CRLecturerImageViewController
 
 - (void)loadView {
@@ -72,6 +93,7 @@
     if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
         self.toggleStudentAnswerTableButton.badgeValue = @"!";
     }
+    //Open for refresh
     [[CRAnswerRefreshService sharedInstance] setUpdateBlock:^{
         [self refreshAnswers];
     }];
@@ -84,16 +106,19 @@
 	[[CRAnswerRefreshService sharedInstance] disconnect];
 }
 
+//Custom setter to handle image change
 - (void)setSliceIndex:(NSUInteger)sliceIndex {
     [super setSliceIndex:sliceIndex];
     [self drawStudentAnswers];
 }
 
+//Custom setter to handle image change
 - (void)setScanIndex:(NSUInteger)scanIndex {
     [super setScanIndex:scanIndex];
-    self.studentAnswerTableViewController.scanId = ((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID;
+    self.studentAnswerTableViewController.scanId = ((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID; //Notify answer table of changes
 }
 
+//Custom setter to handle image change
 - (void)setCaseChosen:(CRCase *)caseChosen {
     [super setCaseChosen:caseChosen];
     self.scansMenuController.highlights = [self.caseChosen answerScans];
@@ -101,6 +126,8 @@
 
 -(void)drawStudentAnswers
 {
+    //Find lines for current slice and scan
+    //TODO: fix color correspondance
     NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
     NSString *sliceID = ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID;
     NSMutableArray *answerLines = [[NSMutableArray alloc] init];
@@ -128,11 +155,12 @@
             NSArray *scanHighlights = [self.caseChosen answerScans];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.studentAnswerTableViewController.answerList = answers;
+                //Highlights may need to change
                 [self.scrollBar reloadData];
                 self.scansMenuController.highlights = scanHighlights;
                 [self drawStudentAnswers];
                 if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0 && !self.studentAnswerTableViewController.visible) {
-                    self.toggleStudentAnswerTableButton.badgeValue = @"!";
+                    self.toggleStudentAnswerTableButton.badgeValue = @"!"; //New answers should trigger badge if answer table isn't currently visible
                 }
                 
             });
@@ -168,7 +196,7 @@
     [self drawStudentAnswers];
 }
 
-//MAY NOT BE NEEDED
+//TODO:MAY NOT BE NEEDED
 -(void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase {
     self.caseChosen.answers = refreshedCase.answers;
     self.scansMenuController.highlights = [self.caseChosen answerScans];
@@ -178,6 +206,7 @@
 -(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
 {
     [super scansMenuViewControllerDidSelectScan:scanId];
+    //Make sure to adjust badge to notify of answers
     if ([self.caseChosen answerSlicesForScan:scanId].count > 0 && !self.studentAnswerTableViewController.visible) {
         self.toggleStudentAnswerTableButton.badgeValue = @"!";
     } else {
@@ -188,10 +217,10 @@
 - (void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didSelectTool:(NSInteger)tool
 {
     [super toolPanelViewController:toolPanelViewController didSelectTool:tool];
-    [self drawStudentAnswers];
+    [self drawStudentAnswers]; //Make sure answers are drawn after action
 }
 
--(UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
+-(UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view { //Highlight slices with drawings
     CRCarouselCell *cView = (CRCarouselCell *)[super carousel:carousel viewForItemAtIndex:index reusingView:view];
     if ([[self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID] containsObject:@(index)]) {
         cView.isHighlighted = YES;
@@ -201,16 +230,11 @@
     return cView;
 }
 
-#pragma mark - iCarousel Delegate Methods
-
--(void) carouselCurrentItemIndexDidChange:(iCarousel *)carousel {
-    [super carouselCurrentItemIndexDidChange:carousel];
-}
-
 #pragma mark - CRSideBarViewController Delegate Methods
 
 - (void)CRSideBarViewController:(CRSideBarViewController *)sideBarViewController didChangeVisibility:(BOOL)visible
 {
+    //Toggle title, no more need for alert once visible
     if (visible) {
         self.toggleStudentAnswerTableButton.badgeValue = @"";
     }

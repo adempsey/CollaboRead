@@ -26,6 +26,8 @@
  
  @param block
  Block to execute in response to user action with alert
+ 
+ @return Alert controller formated for the appropriate alert
  */
 - (UIAlertController*)networkErrorAlertForItem:(NSString*)item completionBlock:(void (^)(UIAlertAction*))block;
 

@@ -9,6 +9,11 @@
 #import "CRImageController.h"
 #import "CRPatientInfoViewController.h"
 
+/*!
+ @class CRCreateAccountViewController
+ 
+ @discussion View Controller for analysis of cases by students
+ */
 @interface CRStudentImageViewController : CRImageController <CRSideBarViewControllerDelegate>
 
 @end

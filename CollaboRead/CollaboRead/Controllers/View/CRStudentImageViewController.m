@@ -19,15 +19,30 @@
 #define kCR_COLLABORATOR_TOGGLE_SHOW @"Show Collaborators"
 #define kCR_COLLABORATOR_TOGGLE_HIDE @"Hide Collaborators"
 
-
-
 @interface CRStudentImageViewController ()
-
+/*!
+ @brief Button that triggers toggling of collaborators panel
+ */
 @property (nonatomic, readwrite, strong) UIBarButtonItem *toggleCollaboratorsButton;
+/*!
+ @brief Button to trigger answer submission
+ */
 @property (nonatomic, readwrite, strong) CRSubmitButton *submitButton;
+/*!
+ @brief View controller to handle group creation
+ */
 @property (nonatomic, readwrite, strong) CRAddCollaboratorsViewController *collaboratorsView;
-
-
+/*!
+ Method to submit student answer
+ @param submitButton
+ Button that triggered method
+ */
+-(void)submitAnswer:(UIButton *)submitButton;
+/*!
+ Method to determine if an answer was already submitted
+ @return Yes if there was an answer already submitted, no otherwise
+ */
+- (BOOL)userHasPreviouslySubmittedAnswer;
 @end
 
 @implementation CRStudentImageViewController
@@ -69,7 +84,6 @@
     [super viewDidLoad];
 }
 
-//Perform action of submitting answer, provide user status update
 -(void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
@@ -102,7 +116,8 @@
 		if ([answerObj isKindOfClass:[CRAnswer class]]) {
 			CRAnswer *answer = (CRAnswer*)answerObj;
 			
-			if ([answer.owners containsObject:[CRAccountService sharedInstance].user.userID]) {
+            if ([answer.owners containsObject:[CRAccountService sharedInstance].user.userID]) {
+                //TODO:search scan as well
 				hasSubmitted = YES;
 				*stop = YES;
 			}
@@ -115,6 +130,7 @@
 
 - (void)CRSideBarViewController:(CRSideBarViewController *)sideBarViewController didChangeVisibility:(BOOL)visible
 {
+    //Changing add collaborator view visiblity should change the toggle button's title
 	self.toggleCollaboratorsButton.title = visible ? kCR_COLLABORATOR_TOGGLE_HIDE : kCR_COLLABORATOR_TOGGLE_SHOW;
 }
 

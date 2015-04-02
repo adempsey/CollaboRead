@@ -10,6 +10,12 @@
 
 @interface NSDate (CRAdditions)
 
+/*!
+ Creates a date object from a json string
+ @param string
+ Json string containing the date
+ @return Date represented by json string
+ */
 + (NSDate*)dateFromJSONString:(NSString*)string;
 
 @end

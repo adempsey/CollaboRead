@@ -31,19 +31,33 @@
 #define kCAROUSEL_HEIGHT kCR_CAROUSEL_CELL_HEIGHT + 20
 #define kPATIENT_INFO_DIMENSION (CR_LANDSCAPE_FRAME).size.height/3
 
-//TODO: slice/scanID custom setters
 @interface CRImageController ()
 
+/*!
+ @brief View controller to handle tool selection
+ */
 @property (nonatomic, readwrite, strong) CRToolPanelViewController *toolPanelViewController;
+/*!
+ @brief Displays patient info for the case
+ */
 @property (nonatomic, readwrite, strong) UITextView *patientInfo;
-
+/*!
+ @brief Level of scroll from last change in position
+ */
 @property (nonatomic, assign) NSInteger pastScroll;
-
-@property (nonatomic, readwrite, strong) UIButton *toggleButton;
-
+/*!
+ Toggles the display of the scans menu
+ */
 - (void)toggleScansMenu;
+/*!
+ Toggles the display of the patient info
+ */
 - (void)togglePatientInfo;
-
+/*!
+ Handles touch to scroll through slices
+ @param gestureRecognizer
+ Gesture recognizer that triggered the method
+ */
 - (void)scrollTouch:(UIPanGestureRecognizer *)gestureRecognizer;
 @end
 
@@ -114,11 +128,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    //Make sure image is correct
     [self.imageMarkup swapImageToScan:self.scanIndex Slice:self.sliceIndex];
     self.scrollBar.frame = CGRectMake(self.imageMarkup.view.frame.origin.x, self.imageMarkup.view.frame.origin.y + self.imageMarkup.view.frame.size.height, self.imageMarkup.view.frame.size.width, kCR_CAROUSEL_CELL_HEIGHT + 20);
     self.scrollBar.bounds = self.scrollBar.frame;
 }
 
+//Custom setter to handle image change
 -(void) setSliceIndex:(NSUInteger)sliceIndex {
     _sliceIndex = sliceIndex;
     if(self.view) {
@@ -129,12 +145,14 @@
     }
 }
 
+//Custom setter to handle image change
 -(void) setScanIndex:(NSUInteger)scanIndex {
     _scanIndex = scanIndex;
     self.sliceIndex = 0;
     
 }
 
+//Custom setter to handle image change
 -(void) setCaseChosen:(CRCase *)caseChosen {
     _caseChosen = caseChosen;
     if (self.view) {
@@ -148,7 +166,7 @@
 
 #pragma mark - Gesture methods
 -(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
+{ //Prevent swiping to last view controller
     if (gestureRecognizer == self.navigationController.interactivePopGestureRecognizer) {
         return NO;
     }
@@ -163,6 +181,7 @@
     NSInteger translation = self.pastScroll - ([gestureRecognizer translationInView:self.view].x);
     [self.scrollBar scrollByOffset:translation/10 duration:0];
     self.pastScroll = [gestureRecognizer translationInView:self.view].x;
+    //Change location of scrollbar, it handles change of image
 }
 
 #pragma mark - View Toggle Methods
@@ -196,7 +215,7 @@
 }
 
 #pragma mark - CRToolPanelViewController Delegate Methods
-
+//Notify image markup to perform appropriate action for each tool, or perform view changes as needed
 - (void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didSelectTool:(NSInteger)tool
 {
 	switch (tool) {
@@ -223,7 +242,7 @@
             break;
 	}
 }
-
+//Perform view changes when views should no longer be visible
 -(void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didDeselectTool:(NSInteger)tool
 {
     switch (tool) {
@@ -239,7 +258,7 @@
 
 #pragma mark - CRScansMenuViewController Delegate Methods
 -(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
-{
+{ //Change image if needed
     [self.caseChosen.scans enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([((CRScan *)obj).scanID isEqualToString:scanId]) {
             if (idx != self.scanIndex) {
@@ -268,7 +287,7 @@
 #pragma mark - iCarousel Delegate Methods
 
 -(void) carouselCurrentItemIndexDidChange:(iCarousel *)carousel {
-    self.sliceIndex = carousel.currentItemIndex;
+    self.sliceIndex = carousel.currentItemIndex; //Changing item index changes image shown
 }
 
 -(CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value

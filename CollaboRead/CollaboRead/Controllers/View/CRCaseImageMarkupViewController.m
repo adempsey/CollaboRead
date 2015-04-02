@@ -25,35 +25,112 @@
 
 @interface CRCaseImageMarkupViewController ()
 {
-    CRAnswerPoint *lastPoint;
+    CRAnswerPoint *lastPoint;//Last point drawn/erased
 }
+/*!
+ @brief UIImageView to display user's markup of the image
+ */
 @property (nonatomic, strong) UIImageView *drawView;
+/*!
+ @brief UIImageView to display image to markup
+ */
 @property (nonatomic, strong) UIImageView *caseImage;
+/*!
+ @brief UIImageView to display non-editable drawings
+ */
 @property (nonatomic, strong) UIImageView *permanentDrawView;
 
+/*!
+ @brief Current line being drawn
+ */
 @property (nonatomic, strong) NSMutableArray *currentDrawing;
 
+/*!
+ @brief Zoom level at end of last "zoom touch"
+ */
 @property (nonatomic, assign) CGFloat lastZoom;
+/*!
+ @brief Translation from zoom origin at end of last "pan touch"
+ */
 @property (nonatomic, assign) CGPoint lastTranslation;
+/*!
+ @brief Current level of zoom for the image
+ */
 @property (nonatomic, assign) CGFloat currZoom;
+/*!
+ @brief Frame for the image in a state of no zoom
+ */
 @property (nonatomic, assign) CGRect imgFrame;
 
+/*!
+ @brief Index of scan within the case for the image currently displayed
+ */
 @property (nonatomic, assign) NSUInteger scanIndex;
+/*!
+ @brief Index of slice within scan for the image currently displayed
+ */
 @property (nonatomic, assign) NSUInteger sliceIndex;
 
+/*!
+ @brief Gesture recognizer for zooming, used for comparison to prevent override of panning
+ */
 @property (nonatomic, strong) UIPinchGestureRecognizer *zoomGesture;
 
-//Loads the image to be drawn over into the view and scales it to fit the screen.
+/*!
+ Method to display a new image at its maximum size within maxFrame maintaining orientation
+ @param img
+ Image to display
+ */
 - (void)loadAndScaleImage:(UIImage *)img;
-
+/*!
+ Draws a line on the editable image
+ @param beg
+ Point to start line
+ @param fin
+ Point to end line
+ */
 - (void)drawLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
+/*!
+ Erases a line on the editable image
+ @param beg
+ Point to start line
+ @param fin
+ Point to end line
+ */
 - (void)eraseLineFrom:(CRAnswerPoint *)beg to:(CRAnswerPoint *)fin;
+/*!
+ Removes points from the answer in a radius corresponding to line errasure range
+ @param pt
+ Point to remove points around
+ */
 - (void)removePointFromAnswer:(CRAnswerPoint *)pt;
-
+/*!
+ Clears edittable drawings
+ */
 - (void)wipeDrawing;
-
+/*!
+ Pan zoomed in image
+ @param translation
+ New translation to pan image to
+ */
+- (void)panZoom:(CGPoint)translation;
+/*!
+ Method to handle a "draw touch" (1 finger pan)
+ @param gestureRecognizer
+ Gesture recognizer performing action
+ */
 - (void)drawTouch:(UIPanGestureRecognizer *)gestureRecognizer;
+/*!
+ Method to handle a "zoom touch" (2 finger pinch)
+ @param gestureRecognizer
+ Gesture recognizer performing action
+ */
 - (void)zoomTouch:(UIPinchGestureRecognizer *)gestureRecognizer;
+/*!
+ Method to handle a "pan touch" (3 finger pan)
+ @param gestureRecognizer
+ Gesture recognizer performing action
+ */
 - (void)panTouch:(UIPanGestureRecognizer *)gestureRecognizer;
 
 @end
@@ -127,7 +204,7 @@
     }
 }
 
-- (void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     CRScan *scan = self.caseChosen.scans[self.scanIndex];
     self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
@@ -135,7 +212,7 @@
 }
 
 #pragma mark - Image Loading Methods
--(void)swapImageToScan:(NSUInteger)scanIndex Slice:(NSUInteger)sliceIndex {
+- (void)swapImageToScan:(NSUInteger)scanIndex Slice:(NSUInteger)sliceIndex {
     if (self.view) {
         [self zoomOut];
         self.scanIndex = scanIndex;
@@ -147,10 +224,7 @@
     }
 }
 
-//Loads the image to be drawn over into the image view and scales it to fit the screen.
-//Necessary while this all is done programmatically, use "Mode: Aspect Fit" instead setting up with
-//storyboard
--(void)loadAndScaleImage:(UIImage *)img {
+- (void)loadAndScaleImage:(UIImage *)img {
     self.caseImage.image = img;
     CGRect newFrame = CGRectMake(0, 0, img.size.width, img.size.height);
     
@@ -177,7 +251,7 @@
     }
     self.view.frame = newFrame;
     self.view.bounds = newFrame;
-    self.imgFrame = newFrame;//CGRectMake(0, 0, newFrame.size.width, newFrame.size.height);
+    self.imgFrame = newFrame;
     [self.caseImage setFrame:self.imgFrame];
     [self wipeDrawing];
     self.permanentDrawView.image = [[UIImage alloc] init];
@@ -217,12 +291,11 @@
     CGFloat newWidth = self.view.frame.size.width*self.currZoom;
     CGFloat newHeight = self.view.frame.size.height*self.currZoom;
     
+    //Maintain translation relative to change in scale
     self.lastTranslation = CGPointMake(self.lastTranslation.x * newWidth / currFrame.size.width, self.lastTranslation.y * newHeight / currFrame.size.height);
     
     CGFloat moveLeft = (self.view.frame.size.width - newWidth)/2 + self.lastTranslation.x;
     CGFloat moveUp = (self.view.frame.size.height - newHeight)/2 + self.lastTranslation.y * newHeight / currFrame.size.height;
-    
-    
     
     if (self.view.frame.size.width > moveLeft + newWidth) {
         moveLeft = self.view.frame.size.width - newWidth;
@@ -244,6 +317,7 @@
 
 - (void)panZoom:(CGPoint)translation {
     CGRect origFrame = self.imgFrame;
+    //Translation is relative to "zoom origin" or origin of centered zoomed image
     CGFloat origX = (self.view.frame.size.width - origFrame.size.width)/2;
     CGFloat origY = (self.view.frame.size.height - origFrame.size.height)/2;
     CGFloat newX = origX + translation.x;
@@ -262,7 +336,6 @@
 }
 
 #pragma mark - Tool Methods
-//Pops from answer stack and redraws previous answer
 - (void)undoEdit {
     CRScan *scan = self.caseChosen.scans[self.scanIndex];
     self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack removeLayerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID] copyItems:YES];
@@ -275,7 +348,6 @@
     }
 }
 
-//Only clears image, does not affect saved data
 - (void)clearDrawing {
     [self.undoStack addLayer:[[NSArray alloc] init] forSlice: ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID ofScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
     self.currentDrawing = [[NSMutableArray alloc] init];
@@ -380,6 +452,7 @@
 
 - (void)drawTouch:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    //Only draw within bounds of image, and only when there is a valid markup tool
     if (CGRectContainsPoint(self.view.bounds, [gestureRecognizer locationInView:self.view])) {
         CGPoint touchPt = [gestureRecognizer locationInView:self.drawView];
         if (self.selectedTool == kCR_PANEL_TOOL_PEN && lastPoint != nil) {
@@ -420,6 +493,7 @@
             lastPoint = nil;
         }
     }
+    //Handle update of undo stack or image once an edit phase (touch) is ended
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
         if (self.selectedTool == kCR_PANEL_TOOL_PEN || self.selectedTool == kCR_PANEL_TOOL_ERASER) {
             lastPoint.isEndPoint = YES;
@@ -437,7 +511,7 @@
 
 #pragma mark - Gesture methods
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
+{ //Prevent zoom pinch from overriding 2 finger pans or swipes that may be inserted by other views
     if (gestureRecognizer == self.zoomGesture && gestureRecognizer.numberOfTouches > 2) {
         return NO;
     }
@@ -448,10 +522,10 @@
 {
     CGPoint touchPt = [gestureRecognizer locationInView:self.view];
     if (CGRectContainsPoint(self.view.bounds, touchPt)) {
-        [self zoomImageToScale: self.lastZoom + (gestureRecognizer.scale - 1)];
+        [self zoomImageToScale: self.lastZoom + (gestureRecognizer.scale - 1)];//Calculates change in zoom since last zoom touch sequence, allowing for pinch in to be zoom out
     }
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
-        self.lastZoom = self.currZoom;
+        self.lastZoom = self.currZoom; //last zoom only changes when touch is done to prevent compounding of scale
     }
 }
 
@@ -460,13 +534,13 @@
     CGPoint touchPt = [gestureRecognizer locationInView:self.view];
     if (CGRectContainsPoint(self.view.bounds, touchPt)) {
         CGPoint translation =[gestureRecognizer translationInView:self.view];
-        [self panZoom:CGPointMake(translation.x + self.lastTranslation.x, translation.y + self.lastTranslation.y)];
+        [self panZoom:CGPointMake(translation.x + self.lastTranslation.x, translation.y + self.lastTranslation.y)]; //Calculates change in zoom since last pan touch sequence
     }
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
         CGRect frame = self.drawView.frame;
         CGFloat x = frame.origin.x - (self.view.frame.size.width - frame.size.width)/2;
         CGFloat y = frame.origin.y - (self.view.frame.size.height - frame.size.height)/2;
-        self.lastTranslation = CGPointMake(x, y);
+        self.lastTranslation = CGPointMake(x, y); //last translation only changes when touch is done to prevent compounding of movement
     }
 }
 
