@@ -180,6 +180,11 @@
     }
     NSInteger translation = self.pastScroll - ([gestureRecognizer translationInView:self.view].x);
     [self.scrollBar scrollByOffset:translation/10 duration:0];
+    if(self.scrollBar.scrollOffset < 0) {
+        self.scrollBar.scrollOffset = 0;
+    } else if (self.scrollBar.scrollOffset >= [self numberOfItemsInCarousel:self.scrollBar]) {
+        self.scrollBar.scrollOffset = [self numberOfItemsInCarousel:self.scrollBar] - 1;
+    }
     self.pastScroll = [gestureRecognizer translationInView:self.view].x;
     //Change location of scrollbar, it handles change of image
 }
