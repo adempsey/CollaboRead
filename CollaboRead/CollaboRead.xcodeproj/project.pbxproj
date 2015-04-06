@@ -32,6 +32,7 @@
 		8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2E19E6064B002EA706 /* LaunchScreen.xib */; };
 		8DA5DE3C19E6064B002EA706 /* CollaboReadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */; };
 		8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */; };
+		8DB8D7D11AD32F72002F368C /* CRUserSuggestionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB8D7D01AD32F72002F368C /* CRUserSuggestionTableViewController.m */; };
 		8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */; };
 		8DCD7B4E1A070BAF0005BFDA /* NSDate+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD7B4D1A070BAF0005BFDA /* NSDate+CRAdditions.m */; };
 		8DCF9CA51A2BEF6A000D42C5 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF9CA41A2BEF6A000D42C5 /* SRWebSocket.m */; };
@@ -52,7 +53,6 @@
 		8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */; };
 		BB083DCC1ABA0DF80061C081 /* CRCaseImageMarkupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB083DCB1ABA0DF80061C081 /* CRCaseImageMarkupViewController.m */; };
 		BB0E0C721A9A5F87004D7521 /* CRAddCollaboratorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0E0C711A9A5F87004D7521 /* CRAddCollaboratorsViewController.m */; };
-		BB2090E91AB876A600E33ACE /* CRUserSuggestionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2090E81AB876A600E33ACE /* CRUserSuggestionTableViewController.m */; };
 		BB4D35C81A882F9A00F4EA57 /* CRToolPanelZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */; };
 		BB5017891AA74716000E9021 /* CRCollaboratorList.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5017881AA74716000E9021 /* CRCollaboratorList.m */; };
 		BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6278C21A79480D002391FB /* CRUndoStack.m */; };
@@ -134,6 +134,8 @@
 		8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollaboReadTests.m; sourceTree = "<group>"; };
 		8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStudentAnswerTableViewController.h; sourceTree = "<group>"; };
 		8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRStudentAnswerTableViewController.m; sourceTree = "<group>"; };
+		8DB8D7CF1AD32F72002F368C /* CRUserSuggestionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUserSuggestionTableViewController.h; sourceTree = "<group>"; };
+		8DB8D7D01AD32F72002F368C /* CRUserSuggestionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUserSuggestionTableViewController.m; sourceTree = "<group>"; };
 		8DCD7B491A0709B00005BFDA /* CRAnswer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAnswer.h; sourceTree = "<group>"; };
 		8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswer.m; sourceTree = "<group>"; };
 		8DCD7B4C1A070BAF0005BFDA /* NSDate+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CRAdditions.h"; sourceTree = "<group>"; };
@@ -170,8 +172,6 @@
 		BB083DCB1ABA0DF80061C081 /* CRCaseImageMarkupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCaseImageMarkupViewController.m; sourceTree = "<group>"; };
 		BB0E0C701A9A5F87004D7521 /* CRAddCollaboratorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAddCollaboratorsViewController.h; sourceTree = "<group>"; };
 		BB0E0C711A9A5F87004D7521 /* CRAddCollaboratorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAddCollaboratorsViewController.m; sourceTree = "<group>"; };
-		BB2090E71AB876A600E33ACE /* CRUserSuggestionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRUserSuggestionTableViewController.h; path = ../../../../../../../../compsci/Capstone/Collaboread/CollaboRead/CollaboRead/CollaboRead/Controllers/View/CRUserSuggestionTableViewController.h; sourceTree = "<group>"; };
-		BB2090E81AB876A600E33ACE /* CRUserSuggestionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRUserSuggestionTableViewController.m; path = ../../../../../../../../compsci/Capstone/Collaboread/CollaboRead/CollaboRead/CollaboRead/Controllers/View/CRUserSuggestionTableViewController.m; sourceTree = "<group>"; };
 		BB375B5C1A141DCC007D8556 /* CRViewSizeMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRViewSizeMacros.h; path = ../Controllers/View/CRViewSizeMacros.h; sourceTree = "<group>"; };
 		BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelZoom.png; sourceTree = "<group>"; };
 		BB5017871AA74716000E9021 /* CRCollaboratorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRCollaboratorList.h; sourceTree = "<group>"; };
@@ -533,8 +533,8 @@
 				8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */,
 				BB0E0C701A9A5F87004D7521 /* CRAddCollaboratorsViewController.h */,
 				BB0E0C711A9A5F87004D7521 /* CRAddCollaboratorsViewController.m */,
-				BB2090E71AB876A600E33ACE /* CRUserSuggestionTableViewController.h */,
-				BB2090E81AB876A600E33ACE /* CRUserSuggestionTableViewController.m */,
+				8DB8D7CF1AD32F72002F368C /* CRUserSuggestionTableViewController.h */,
+				8DB8D7D01AD32F72002F368C /* CRUserSuggestionTableViewController.m */,
 				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
 				BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */,
 				8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */,
@@ -716,6 +716,7 @@
 				BBA0C5A01A8952C4009E53EC /* CRImageScrollBar.m in Sources */,
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */,
+				8DB8D7D11AD32F72002F368C /* CRUserSuggestionTableViewController.m in Sources */,
 				8D0FA3C01AA28E76004AD7E4 /* CRAccountService.m in Sources */,
 				BB5017891AA74716000E9021 /* CRCollaboratorList.m in Sources */,
 				BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */,
@@ -739,7 +740,6 @@
 				8D9830BC1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m in Sources */,
 				8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
-				BB2090E91AB876A600E33ACE /* CRUserSuggestionTableViewController.m in Sources */,
 				8DCF9CB31A2BF8FB000D42C5 /* CRAnswerRefreshService.m in Sources */,
 				8D06A5B11AAEA40F007E9B07 /* CRForgotPasswordViewController.m in Sources */,
 				8DA146001AB330560082BB6C /* CRUserAutoCompletionService.m in Sources */,
