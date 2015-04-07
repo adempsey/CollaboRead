@@ -56,6 +56,8 @@
 		BB4D35C81A882F9A00F4EA57 /* CRToolPanelZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */; };
 		BB5017891AA74716000E9021 /* CRCollaboratorList.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5017881AA74716000E9021 /* CRCollaboratorList.m */; };
 		BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6278C21A79480D002391FB /* CRUndoStack.m */; };
+		BB632CCD1AD48FC7000E4F54 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB632CCB1AD48FC7000E4F54 /* Crashlytics.framework */; };
+		BB632CCE1AD48FC7000E4F54 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB632CCC1AD48FC7000E4F54 /* Fabric.framework */; };
 		BB86F5CB1AAE274D004DB6DF /* CRToolPanelPatientInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */; };
 		BB86F5CD1AAE276A004DB6DF /* CRToolPanelPointer.png in Resources */ = {isa = PBXBuildFile; fileRef = BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */; };
 		BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */; };
@@ -178,6 +180,8 @@
 		BB5017881AA74716000E9021 /* CRCollaboratorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCollaboratorList.m; sourceTree = "<group>"; };
 		BB6278C11A79480D002391FB /* CRUndoStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUndoStack.h; sourceTree = "<group>"; };
 		BB6278C21A79480D002391FB /* CRUndoStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUndoStack.m; sourceTree = "<group>"; };
+		BB632CCB1AD48FC7000E4F54 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		BB632CCC1AD48FC7000E4F54 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelPatientInfo.png; sourceTree = "<group>"; };
 		BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelPointer.png; sourceTree = "<group>"; };
 		BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRAnswerPoint.h; path = ../Utilities/Drawing/CRAnswerPoint.h; sourceTree = "<group>"; };
@@ -221,10 +225,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB632CCE1AD48FC7000E4F54 /* Fabric.framework in Frameworks */,
 				BBB97BCF1A967241007715B1 /* QuartzCore.framework in Frameworks */,
 				8DCF9CAF1A2BF07B000D42C5 /* Foundation.framework in Frameworks */,
 				8DCF9CAD1A2BF076000D42C5 /* Security.framework in Frameworks */,
 				8DCF9CAB1A2BF071000D42C5 /* CFNetwork.framework in Frameworks */,
+				BB632CCD1AD48FC7000E4F54 /* Crashlytics.framework in Frameworks */,
 				8DCF9CA91A2BF06A000D42C5 /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,6 +367,8 @@
 		8DCF9CB01A2BF114000D42C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB632CCB1AD48FC7000E4F54 /* Crashlytics.framework */,
+				BB632CCC1AD48FC7000E4F54 /* Fabric.framework */,
 				BBB97BCE1A967241007715B1 /* QuartzCore.framework */,
 				8DCF9CAE1A2BF07B000D42C5 /* Foundation.framework */,
 				8DCF9CAC1A2BF076000D42C5 /* Security.framework */,
@@ -605,6 +613,7 @@
 				8DA5DE1819E6064A002EA706 /* Sources */,
 				8DA5DE1919E6064A002EA706 /* Frameworks */,
 				8DA5DE1A19E6064A002EA706 /* Resources */,
+				BB632CCA1AD48F8F000E4F54 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -703,6 +712,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BB632CCA1AD48F8F000E4F54 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run c4b0d42ae433cba3eb0da390996287c94c481594 ab2a4e943e0b14706e9ad7e4addfab0ffe2e2e4fbf8f0c7289d44f9517978d20";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8DA5DE1819E6064A002EA706 /* Sources */ = {
@@ -883,6 +908,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = CollaboRead/Info.plist;
@@ -900,6 +929,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = CollaboRead/Info.plist;
