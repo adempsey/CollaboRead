@@ -36,7 +36,12 @@
 	return self;
 }
 
-// Implicitly sets value of image property
+/*!
+ Sets image URL and image from the URL
+ 
+ @param imageURLString
+ URL to get avatar image from
+ */
 - (void)setImageURL:(NSString *)imageURLString
 {
 	NSURL *imageURL = [NSURL URLWithString:imageURLString];

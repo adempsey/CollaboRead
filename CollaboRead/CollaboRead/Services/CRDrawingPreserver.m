@@ -11,13 +11,15 @@
 
 @interface CRDrawingPreserver ()
 
-@property (nonatomic, strong) NSMutableDictionary *drawings;//Holds values of undo stack arrays keyed to case ids
-
+/*!
+ @brief Holds undo stacks mapped to case ids
+ */
+@property (nonatomic, strong) NSMutableDictionary *drawings;
 @end
 
 @implementation CRDrawingPreserver
 
-+(CRDrawingPreserver *) sharedInstance
++ (CRDrawingPreserver *) sharedInstance
 {
     static CRDrawingPreserver *sharedInstance = nil;
     static dispatch_once_t onceToken;
@@ -28,14 +30,20 @@
     return sharedInstance;
 }
 
--(CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID
+- (CRUndoStack *)drawingHistoryForCaseID:(NSString *)caseID
 {
     return [self.drawings objectForKey:caseID];
 }
 
--(void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID
+- (void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID
 {
     [self.drawings setObject:drawing forKey:caseID];
+}
+
+- (void)clearDrawings
+{
+	self.drawings = nil;
+	self.drawings = [[NSMutableDictionary alloc] init];
 }
 
 @end

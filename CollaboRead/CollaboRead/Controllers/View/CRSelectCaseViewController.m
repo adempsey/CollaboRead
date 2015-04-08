@@ -21,15 +21,29 @@
 
 @interface CRSelectCaseViewController()
 {
-    NSIndexPath *selectedPath; //Allows the view to pass the selected case in the segue prep function
+    /*!
+     @brief Path that determines selected case to pass along in segue prep
+     */
+    NSIndexPath *selectedPath;
 }
 
+/*!
+ @brief Sets of cases to select from
+ */
 @property (nonatomic, strong) NSArray *caseSets;
+/*!
+ @brief Activity indicator to show loading cases activity
+ */
 @property (nonatomic, readwrite, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation CRSelectCaseViewController
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.collectionView.userInteractionEnabled = YES;
+}
 
 -(void)viewDidLoad
 {
@@ -45,6 +59,7 @@
 			self.caseSets = caseSets;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.collectionView reloadData];
+                [self.activityIndicator stopAnimating];
             });
 		} else {
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
@@ -57,12 +72,26 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self presentViewController:alertController animated:YES completion:nil];
             });
-
-
 		}
 	}];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
-    
+}
+
+- (void)prepSegue {
+    [self.activityIndicator stopAnimating]; //The view won't make this change until it also performs the segue, so it is ok to stop before the view loading occurs
+    NSString *segID = [[CRAccountService sharedInstance].user.type isEqualToString:@"lecturer"] ? @"LecturerSelectedCase" : @"StudentSelectedCase";
+    [self performSegueWithIdentifier:segID sender:self];
+}
+
+/*!
+ Dismiss view controller
+ @param sender
+ UIElement that triggered method, unused
+ */
+- (IBAction)dismiss:(id)sender
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
+	[[CRAccountService sharedInstance] logout];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -99,11 +128,10 @@
 //When a cell is selected, remember its path to set the case for the next view
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSString *segID = [[CRAccountService sharedInstance].user.type isEqualToString:@"lecturer"] ? @"LecturerSelectedCase" : @"StudentSelectedCase";
     selectedPath = indexPath;
-    [self.view addSubview:self.activityIndicator];
+    [self.activityIndicator startAnimating];
     self.collectionView.userInteractionEnabled = NO;
-    [self performSegueWithIdentifier:segID sender:self];
+    [self performSelector:@selector(prepSegue) withObject:nil afterDelay:0];//"Delay" is needed so that the view will render activity indicator before stopping it
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout
@@ -125,12 +153,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	CRImageController *nextController = segue.destinationViewController;
-
 	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
     NSArray *caseArray = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
 	CRCase *selectedCase = caseArray[selectedPath.row];
-    //NSString *selectedCaseKey = [selectedCaseSet.cases allKeysForObject:selectedCase][0];//[selectedCaseSet.cases keysSortedByValueUsingSelector:@selector(compareDates:)][selectedPath.row];
-    //selectedCaseSet.cases.allKeys[selectedPath.row];
+    
 	nextController.caseChosen = selectedCase;
 	nextController.caseGroup = selectedCaseSet.setID;
 

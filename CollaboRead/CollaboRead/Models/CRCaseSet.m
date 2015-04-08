@@ -40,4 +40,13 @@
 	_cases = casesDictionary;
 }
 
+-(void)loadImagesAsync {
+    [self.cases enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [(CRCase *)obj loadImagesAsync];
+        
+    }];
+}
+
+
+
 @end

@@ -12,19 +12,22 @@
 #import "NSDictionary+CRAdditions.h"
 #import "CRCaseKeys.h"
 
+#define kXCoordKey @"x"
+#define kYCoordKey @"y"
+#define kEndKey @"isEnd"
+
 @implementation CRAnswerPoint
 
 -(id)initFromJSONDict:(NSDictionary *)dict
 {
     self = [super init];
     if (self) {
-        self.coordinate = CGPointMake([dict[@"x"] floatValue], [dict[@"y"] floatValue]);
-        self.isEndPoint = [dict[@"isEnd"] boolValue];
+        self.coordinate = CGPointMake([dict[kXCoordKey] floatValue], [dict[kYCoordKey] floatValue]);
+        self.isEndPoint = [dict[kEndKey] boolValue];
     }
     return self;
 }
 
-//Make a point with coordinate and endpoint boolean
 -(id)initWithPoint:(CGPoint)point end:(BOOL)end{
     self = [super init];
     if (self) {
@@ -34,7 +37,7 @@
     return self;
 }
 
-//Checks value equality of point and a passed object
+//Equality is defined as points at the same location
 -(BOOL)isEqual:(id)object
 {
     return [object isKindOfClass:[CRAnswerPoint class]] &&
@@ -42,7 +45,7 @@
             ((CRAnswerPoint *)object).coordinate.y == self.coordinate.y;
 }
 
-//Checks if an object is a CRAnswerPoint within a given range of another
+//A 20 px square centered on the point is the "touch range"
 -(BOOL)isInTouchRange:(id)object
 {
     return [object isKindOfClass:[CRAnswerPoint class]] &&
@@ -52,7 +55,6 @@
      ((CRAnswerPoint *)object).coordinate.y >= self.coordinate.y - 10;
 }
 
-//Make a deep copy
 -(id)copyWithZone:(NSZone *)zone
 {
     return [[CRAnswerPoint alloc] initWithPoint:self.coordinate end:self.isEndPoint];
@@ -60,7 +62,7 @@
 
 -(NSDictionary *)jsonDictFromPoint
 {
-    return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:self.coordinate.x], @"x", [NSNumber numberWithFloat:self.coordinate.y], @"y", [NSNumber numberWithFloat: self.isEndPoint], @"isEnd",nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:self.coordinate.x], kXCoordKey, [NSNumber numberWithFloat:self.coordinate.y], kYCoordKey, [NSNumber numberWithFloat: self.isEndPoint], kEndKey,nil];
 }
 
 - (NSString*)jsonString

@@ -9,6 +9,11 @@
 #import "CRImageController.h"
 #import "CRStudentAnswerTableViewController.h"
 
+/*!
+ @class CRCreateAccountViewController
+ 
+ @discussion View Controller for analysis of cases by students
+ */
 @interface CRLecturerImageViewController : CRImageController <CRStudentAnswerTableViewDelegate, CRSideBarViewControllerDelegate>
 
 @end

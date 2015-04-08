@@ -10,6 +10,10 @@
 
 @interface NSArray (CRAdditions)
 
+/*!
+ Creates a json formated string from an array
+ @return Json string representing the array
+ */
 - (NSString*)jsonString;
 
 @end

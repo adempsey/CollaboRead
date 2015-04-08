@@ -27,6 +27,7 @@
 
 /*!
  @brief Dictionary of case objects, keyed by case ID number
+ Can be set with CRCases or JSON Dictionaries
  */
 @property (nonatomic, readwrite, strong) NSDictionary *cases;
 
@@ -37,5 +38,10 @@
  Dictionary with keys and values containing scan data
  */
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary;
+
+/*!
+ Asynchronously loads all images for cases in the set
+ */
+- (void)loadImagesAsync;
 
 @end

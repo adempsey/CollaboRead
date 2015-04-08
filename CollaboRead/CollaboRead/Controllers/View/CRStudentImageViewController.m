@@ -15,73 +15,91 @@
 #import "CRAccountService.h"
 #import "CRCollaboratorList.h"
 #import "CRColors.h"
-
-#define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Patient Info"
-#define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Patient Info"
+#import "CRAnswerLine.h"
+#import "CRScan.h"
 
 #define kCR_COLLABORATOR_TOGGLE_SHOW @"Show Collaborators"
 #define kCR_COLLABORATOR_TOGGLE_HIDE @"Hide Collaborators"
 
 @interface CRStudentImageViewController ()
-
-@property (nonatomic, readwrite, strong) UIBarButtonItem *togglePatientInfoButton;
-@property (nonatomic, readwrite, strong) CRPatientInfoViewController *patientInfoViewController;
+/*!
+ @brief Button that triggers toggling of collaborators panel
+ */
+@property (nonatomic, readwrite, strong) UIBarButtonItem *toggleCollaboratorsButton;
+/*!
+ @brief Button to trigger answer submission
+ */
 @property (nonatomic, readwrite, strong) CRSubmitButton *submitButton;
+/*!
+ @brief View controller to handle group creation
+ */
 @property (nonatomic, readwrite, strong) CRAddCollaboratorsViewController *collaboratorsView;
-@property (nonatomic, readwrite, strong) UIButton *toggleCollaborators;
-
+/*!
+ Method to submit student answer
+ @param submitButton
+ Button that triggered method
+ */
+-(void)submitAnswer:(UIButton *)submitButton;
+/*!
+ Method to determine if an answer was already submitted for the scan shown
+ @return Yes if there was an answer already submitted, no otherwise
+ */
+- (BOOL)userHasPreviouslySubmittedAnswer;
 @end
 
 @implementation CRStudentImageViewController
 
-//Set up student specific view elements
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    CGRect frame = CR_LANDSCAPE_FRAME; //Use iOS version appropriate bounds
-
-	self.togglePatientInfoButton= [[UIBarButtonItem alloc] initWithTitle:kCR_SIDE_BAR_TOGGLE_HIDE
-																   style:UIBarButtonItemStylePlain
-																  target:nil
-																  action:nil];
-	self.togglePatientInfoButton.possibleTitles = [NSSet setWithArray:@[kCR_SIDE_BAR_TOGGLE_HIDE, kCR_SIDE_BAR_TOGGLE_SHOW]];
-	self.navigationItem.rightBarButtonItem = self.togglePatientInfoButton;
-
-	self.patientInfoViewController = [[CRPatientInfoViewController alloc] initWithPatientInfo:self.patientInfo];
-	self.patientInfoViewController.delegate = self;
-	self.patientInfoViewController.toggleButton = self.togglePatientInfoButton;
-    [self.view addSubview:self.patientInfoViewController.view];
-
-	self.submitButton = [[CRSubmitButton alloc] init];
-	[self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
-	[self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
-	
-	if ([self userHasPreviouslySubmittedAnswer]) {
-		self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
-	}
-	
-	[self.view addSubview:self.submitButton];
+- (void)loadView {
+    [super loadView];
     
-    self.toggleCollaborators = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 205, frame.size.height - 140, 180.0, 40.0)];
-    [self.toggleCollaborators setTitle:kCR_COLLABORATOR_TOGGLE_SHOW forState:UIControlStateNormal];
-    [self.toggleCollaborators setTitleColor:CR_COLOR_TINT forState:UIControlStateNormal];
-    [self.toggleCollaborators addTarget:self action:@selector(toggleCollaborators:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.toggleCollaborators];
+    CGRect frame = CR_LANDSCAPE_FRAME; //Use iOS version appropriate bounds
+    
+    self.toggleCollaboratorsButton= [[UIBarButtonItem alloc] initWithTitle:kCR_COLLABORATOR_TOGGLE_SHOW
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:nil
+                                                                    action:nil];
+    self.toggleCollaboratorsButton.possibleTitles = [NSSet setWithArray:@[kCR_COLLABORATOR_TOGGLE_SHOW, kCR_COLLABORATOR_TOGGLE_HIDE]];
+    self.navigationItem.rightBarButtonItem = self.toggleCollaboratorsButton;
+    
+    
+    self.submitButton = [[CRSubmitButton alloc] init];
+    [self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
+    [self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([self userHasPreviouslySubmittedAnswer]) {
+        self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
+    }
+    
+    [super.view addSubview:self.submitButton];
     
     self.collaboratorsView = [[CRAddCollaboratorsViewController alloc] init];
-    [self.collaboratorsView setViewFrame:CGRectMake(self.toggleCollaborators.frame.origin.x, self.toggleCollaborators.frame.origin.y, 0, 0)];
-    self.collaboratorsView.view.hidden = YES;
-    [self.view addSubview:self.collaboratorsView.view];
+    self.collaboratorsView.delegate = self;
+    self.collaboratorsView.toggleButton = self.toggleCollaboratorsButton;
+    self.collaboratorsView.visible = NO;
+    self.collaboratorsView.side = CR_SIDE_BAR_SIDE_RIGHT;
+    [self addChildViewController:self.collaboratorsView];
+    [super.view addSubview:self.collaboratorsView.view];
+    self.view = super.view;
 }
 
-//Perform action of submitting answer, provide user status update
+- (void)setScanIndex:(NSUInteger)scanIndex {
+    [super setScanIndex:scanIndex];
+    if (self.view) {
+        self.submitButton.buttonState = [self userHasPreviouslySubmittedAnswer] ?CR_SUBMIT_BUTTON_STATE_RESUBMIT : CR_SUBMIT_BUTTON_STATE_SUBMIT;
+    }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
+
 -(void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
     NSArray *students = [[CRCollaboratorList sharedInstance] collaboratorIds];
 
     //Prepare and send answer
-	CRAnswer *answer = [self.undoStack answersFromStackForOwners:students inGroup:[CRCollaboratorList sharedInstance].groupName];
+	CRAnswer *answer = [self.imageMarkup.undoStack answersFromStackForOwners:students inGroup:[CRCollaboratorList sharedInstance].groupName];
 
     [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block, NSError *error) {//Provide submission success feedback
 		if (!error) {
@@ -99,37 +117,21 @@
 	}];
 }
 
--(void)toggleCollaborators:(UIButton *)sender {
-    BOOL show =[sender.currentTitle isEqualToString:kCR_COLLABORATOR_TOGGLE_SHOW];
-    if (show) {
-        self.collaboratorsView.view.hidden = NO;
-    }
-    CGRect frame = CGRectMake(self.toggleCollaborators.frame.origin.x, self.toggleCollaborators.frame.origin.y, 0, 0);
-    if (show) {
-        frame = CGRectMake((self.view.frame.size.width - 300)/2, (self.view.frame.size.height - 400)/2, 300, 400);
-    }
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.collaboratorsView setViewFrame:frame];
-    } completion:^(BOOL finished) {
-        NSString* newTitle = kCR_COLLABORATOR_TOGGLE_HIDE;
-        if (!show) {
-            newTitle = kCR_COLLABORATOR_TOGGLE_SHOW;
-            self.collaboratorsView.view.hidden = YES;
-        }
-        [self.toggleCollaborators setTitle: newTitle forState:UIControlStateNormal];
-    }];
-}
-
 - (BOOL)userHasPreviouslySubmittedAnswer
 {
 	BOOL __block hasSubmitted = NO;
-	
+    NSString *scanId = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
 	[self.caseChosen.answers enumerateObjectsUsingBlock:^(id answerObj, NSUInteger idx, BOOL *stop) {
 		if ([answerObj isKindOfClass:[CRAnswer class]]) {
 			CRAnswer *answer = (CRAnswer*)answerObj;
 			
-			if ([answer.owners containsObject:[CRAccountService sharedInstance].user.userID]) {
-				hasSubmitted = YES;
+            if ([answer.owners containsObject:[CRAccountService sharedInstance].user.userID]) {
+                [answer.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    if ([((CRAnswerLine *)obj).scanID isEqualToString:scanId]) {
+                        hasSubmitted = YES;
+                        *stop = YES;
+                    }
+                }];
 				*stop = YES;
 			}
 		}
@@ -141,7 +143,8 @@
 
 - (void)CRSideBarViewController:(CRSideBarViewController *)sideBarViewController didChangeVisibility:(BOOL)visible
 {
-	self.togglePatientInfoButton.title = visible ? kCR_SIDE_BAR_TOGGLE_HIDE : kCR_SIDE_BAR_TOGGLE_SHOW;
+    //Changing add collaborator view visiblity should change the toggle button's title
+	self.toggleCollaboratorsButton.title = visible ? kCR_COLLABORATOR_TOGGLE_HIDE : kCR_COLLABORATOR_TOGGLE_SHOW;
 }
 
 @end

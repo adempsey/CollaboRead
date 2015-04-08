@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface NSDictionary (CRAdditions)
-
+/*!
+ Converts dictionary to a json string
+ @return Json formatted string from the dictionary
+ */
 - (NSString*)jsonString;
 
 @end

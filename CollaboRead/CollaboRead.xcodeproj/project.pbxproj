@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		36ED59531A2D3CEE00F61D7B /* CRPatientInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */; };
+		8D06A5B11AAEA40F007E9B07 /* CRForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */; };
+		8D06A5B61AAEC3E0007E9B07 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D06A5B51AAEC3E0007E9B07 /* dot.png */; };
 		8D0FA3C01AA28E76004AD7E4 /* CRAccountService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D0FA3BF1AA28E76004AD7E4 /* CRAccountService.m */; };
 		8D113F3C1AACC72200EA3A34 /* UILabel+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D113F3B1AACC72200EA3A34 /* UILabel+CRAdditions.m */; };
 		8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D16E93519EF440500DAFEC0 /* CRNetworkingService.m */; };
@@ -22,6 +24,7 @@
 		8D7530A51A11EA6E0077A01C /* CRToolPanelToggle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */; };
 		8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D9830B81A74480000FC2BE1 /* CRAnswerLine.m */; };
 		8D9830BC1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D9830BB1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m */; };
+		8DA146001AB330560082BB6C /* CRUserAutoCompletionService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA145FF1AB330560082BB6C /* CRUserAutoCompletionService.m */; };
 		8DA5DE2219E6064B002EA706 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2119E6064B002EA706 /* main.m */; };
 		8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2419E6064B002EA706 /* AppDelegate.m */; };
 		8DA5DE2B19E6064B002EA706 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2919E6064B002EA706 /* Main.storyboard */; };
@@ -29,6 +32,7 @@
 		8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2E19E6064B002EA706 /* LaunchScreen.xib */; };
 		8DA5DE3C19E6064B002EA706 /* CollaboReadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */; };
 		8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */; };
+		8DB8D7D11AD32F72002F368C /* CRUserSuggestionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB8D7D01AD32F72002F368C /* CRUserSuggestionTableViewController.m */; };
 		8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */; };
 		8DCD7B4E1A070BAF0005BFDA /* NSDate+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD7B4D1A070BAF0005BFDA /* NSDate+CRAdditions.m */; };
 		8DCF9CA51A2BEF6A000D42C5 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF9CA41A2BEF6A000D42C5 /* SRWebSocket.m */; };
@@ -47,10 +51,15 @@
 		8DE3FB041A930BED0002776F /* CRErrorAlertService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE3FB031A930BED0002776F /* CRErrorAlertService.m */; };
 		8DEBB0561A86AA1600DC0FCA /* CRSubmitButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEBB0551A86AA1600DC0FCA /* CRSubmitButton.m */; };
 		8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */; };
+		BB083DCC1ABA0DF80061C081 /* CRCaseImageMarkupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB083DCB1ABA0DF80061C081 /* CRCaseImageMarkupViewController.m */; };
 		BB0E0C721A9A5F87004D7521 /* CRAddCollaboratorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0E0C711A9A5F87004D7521 /* CRAddCollaboratorsViewController.m */; };
 		BB4D35C81A882F9A00F4EA57 /* CRToolPanelZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */; };
 		BB5017891AA74716000E9021 /* CRCollaboratorList.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5017881AA74716000E9021 /* CRCollaboratorList.m */; };
 		BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6278C21A79480D002391FB /* CRUndoStack.m */; };
+		BB632CCD1AD48FC7000E4F54 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB632CCB1AD48FC7000E4F54 /* Crashlytics.framework */; };
+		BB632CCE1AD48FC7000E4F54 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB632CCC1AD48FC7000E4F54 /* Fabric.framework */; };
+		BB86F5CB1AAE274D004DB6DF /* CRToolPanelPatientInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */; };
+		BB86F5CD1AAE276A004DB6DF /* CRToolPanelPointer.png in Resources */ = {isa = PBXBuildFile; fileRef = BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */; };
 		BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */; };
 		BBA0C1131A1637F800FFA921 /* CRDrawingPreserver.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */; };
 		BBA0C59D1A89427F009E53EC /* CRImageScrollBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */; };
@@ -68,6 +77,7 @@
 		BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */; };
 		BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */; };
 		BBE8DCCF1A77EA8500B09C4F /* CRImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2719E6064B002EA706 /* CRImageController.m */; };
+		BBEBF16A1AAF758C001778F3 /* BBBadgeBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BBEBF1691AAF758C001778F3 /* BBBadgeBarButtonItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,8 +91,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRPatientInfoViewController.h; sourceTree = "<group>"; };
-		36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRPatientInfoViewController.m; sourceTree = "<group>"; };
+		36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRPatientInfoViewController.h; path = Controllers/View/CRPatientInfoViewController.h; sourceTree = "<group>"; };
+		36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRPatientInfoViewController.m; path = Controllers/View/CRPatientInfoViewController.m; sourceTree = "<group>"; };
+		8D06A5AF1AAEA40F007E9B07 /* CRForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRForgotPasswordViewController.h; sourceTree = "<group>"; };
+		8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRForgotPasswordViewController.m; sourceTree = "<group>"; };
+		8D06A5B51AAEC3E0007E9B07 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 		8D0FA3BE1AA28E76004AD7E4 /* CRAccountService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAccountService.h; sourceTree = "<group>"; };
 		8D0FA3BF1AA28E76004AD7E4 /* CRAccountService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAccountService.m; sourceTree = "<group>"; };
 		8D113F3A1AACC72200EA3A34 /* UILabel+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+CRAdditions.h"; sourceTree = "<group>"; };
@@ -106,6 +119,8 @@
 		8D9830B81A74480000FC2BE1 /* CRAnswerLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswerLine.m; sourceTree = "<group>"; };
 		8D9830BA1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+CRAdditions.h"; sourceTree = "<group>"; };
 		8D9830BB1A74CFA700FC2BE1 /* NSDictionary+CRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+CRAdditions.m"; sourceTree = "<group>"; };
+		8DA145FE1AB330560082BB6C /* CRUserAutoCompletionService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUserAutoCompletionService.h; sourceTree = "<group>"; };
+		8DA145FF1AB330560082BB6C /* CRUserAutoCompletionService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUserAutoCompletionService.m; sourceTree = "<group>"; };
 		8DA5DE1C19E6064A002EA706 /* CollaboRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollaboRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA5DE2019E6064A002EA706 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DA5DE2119E6064B002EA706 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -121,6 +136,8 @@
 		8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollaboReadTests.m; sourceTree = "<group>"; };
 		8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStudentAnswerTableViewController.h; sourceTree = "<group>"; };
 		8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRStudentAnswerTableViewController.m; sourceTree = "<group>"; };
+		8DB8D7CF1AD32F72002F368C /* CRUserSuggestionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUserSuggestionTableViewController.h; sourceTree = "<group>"; };
+		8DB8D7D01AD32F72002F368C /* CRUserSuggestionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUserSuggestionTableViewController.m; sourceTree = "<group>"; };
 		8DCD7B491A0709B00005BFDA /* CRAnswer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAnswer.h; sourceTree = "<group>"; };
 		8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswer.m; sourceTree = "<group>"; };
 		8DCD7B4C1A070BAF0005BFDA /* NSDate+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CRAdditions.h"; sourceTree = "<group>"; };
@@ -153,6 +170,8 @@
 		8DEBB0551A86AA1600DC0FCA /* CRSubmitButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSubmitButton.m; sourceTree = "<group>"; };
 		8DEE5ADA19F63EFB0090AF0B /* NSArray+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+CRAdditions.h"; sourceTree = "<group>"; };
 		8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+CRAdditions.m"; sourceTree = "<group>"; };
+		BB083DCA1ABA0DF80061C081 /* CRCaseImageMarkupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRCaseImageMarkupViewController.h; sourceTree = "<group>"; };
+		BB083DCB1ABA0DF80061C081 /* CRCaseImageMarkupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCaseImageMarkupViewController.m; sourceTree = "<group>"; };
 		BB0E0C701A9A5F87004D7521 /* CRAddCollaboratorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAddCollaboratorsViewController.h; sourceTree = "<group>"; };
 		BB0E0C711A9A5F87004D7521 /* CRAddCollaboratorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAddCollaboratorsViewController.m; sourceTree = "<group>"; };
 		BB375B5C1A141DCC007D8556 /* CRViewSizeMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRViewSizeMacros.h; path = ../Controllers/View/CRViewSizeMacros.h; sourceTree = "<group>"; };
@@ -161,14 +180,18 @@
 		BB5017881AA74716000E9021 /* CRCollaboratorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCollaboratorList.m; sourceTree = "<group>"; };
 		BB6278C11A79480D002391FB /* CRUndoStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUndoStack.h; sourceTree = "<group>"; };
 		BB6278C21A79480D002391FB /* CRUndoStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRUndoStack.m; sourceTree = "<group>"; };
+		BB632CCB1AD48FC7000E4F54 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		BB632CCC1AD48FC7000E4F54 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelPatientInfo.png; sourceTree = "<group>"; };
+		BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CRToolPanelPointer.png; sourceTree = "<group>"; };
 		BB913F6219E989B6006C3EEC /* CRAnswerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRAnswerPoint.h; path = ../Utilities/Drawing/CRAnswerPoint.h; sourceTree = "<group>"; };
 		BB913F6319E989B6006C3EEC /* CRAnswerPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRAnswerPoint.m; path = ../Utilities/Drawing/CRAnswerPoint.m; sourceTree = "<group>"; };
 		BBA0C1111A1637F800FFA921 /* CRDrawingPreserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRDrawingPreserver.h; sourceTree = "<group>"; };
 		BBA0C1121A1637F800FFA921 /* CRDrawingPreserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRDrawingPreserver.m; sourceTree = "<group>"; };
-		BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRImageScrollBarController.h; sourceTree = "<group>"; };
-		BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRImageScrollBarController.m; sourceTree = "<group>"; };
-		BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRImageScrollBar.h; sourceTree = "<group>"; };
-		BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRImageScrollBar.m; sourceTree = "<group>"; };
+		BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRImageScrollBarController.h; path = Controllers/View/CRImageScrollBarController.h; sourceTree = "<group>"; };
+		BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRImageScrollBarController.m; path = Controllers/View/CRImageScrollBarController.m; sourceTree = "<group>"; };
+		BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRImageScrollBar.h; path = Views/CRImageScrollBar.h; sourceTree = "<group>"; };
+		BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRImageScrollBar.m; path = Views/CRImageScrollBar.m; sourceTree = "<group>"; };
 		BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRLoginViewController.h; sourceTree = "<group>"; };
 		BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRLoginViewController.m; sourceTree = "<group>"; };
 		BBA2EBD019EECE270093044E /* CRUserKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CRUserKeys.h; sourceTree = "<group>"; };
@@ -193,6 +216,8 @@
 		BBD3B03419F5B60300C18A6A /* CRStudentImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRStudentImageViewController.m; sourceTree = "<group>"; };
 		BBD3B03619F5B64200C18A6A /* CRLecturerImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRLecturerImageViewController.h; sourceTree = "<group>"; };
 		BBD3B03719F5B64200C18A6A /* CRLecturerImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRLecturerImageViewController.m; sourceTree = "<group>"; };
+		BBEBF1681AAF758C001778F3 /* BBBadgeBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBBadgeBarButtonItem.h; sourceTree = "<group>"; };
+		BBEBF1691AAF758C001778F3 /* BBBadgeBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBadgeBarButtonItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,10 +225,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB632CCE1AD48FC7000E4F54 /* Fabric.framework in Frameworks */,
 				BBB97BCF1A967241007715B1 /* QuartzCore.framework in Frameworks */,
 				8DCF9CAF1A2BF07B000D42C5 /* Foundation.framework in Frameworks */,
 				8DCF9CAD1A2BF076000D42C5 /* Security.framework in Frameworks */,
 				8DCF9CAB1A2BF071000D42C5 /* CFNetwork.framework in Frameworks */,
+				BB632CCD1AD48FC7000E4F54 /* Crashlytics.framework in Frameworks */,
 				8DCF9CA91A2BF06A000D42C5 /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -221,6 +248,8 @@
 		8D16E93319EF438A00DAFEC0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8DA145FE1AB330560082BB6C /* CRUserAutoCompletionService.h */,
+				8DA145FF1AB330560082BB6C /* CRUserAutoCompletionService.m */,
 				8D0FA3BE1AA28E76004AD7E4 /* CRAccountService.h */,
 				8D0FA3BF1AA28E76004AD7E4 /* CRAccountService.m */,
 				8DE3FB021A930BED0002776F /* CRErrorAlertService.h */,
@@ -242,6 +271,7 @@
 		8D6BC2461A2BEF0500DB76D0 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				BBEBF1671AAF758C001778F3 /* BBBadgeBarButtonItem */,
 				BBB97BCA1A96722B007715B1 /* iCarousel */,
 				8D6BC2471A2BEF1C00DB76D0 /* SocketRocket */,
 			);
@@ -261,7 +291,6 @@
 		8DA5DE1319E6064A002EA706 = {
 			isa = PBXGroup;
 			children = (
-				BBB97BCE1A967241007715B1 /* QuartzCore.framework */,
 				8DA5DE1E19E6064A002EA706 /* CollaboRead */,
 				8DA5DE3819E6064B002EA706 /* CollaboReadTests */,
 				8DA5DE1D19E6064A002EA706 /* Products */,
@@ -280,6 +309,7 @@
 		8DA5DE1E19E6064A002EA706 /* CollaboRead */ = {
 			isa = PBXGroup;
 			children = (
+				BB083DC91AB9EADE0061C081 /* Not In Use */,
 				8DEE5ADE19F642EA0090AF0B /* Views */,
 				8DEE5ADD19F642440090AF0B /* Controllers */,
 				8DEE5AD919F63EBC0090AF0B /* Categories */,
@@ -337,6 +367,9 @@
 		8DCF9CB01A2BF114000D42C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB632CCB1AD48FC7000E4F54 /* Crashlytics.framework */,
+				BB632CCC1AD48FC7000E4F54 /* Fabric.framework */,
+				BBB97BCE1A967241007715B1 /* QuartzCore.framework */,
 				8DCF9CAE1A2BF07B000D42C5 /* Foundation.framework */,
 				8DCF9CAC1A2BF076000D42C5 /* Security.framework */,
 				8DCF9CAA1A2BF071000D42C5 /* CFNetwork.framework */,
@@ -358,6 +391,7 @@
 		8DD3600B1A0B343000E572D1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8D06A5B51AAEC3E0007E9B07 /* dot.png */,
 				8D34C13F1A15FC37007BC6CB /* shapiro.jpg */,
 				8DD360091A0AC93D00E572D1 /* CRLogo.png */,
 			);
@@ -367,6 +401,8 @@
 		8DD3600C1A0B343A00E572D1 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */,
+				BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */,
 				BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */,
 				BBCCEDE01A71991800782507 /* CRToolPanelScan.png */,
 				8D7530A41A11EA6E0077A01C /* CRToolPanelToggle.png */,
@@ -438,8 +474,6 @@
 			children = (
 				8DEBB0531A86A9D300DC0FCA /* Buttons */,
 				8DEE5ADF19F642F50090AF0B /* Cells */,
-				BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */,
-				BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -485,6 +519,19 @@
 			path = Drawing;
 			sourceTree = "<group>";
 		};
+		BB083DC91AB9EADE0061C081 /* Not In Use */ = {
+			isa = PBXGroup;
+			children = (
+				36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */,
+				36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */,
+				BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */,
+				BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */,
+				BBA0C59E1A8952C4009E53EC /* CRImageScrollBar.h */,
+				BBA0C59F1A8952C4009E53EC /* CRImageScrollBar.m */,
+			);
+			name = "Not In Use";
+			sourceTree = "<group>";
+		};
 		BBA0C5991A894201009E53EC /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -492,16 +539,16 @@
 				8D3916FD1A8D52E300B7523F /* CRSideBarViewController.m */,
 				8DD360151A0B366200E572D1 /* CRToolPanelViewController.h */,
 				8DD360161A0B366200E572D1 /* CRToolPanelViewController.m */,
-				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
-				BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */,
-				36ED59511A2D3CEE00F61D7B /* CRPatientInfoViewController.h */,
-				36ED59521A2D3CEE00F61D7B /* CRPatientInfoViewController.m */,
-				8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */,
-				8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */,
-				BBA0C59B1A89427F009E53EC /* CRImageScrollBarController.h */,
-				BBA0C59C1A89427F009E53EC /* CRImageScrollBarController.m */,
 				BB0E0C701A9A5F87004D7521 /* CRAddCollaboratorsViewController.h */,
 				BB0E0C711A9A5F87004D7521 /* CRAddCollaboratorsViewController.m */,
+				8DB8D7CF1AD32F72002F368C /* CRUserSuggestionTableViewController.h */,
+				8DB8D7D01AD32F72002F368C /* CRUserSuggestionTableViewController.m */,
+				BBCCEDE51A719F3300782507 /* CRScansMenuViewController.h */,
+				BBCCEDE61A719F3300782507 /* CRScansMenuViewController.m */,
+				8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */,
+				8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */,
+				BB083DCA1ABA0DF80061C081 /* CRCaseImageMarkupViewController.h */,
+				BB083DCB1ABA0DF80061C081 /* CRCaseImageMarkupViewController.m */,
 			);
 			name = SubViews;
 			sourceTree = "<group>";
@@ -526,6 +573,8 @@
 				BBA0C5991A894201009E53EC /* SubViews */,
 				BBA9FB5D1A96AE5200E891E6 /* CRCreateAccountViewController.h */,
 				BBA9FB5E1A96AE5200E891E6 /* CRCreateAccountViewController.m */,
+				8D06A5AF1AAEA40F007E9B07 /* CRForgotPasswordViewController.h */,
+				8D06A5B01AAEA40F007E9B07 /* CRForgotPasswordViewController.m */,
 				BBA2EBCD19EEC2EF0093044E /* CRLoginViewController.h */,
 				BBA2EBCE19EEC2EF0093044E /* CRLoginViewController.m */,
 				BBD3135619F2E2040017B96A /* CRSelectLecturerViewController.h */,
@@ -545,6 +594,15 @@
 			path = iCarousel;
 			sourceTree = "<group>";
 		};
+		BBEBF1671AAF758C001778F3 /* BBBadgeBarButtonItem */ = {
+			isa = PBXGroup;
+			children = (
+				BBEBF1681AAF758C001778F3 /* BBBadgeBarButtonItem.h */,
+				BBEBF1691AAF758C001778F3 /* BBBadgeBarButtonItem.m */,
+			);
+			path = BBBadgeBarButtonItem;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -555,6 +613,7 @@
 				8DA5DE1819E6064A002EA706 /* Sources */,
 				8DA5DE1919E6064A002EA706 /* Frameworks */,
 				8DA5DE1A19E6064A002EA706 /* Resources */,
+				BB632CCA1AD48F8F000E4F54 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -627,8 +686,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB86F5CB1AAE274D004DB6DF /* CRToolPanelPatientInfo.png in Resources */,
 				8D34C1401A15FC37007BC6CB /* shapiro.jpg in Resources */,
 				8D48119A1A0B47AB004329AE /* CRToolPanelClear.png in Resources */,
+				8D06A5B61AAEC3E0007E9B07 /* dot.png in Resources */,
 				8D48119C1A0B47AB004329AE /* CRToolPanelPen.png in Resources */,
 				8D7530A51A11EA6E0077A01C /* CRToolPanelToggle.png in Resources */,
 				8DA5DE2B19E6064B002EA706 /* Main.storyboard in Resources */,
@@ -639,6 +700,7 @@
 				8DA5DE2D19E6064B002EA706 /* Images.xcassets in Resources */,
 				8DD3600A1A0AC93D00E572D1 /* CRLogo.png in Resources */,
 				8D48119D1A0B47AB004329AE /* CRToolPanelUndo.png in Resources */,
+				BB86F5CD1AAE276A004DB6DF /* CRToolPanelPointer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -650,6 +712,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BB632CCA1AD48F8F000E4F54 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run c4b0d42ae433cba3eb0da390996287c94c481594 ab2a4e943e0b14706e9ad7e4addfab0ffe2e2e4fbf8f0c7289d44f9517978d20";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8DA5DE1819E6064A002EA706 /* Sources */ = {
@@ -663,6 +741,7 @@
 				BBA0C5A01A8952C4009E53EC /* CRImageScrollBar.m in Sources */,
 				8DA5DE2519E6064B002EA706 /* AppDelegate.m in Sources */,
 				BBA2EBD419EED5F80093044E /* CRSelectCaseViewController.m in Sources */,
+				8DB8D7D11AD32F72002F368C /* CRUserSuggestionTableViewController.m in Sources */,
 				8D0FA3C01AA28E76004AD7E4 /* CRAccountService.m in Sources */,
 				BB5017891AA74716000E9021 /* CRCollaboratorList.m in Sources */,
 				BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */,
@@ -670,6 +749,7 @@
 				8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */,
 				BBA9FB5F1A96AE5200E891E6 /* CRCreateAccountViewController.m in Sources */,
 				BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */,
+				BBEBF16A1AAF758C001778F3 /* BBBadgeBarButtonItem.m in Sources */,
 				8DD664E71A75F878002C379E /* CRScan.m in Sources */,
 				8D5508AB19FF509B00AF5302 /* CRUser.m in Sources */,
 				BBD3B03819F5B64200C18A6A /* CRLecturerImageViewController.m in Sources */,
@@ -686,6 +766,8 @@
 				8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */,
 				8D16E93919EF553F00DAFEC0 /* CRAPIClientService.m in Sources */,
 				8DCF9CB31A2BF8FB000D42C5 /* CRAnswerRefreshService.m in Sources */,
+				8D06A5B11AAEA40F007E9B07 /* CRForgotPasswordViewController.m in Sources */,
+				8DA146001AB330560082BB6C /* CRUserAutoCompletionService.m in Sources */,
 				8DD3601A1A0B3E8900E572D1 /* CRToolPanelCell.m in Sources */,
 				8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */,
 				BB0E0C721A9A5F87004D7521 /* CRAddCollaboratorsViewController.m in Sources */,
@@ -697,6 +779,7 @@
 				8DCF9CA51A2BEF6A000D42C5 /* SRWebSocket.m in Sources */,
 				8D16E93619EF440500DAFEC0 /* CRNetworkingService.m in Sources */,
 				BBA2EBCF19EEC2EF0093044E /* CRLoginViewController.m in Sources */,
+				BB083DCC1ABA0DF80061C081 /* CRCaseImageMarkupViewController.m in Sources */,
 				BBE8DCCF1A77EA8500B09C4F /* CRImageController.m in Sources */,
 				BBCCEDE71A719F3300782507 /* CRScansMenuViewController.m in Sources */,
 			);
@@ -825,6 +908,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = CollaboRead/Info.plist;
@@ -842,6 +929,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = CollaboRead/Info.plist;

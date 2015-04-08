@@ -23,6 +23,7 @@
 	return self;
 }
 
+//Custom setter turns slices into appropriate object from dictionary if needed
 - (void)setSlices:(NSArray *)slices
 {
 	NSMutableArray *finalArray = [[NSMutableArray alloc] init];
@@ -31,9 +32,22 @@
 		if ([obj isKindOfClass:[NSDictionary class]]) {
 			CRSlice *slice = [[CRSlice alloc] initWithDictionary:obj];
 			[finalArray addObject:slice];
-		}
+		} else if ([obj isKindOfClass:[CRSlice class]]) {
+            [finalArray addObject:obj];
+        }
 	}];
 	
 	_slices = finalArray;
+}
+
+-(void)loadImagesAsync {
+    [self.slices enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        CRSlice *slice = obj;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            if(!slice.image) {
+                NSLog(@"loading error"); //Replace with a network error?
+            }
+        });
+    }];
 }
 @end

@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CRSideBarViewController.h"
+#import "CRUserSuggestionTableViewController.h"
 
-@interface CRAddCollaboratorsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
-
--(void)setViewFrame:(CGRect)rect;
+/*!
+ @class CRAddCollaboratorsViewController
+ 
+ @discussion Provides user interface to adjust the collaborators for answers
+ */
+@interface CRAddCollaboratorsViewController : CRSideBarViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, CRUserSuggestionTableViewControllerDelegate>
 
 @end

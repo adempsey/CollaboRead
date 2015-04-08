@@ -26,27 +26,34 @@
 
 @implementation CRSideBarViewController
 
-- (instancetype)init
-{
-	if (self = [super init]) {
-		self.width = kSIDE_BAR_DEFAULT_WIDTH;
-		self.side = CR_SIDE_BAR_SIDE_LEFT;
-		self.visible = YES;
-	}
-	return self;
+-(instancetype) init {
+    if (self = [super init]) {
+        _width = kSIDE_BAR_DEFAULT_WIDTH;
+        _side = CR_SIDE_BAR_SIDE_LEFT;
+        _visible = YES;
+    }
+    return self;
+}
+
+-(void)loadView {
+    //Setters for those properties call reset frame which references the view, so must not be used here
+    CGRect screenBounds = CR_LANDSCAPE_FRAME;
+    CGFloat viewOriginY = CR_TOP_BAR_HEIGHT;
+    CGRect viewFrame = CGRectMake(kSIDE_BAR_ORIGIN_X_SHOWN,
+                                  viewOriginY,
+                                  self.width,
+                                  screenBounds.size.height - viewOriginY);
+    UIView *view = [[UIView alloc] initWithFrame:viewFrame];
+    view.backgroundColor = [UIColor clearColor];
+    self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, viewFrame.size.width, viewFrame.size.height)];
+    self.backgroundView.backgroundColor = CR_COLOR_PRIMARY;
+    self.backgroundView.alpha = 0.9;
+    [view addSubview:self.backgroundView];
+    self.view = view;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
-	self.view.backgroundColor = [UIColor clearColor];
-
-	[self resetFrame];
-
-	self.backgroundView = [[UIView alloc] initWithFrame:kSIDE_BAR_BACKGROUND_VIEW_FRAME];
-	self.backgroundView.backgroundColor = CR_COLOR_PRIMARY;
-	self.backgroundView.alpha = 0.9;
-	[self.view addSubview:self.backgroundView];
 }
 
 - (void)resetFrame
@@ -58,10 +65,10 @@
 								 viewOriginY,
 								 self.width,
 								 screenBounds.size.height - viewOriginY);
-	
 	self.backgroundView.frame = kSIDE_BAR_BACKGROUND_VIEW_FRAME;
 }
 
+//View needs to be adjusted after changing frame settings
 - (void)setSide:(NSUInteger)side
 {
 	_side = side;
@@ -77,16 +84,13 @@
 - (void)setVisible:(BOOL)visible
 {
 	_visible = visible;
-	CGRect frame = self.view.frame;
-	CGFloat originXDestination = self.visible ? kSIDE_BAR_ORIGIN_X_SHOWN : kSIDE_BAR_ORIGIN_X_HIDDEN;
-	frame.origin.x = originXDestination;
-	self.view.frame = frame;
-	
+    [self resetFrame];
 	if ([self.delegate respondsToSelector:@selector(CRSideBarViewController:didChangeVisibility:)]) {
 		[self.delegate CRSideBarViewController:self didChangeVisibility:visible];
 	}
 }
 
+//Setting the toggle button should set its action to toggle the bar
 - (void)setToggleButton:(id)toggleButton
 {
 	_toggleButton = toggleButton;
@@ -104,15 +108,9 @@
 
 - (void)toggleAnimated
 {
-	CGRect frame = self.view.frame;
-	CGFloat originXDestination = self.visible ? kSIDE_BAR_ORIGIN_X_HIDDEN : kSIDE_BAR_ORIGIN_X_SHOWN;
-	frame.origin.x = originXDestination;
-
-	[UIView animateWithDuration:kSIDE_BAR_SLIDE_ANIMATION_LENGTH animations:^{
-		self.view.frame = frame;
-	} completion:^(BOOL finished) {
+    [UIView animateWithDuration:kSIDE_BAR_SLIDE_ANIMATION_LENGTH animations:^{
 		self.visible = !self.visible;
-	}];
+	} completion:nil];
 }
 
 @end

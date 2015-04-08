@@ -9,7 +9,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+/*!
+ @class CRLoginViewController
+ 
+ @discussion View Controller for login form
+ */
 @interface CRLoginViewController : UIViewController <UITextFieldDelegate>
 
 @end

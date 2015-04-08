@@ -27,6 +27,7 @@
 
 /*!
  @brief Array of CRAnswerPoint objects containing drawing coordinates
+ Can be set with either CRAnswerPoint objects or JSON Dictionaries
  */
 @property (nonatomic, readwrite, strong) NSArray *data;
 

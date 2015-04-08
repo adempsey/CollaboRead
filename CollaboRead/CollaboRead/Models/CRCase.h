@@ -13,6 +13,7 @@
  
  @discussion Object for storing data about an individual case.
  Cases represent one individual question to be asked in a lecture, which may contain several scans.
+ It is expected that these will always come in json form from the api
  */
 @interface CRCase : NSObject
 
@@ -32,12 +33,14 @@
 @property (nonatomic, readwrite, strong) NSDate *date;
 
 /*!
- @brief Array of CRScan objects that compose the case
+ @brief Array of CRScan objects that compose the case.
+ Can be set with either CRScan objects or JSON dictionaries
  */
 @property (nonatomic, readwrite, strong) NSArray *scans;
 
 /*!
- @brief Array of CRAnswer objects for answers submitted by students
+ @brief Array of CRAnswer objects for answers submitted by students.
+ Can be set with either CRAnswer objects or JSON dictionaries
  */
 @property (nonatomic, readwrite, strong) NSArray *answers;
 
@@ -80,5 +83,10 @@
  @return Integer object to use for sorting
  */
 - (NSInteger)compareDates:(CRCase *)other;
+
+/*!
+ Asynchronously loads all case images
+ */
+- (void)loadImagesAsync;
 
 @end

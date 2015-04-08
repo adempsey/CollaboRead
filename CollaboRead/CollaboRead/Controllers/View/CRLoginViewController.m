@@ -26,8 +26,6 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 @interface CRLoginViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *serverField; //UNTIL WE GET TUFTS SERVER ONLY
-
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
@@ -35,16 +33,39 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 @property (nonatomic, readwrite, strong) UIActivityIndicatorView *activityIndicator;
 
--(IBAction)loginPressed:(id)sender; //Triggers login attempt based on button press
--(IBAction)exitTextField:(id)sender; //Dismisses keyboard when appropriate
+/*!
+ Attempts login with information entered in fields
+ */
+- (void)attemptLogin;
+/*!
+ Triggers a login attempt
+ @param sender
+ UI element triggering method call, unused
+ */
+- (IBAction)loginPressed:(id)sender;
+/*!
+ Dismisses keyboard on touch
+ @param sender
+ UI element triggering method call, unused
+ */
+- (IBAction)exitTextField:(id)sender; //Dismisses keyboard when appropriate
+/*!
+ Adjusts UI to show successful login
+ */
+- (void)showSuccess;
+/*!
+ Adjusts UI to show login error
+ @param error
+ Error number to base response type on
+ */
+- (void)showError:(NSUInteger)error;
 
 @end
 
 @implementation CRLoginViewController
 
 //Sets up activity indicator, other setup done via storyboard
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
 	[super viewDidLoad];
 	CGRect screenBounds = CR_LANDSCAPE_FRAME;
 	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake((screenBounds.size
@@ -53,18 +74,24 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	[self.view addSubview:self.activityIndicator];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.loginButton.titleLabel.text = @"Login";
 	self.loginButton.userInteractionEnabled = YES;
+	
+	self.emailField.text = @"";
+	self.passwordField.text = @"";
 }
 
--(void)attemptLogin
-{
+-(void)attemptLogin {
 	[[CRAPIClientService sharedInstance] loginUserWithEmail:self.emailField.text password:self.passwordField.text block:^(CRUser *user, NSError *error) {
 		if (error) {
-			[self showError:kCR_LOGIN_ERROR_CREDENTIALS];
+            if (error.code == -1012) {//error for bad auth, should be made more reliable
+                [self showError:kCR_LOGIN_ERROR_CREDENTIALS];
+            } else {
+                [self showError:kCR_LOGIN_ERROR_NETWORK];
+            }
+			
 		} else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self showSuccess];
@@ -80,8 +107,8 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 				newController = navController;
 				
 			} else if([user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
-                [[CRCollaboratorList sharedInstance] setOwner:user.email withName:user.name andID:user.userID];
 				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
+                [[CRCollaboratorList sharedInstance] setOwner];
 				newController = navController;
 			}
 
@@ -97,9 +124,8 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	}];
 }
 
-//Start attempt to login with api call
--(IBAction)loginPressed:(id)sender
-{
+-(IBAction)loginPressed:(id)sender {
+    [self exitTextField:sender];
 	self.loginButton.userInteractionEnabled = NO;
 	self.loginButton.hidden = YES;
 
@@ -110,19 +136,21 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 }
 
 //Dismiss keyboard from a tap outside text fields or end of editting
--(IBAction)exitTextField:(id)sender
-{
+-(IBAction)exitTextField:(id)sender {
     [self.emailField resignFirstResponder];
     [self.passwordField resignFirstResponder];
 }
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
+    if ([textField isEqual:self.emailField]) {
+        [self.passwordField becomeFirstResponder];
+    }
+    return NO;
 }
 
 //Adjust desplay to give user feedback on login credentials
-- (void)showSuccess
-{
+- (void)showSuccess {
 	if (self.errorLabel.alpha > 0.0) {
 		[UIView animateWithDuration:0.25 animations:^{
 			self.errorLabel.alpha = 0.0;
@@ -138,8 +166,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	self.loginButton.hidden = NO;
 }
 
--(void)showError:(NSUInteger)error
-{
+-(void)showError:(NSUInteger)error {
 	if (self.errorLabel.alpha > 0.0) {
 		[UIView animateWithDuration:0.25 animations:^{
 			self.errorLabel.alpha = 0.0;

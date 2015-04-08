@@ -8,6 +8,10 @@
 
 #import "UILabel+CRAdditions.h"
 
+/*!
+ @defined kANIMATION_LENGTH
+ @brief Duration of label animations
+ */
 #define kANIMATION_LENGTH .25
 
 @implementation UILabel (CRAdditions)

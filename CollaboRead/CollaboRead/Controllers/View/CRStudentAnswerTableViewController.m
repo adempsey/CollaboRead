@@ -9,6 +9,8 @@
 #import "CRStudentAnswerTableViewController.h"
 #import "CRUser.h"
 #import "CRAnswer.h"
+#import "CRAnswerLine.h"
+#import "CRColors.h"
 
 typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewSections) {
 	kSECTION_OPTIONS = 0,
@@ -28,45 +30,83 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
 @interface CRStudentAnswerTableViewController ()
 
+/*!
+ @brief Table view to display options and submitted answers' identifiers
+ */
 @property (nonatomic, readwrite, strong) UITableView *tableView;
-@property (nonatomic, readwrite, strong) NSMutableArray *selectedStudents;
+/*!
+ @brief Currently selected answers
+ */
+@property (nonatomic, readwrite, strong) NSMutableArray *selectedAnswers;
+/*!
+ @brief Whether to show group names or generic identifier
+ */
 @property (nonatomic, readwrite, assign) BOOL shouldShowStudentNames;
-@property (nonatomic, readwrite, strong) NSIndexPath *tempIndexPath;
-@property (nonatomic, strong) NSArray *caseSets;
-@property (nonatomic, strong) NSString *userID;
+/*!
+ @brief A list of the CRAnswers for the current scan
+ */
+@property (nonatomic, readonly, strong) NSMutableArray *scanList;
 
 @end
 
 @implementation CRStudentAnswerTableViewController
 
-- (instancetype)initWithAnswerList:(NSArray*)answerList;
+- (instancetype)initWithAnswerList:(NSArray*)answerList andScanID:(NSString *)scanId;
 {
 	if (self = [super init]) {
         self.shouldShowStudentNames = NO;
-		self.selectedStudents = [[NSMutableArray alloc] init];
+		self.selectedAnswers = [[NSMutableArray alloc] init];
+        _scanList = [[NSMutableArray alloc] init];
         _answerList = [[NSArray alloc] initWithArray:answerList];
+        self.scanId = scanId;
 		self.side = CR_SIDE_BAR_SIDE_RIGHT;
 		self.width = kTableViewWidth;
 	}
 	return self;
 }
 
+- (void)loadView {
+    [super loadView];
+    CGRect tableViewFrame = CGRectMake(0, 0, kTableViewWidth, super.view.frame.size.height);
+    self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.backgroundColor = [UIColor clearColor];
+    [super.view addSubview:self.tableView];
+    self.view = super.view;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
-	CGRect tableViewFrame = CGRectMake(0, 0, kTableViewWidth, super.view.frame.size.height);
-	self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
-	self.tableView.delegate = self;
-	self.tableView.dataSource = self;
-	self.tableView.backgroundColor = [UIColor clearColor];
-	[self.view addSubview:self.tableView];
 }
 
--(void)setAnswerList:(NSArray *)students
+- (void)setScanAnswers {
+    [self.scanList removeAllObjects];
+    [self.answerList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        CRAnswer *ans = obj;
+        [ans.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([((CRAnswerLine *)obj).scanID isEqualToString:self.scanId]) {
+                [self.scanList addObject:ans];
+            }
+        }];
+    }];
+}
+
+//Setting the list of answers should cause the table to update
+- (void)setAnswerList:(NSArray *)answerList
 {
-    _answerList = students;
+    _answerList = answerList;
+    [self setScanAnswers];
     [self.tableView reloadData];
+}
+
+- (void)setScanId:(NSString *)scanId {
+    _scanId = scanId;
+    [self setScanAnswers];
+    [self.tableView reloadData];
+    [self.selectedAnswers removeAllObjects];
+    [self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedAnswers copy]];
 }
 
 #pragma mark - UITableView Datasource Methods
@@ -88,7 +128,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 			return kOPTION_COUNT;
 			break;
 		case kSECTION_STUDENTS:
-			return self.answerList.count;
+			return self.scanList.count;
 			break;
 		default:
 			return 0;
@@ -108,6 +148,17 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	cell.textLabel.text = [self titleForCellAtIndexPath:indexPath];
 	cell.textLabel.textColor = [UIColor whiteColor];
 	cell.textLabel.adjustsFontSizeToFitWidth = YES;
+
+    //Correspond identifier to color of the drawing
+	if (indexPath.section == kSECTION_STUDENTS) {
+		NSDictionary *color = studentColors[indexPath.row];
+		UIImage *dot = [UIImage imageNamed:@"dot.png"];
+		dot = [dot imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		cell.imageView.image = dot;
+        cell.imageView.tintColor = [UIColor colorWithRed: [color[@"red"] floatValue] green: [color[@"green"] floatValue] blue:[color[@"blue"] floatValue] alpha:1.0];
+    } else {
+        cell.imageView.tintColor = [UIColor whiteColor];
+    }
 	
 	cell.accessoryType = [self accessoryTypeForCellAtIndexPath:indexPath];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -121,24 +172,24 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	if (indexPath.section == kSECTION_OPTIONS) {
 		
 		if (indexPath.row == kOPTION_SHOW_ALL) {
-			self.selectedStudents = [self.answerList mutableCopy];
-			[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedStudents copy]];
+			self.selectedAnswers = [self.answerList mutableCopy];
+			[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedAnswers copy]];
 		} else if (indexPath.row == kOPTION_HIDE_ALL) {
-			[self.selectedStudents removeAllObjects];
-			[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedStudents copy]];
+			[self.selectedAnswers removeAllObjects];
+			[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedAnswers copy]];
 		} else if (indexPath.row == kOPTION_SHOW_NAMES) {
 			self.shouldShowStudentNames = !self.shouldShowStudentNames;
         }
 	} else if (indexPath.section == kSECTION_STUDENTS) {
-		id selectedStudent = self.answerList[indexPath.row];
-		if ([self.selectedStudents containsObject:selectedStudent]) {
-			[self.selectedStudents removeObject:selectedStudent];
+		id selectedStudent = self.scanList[indexPath.row];
+		if ([self.selectedAnswers containsObject:selectedStudent]) {
+			[self.selectedAnswers removeObject:selectedStudent];
 		} else {
-			[self.selectedStudents addObject:selectedStudent];
+			[self.selectedAnswers addObject:selectedStudent];
 			
 		}
 		
-		[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedStudents copy]];
+		[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedAnswers copy]];
     }
 	
 	[self.tableView reloadData];
@@ -158,7 +209,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 				return @"Hide All Answers";
 				break;
 			case kOPTION_SHOW_NAMES:
-				return @"Show Student Names";
+				return @"Show Group Names";
 				break;
 			default:
 				return @"";
@@ -187,7 +238,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		
 	} else if (indexPath.section == kSECTION_STUDENTS) {
 		
-		BOOL isSelected = [self.selectedStudents containsObject:self.answerList[indexPath.row]];
+		BOOL isSelected = [self.selectedAnswers containsObject:self.answerList[indexPath.row]];
 		return isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 		
 	}

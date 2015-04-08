@@ -32,7 +32,7 @@
 @property (nonatomic, readwrite, strong) NSString *email;
 
 /*!
- @brief The type of user (e.g., Student, Professor, Administrator)
+ @brief The type of user (e.g., student, lecturer, administrator)
  */
 @property (nonatomic, readwrite, strong) NSString *type;
 

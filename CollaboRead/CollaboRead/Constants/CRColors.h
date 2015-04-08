@@ -22,4 +22,20 @@ alpha:1.0]
 #define CR_COLOR_ERROR UIColorFromRGB(0xFF4760)
 #define CR_COLOR_ANSWER_INDICATOR [UIColor yellowColor]
 
+#define studentColors @[@{@"red":@0, @"green": @255, @"blue" : @0}, \
+@{@"red":@0, @"green": @0, @"blue" : @255}, \
+@{@"red":@255, @"green": @255, @"blue" : @0}, \
+@{@"red":@255, @"green": @0, @"blue" : @255}, \
+@{@"red":@0, @"green": @255, @"blue" : @255}, \
+@{@"red":@255, @"green": @150, @"blue" : @100}, \
+@{@"red":@175, @"green": @255, @"blue" : @50}, \
+@{@"red":@175, @"green": @255, @"blue" : @255}, \
+@{@"red":@175, @"green": @100, @"blue" : @255}, \
+@{@"red":@175, @"green": @255, @"blue" : @200}, \
+@{@"red":@255, @"green": @50, @"blue" : @100}, \
+@{@"red":@150, @"green": @150, @"blue" : @255}, \
+@{@"red":@255, @"green": @200, @"blue" : @255}, \
+@{@"red":@0, @"green": @150, @"blue" : @150}, \
+@{@"red":@150, @"green": @100, @"blue" : @100}]
+
 #endif

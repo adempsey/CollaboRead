@@ -33,6 +33,7 @@
 	return self;
 }
 
+//Custom setter turns points into appropriate object from dictionary if needed
 - (void)setData:(NSArray *)data
 {
 	NSMutableArray *finalArray = [[NSMutableArray alloc] init];
