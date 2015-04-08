@@ -16,10 +16,6 @@
  @discussion View Controller for display and markup of case images
  */
 @interface CRCaseImageMarkupViewController : UIViewController <UIGestureRecognizerDelegate>
-//The following define drawing color used by user - irrelevant after api changes
-@property (nonatomic, assign) CGFloat lineRedComp;
-@property (nonatomic, assign) CGFloat lineBlueComp;
-@property (nonatomic, assign) CGFloat lineGreenComp;
 
 /*!
  @brief The maximum size and closest origin allowed for the image

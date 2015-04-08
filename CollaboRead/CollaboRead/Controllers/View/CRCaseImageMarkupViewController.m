@@ -26,6 +26,9 @@
 @interface CRCaseImageMarkupViewController ()
 {
     CRAnswerPoint *lastPoint;//Last point drawn/erased
+    CGFloat lineRedComp;
+    CGFloat lineBlueComp;
+    CGFloat lineGreenComp;
 }
 /*!
  @brief UIImageView to display user's markup of the image
@@ -176,9 +179,9 @@
     self.lastTranslation = CGPointMake(0, 0);
     
     //Set up current drawing
-    self.lineRedComp = 255;
-    self.lineBlueComp = 0;
-    self.lineGreenComp = 0;
+    lineRedComp = [[CRAccountService sharedInstance].user.drawColor[CR_DB_RED_COMP] floatValue];
+    lineBlueComp = [[CRAccountService sharedInstance].user.drawColor[CR_DB_BLUE_COMP] floatValue];
+    lineGreenComp = [[CRAccountService sharedInstance].user.drawColor[CR_DB_GREEN_COMP] floatValue];
     
     lastPoint = nil;
     
@@ -208,7 +211,7 @@
     [super viewWillAppear:animated];
     CRScan *scan = self.caseChosen.scans[self.scanIndex];
     self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
-    [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+    [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
 }
 
 #pragma mark - Image Loading Methods
@@ -220,7 +223,7 @@
         CRScan *scan = self.caseChosen.scans[self.scanIndex];
         [self loadAndScaleImage:((CRSlice *)((CRScan *) scan).slices[self.sliceIndex]).image];
         self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
-        [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+        [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
     }
 }
 
@@ -341,7 +344,7 @@
     self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack removeLayerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID] copyItems:YES];
     if (self.currentDrawing.count > 0) {
         [self wipeDrawing];
-        [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+        [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
     }
     else {
         [self wipeDrawing];
@@ -398,7 +401,7 @@
     
     //Set up to draw line
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 3.0 * self.currZoom);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.lineRedComp, self.lineGreenComp, self.lineBlueComp, 1.0);
+    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), lineRedComp, lineGreenComp, lineBlueComp, 1.0);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
     CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x * self.currZoom, beg.coordinate.y * self.currZoom);
     CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x * self.currZoom, fin.coordinate.y * self.currZoom);
@@ -503,7 +506,7 @@
             lastPoint = nil;
         } else if (self.selectedTool == kCR_PANEL_TOOL_POINTER) {
             [self wipeDrawing];
-            [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+            [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
             lastPoint = nil;
         }
     }
