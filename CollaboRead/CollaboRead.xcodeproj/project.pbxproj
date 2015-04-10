@@ -31,6 +31,7 @@
 		8DA5DE2D19E6064B002EA706 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2C19E6064B002EA706 /* Images.xcassets */; };
 		8DA5DE3019E6064B002EA706 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5DE2E19E6064B002EA706 /* LaunchScreen.xib */; };
 		8DA5DE3C19E6064B002EA706 /* CollaboReadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */; };
+		8DAA7BEE1AD72DD600A7F02A /* CRSelectLectureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DAA7BED1AD72DD600A7F02A /* CRSelectLectureViewController.m */; };
 		8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */; };
 		8DB8D7D11AD32F72002F368C /* CRUserSuggestionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB8D7D01AD32F72002F368C /* CRUserSuggestionTableViewController.m */; };
 		8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */; };
@@ -47,7 +48,7 @@
 		8DD664E71A75F878002C379E /* CRScan.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DD664E41A75F878002C379E /* CRScan.m */; };
 		8DD664E81A75F878002C379E /* CRSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DD664E61A75F878002C379E /* CRSlice.m */; };
 		8DE0B26019FF2FD300760434 /* CRCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B25F19FF2FD300760434 /* CRCase.m */; };
-		8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B26219FF306900760434 /* CRCaseSet.m */; };
+		8DE0B26319FF306900760434 /* CRLecture.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE0B26219FF306900760434 /* CRLecture.m */; };
 		8DE3FB041A930BED0002776F /* CRErrorAlertService.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE3FB031A930BED0002776F /* CRErrorAlertService.m */; };
 		8DEBB0561A86AA1600DC0FCA /* CRSubmitButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEBB0551A86AA1600DC0FCA /* CRSubmitButton.m */; };
 		8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEE5ADB19F63EFB0090AF0B /* NSArray+CRAdditions.m */; };
@@ -134,6 +135,8 @@
 		8DA5DE3519E6064B002EA706 /* CollaboReadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CollaboReadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA5DE3A19E6064B002EA706 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DA5DE3B19E6064B002EA706 /* CollaboReadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollaboReadTests.m; sourceTree = "<group>"; };
+		8DAA7BEC1AD72DD600A7F02A /* CRSelectLectureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSelectLectureViewController.h; sourceTree = "<group>"; };
+		8DAA7BED1AD72DD600A7F02A /* CRSelectLectureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSelectLectureViewController.m; sourceTree = "<group>"; };
 		8DB739E81A08226000321BEF /* CRStudentAnswerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRStudentAnswerTableViewController.h; sourceTree = "<group>"; };
 		8DB739E91A08226000321BEF /* CRStudentAnswerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRStudentAnswerTableViewController.m; sourceTree = "<group>"; };
 		8DB8D7CF1AD32F72002F368C /* CRUserSuggestionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRUserSuggestionTableViewController.h; sourceTree = "<group>"; };
@@ -162,8 +165,8 @@
 		8DD664E61A75F878002C379E /* CRSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSlice.m; sourceTree = "<group>"; };
 		8DE0B25E19FF2FD300760434 /* CRCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRCase.h; sourceTree = "<group>"; };
 		8DE0B25F19FF2FD300760434 /* CRCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCase.m; sourceTree = "<group>"; };
-		8DE0B26119FF306900760434 /* CRCaseSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRCaseSet.h; sourceTree = "<group>"; };
-		8DE0B26219FF306900760434 /* CRCaseSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRCaseSet.m; sourceTree = "<group>"; };
+		8DE0B26119FF306900760434 /* CRLecture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRLecture.h; sourceTree = "<group>"; };
+		8DE0B26219FF306900760434 /* CRLecture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRLecture.m; sourceTree = "<group>"; };
 		8DE3FB021A930BED0002776F /* CRErrorAlertService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRErrorAlertService.h; sourceTree = "<group>"; };
 		8DE3FB031A930BED0002776F /* CRErrorAlertService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRErrorAlertService.m; sourceTree = "<group>"; };
 		8DEBB0541A86AA1600DC0FCA /* CRSubmitButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSubmitButton.h; sourceTree = "<group>"; };
@@ -431,8 +434,8 @@
 				8D5508AA19FF509B00AF5302 /* CRUser.m */,
 				8DE0B25E19FF2FD300760434 /* CRCase.h */,
 				8DE0B25F19FF2FD300760434 /* CRCase.m */,
-				8DE0B26119FF306900760434 /* CRCaseSet.h */,
-				8DE0B26219FF306900760434 /* CRCaseSet.m */,
+				8DE0B26119FF306900760434 /* CRLecture.h */,
+				8DE0B26219FF306900760434 /* CRLecture.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -569,6 +572,8 @@
 		BBA2EBD519EED7C40093044E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8DAA7BEC1AD72DD600A7F02A /* CRSelectLectureViewController.h */,
+				8DAA7BED1AD72DD600A7F02A /* CRSelectLectureViewController.m */,
 				BBA0C59A1A894218009E53EC /* ImageEditingViews */,
 				BBA0C5991A894201009E53EC /* SubViews */,
 				BBA9FB5D1A96AE5200E891E6 /* CRCreateAccountViewController.h */,
@@ -746,7 +751,7 @@
 				BB5017891AA74716000E9021 /* CRCollaboratorList.m in Sources */,
 				BBD3B03519F5B60300C18A6A /* CRStudentImageViewController.m in Sources */,
 				8DEE5ADC19F63EFB0090AF0B /* NSArray+CRAdditions.m in Sources */,
-				8DE0B26319FF306900760434 /* CRCaseSet.m in Sources */,
+				8DE0B26319FF306900760434 /* CRLecture.m in Sources */,
 				BBA9FB5F1A96AE5200E891E6 /* CRCreateAccountViewController.m in Sources */,
 				BB913F6419E989B6006C3EEC /* CRAnswerPoint.m in Sources */,
 				BBEBF16A1AAF758C001778F3 /* BBBadgeBarButtonItem.m in Sources */,
@@ -772,6 +777,7 @@
 				8DB739EA1A08226000321BEF /* CRStudentAnswerTableViewController.m in Sources */,
 				BB0E0C721A9A5F87004D7521 /* CRAddCollaboratorsViewController.m in Sources */,
 				BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */,
+				8DAA7BEE1AD72DD600A7F02A /* CRSelectLectureViewController.m in Sources */,
 				BBA0C59D1A89427F009E53EC /* CRImageScrollBarController.m in Sources */,
 				8DA5DE2219E6064B002EA706 /* main.m in Sources */,
 				8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */,

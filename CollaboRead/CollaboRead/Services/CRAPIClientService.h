@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "CRCaseSet.h"
+#import "CRLecture.h"
 #import "CRUser.h"
 #import "CRAnswer.h"
 
@@ -111,7 +111,7 @@
  @param block
  completion block to execute with CRCaseSet object for retrieved case set
  */
-- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*, NSError*))block;
+- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRLecture*, NSError*))block;
 
 /*!
  Retrieves a list of case sets belonging to the given lecturer from the API
@@ -121,6 +121,8 @@
  completion block to execute with list of case sets retrieved from the API
  */
 - (void)retrieveCaseSetsWithLecturer:(NSString*)lecturerID block:(void (^)(NSArray*, NSError*))block;
+
+- (void)retrieveLecturesWithLecturer:(NSString*)lecturerID block:(void (^)(NSArray*, NSError*))block;
 
 #pragma mark - Submission Methods
 
@@ -136,6 +138,6 @@
  @param block
  completion block to execute with updated case set retrieved from the API
  */
-- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*, NSError*))block;
+- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRLecture*, NSError*))block;
 
 @end

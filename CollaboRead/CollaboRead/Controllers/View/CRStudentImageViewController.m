@@ -101,7 +101,7 @@
     //Prepare and send answer
 	CRAnswer *answer = [self.imageMarkup.undoStack answersFromStackForOwners:students inGroup:[CRCollaboratorList sharedInstance].groupName];
 
-    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRCaseSet *block, NSError *error) {//Provide submission success feedback
+    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inSet:self.caseGroup block:^(CRLecture *block, NSError *error) {//Provide submission success feedback
 		if (!error) {
 			self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUCCESS;
 		} else {

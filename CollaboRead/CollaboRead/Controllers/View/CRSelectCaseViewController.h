@@ -20,5 +20,7 @@
  @brief Lecturer whose cases are being selected from
  */
 @property (nonatomic, strong) CRUser *lecturer;
+@property (nonatomic, readwrite, strong) NSString *lectureID;
+@property (nonatomic, readwrite, strong) NSDictionary *cases;
 
 @end

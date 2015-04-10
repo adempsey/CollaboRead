@@ -148,7 +148,7 @@
 {
 	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array, NSError *error) {
 		if (!error) {
-			CRCaseSet *selectedCaseSet = array[self.indexPath.section];
+			CRLecture *selectedCaseSet = array[self.indexPath.section];
 			self.caseChosen.answers = ((CRCase *)[selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row]).answers;
 			
 			NSArray *answers = self.caseChosen.answers;

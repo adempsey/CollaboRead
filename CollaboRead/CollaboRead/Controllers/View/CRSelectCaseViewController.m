@@ -9,7 +9,7 @@
 #import "CRSelectCaseViewController.h"
 #import "CRImageController.h"
 #import "CRUserKeys.h"
-#import "CRCaseSet.h"
+#import "CRLecture.h"
 #import "CRCase.h"
 #import "CRScan.h"
 #import "CRSlice.h"
@@ -30,7 +30,7 @@
 /*!
  @brief Sets of cases to select from
  */
-@property (nonatomic, strong) NSArray *caseSets;
+//@property (nonatomic, strong) NSArray *caseSets;
 /*!
  @brief Activity indicator to show loading cases activity
  */
@@ -52,28 +52,9 @@
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
 	self.navigationItem.title = self.lecturer.name;
-
-    //Get lecturers cases and reload view with that information
-	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturer.userID block:^(NSArray *caseSets, NSError *error) {
-		if (!error) {
-			self.caseSets = caseSets;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.collectionView reloadData];
-                [self.activityIndicator stopAnimating];
-            });
-		} else {
-			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"cases" completionBlock:^(UIAlertAction *action) {
-				if (self != self.navigationController.viewControllers[0]) {
-					[self.navigationController popViewControllerAnimated:YES];
-				} else if (self.presentingViewController) {
-					[self dismissViewControllerAnimated:YES completion:nil];
-				}
-			}];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self presentViewController:alertController animated:YES completion:nil];
-            });
-		}
-	}];
+	
+	[self.activityIndicator stopAnimating];
+	[self.collectionView reloadData];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
 }
 
@@ -98,13 +79,13 @@
 //Set the number of cases per section to be the number of cases in the group it was formed from
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-	return self.caseSets ? ((CRCaseSet*) self.caseSets[section]).cases.count : 0;
+	return self.cases.count;
 }
 
 //Set the number of sections to be the number of groupings
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return self.caseSets.count;
+	return 1;
 }
 
 //Set the cell to have the image and name of the case it corresponds to
@@ -113,8 +94,8 @@
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CaseCell" forIndexPath:indexPath];
     cell.contentView.frame = cell.bounds;
     cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	CRCaseSet *caseSet = self.caseSets[indexPath.section];
-	NSArray *caseArray = [caseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
+	
+	NSArray *caseArray = [self.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
 	CRCase *crCase = caseArray[indexPath.row];
     
 	cell.name.text = crCase.name;
@@ -153,14 +134,11 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 	CRImageController *nextController = segue.destinationViewController;
-	CRCaseSet *selectedCaseSet = self.caseSets[selectedPath.section];
-    NSArray *caseArray = [selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
+    NSArray *caseArray = [self.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
 	CRCase *selectedCase = caseArray[selectedPath.row];
     
 	nextController.caseChosen = selectedCase;
-	nextController.caseGroup = selectedCaseSet.setID;
-
-    nextController.lecturerID = self.lecturer.userID;
+	nextController.caseGroup = self.lectureID;
     nextController.indexPath = selectedPath;
 }
 

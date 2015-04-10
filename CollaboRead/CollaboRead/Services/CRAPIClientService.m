@@ -14,7 +14,8 @@
 #import "NSArray+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
 
-#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
+//#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
+#define kCR_API_ADDRESS @"http://localhost:5000/api/v1/"
 #define kCR_API_ENDPOINT(endpoint) [kCR_API_ADDRESS stringByAppendingString:endpoint]
 
 #define kHTTP_METHOD_GET @"GET"
@@ -26,7 +27,8 @@
 #define kCR_API_ENDPOINT_USER_CHECK kCR_API_ENDPOINT(@"usercheck")
 #define kCR_API_ENDPOINT_USERS kCR_API_ENDPOINT(@"users")
 #define kCR_API_ENDPOINT_LECTURERS kCR_API_ENDPOINT(@"lecturers")
-#define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"casesets")
+//#define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"casesets")
+#define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"caseset")
 #define kCR_API_ENDPOINT_SUBMIT_ANSWER kCR_API_ENDPOINT(@"submitanswer")
 
 #define kCR_API_QUERY_PARAMETER_ID @"id"
@@ -185,12 +187,12 @@
     }];
 }
 
-- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRCaseSet*, NSError*))block
+- (void)retrieveCaseSetWithID:(NSString*)caseSetID block:(void (^)(CRLecture*, NSError*))block
 {
 	[self retrieveItemFromEndpoint:kCR_API_ENDPOINT_CASE_SET withID:caseSetID completionBlock:^(NSDictionary *caseSetDictionary, NSError *error) {
-		CRCaseSet *caseSet;
+		CRLecture *caseSet;
 		if (!error) {
-			caseSet = [[CRCaseSet alloc] initWithDictionary:caseSetDictionary];
+			caseSet = [[CRLecture alloc] initWithDictionary:caseSetDictionary];
 		}
 		block(caseSet, error);
 	}];
@@ -205,16 +207,42 @@
 			NSArray *retrievedItems = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
 			[retrievedItems enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 				if ([obj isKindOfClass:[NSDictionary class]]) {
-					CRCaseSet *caseSet = [[CRCaseSet alloc] initWithDictionary:obj];
+					CRLecture *caseSet = [[CRLecture alloc] initWithDictionary:obj];
 					[caseSets addObject:caseSet];
 				}
 			}];
 		}
+		
+		NSLog(@"%@", caseSets);
 
 		block(caseSets, error);
 	};
 
-	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturerID};
+//	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturerID};
+	NSDictionary *params = @{@"lecturerID": lecturerID};
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_CASE_SET usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
+}
+
+- (void)retrieveLecturesWithLecturer:(NSString*)lecturerID block:(void (^)(NSArray*, NSError*))block
+{
+	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
+		NSMutableArray *caseSets = [[NSMutableArray alloc] init];
+		
+		if (!error) {
+			NSArray *retrievedItems = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+			[retrievedItems enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+				if ([obj isKindOfClass:[NSDictionary class]]) {
+					CRLecture *caseSet = [[CRLecture alloc] initWithDictionary:obj];
+					[caseSets addObject:caseSet];
+				}
+			}];
+		}
+		
+		block(caseSets, error);
+	};
+	
+	//	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturerID};
+	NSDictionary *params = @{@"lecturerID": lecturerID};
 	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_CASE_SET usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
 }
 
@@ -267,13 +295,13 @@
 
 #pragma mark - Public Submission Methods
 
-- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRCaseSet*, NSError*))block
+- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRLecture*, NSError*))block
 {
 	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
-		CRCaseSet *caseSet;
+		CRLecture *caseSet;
 		if (!error) {
 			NSDictionary *caseItem = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
-			caseSet = [[CRCaseSet alloc] initWithDictionary:caseItem];
+			caseSet = [[CRLecture alloc] initWithDictionary:caseItem];
 		}
 		block(caseSet, error);
 	};

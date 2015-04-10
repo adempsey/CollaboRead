@@ -10,7 +10,7 @@
 #import "CRSelectCaseViewController.h"
 #import "CRTitledImageCollectionCell.h"
 #import "CRAPIClientService.h"
-#import "CRCaseSet.h"
+#import "CRLecture.h"
 #import "CRCase.h"
 #import "CRViewSizeMacros.h"
 #import "CRErrorAlertService.h"

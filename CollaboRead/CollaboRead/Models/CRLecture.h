@@ -13,12 +13,14 @@
  
  @discussion Object for storing a list of cases belonging to a series of lecturers
  */
-@interface CRCaseSet : NSObject
+@interface CRLecture : NSObject
 
 /*!
  @brief Case set's ID number
  */
-@property (nonatomic, readwrite, strong) NSString *setID;
+@property (nonatomic, readwrite, strong) NSString *lectureID;
+
+@property (nonatomic, readwrite, strong) NSString *name;
 
 /*!
  @brief List of lecturers that have ownership over the cases

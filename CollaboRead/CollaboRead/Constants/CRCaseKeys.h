@@ -15,7 +15,7 @@
 #define CR_DB_CASE_SET_OWNERS @"owners"
 
 //Cases
-#define CR_DB_CASE_ID @"caseID"
+#define CR_DB_CASE_ID @"_id"
 #define CR_DB_CASE_SCANS @"scans"
 //#define CR_DB_CASE_IMAGE_LIST @"images" //array
 #define CR_DB_CASE_DATE @"date"
@@ -42,13 +42,13 @@
 #define CR_DB_DRAWING_DATA_IS_END @"isEnd"
 
 //Scans
-#define CR_DB_SCAN_ID @"scanID"
+#define CR_DB_SCAN_ID @"_id"
 #define CR_DB_SCAN_NAME @"name"
 #define CR_DB_SCAN_HAS_DRAWING @"hasDrawing"
 #define CR_DB_SCAN_SLICES @"slices"
 
 //Slices
-#define CR_DB_SLICE_ID @"sliceID"
+#define CR_DB_SLICE_ID @"_id"
 #define CR_DB_SLICE_URL @"url"
 #define CR_DB_SLICE_HAS_DRAWING @"hasDrawing"
 

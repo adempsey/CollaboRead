@@ -27,7 +27,8 @@
 	if (self = [super init]) {
         imgMutex = dispatch_semaphore_create(1);//Semaphore initialized to 1 for use as mutex;
 		self.sliceID = dictionary[CR_DB_SLICE_ID];
-		self.imageURL = [NSURL URLWithString:dictionary[CR_DB_SLICE_URL]];
+		NSString *urlString = [dictionary[CR_DB_SLICE_URL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		self.imageURL = [NSURL URLWithString:urlString];
 		self.hasDrawing = [dictionary[CR_DB_SLICE_HAS_DRAWING] boolValue];
 	}
 	return self;

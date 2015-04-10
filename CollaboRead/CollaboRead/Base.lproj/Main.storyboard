@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aTb-68-nBh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aTb-68-nBh">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
@@ -577,7 +577,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="epf-Xt-EAU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="926.25" y="78.75"/>
+            <point key="canvasLocation" x="1635" y="92"/>
         </scene>
         <!--Select Lecturer View Controller-->
         <scene sceneID="UXg-Oe-v2K">
@@ -639,6 +639,7 @@
                                 <connections>
                                     <outlet property="image" destination="swF-b3-0rd" id="ZMi-e8-yOo"/>
                                     <outlet property="name" destination="Fnd-BM-10I" id="WGp-cP-set"/>
+                                    <segue destination="Vcs-QQ-UTF" kind="show" identifier="LecturerSelected" id="rSt-h9-SiS"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -656,12 +657,49 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="QLl-sf-1P0" id="UJf-sq-ZgM"/>
-                        <segue destination="6Yd-V2-tBb" kind="show" identifier="LecturerSelected" id="mDl-dN-x7E"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WM3-hh-EOK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="165.75" y="785.25"/>
+            <point key="canvasLocation" x="-730" y="819"/>
+        </scene>
+        <!--Select Lecture View Controller-->
+        <scene sceneID="hCD-A6-QxM">
+            <objects>
+                <collectionViewController id="Vcs-QQ-UTF" customClass="CRSelectLectureViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="i5T-fz-lGN">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Rwc-mU-eGm">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LectureCell" id="2VR-dt-XqU" customClass="CRTitledImageCollectionCell">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <size key="customSize" width="200" height="200"/>
+                                <connections>
+                                    <segue destination="6Yd-V2-tBb" kind="show" identifier="StudentSelectedLecture" id="dBo-P8-2NN"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="Vcs-QQ-UTF" id="YOb-K4-b7p"/>
+                            <outlet property="delegate" destination="Vcs-QQ-UTF" id="Mmj-8m-kWO"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CEi-qG-ULI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="217" y="819"/>
         </scene>
         <!--Lecturer Image View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -679,7 +717,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1635.75" y="78.75"/>
+            <point key="canvasLocation" x="2344" y="92"/>
         </scene>
         <!--Student Image View Controller-->
         <scene sceneID="hwY-nN-n1Q">
@@ -697,7 +735,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GHq-CC-0L9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1786.5" y="806.25"/>
+            <point key="canvasLocation" x="1635" y="827"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XRz-Wi-QR6">
@@ -730,12 +768,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="CoA-IA-OLj" kind="relationship" relationship="rootViewController" id="JK5-uj-xnE"/>
+                        <segue destination="X94-r6-r4W" kind="relationship" relationship="rootViewController" id="wnJ-Bz-2w3"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TD0-aA-5RO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="165.75" y="78.75"/>
+            <point key="canvasLocation" x="217" y="92"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="s3B-7I-oaQ">
@@ -755,7 +793,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UAO-pJ-MFg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-506.25" y="801"/>
+            <point key="canvasLocation" x="-1402" y="835"/>
         </scene>
         <!--Select Case View Controller-->
         <scene sceneID="Qj2-xJ-aGK">
@@ -837,7 +875,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VnU-Tb-pE7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="926.25" y="785.25"/>
+            <point key="canvasLocation" x="926" y="819"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6vd-o1-H8P">
@@ -858,22 +896,44 @@
             </objects>
             <point key="canvasLocation" x="-730" y="-1538"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="OyH-zX-Num">
+        <!--Select Lecture View Controller-->
+        <scene sceneID="T7y-zm-A4g">
             <objects>
-                <viewController id="tnG-Ka-Cum" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="nZz-WT-fiG"/>
-                        <viewControllerLayoutGuide type="bottom" id="xbg-Jl-qQb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3yN-as-8r0">
+                <collectionViewController id="X94-r6-r4W" customClass="CRSelectLectureViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="EKf-3M-GFV">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cMX-Tk-xtG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="VsB-CV-pyI">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LectureCell" id="Xhj-WS-u8e" customClass="CRTitledImageCollectionCell">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <size key="customSize" width="200" height="200"/>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="X94-r6-r4W" id="eZg-dN-XUr"/>
+                            <outlet property="delegate" destination="X94-r6-r4W" id="sZ7-BT-oS3"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="RUZ-8S-eok"/>
+                    <connections>
+                        <segue destination="CoA-IA-OLj" kind="show" identifier="LecturerSelectedLecture" id="TlT-h7-E23"/>
+                    </connections>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KUi-Fd-HFX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="926" y="92"/>
         </scene>
     </scenes>
     <resources>
