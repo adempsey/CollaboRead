@@ -11,6 +11,7 @@
 
 #define kHTTP_METHOD_GET @"GET"
 #define kHTTP_METHOD_POST @"POST"
+#define kHTTP_METHOD_PUT @"PUT"
 
 #define kCR_API_QUERY_PARAMETER_USER_EMAIL @"email"
 #define kCR_API_QUERY_PARAMETER_USER_PASSWORD @"password"
@@ -38,10 +39,11 @@
 		if ([method isEqualToString:kHTTP_METHOD_GET]) {
 			resource = [NSString stringWithFormat:@"%@?%@", resource, paramString];
 
-		// HTTP POST requests set the request body as the parameter string
-		} else if ([method isEqualToString:kHTTP_METHOD_POST]) {
+		// HTTP POST/PUT requests set the request body as the parameter string
+		} else if ([method isEqualToString:kHTTP_METHOD_POST] || [method isEqualToString:kHTTP_METHOD_PUT]) {
 			NSData *encodedParams = [paramString dataUsingEncoding:NSUTF8StringEncoding];
 			[request setHTTPBody:encodedParams];
+			[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 		}
 	}
 

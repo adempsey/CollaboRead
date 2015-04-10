@@ -138,6 +138,6 @@
  @param block
  completion block to execute with updated case set retrieved from the API
  */
-- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRLecture*, NSError*))block;
+- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inLecture:(NSString*)setID block:(void (^)(CRLecture*, NSError*))block;
 
 @end

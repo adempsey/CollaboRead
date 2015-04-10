@@ -20,6 +20,7 @@
 
 #define kHTTP_METHOD_GET @"GET"
 #define kHTTP_METHOD_POST @"POST"
+#define kHTTP_METHOD_PUT @"PUT"
 
 #define kCR_API_ENDPOINT_LOGIN kCR_API_ENDPOINT(@"login")
 #define kCR_API_ENDPOINT_REGISTER kCR_API_ENDPOINT(@"register")
@@ -29,7 +30,8 @@
 #define kCR_API_ENDPOINT_LECTURERS kCR_API_ENDPOINT(@"lecturers")
 //#define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"casesets")
 #define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"caseset")
-#define kCR_API_ENDPOINT_SUBMIT_ANSWER kCR_API_ENDPOINT(@"submitanswer")
+//#define kCR_API_ENDPOINT_SUBMIT_ANSWER kCR_API_ENDPOINT(@"submitanswer")
+#define kCR_API_ENDPOINT_SUBMIT_ANSWER kCR_API_ENDPOINT(@"answer")
 
 #define kCR_API_QUERY_PARAMETER_ID @"id"
 #define kCR_API_QUERY_PARAMETER_LECTURER_ID @"lecturerID"
@@ -295,7 +297,7 @@
 
 #pragma mark - Public Submission Methods
 
-- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inSet:(NSString*)setID block:(void (^)(CRLecture*, NSError*))block
+- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inLecture:(NSString*)setID block:(void (^)(CRLecture*, NSError*))block
 {
 	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
 		CRLecture *caseSet;
@@ -307,12 +309,13 @@
 	};
 	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: answer.jsonDictionary];
-	params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS] = ((NSDictionary *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS]).jsonString;
-	params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS] = ((NSArray *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS]).jsonString;
-	params[kCR_API_QUERY_PARAMETER_CASE_SET_ID] = setID;
-	params[kCR_API_QUERY_PARAMETER_CASE_ID] = caseID;
+	params[@"drawings"] = ((NSDictionary *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS]).jsonString;
+	params[@"owners"] = ((NSArray *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS]).jsonString;
+	params[@"lectureID"] = setID;
+	params[@"caseID"] = caseID;
+	params[@"groupName"] = @"group name";
 	
-	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_SUBMIT_ANSWER usingMethod:kHTTP_METHOD_POST withParams:params completionBlock:completionBlock];
+	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_SUBMIT_ANSWER usingMethod:kHTTP_METHOD_PUT withParams:params completionBlock:completionBlock];
 }
 
 @end

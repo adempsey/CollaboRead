@@ -15,7 +15,7 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
 	if (self = [super init]) {
-		self.lectureID = dictionary[CR_DB_CASE_SET_ID];
+		self.lectureID = dictionary[@"lectureID"];
 		self.name = dictionary[@"name"];
 		self.owners = dictionary[CR_DB_CASE_SET_OWNERS];
 		[self setCases:dictionary[CR_DB_CASE_SET_CASE_LIST]];
