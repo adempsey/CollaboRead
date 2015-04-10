@@ -28,10 +28,6 @@
  */
 @property (nonatomic, strong) NSArray *selectedAnswers;
 /*!
- @brief Colors of student answers as dictionary with keys r, g, b
- */
-@property (nonatomic, strong) NSArray *selectedColors;
-/*!
  @brief Button placed within toggle button to allow for a title with the badge
  */
 @property (nonatomic, strong) UIButton *subToggleButton;
@@ -127,20 +123,22 @@
 -(void)drawStudentAnswers
 {
     //Find lines for current slice and scan
-    //TODO: fix color correspondance
     NSString *scanID = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
     NSString *sliceID = ((CRSlice *)((CRScan *)self.caseChosen.scans[self.scanIndex]).slices[self.sliceIndex]).sliceID;
     NSMutableArray *answerLines = [[NSMutableArray alloc] init];
+    NSMutableArray *answerColors = [[NSMutableArray alloc] init];
     [self.selectedAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [((CRAnswer *)obj).drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        CRAnswer *ans = obj;
+        [ans.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             CRAnswerLine *line = obj;
             if ([line.scanID isEqualToString: scanID] && [line.sliceID isEqualToString:sliceID]) {
                 [answerLines addObject:line];
+                [answerColors addObject:ans.answerColor];
                 *stop = true;
             }
         }];
     }];
-    [self.imageMarkup drawPermenantAnswers:answerLines inColors:self.selectedColors];
+    [self.imageMarkup drawPermenantAnswers:answerLines inColors:answerColors];
     
 }
 
@@ -186,13 +184,6 @@
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeAnswerSelection:(NSArray *)answers
 {
     self.selectedAnswers = answers;
-	
-	NSMutableArray *colors = [[NSMutableArray alloc] init];
-	for (id obj in answers) {
-		[colors addObject:studentColors[[self.caseChosen.answers indexOfObject:obj]]];
-	}
-	
-    self.selectedColors = colors;
     [self drawStudentAnswers];
 }
 

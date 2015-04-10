@@ -151,7 +151,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
     //Correspond identifier to color of the drawing
 	if (indexPath.section == kSECTION_STUDENTS) {
-		NSDictionary *color = studentColors[indexPath.row];
+		NSDictionary *color = ((CRAnswer*)self.answerList[indexPath.row]).answerColor;
 		UIImage *dot = [UIImage imageNamed:@"dot.png"];
 		dot = [dot imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		cell.imageView.image = dot;

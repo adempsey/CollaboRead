@@ -39,7 +39,7 @@
 		self.submissionDate = date;
 		self.owners = owners;
 		self.answerName = answerName ? : [CRAccountService sharedInstance].user.name;
-        self.answerColor = [CRAccountService sharedInstance].user.color;
+        self.answerColor = [CRAccountService sharedInstance].user.drawColor;
 	}
 	return self;
 }
@@ -57,6 +57,7 @@
 			 CR_DB_ANSWER_OWNERS: self.owners,
 			 CR_DB_ANSWER_GROUP_NAME: self.answerName,
              CR_DB_ANSWER_SUBMISSION_DATE: [NSString stringWithFormat:@"%@", self.submissionDate],
+             CR_DB_ANSWER_COLOR: self.answerColor,
 			 CR_DB_ANSWER_DRAWINGS: drawingDescriptions};
 }
 
