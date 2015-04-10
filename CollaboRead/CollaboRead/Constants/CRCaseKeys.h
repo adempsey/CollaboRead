@@ -29,6 +29,7 @@
 #define CR_DB_ANSWER_OWNERS @"owners"
 #define CR_DB_ANSWER_GROUP_NAME @"answerName"
 #define CR_DB_ANSWER_DRAWINGS @"drawings"
+#define CR_DB_ANSWER_COLOR @"color"
 #define CR_DB_ANSWER_SUBMISSION_DATE @"submissionDate"
 
 //Drawings

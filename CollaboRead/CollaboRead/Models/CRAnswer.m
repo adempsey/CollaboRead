@@ -39,6 +39,7 @@
 		self.submissionDate = date;
 		self.owners = owners;
 		self.answerName = answerName ? : [CRAccountService sharedInstance].user.name;
+        self.answerColor = [CRAccountService sharedInstance].user.color;
 	}
 	return self;
 }
