@@ -11,7 +11,7 @@
 
 #define kCR_API_ADDRESS @"ws://collaboread.herokuapp.com/"
 
-#define kCR_REFRESH_RATE 1.0
+#define kCR_REFRESH_RATE 5.0
 
 @interface CRAnswerRefreshService ()
 
@@ -110,14 +110,15 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
 {
-	if (message && [message isKindOfClass:[NSString class]]) {
-		if (self.lastUpdate && ![self.lastUpdate isEqualToString:message]) {
-			self.updateBlock();
-			self.lastUpdate = message;
-		} else if (!self.lastUpdate) {
-			self.lastUpdate = message;
-		}
-	}
+	self.updateBlock();
+//	if (message && [message isKindOfClass:[NSString class]]) {
+//		if (self.lastUpdate && ![self.lastUpdate isEqualToString:message]) {
+//			self.updateBlock();
+//			self.lastUpdate = message;
+//		} else if (!self.lastUpdate) {
+//			self.lastUpdate = message;
+//		}
+//	}
 }
 //These make sure the connection is maintained
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket
