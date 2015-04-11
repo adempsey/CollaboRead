@@ -11,6 +11,8 @@
 #import "CRCaseKeys.h"
 #import "CRAccountService.h"
 
+#import "NSDictionary+CRAdditions.h"
+
 @implementation CRAnswer
 
 - (instancetype)initWithDictionary:(NSDictionary*)dictionary
@@ -20,6 +22,9 @@
 		self.owners = dictionary[CR_DB_ANSWER_OWNERS];
 		self.answerName = dictionary[CR_DB_ANSWER_GROUP_NAME] ? : [CRAccountService sharedInstance].user.name;
 		self.submissionDate = dictionary[CR_DB_ANSWER_SUBMISSION_DATE];
+#warning literal key
+		
+		self.answerColor = dictionary[@"colors"];
 		
 		NSMutableArray *drawings = [[NSMutableArray alloc] init];
 		for (NSDictionary *drawing in dictionary[CR_DB_ANSWER_DRAWINGS]) {
@@ -57,7 +62,7 @@
 			 CR_DB_ANSWER_OWNERS: self.owners,
 			 CR_DB_ANSWER_GROUP_NAME: self.answerName,
              CR_DB_ANSWER_SUBMISSION_DATE: [NSString stringWithFormat:@"%@", self.submissionDate],
-             CR_DB_ANSWER_COLOR: self.answerColor,
+             CR_DB_ANSWER_COLOR: self.answerColor.jsonString,
 			 CR_DB_ANSWER_DRAWINGS: drawingDescriptions};
 }
 

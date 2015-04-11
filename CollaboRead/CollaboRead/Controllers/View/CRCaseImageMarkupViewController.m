@@ -555,7 +555,7 @@
         CRAnswerLine *line = obj;
         for (int i = 1; i < [line.data count]; i++) {
             NSDictionary* color = colors[idx];
-            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), [color[@"red"] floatValue], [color[@"green"] floatValue], [color[@"blue"] floatValue], 1.0);
+            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), [color[@"r"] floatValue], [color[@"g"] floatValue], [color[@"b"] floatValue], 1.0);
             CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
             CRAnswerPoint *beg = [line.data objectAtIndex:i - 1];
             if (!beg.isEndPoint) {
