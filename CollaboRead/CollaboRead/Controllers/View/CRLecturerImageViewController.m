@@ -163,20 +163,24 @@
 			
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.studentAnswerTableViewController.answerList = answers;
-                //Highlights may need to change
-                [self.scrollBar reloadData];
 				
 				// Obtain IDs of scans with answers and set highlights
 				NSArray *answerDrawings = [answers valueForKeyPath:@"drawings"];
 				NSMutableArray *answerScans = [[NSMutableArray alloc] init];
+				NSMutableArray *answerSlices = [[NSMutableArray alloc] init];
 				[answerDrawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 					if ([obj isKindOfClass:[NSArray class]]) {
 						NSArray *answerLines = (NSArray *)obj;
+						
 						NSArray *answerLineScans = [answerLines valueForKeyPath:@"scanID"];
 						[answerScans addObjectsFromArray:answerLineScans];
+						
+						NSArray *answerLineSlices = [answerLines valueForKeyPath:@"sliceID"];
+						[answerSlices addObjectsFromArray:answerLineSlices];
 					}
 				}];
 				self.scansMenuController.highlights = answerScans;
+				self.sliceScroller.highlights = answerSlices;
 				
                 [self drawStudentAnswers];
                 if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0 && !self.studentAnswerTableViewController.visible) {
@@ -199,6 +203,27 @@
 	}];
 }
 
+#pragma mark - CRScanMenuViewController Delegate Methods
+
+- (void)scansMenuViewControllerDidSelectScan:(NSString *)scanId
+{
+	[super scansMenuViewControllerDidSelectScan:scanId];
+	//Make sure to adjust badge to notify of answers
+	if ([self.caseChosen answerSlicesForScan:scanId].count > 0 && !self.studentAnswerTableViewController.visible) {
+		self.toggleStudentAnswerTableButton.badgeValue = @"!";
+	} else {
+		self.toggleStudentAnswerTableButton.badgeValue = @"";
+	}
+}
+
+#pragma mark - CRToolPanelViewController Delegate Methods
+
+- (void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didSelectTool:(NSInteger)tool
+{
+	[super toolPanelViewController:toolPanelViewController didSelectTool:tool];
+	[self drawStudentAnswers]; //Make sure answers are drawn after action
+}
+
 #pragma mark - CRStudentAnswerTable Delegate Methods
 
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeAnswerSelection:(NSArray *)answers
@@ -212,40 +237,6 @@
 	
     self.selectedColors = colors;
     [self drawStudentAnswers];
-}
-
-//TODO:MAY NOT BE NEEDED
-- (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase {
-    self.studentAnswers = refreshedCase.answers;
-    self.scansMenuController.highlights = [self.caseChosen answerScans];
-    [self.scrollBar reloadData];
-}
-
-- (void)scansMenuViewControllerDidSelectScan:(NSString *)scanId
-{
-    [super scansMenuViewControllerDidSelectScan:scanId];
-    //Make sure to adjust badge to notify of answers
-    if ([self.caseChosen answerSlicesForScan:scanId].count > 0 && !self.studentAnswerTableViewController.visible) {
-        self.toggleStudentAnswerTableButton.badgeValue = @"!";
-    } else {
-        self.toggleStudentAnswerTableButton.badgeValue = @"";
-    }
-}
-
-- (void)toolPanelViewController:(CRToolPanelViewController *)toolPanelViewController didSelectTool:(NSInteger)tool
-{
-    [super toolPanelViewController:toolPanelViewController didSelectTool:tool];
-    [self drawStudentAnswers]; //Make sure answers are drawn after action
-}
-
-- (UIView*)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view { //Highlight slices with drawings
-    CRCarouselCell *cView = (CRCarouselCell *)[super carousel:carousel viewForItemAtIndex:index reusingView:view];
-    if ([[self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID] containsObject:@(index)]) {
-        cView.isHighlighted = YES;
-    } else {
-        cView.isHighlighted = NO;
-    }
-    return cView;
 }
 
 #pragma mark - CRSideBarViewController Delegate Methods

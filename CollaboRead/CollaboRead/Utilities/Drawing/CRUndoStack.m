@@ -9,6 +9,7 @@
 #import "CRUndoStack.h"
 #import "CRAnswer.h"
 #import "CRAnswerLine.h"
+#import "CRAccountService.h"
 
 @interface CRUndoStack ()
 
@@ -95,6 +96,9 @@
             }
         }];
     }];
+	
+	group = group ? : [[CRAccountService sharedInstance] user].name;
+	
     return [[CRAnswer alloc] initWithData:answerLines submissionDate:[NSDate dateWithTimeIntervalSinceNow:0] owners:owners answerName:group answerID:@"replace_this"];
 }
 

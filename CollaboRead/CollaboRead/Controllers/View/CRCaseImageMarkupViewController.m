@@ -210,7 +210,7 @@
 }
 
 #pragma mark - Image Loading Methods
-- (void)swapImageToScan:(NSUInteger)scanIndex Slice:(NSUInteger)sliceIndex {
+- (void)swapImageToScan:(NSUInteger)scanIndex slice:(NSUInteger)sliceIndex {
     if (self.view) {
         [self zoomOut];
         self.scanIndex = scanIndex;

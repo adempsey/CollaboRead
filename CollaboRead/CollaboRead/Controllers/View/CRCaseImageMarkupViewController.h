@@ -99,6 +99,6 @@
  @param sliceIndex
  Index of slice within specified scan to display image of
  */
-- (void)swapImageToScan:(NSUInteger)scanIndex Slice:(NSUInteger)sliceIndex;
+- (void)swapImageToScan:(NSUInteger)scanIndex slice:(NSUInteger)sliceIndex;
 
 @end

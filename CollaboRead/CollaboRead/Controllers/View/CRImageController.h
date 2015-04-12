@@ -17,13 +17,14 @@
 #import "CRUndoStack.h"
 #import "iCarousel.h"
 #import "CRCaseImageMarkupViewController.h"
+#import "CRSliceScrollerViewController.h"
 
 /*!
  @class CRImageController
  
  @discussion View Controller for analysis of cases
  */
-@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate, iCarouselDataSource, iCarouselDelegate, UIGestureRecognizerDelegate>
+@interface CRImageController : UIViewController <CRToolPanelViewControllerDelegate, CRScansMenuViewControllerDelegate, CRSliceScrollerDelegate, UIGestureRecognizerDelegate>
 
 /*!
  @brief Case to display for analysis
@@ -48,7 +49,7 @@
 /*!
  @brief Scrollbar to handle scrolling through slices
  */
-@property (nonatomic, strong) iCarousel *scrollBar;
+@property (nonatomic, strong) CRSliceScrollerViewController *sliceScroller;
 /*!
  @brief Controller to handle displaying and drawing on image
  */

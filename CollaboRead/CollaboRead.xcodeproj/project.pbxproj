@@ -36,6 +36,7 @@
 		8DB8D7D11AD32F72002F368C /* CRUserSuggestionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB8D7D01AD32F72002F368C /* CRUserSuggestionTableViewController.m */; };
 		8DCD7B4B1A0709B00005BFDA /* CRAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */; };
 		8DCD7B4E1A070BAF0005BFDA /* NSDate+CRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD7B4D1A070BAF0005BFDA /* NSDate+CRAdditions.m */; };
+		8DCF5DE51ADAFA6C00E84B3D /* CRSliceScrollerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF5DE41ADAFA6C00E84B3D /* CRSliceScrollerViewController.m */; };
 		8DCF9CA51A2BEF6A000D42C5 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF9CA41A2BEF6A000D42C5 /* SRWebSocket.m */; };
 		8DCF9CA91A2BF06A000D42C5 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCF9CA81A2BF06A000D42C5 /* libicucore.dylib */; };
 		8DCF9CAB1A2BF071000D42C5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCF9CAA1A2BF071000D42C5 /* CFNetwork.framework */; };
@@ -145,6 +146,8 @@
 		8DCD7B4A1A0709B00005BFDA /* CRAnswer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAnswer.m; sourceTree = "<group>"; };
 		8DCD7B4C1A070BAF0005BFDA /* NSDate+CRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CRAdditions.h"; sourceTree = "<group>"; };
 		8DCD7B4D1A070BAF0005BFDA /* NSDate+CRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CRAdditions.m"; sourceTree = "<group>"; };
+		8DCF5DE31ADAFA6C00E84B3D /* CRSliceScrollerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSliceScrollerViewController.h; sourceTree = "<group>"; };
+		8DCF5DE41ADAFA6C00E84B3D /* CRSliceScrollerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSliceScrollerViewController.m; sourceTree = "<group>"; };
 		8DCF9CA31A2BEF6A000D42C5 /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
 		8DCF9CA41A2BEF6A000D42C5 /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
 		8DCF9CA71A2BEF89000D42C5 /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
@@ -538,6 +541,8 @@
 		BBA0C5991A894201009E53EC /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				8DCF5DE31ADAFA6C00E84B3D /* CRSliceScrollerViewController.h */,
+				8DCF5DE41ADAFA6C00E84B3D /* CRSliceScrollerViewController.m */,
 				8D3916FC1A8D52E300B7523F /* CRSideBarViewController.h */,
 				8D3916FD1A8D52E300B7523F /* CRSideBarViewController.m */,
 				8DD360151A0B366200E572D1 /* CRToolPanelViewController.h */,
@@ -779,6 +784,7 @@
 				BBA2EBD819EEE54B0093044E /* CRTitledImageCollectionCell.m in Sources */,
 				8DAA7BEE1AD72DD600A7F02A /* CRSelectLectureViewController.m in Sources */,
 				BBA0C59D1A89427F009E53EC /* CRImageScrollBarController.m in Sources */,
+				8DCF5DE51ADAFA6C00E84B3D /* CRSliceScrollerViewController.m in Sources */,
 				8DA5DE2219E6064B002EA706 /* main.m in Sources */,
 				8D9830B91A74480000FC2BE1 /* CRAnswerLine.m in Sources */,
 				BBB97BD21A967A80007715B1 /* CRCarouselCell.m in Sources */,
