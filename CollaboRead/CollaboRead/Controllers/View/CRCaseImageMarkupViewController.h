@@ -36,6 +36,8 @@
  */
 @property(nonatomic, strong) CRCase *caseChosen;
 
+@property (nonatomic, readwrite, strong) NSString *lectureID;
+
 /*!
  @brief Currently active markup tool
  */
@@ -71,7 +73,7 @@
  @param colors
  Colors to draw answers in. It is an unchecked runtime error for it to have a different length from answers
  */
-- (void)drawPermenantAnswers:(NSArray *)answers inColors:(NSArray *)colors;
+- (void)drawPermanentAnswers:(NSArray *)answers inColors:(NSArray *)colors;
 
 /*!
  Completely zooms out current image in an animated manner

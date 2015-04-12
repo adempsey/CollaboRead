@@ -40,7 +40,7 @@
 /*!
  @brief Identifier of caseSet for use when submitting/retrieving answers
  */
-@property (nonatomic, strong) NSString *caseGroup;
+@property (nonatomic, strong) NSString *lectureID;
 /*!
  @brief View controller to handle swaping between scans
  */

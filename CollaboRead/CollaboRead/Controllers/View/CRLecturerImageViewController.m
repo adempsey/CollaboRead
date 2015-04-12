@@ -44,6 +44,8 @@
  */
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerTableViewController;
 
+@property (nonatomic, readwrite, strong) NSArray *studentAnswers;
+
 /*!
  Handles acquistion of new answers
  */
@@ -60,7 +62,7 @@
 - (void)loadView {
     [super loadView];
     
-    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:self.caseChosen.answers andScanID:((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID];
+    self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:self.studentAnswers andScanID:((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID];
     
     self.studentAnswerTableViewController.delegate = self;
     self.studentAnswerTableViewController.visible = NO;
@@ -140,18 +142,21 @@
             }
         }];
     }];
-    [self.imageMarkup drawPermenantAnswers:answerLines inColors:self.selectedColors];
+    [self.imageMarkup drawPermanentAnswers:answerLines inColors:self.selectedColors];
     
 }
 
 - (void)refreshAnswers
 {
-	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array, NSError *error) {
+//	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array, NSError *error) {
+	[[CRAPIClientService sharedInstance] retrieveAnswersForCase:self.caseChosen.caseID inLecture:self.lectureID block:^(NSArray *array, NSError *error) {
 		if (!error) {
-			CRLecture *selectedCaseSet = array[self.indexPath.section];
-			self.caseChosen.answers = ((CRCase *)[selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row]).answers;
+//			CRLecture *selectedCaseSet = array[self.indexPath.section];
+//			self.studentAnswers = ((CRCase *)[selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row]).answers;
+			NSLog(@"%@", array);
+			self.studentAnswers = array;
 			
-			NSArray *answers = self.caseChosen.answers;
+			NSArray *answers = self.studentAnswers;
             NSArray *scanHighlights = [self.caseChosen answerScans];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.studentAnswerTableViewController.answerList = answers;
@@ -189,7 +194,7 @@
 	
 	NSMutableArray *colors = [[NSMutableArray alloc] init];
 	for (id obj in answers) {
-		[colors addObject:studentColors[[self.caseChosen.answers indexOfObject:obj]]];
+		[colors addObject:studentColors[[self.studentAnswers indexOfObject:obj]]];
 	}
 	
     self.selectedColors = colors;
@@ -198,7 +203,7 @@
 
 //TODO:MAY NOT BE NEEDED
 -(void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase {
-    self.caseChosen.answers = refreshedCase.answers;
+    self.studentAnswers = refreshedCase.answers;
     self.scansMenuController.highlights = [self.caseChosen answerScans];
     [self.scrollBar reloadData];
 }

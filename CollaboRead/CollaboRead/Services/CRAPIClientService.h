@@ -124,6 +124,10 @@
 
 - (void)retrieveLecturesWithLecturer:(NSString*)lecturerID block:(void (^)(NSArray*, NSError*))block;
 
+- (void)retrieveAnswersForCase:(NSString*)caseID inLecture:(NSString*)lectureID block:(void (^)(NSArray*, NSError*))block;
+
+- (void)retrieveAnswerForCase:(NSString*)caseID inLecture:(NSString*)lectureID withOwner:(NSString*)ownerID block:(void (^)(CRAnswer*, NSError*))block;
+
 #pragma mark - Submission Methods
 
 /*!

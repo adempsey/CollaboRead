@@ -32,6 +32,7 @@
 #define kCR_API_ENDPOINT_CASE_SET kCR_API_ENDPOINT(@"caseset")
 //#define kCR_API_ENDPOINT_SUBMIT_ANSWER kCR_API_ENDPOINT(@"submitanswer")
 #define kCR_API_ENDPOINT_SUBMIT_ANSWER kCR_API_ENDPOINT(@"answer")
+#define kCR_API_ENDPOINT_ANSWERS kCR_API_ENDPOINT(@"answer")
 
 #define kCR_API_QUERY_PARAMETER_ID @"id"
 #define kCR_API_QUERY_PARAMETER_LECTURER_ID @"lecturerID"
@@ -246,6 +247,43 @@
 	//	NSDictionary *params = @{kCR_API_QUERY_PARAMETER_LECTURER_ID: lecturerID};
 	NSDictionary *params = @{@"lecturerID": lecturerID};
 	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_CASE_SET usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
+}
+
+- (void)retrieveAnswersForCase:(NSString*)caseID inLecture:(NSString*)lectureID block:(void (^)(NSArray*, NSError*))block
+{
+	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
+		NSMutableArray *answerList = [[NSMutableArray alloc] init];
+		
+		if (!error) {
+			NSArray *retrievedAnswers = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+			[retrievedAnswers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+				if ([obj isKindOfClass:[NSDictionary class]]) {
+					CRAnswer *answer = [[CRAnswer alloc] initWithDictionary:obj];
+					[answerList addObject:answer];
+				}
+			}];
+		}
+		
+		block(answerList, error);
+	};
+	
+	NSDictionary *params = @{@"lectureID": lectureID, @"caseID": caseID};
+	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_ANSWERS usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
+}
+
+- (void)retrieveAnswerForCase:(NSString*)caseID inLecture:(NSString*)lectureID withOwner:(NSString*)ownerID block:(void (^)(CRAnswer*, NSError*))block
+{
+	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
+		CRAnswer *answer;
+		if (!error && json.length > 0) {
+			NSDictionary *answerData = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+			 answer = [[CRAnswer alloc] initWithDictionary:answerData];
+		}
+		block(answer, error);
+	};
+	
+	NSDictionary *params = @{@"lectureID": lectureID, @"caseID": caseID, @"ownerID": ownerID};
+	[[CRNetworkingService sharedInstance] performRequestForResource:kCR_API_ENDPOINT_ANSWERS usingMethod:kHTTP_METHOD_GET withParams:params completionBlock:completionBlock];
 }
 
 #pragma mark - Private API Interface Methods

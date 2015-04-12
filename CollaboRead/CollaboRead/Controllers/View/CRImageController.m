@@ -15,9 +15,7 @@
 #import "CRAnswer.h"
 #import "CRScan.h"
 #import "CRSlice.h"
-#import "CRAPIClientService.h"
 #import "CRViewSizeMacros.h"
-#import "CRDrawingPreserver.h"
 #import "CRUserKeys.h"
 #import "CRCarouselCell.h"
 #import "CRColors.h"
@@ -81,6 +79,7 @@
     
     self.imageMarkup = [[CRCaseImageMarkupViewController alloc] init];
     self.imageMarkup.maxFrame = CGRectMake(kToolPanelTableViewWidth, CR_TOP_BAR_HEIGHT, (CR_LANDSCAPE_FRAME).size.width - 2 * kToolPanelTableViewWidth, (CR_LANDSCAPE_FRAME).size.height - (CR_TOP_BAR_HEIGHT) - kCR_CAROUSEL_CELL_HEIGHT - 20);
+	self.imageMarkup.lectureID = self.lectureID;
     self.imageMarkup.caseChosen = self.caseChosen;
     self.imageMarkup.selectedTool = kCR_PANEL_TOOL_PEN; //In loadview because needed for loading imageMarkup view
     [self addChildViewController:self.imageMarkup];

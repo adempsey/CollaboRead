@@ -13,6 +13,7 @@
 #import "CRToolPanelViewController.h"
 #import "CRAnswerPoint.h"
 #import "CRAccountService.h"
+#import "CRAPIClientService.h"
 #import "CRDrawingPreserver.h"
 #import "CRSlice.h"
 #import "CRScan.h"
@@ -180,35 +181,32 @@
     self.lineBlueComp = 0;
     self.lineGreenComp = 0;
     
-    lastPoint = nil;
-    
+	lastPoint = nil;
+
     //Try to load drawings from previous viewing during session or make new undo stack
     self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID];
     if (!self.undoStack) {
         if ([[CRAccountService sharedInstance].user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
-            NSArray *answers = self.caseChosen.answers;
-            NSUInteger idx = [answers indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                return [((CRAnswer *)obj).owners indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                    return [(NSString *)obj isEqualToString:[CRAccountService sharedInstance].user.userID];
-                }] != NSNotFound;
-            }];
-            if(idx != NSNotFound) {
-                CRAnswer *answer = answers[idx];
-                self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
-            }
-        }
-        if (!self.undoStack) {
-            self.undoStack = [[CRUndoStack alloc] init];
-        }
-        [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
+			
+			NSString *caseID = self.caseChosen.caseID;
+			NSString *lectureID = self.lectureID;
+			NSString *ownerID = [[CRAccountService sharedInstance] user].userID;
+			
+			[[CRAPIClientService sharedInstance] retrieveAnswerForCase:caseID inLecture:lectureID withOwner:ownerID block:^(CRAnswer *answer, NSError *error) {
+				if (!error && answer) {
+					self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
+				} else {
+					self.undoStack = [[CRUndoStack alloc] init];
+				}
+				
+				[[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
+				
+				CRScan *scan = self.caseChosen.scans[self.scanIndex];
+				self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
+				[self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+			}];
+		}
     }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    CRScan *scan = self.caseChosen.scans[self.scanIndex];
-    self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
-    [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
 }
 
 #pragma mark - Image Loading Methods
@@ -545,7 +543,7 @@
 }
 
 #pragma mark - Permanent Drawings
-- (void)drawPermenantAnswers:(NSArray *)answers inColors:(NSArray *)colors {
+- (void)drawPermanentAnswers:(NSArray *)answers inColors:(NSArray *)colors {
     UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
     [answers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -566,11 +564,6 @@
     self.permanentDrawView.image = UIGraphicsGetImageFromCurrentImageContext();
     [self.permanentDrawView setAlpha:1.0];
     UIGraphicsEndImageContext();
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

@@ -136,9 +136,9 @@
 	CRImageController *nextController = segue.destinationViewController;
     NSArray *caseArray = [self.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)];
 	CRCase *selectedCase = caseArray[selectedPath.row];
-    
+
+	nextController.lectureID = self.lectureID;
 	nextController.caseChosen = selectedCase;
-	nextController.caseGroup = self.lectureID;
     nextController.indexPath = selectedPath;
 }
 

@@ -17,6 +17,7 @@
 #import "CRColors.h"
 #import "CRAnswerLine.h"
 #import "CRScan.h"
+#import "CRDrawingPreserver.h"
 
 #define kCR_COLLABORATOR_TOGGLE_SHOW @"Show Collaborators"
 #define kCR_COLLABORATOR_TOGGLE_HIDE @"Hide Collaborators"
@@ -40,11 +41,7 @@
  Button that triggered method
  */
 -(void)submitAnswer:(UIButton *)submitButton;
-/*!
- Method to determine if an answer was already submitted for the scan shown
- @return Yes if there was an answer already submitted, no otherwise
- */
-- (BOOL)userHasPreviouslySubmittedAnswer;
+
 @end
 
 @implementation CRStudentImageViewController
@@ -65,11 +62,7 @@
     self.submitButton = [[CRSubmitButton alloc] init];
     [self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
     [self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
-    
-    if ([self userHasPreviouslySubmittedAnswer]) {
-        self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
-    }
-    
+	
     [super.view addSubview:self.submitButton];
     
     self.collaboratorsView = [[CRAddCollaboratorsViewController alloc] init];
@@ -82,17 +75,6 @@
     self.view = super.view;
 }
 
-- (void)setScanIndex:(NSUInteger)scanIndex {
-    [super setScanIndex:scanIndex];
-    if (self.view) {
-        self.submitButton.buttonState = [self userHasPreviouslySubmittedAnswer] ?CR_SUBMIT_BUTTON_STATE_RESUBMIT : CR_SUBMIT_BUTTON_STATE_SUBMIT;
-    }
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-
 -(void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
@@ -101,7 +83,7 @@
     //Prepare and send answer
 	CRAnswer *answer = [self.imageMarkup.undoStack answersFromStackForOwners:students inGroup:[CRCollaboratorList sharedInstance].groupName];
 
-    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inLecture:self.caseGroup block:^(CRLecture *block, NSError *error) {//Provide submission success feedback
+    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inLecture:self.lectureID block:^(CRLecture *block, NSError *error) {//Provide submission success feedback
 		if (!error) {
 			self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUCCESS;
 		} else {
@@ -115,28 +97,6 @@
 			[self presentViewController:alertController animated:YES completion:nil];
 		}
 	}];
-}
-
-- (BOOL)userHasPreviouslySubmittedAnswer
-{
-	BOOL __block hasSubmitted = NO;
-    NSString *scanId = ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID;
-	[self.caseChosen.answers enumerateObjectsUsingBlock:^(id answerObj, NSUInteger idx, BOOL *stop) {
-		if ([answerObj isKindOfClass:[CRAnswer class]]) {
-			CRAnswer *answer = (CRAnswer*)answerObj;
-			
-            if ([answer.owners containsObject:[CRAccountService sharedInstance].user.userID]) {
-                [answer.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    if ([((CRAnswerLine *)obj).scanID isEqualToString:scanId]) {
-                        hasSubmitted = YES;
-                        *stop = YES;
-                    }
-                }];
-				*stop = YES;
-			}
-		}
-	}];
-	return hasSubmitted;
 }
 
 #pragma mark - CRSideBarViewController Delegate Methods
