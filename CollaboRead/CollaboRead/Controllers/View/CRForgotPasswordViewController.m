@@ -46,7 +46,10 @@
  @brief Button to dismiss form upon completion
  */
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
-
+/*!
+ @brief Button to exit without submitting request
+ */
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
 /*!
  Dismisses view controller
  @param sender
@@ -83,6 +86,8 @@
 - (IBAction)reset:(id)sender
 {
 	[self.view endEditing:YES];
+    
+    self.cancelButton.enabled = NO;
 	
 	self.resetButton.userInteractionEnabled = NO;
 	self.resetButton.hidden = YES;
@@ -92,6 +97,7 @@
 	
 	[[CRAPIClientService sharedInstance] resetPasswordForAccountWithEmail:self.emailTextField.text block:^(NSError *error) {
 		if (error) {
+            self.cancelButton.enabled = YES;
 			self.activityIndicator.hidden = YES;
 			[self.activityIndicator stopAnimating];
 			
