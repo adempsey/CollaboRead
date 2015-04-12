@@ -157,21 +157,27 @@
 
 - (void)refreshAnswers
 {
-//	[[CRAPIClientService sharedInstance] retrieveCaseSetsWithLecturer:self.lecturerID block:^(NSArray *array, NSError *error) {
-	[[CRAPIClientService sharedInstance] retrieveAnswersForCase:self.caseChosen.caseID inLecture:self.lectureID block:^(NSArray *array, NSError *error) {
+	[[CRAPIClientService sharedInstance] retrieveAnswersForCase:self.caseChosen.caseID inLecture:self.lectureID block:^(NSArray *answers, NSError *error) {
 		if (!error) {
-//			CRLecture *selectedCaseSet = array[self.indexPath.section];
-//			self.studentAnswers = ((CRCase *)[selectedCaseSet.cases.allValues sortedArrayUsingSelector:@selector(compareDates:)][self.indexPath.row]).answers;
-			NSLog(@"%@", array);
-			self.studentAnswers = array;
+			self.studentAnswers = answers;
 			
-			NSArray *answers = self.studentAnswers;
-            NSArray *scanHighlights = [self.caseChosen answerScans];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.studentAnswerTableViewController.answerList = answers;
                 //Highlights may need to change
                 [self.scrollBar reloadData];
-                self.scansMenuController.highlights = scanHighlights;
+				
+				// Obtain IDs of scans with answers and set highlights
+				NSArray *answerDrawings = [answers valueForKeyPath:@"drawings"];
+				NSMutableArray *answerScans = [[NSMutableArray alloc] init];
+				[answerDrawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+					if ([obj isKindOfClass:[NSArray class]]) {
+						NSArray *answerLines = (NSArray *)obj;
+						NSArray *answerLineScans = [answerLines valueForKeyPath:@"scanID"];
+						[answerScans addObjectsFromArray:answerLineScans];
+					}
+				}];
+				self.scansMenuController.highlights = answerScans;
+				
                 [self drawStudentAnswers];
                 if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0 && !self.studentAnswerTableViewController.visible) {
                     self.toggleStudentAnswerTableButton.badgeValue = @"!"; //New answers should trigger badge if answer table isn't currently visible
@@ -193,9 +199,8 @@
 	}];
 }
 
-
-
 #pragma mark - CRStudentAnswerTable Delegate Methods
+
 - (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTable didChangeAnswerSelection:(NSArray *)answers
 {
     self.selectedAnswers = answers;

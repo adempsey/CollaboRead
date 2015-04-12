@@ -42,7 +42,8 @@
 
 static NSString * const reuseIdentifier = @"scanCell";
 
--(instancetype)initWithScans:(NSArray *)scans {
+- (instancetype)initWithScans:(NSArray *)scans
+{
     self = [super init];
     if (self) {
         self.scans = scans;
@@ -51,7 +52,9 @@ static NSString * const reuseIdentifier = @"scanCell";
     return self;
 }
 
-- (void)loadView {
+- (void)loadView
+{
+	[super loadView];
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = CR_COLOR_TINT;
     view.clipsToBounds = YES;
@@ -73,31 +76,36 @@ static NSString * const reuseIdentifier = @"scanCell";
     self.view = view;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     if (self.scans == nil) {
         self.scans = [[NSArray alloc] init];
     }
 }
 
-- (void)setHighlights:(NSArray *)highlights {
+- (void)setHighlights:(NSArray *)highlights
+{
     _highlights = highlights;
     [self.collectionView reloadData];
 }
 
-- (void)setScans:(NSArray *)scans {
+- (void)setScans:(NSArray *)scans
+{
     _scans = scans;
     [self.collectionView reloadData];
 }
 
-- (void)setViewFrame:(CGRect)frame animated:(BOOL)animated {
+- (void)setViewFrame:(CGRect)frame animated:(BOOL)animated
+{
     [self.activityIndicator startAnimating];
     self.activityIndicator.frame = CGRectMake((frame.size.width - KActivitySize)/2, (frame.size.width - KActivitySize)/2, KActivitySize, KActivitySize);
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:NSStringFromCGRect(frame), @"frame", [NSNumber numberWithBool:animated], @"animated", nil];
     [self performSelector:@selector(changeFrame:) withObject:params afterDelay:0.01];
 }
 
--(void)changeFrame:(NSDictionary *) params {
+- (void)changeFrame:(NSDictionary *)params
+{
     CGRect frame = CGRectFromString(params[@"frame"]);
     BOOL animated = [params[@"animated"] boolValue];
     BOOL shouldReloadFirst = frame.size.width == 0 || frame.size.height == 0;
@@ -116,33 +124,32 @@ static NSString * const reuseIdentifier = @"scanCell";
     }];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark <UICollectionViewDataSource>
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
     return 1;
 }
 
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
     return self.view.frame.size.width == 0 ? 0 : [self.scans count];
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
     CRTitledImageCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
-    // Configure the cell
-    cell.name.text = ((CRScan *)self.scans[indexPath.row]).name;
-    cell.image.image = ((CRSlice *)((CRScan *)self.scans[indexPath.row]).slices[0]).image;
-    if ([self.highlights containsObject:[NSNumber numberWithInteger:indexPath.row]]) {
+	CRScan *scan = (CRScan *)self.scans[indexPath.row];
+	
+    cell.name.text = scan.name;
+    cell.image.image = ((CRSlice *)scan.slices[0]).image;
+	
+    if ([self.highlights containsObject:scan.scanID]) {
         cell.layer.borderColor = [CR_COLOR_ANSWER_INDICATOR CGColor];
         cell.layer.borderWidth = 3.0;
-    }
-    else {
+    } else {
         cell.layer.borderWidth = 0;
     }
     return cell;
@@ -150,11 +157,12 @@ static NSString * const reuseIdentifier = @"scanCell";
 
 #pragma mark <UICollectionViewDelegate>
 
-- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedIndex = indexPath;
     [self.delegate scansMenuViewControllerDidSelectScan:((CRScan *)self.scans[indexPath.row]).scanID];
 }
+
 #pragma mark – UICollectionViewDelegateFlowLayout
 //Cells sized to fit 3 per row pixels
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*) collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -170,7 +178,6 @@ static NSString * const reuseIdentifier = @"scanCell";
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-
 {
     return 15;
 }
