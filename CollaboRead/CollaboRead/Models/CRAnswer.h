@@ -21,6 +21,16 @@
 @property (nonatomic, readwrite, strong) NSString *answerID;
 
 /*!
+ @brief ID number of the lecture to which the answer was submitted
+ */
+@property (nonatomic, readwrite, strong) NSString *lectureID;
+
+/*!
+ @brief ID number of the case to which the answer was submitted
+ */
+@property (nonatomic, readwrite, strong) NSString *caseID;
+
+/*!
  @brief Array of CRAnswerLine objects containing drawing data
  */
 @property (nonatomic, readwrite, strong) NSArray *drawings;
@@ -39,7 +49,7 @@
  @brief The name displayed if lecturer chooses to reveal identities behind answers
 If not explicitly set, default's to the current user's name
  */
-@property (nonatomic, readwrite, strong) NSString *answerName;
+@property (nonatomic, readwrite, strong) NSString *groupName;
 
 /*!
  Initializes CRAnswer object with data from the supplied dictionary

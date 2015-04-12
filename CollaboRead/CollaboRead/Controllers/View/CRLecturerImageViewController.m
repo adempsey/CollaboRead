@@ -59,7 +59,8 @@
 //TODO:correspond socket to case changes
 @implementation CRLecturerImageViewController
 
-- (void)loadView {
+- (void)loadView
+{
     [super loadView];
     
     self.studentAnswerTableViewController = [[CRStudentAnswerTableViewController alloc] initWithAnswerList:self.studentAnswers andScanID:((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID];
@@ -79,7 +80,8 @@
     self.view = super.view;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 	self.view.autoresizesSubviews = NO;
 
@@ -90,7 +92,8 @@
     self.toggleStudentAnswerTableButton.badgeOriginX = 170;
 }
 
--(void)viewWillAppear:(BOOL)animated {
+-(void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
         self.toggleStudentAnswerTableButton.badgeValue = @"!";
@@ -101,32 +104,38 @@
     }];
     
     [[CRAnswerRefreshService sharedInstance] initiateConnectionWithCase:self.caseChosen];
+	
+	[self refreshAnswers];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated
+{
 	[super viewWillDisappear:animated];
 	[[CRAnswerRefreshService sharedInstance] disconnect];
 }
 
 //Custom setter to handle image change
-- (void)setSliceIndex:(NSUInteger)sliceIndex {
+- (void)setSliceIndex:(NSUInteger)sliceIndex
+{
     [super setSliceIndex:sliceIndex];
     [self drawStudentAnswers];
 }
 
 //Custom setter to handle image change
-- (void)setScanIndex:(NSUInteger)scanIndex {
+- (void)setScanIndex:(NSUInteger)scanIndex
+{
     [super setScanIndex:scanIndex];
     self.studentAnswerTableViewController.scanId = ((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID; //Notify answer table of changes
 }
 
 //Custom setter to handle image change
-- (void)setCaseChosen:(CRCase *)caseChosen {
+- (void)setCaseChosen:(CRCase *)caseChosen
+{
     [super setCaseChosen:caseChosen];
     self.scansMenuController.highlights = [self.caseChosen answerScans];
 }
 
--(void)drawStudentAnswers
+- (void)drawStudentAnswers
 {
     //Find lines for current slice and scan
     //TODO: fix color correspondance
@@ -180,7 +189,6 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self presentViewController:alertController animated:YES completion:nil];
             });
-
 		}
 	}];
 }
@@ -202,13 +210,13 @@
 }
 
 //TODO:MAY NOT BE NEEDED
--(void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase {
+- (void)studentAnswerTableView:(CRStudentAnswerTableViewController *)studentAnswerTableView didRefresh:(CRCase *)refreshedCase {
     self.studentAnswers = refreshedCase.answers;
     self.scansMenuController.highlights = [self.caseChosen answerScans];
     [self.scrollBar reloadData];
 }
 
--(void) scansMenuViewControllerDidSelectScan:(NSString *)scanId
+- (void)scansMenuViewControllerDidSelectScan:(NSString *)scanId
 {
     [super scansMenuViewControllerDidSelectScan:scanId];
     //Make sure to adjust badge to notify of answers
@@ -225,7 +233,7 @@
     [self drawStudentAnswers]; //Make sure answers are drawn after action
 }
 
--(UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view { //Highlight slices with drawings
+- (UIView*)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view { //Highlight slices with drawings
     CRCarouselCell *cView = (CRCarouselCell *)[super carousel:carousel viewForItemAtIndex:index reusingView:view];
     if ([[self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID] containsObject:@(index)]) {
         cView.isHighlighted = YES;

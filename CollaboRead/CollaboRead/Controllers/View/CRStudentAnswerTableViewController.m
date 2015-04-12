@@ -218,7 +218,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	} else if (indexPath.section == kSECTION_STUDENTS) {
 
 		if (self.shouldShowStudentNames) {
-			return ((CRAnswer*)self.answerList[indexPath.row]).answerName;
+			return ((CRAnswer*)self.answerList[indexPath.row]).groupName;
 
 		} else {
 			return [NSString stringWithFormat:@"Answer %ld", (long) indexPath.row + 1];

@@ -17,8 +17,11 @@
 {
 	if (self = [super init]) {
 		self.answerID = dictionary[CR_DB_ANSWER_ID];
+#warning key literals
+		self.lectureID = dictionary[@"lectureID"];
+		self.caseID = dictionary[@"caseID"];
 		self.owners = dictionary[CR_DB_ANSWER_OWNERS];
-		self.answerName = dictionary[CR_DB_ANSWER_GROUP_NAME] ? : [CRAccountService sharedInstance].user.name;
+		self.groupName = dictionary[CR_DB_ANSWER_GROUP_NAME];
 		self.submissionDate = dictionary[CR_DB_ANSWER_SUBMISSION_DATE];
 		
 		NSMutableArray *drawings = [[NSMutableArray alloc] init];
@@ -38,7 +41,7 @@
 		self.drawings = answerData;
 		self.submissionDate = date;
 		self.owners = owners;
-		self.answerName = answerName ? : [CRAccountService sharedInstance].user.name;
+		self.groupName = answerName;
 	}
 	return self;
 }
@@ -54,7 +57,7 @@
 
 	return @{CR_DB_ANSWER_ID: self.answerID,
 			 CR_DB_ANSWER_OWNERS: self.owners,
-			 CR_DB_ANSWER_GROUP_NAME: self.answerName,
+			 CR_DB_ANSWER_GROUP_NAME: self.groupName,
              CR_DB_ANSWER_SUBMISSION_DATE: [NSString stringWithFormat:@"%@", self.submissionDate],
 			 CR_DB_ANSWER_DRAWINGS: drawingDescriptions};
 }
