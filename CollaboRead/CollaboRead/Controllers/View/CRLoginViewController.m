@@ -108,7 +108,6 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 				
 			} else if([user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
 				UINavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:@"lectNavController"];
-                [[CRCollaboratorList sharedInstance] setOwner];
 				newController = navController;
 			}
 
