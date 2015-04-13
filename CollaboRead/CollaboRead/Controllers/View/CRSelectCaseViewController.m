@@ -51,8 +51,6 @@
 	
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
-	self.navigationItem.title = self.lecturer.name;
-	
 	[self.activityIndicator stopAnimating];
 	[self.collectionView reloadData];
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:@"CaseCell"];
