@@ -8,6 +8,7 @@
 
 #import "CRAccountService.h"
 #import "CRDrawingPreserver.h"
+#import "CRCollaboratorList.h"
 
 @implementation CRAccountService
 
@@ -21,11 +22,17 @@
 	return sharedInstance;
 }
 
+-(void)setUser:(CRUser *)user {
+    _user = user;
+    [[CRCollaboratorList sharedInstance] setOwner];
+}
+
 - (void)logout
 {
 	self.user = nil;
 	self.password = nil;
 	[[CRDrawingPreserver sharedInstance] clearDrawings];
+    [[CRCollaboratorList sharedInstance] clearCollaborators];
 }
 
 @end
