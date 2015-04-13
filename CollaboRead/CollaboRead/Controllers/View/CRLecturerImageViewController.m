@@ -17,6 +17,7 @@
 #import "CRErrorAlertService.h"
 #import "CRCarouselCell.h"
 #import "CRColors.h"
+#import "CRNotifications.h"
 #import "BBBadgeBarButtonItem.h"
 
 #define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Answer Table"
@@ -98,12 +99,9 @@
     if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0) {
         self.toggleStudentAnswerTableButton.badgeValue = @"!";
     }
-    //Open for refresh
-    [[CRAnswerRefreshService sharedInstance] setUpdateBlock:^{
-        [self refreshAnswers];
-    }];
-    
-    [[CRAnswerRefreshService sharedInstance] initiateConnectionWithCase:self.caseChosen];
+	
+    [[CRAnswerRefreshService sharedInstance] initiateConnectionWithLecture:self.lectureID];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAnswers) name:CR_NOTIFICATION_REFRESH_ANSWERS object:nil];
 	
 	[self refreshAnswers];
 }

@@ -19,20 +19,17 @@
 + (CRAnswerRefreshService*)sharedInstance;
 
 /*!
- @brief Block of actions to perform upon receiving notice of an update
+ @brief Lecture to receive updates about
  */
-@property (nonatomic, readwrite, copy) void (^updateBlock)();
-/*!
- @brief Case to receive updates about
- */
-@property (nonatomic, readwrite, strong) CRCase *currentCase;
+@property (nonatomic, readwrite, strong) NSString *lectureID;
 
 /*!
  Opens socket connection for the given case, also setting currentCase
- @param currentCase
- Case to receive updates for
+ @param lectureID
+ Lecture to receive updates about
  */
-- (void)initiateConnectionWithCase:(CRCase*)currentCase;
+- (void)initiateConnectionWithLecture:(NSString*)lectureID;
+
 /*!
  Ends socket connection for a case
  */

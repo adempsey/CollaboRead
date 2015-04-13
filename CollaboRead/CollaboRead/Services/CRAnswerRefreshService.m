@@ -8,10 +8,14 @@
 
 #import "CRAnswerRefreshService.h"
 #import "CRAnswer.h"
+#import "CRNotifications.h"
 
 #define kCR_API_ADDRESS @"ws://collaboread.herokuapp.com/"
 
-#define kCR_REFRESH_RATE 1.0
+#define kCR_API_WS_MESSAGE_UPDATE @"UPDATE"
+#define kCR_API_WS_MESSAGE_INTRO @"INTRO"
+
+#define kCR_REFRESH_RATE 3.0
 
 @interface CRAnswerRefreshService ()
 
@@ -19,14 +23,12 @@
  @brief Socket used for the connection
  */
 @property (nonatomic, readwrite, strong) SRWebSocket *socket;
+
 /*!
  @brief Whether the connection is open
  */
-@property (nonatomic, readwrite, assign) BOOL open;
-/*!
- @brief Last  message recieved
- */
-@property (nonatomic, readwrite, strong) NSString *lastUpdate;
+@property (nonatomic, readonly, assign) BOOL open;
+
 /*!
  @brief Timer to handle checks to maintain connection
  */
@@ -36,10 +38,12 @@
  Recovers connection to current case, used when the socket fails
  */
 - (void)recoverConnection;
+
 /*!
  Pings the socket, used to check presence of a connection
  */
 - (void)ping;
+
 @end
 
 @implementation CRAnswerRefreshService
@@ -54,12 +58,9 @@
 	return sharedInstance;
 }
 
-- (instancetype)init
+- (BOOL)open
 {
-	if (self = [super init]) {
-		self.open = NO;
-	}
-	return self;
+	return self.socket.readyState == SR_OPEN;
 }
 
 - (void)dealloc
@@ -73,23 +74,21 @@
 	_refreshTimer = refreshTimer;
 }
 
-- (void)initiateConnectionWithCase:(CRCase*)currentCase
+- (void)initiateConnectionWithLecture:(NSString *)lectureID
 {
 	if (!self.open) {
-		self.currentCase = currentCase;
+		self.lectureID = lectureID;
 		NSURL *url = [NSURL URLWithString:kCR_API_ADDRESS];
 		NSURLRequest *urlRequest = [[NSURLRequest alloc] initWithURL:url];
 		self.socket = [[SRWebSocket alloc] initWithURLRequest:urlRequest];
 		self.socket.delegate = self;
 		[self.socket open];
-		self.open = YES;
 	}
 }
 
 - (void)disconnect
 {
 	[self.refreshTimer invalidate];
-	self.open = NO;
 	[self.socket close];
 	self.socket = nil;
 }
@@ -97,29 +96,29 @@
 - (void)ping
 {
 	if (self.open) {
-		[self.socket send:self.currentCase.caseID];
+		[self.socket sendPing:nil];
+		
+	} else if (!self.open && self.socket) {
+		//Disconnected unexpectedly
+		[self recoverConnection];
 	}
 }
 
 - (void)recoverConnection
 {
-	[self initiateConnectionWithCase:self.currentCase];
+	[self.refreshTimer invalidate];
+	[self initiateConnectionWithLecture:self.lectureID];
 }
 
 #pragma mark - SRWebSocket Delegate Methods
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
 {
-	if (message && [message isKindOfClass:[NSString class]]) {
-		if (self.lastUpdate && ![self.lastUpdate isEqualToString:message]) {
-			self.updateBlock();
-			self.lastUpdate = message;
-		} else if (!self.lastUpdate) {
-			self.lastUpdate = message;
-		}
+	if ([message isEqualToString:kCR_API_WS_MESSAGE_UPDATE]) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:CR_NOTIFICATION_REFRESH_ANSWERS object:nil];
 	}
 }
-//These make sure the connection is maintained
+
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
 	self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:kCR_REFRESH_RATE
@@ -127,10 +126,13 @@
 													   selector:@selector(ping)
 													   userInfo:nil
 														repeats:YES];
+	
+	NSString *introMessage = [NSString stringWithFormat:@"%@:%@",kCR_API_WS_MESSAGE_INTRO, self.lectureID];
+	[self.socket send:introMessage];
 }
 
-- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
-	[self disconnect];
+- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
+{
 	self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:kCR_REFRESH_RATE
 														 target:self
 													   selector:@selector(recoverConnection)
