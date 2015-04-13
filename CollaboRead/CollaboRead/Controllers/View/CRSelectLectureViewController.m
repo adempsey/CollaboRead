@@ -38,7 +38,7 @@ static NSString * const reuseIdentifier = @"LectureCell";
 	}
 	
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-	self.navigationItem.title = self.lecturer.name;
+	self.navigationItem.title = [self.lecturer.name stringByAppendingString:@"'s Lectures"];
 	
 	[[CRAPIClientService sharedInstance] retrieveLecturesWithLecturer:self.lecturer.userID block:^(NSArray *lectures, NSError *error) {
 		if (!error) {
@@ -52,6 +52,11 @@ static NSString * const reuseIdentifier = @"LectureCell";
 	}];
 	
     [self.collectionView registerClass:[CRTitledImageCollectionCell class] forCellWithReuseIdentifier:reuseIdentifier];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.collectionView.userInteractionEnabled = YES;
 }
 
 #pragma mark <UICollectionViewDataSource>
@@ -97,7 +102,6 @@ static NSString * const reuseIdentifier = @"LectureCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
 	selectedPath = indexPath;
-//	[self.activityIndicator startAnimating];
 	self.collectionView.userInteractionEnabled = NO;
 	[self performSelector:@selector(prepSegue) withObject:nil afterDelay:0];//"Delay" is needed so that the view will render activity indicator before stopping it
 }
@@ -125,6 +129,7 @@ static NSString * const reuseIdentifier = @"LectureCell";
 	CRLecture *selectedLecture = self.lectures[selectedPath.section];
 	nextController.cases = selectedLecture.cases;
 	nextController.lectureID = selectedLecture.lectureID;
+    nextController.navigationItem.title = selectedLecture.name;
 	nextController.lecturer = self.lecturer;
 }
 

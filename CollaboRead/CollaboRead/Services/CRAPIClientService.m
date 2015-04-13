@@ -14,8 +14,8 @@
 #import "NSArray+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
 
-//#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
-#define kCR_API_ADDRESS @"http://localhost:5000/api/v1/"
+#define kCR_API_ADDRESS @"https://collaboread.herokuapp.com/api/v1/"
+//#define kCR_API_ADDRESS @"http://localhost:5000/api/v1/"
 #define kCR_API_ENDPOINT(endpoint) [kCR_API_ADDRESS stringByAppendingString:endpoint]
 
 #define kHTTP_METHOD_GET @"GET"

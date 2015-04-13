@@ -64,7 +64,11 @@
 }
 
 -(void)setOwner {
-    [self.collaborators addObject:[[CRAccountService sharedInstance] user]];
+    if (self.collaborators.count == 0) {
+        [self.collaborators addObject:[[CRAccountService sharedInstance] user]];
+    } else {
+        [self.collaborators insertObject:[[CRAccountService sharedInstance] user] atIndex:0];
+    }
 }
 
 @end
