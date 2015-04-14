@@ -378,7 +378,7 @@
         //Set up to draw lines
         //Could use drawLineFrom:to:, but is much slower than displaying in one go
         CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 3.0 * self.currZoom);
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), r, g, b, 1.0);
+        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), r/255, g/255, b/255, 1.0);
         CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
         for (int i = 1; i < [ans count]; i++) {
             CRAnswerPoint *beg = ans[i - 1];
@@ -406,7 +406,7 @@
     
     //Set up to draw line
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 3.0 * self.currZoom);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), lineRedComp, lineGreenComp, lineBlueComp, 1.0);
+    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), lineRedComp/255, lineGreenComp/255, lineBlueComp/255, 1.0);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
     CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x * self.currZoom, beg.coordinate.y * self.currZoom);
     CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x * self.currZoom, fin.coordinate.y * self.currZoom);
@@ -560,7 +560,7 @@
         CRAnswerLine *line = obj;
         for (int i = 1; i < [line.data count]; i++) {
             NSDictionary* color = colors[idx];
-            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), [color[@"r"] floatValue], [color[@"g"] floatValue], [color[@"b"] floatValue], 1.0);
+            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), [color[@"r"] floatValue]/255, [color[@"g"] floatValue]/255, [color[@"b"] floatValue]/255, 1.0);
             CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
             CRAnswerPoint *beg = [line.data objectAtIndex:i - 1];
             if (!beg.isEndPoint) {

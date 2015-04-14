@@ -155,7 +155,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		UIImage *dot = [UIImage imageNamed:@"dot.png"];
 		dot = [dot imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		cell.imageView.image = dot;
-        cell.imageView.tintColor = [UIColor colorWithRed: [color[@"r"] floatValue] green: [color[@"g"] floatValue] blue:[color[@"b"] floatValue] alpha:1.0];
+        cell.imageView.tintColor = [UIColor colorWithRed: [color[@"r"] floatValue]/255 green: [color[@"g"] floatValue]/255 blue:[color[@"b"] floatValue]/255 alpha:1.0];
     } else {
         cell.imageView.tintColor = [UIColor whiteColor];
     }

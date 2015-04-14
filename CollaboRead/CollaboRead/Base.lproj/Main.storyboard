@@ -354,6 +354,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="LGB-0K-MGs" id="oUO-Bg-DT5"/>
+                        <outlet property="cancelButton" destination="Lmf-4g-YHt" id="9wO-na-6ME"/>
                         <outlet property="doneButton" destination="CZa-9y-SEb" id="Tdc-9c-dwh"/>
                         <outlet property="emailTextField" destination="Sxf-ZV-95x" id="Jtx-u1-kdf"/>
                         <outlet property="instructionsLabel" destination="hIB-uL-k9C" id="yv6-sG-3Q7"/>
