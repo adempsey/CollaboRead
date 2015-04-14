@@ -19,6 +19,7 @@
 #import "CRScan.h"
 #import "CRUserKeys.h"
 #import "CRAnswerLine.h"
+#import "CRNotifications.h"
 
 #define kMAX_ZOOM 3
 #define kMIN_ZOOM 1
@@ -198,6 +199,7 @@
 			[[CRAPIClientService sharedInstance] retrieveAnswerForCase:caseID inLecture:lectureID withOwner:ownerID block:^(CRAnswer *answer, NSError *error) {
 				if (!error && answer) {
 					self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
+					[[NSNotificationCenter defaultCenter] postNotificationName:CR_NOTIFICATION_PREVIOUS_ANSWER_FOUND object:nil];
 				} else {
 					self.undoStack = [[CRUndoStack alloc] init];
 				}
@@ -209,7 +211,9 @@
 				[self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
 			}];
 		}
-    }
+	} else {
+		[[NSNotificationCenter defaultCenter] postNotificationName:CR_NOTIFICATION_PREVIOUS_ANSWER_FOUND object:nil];
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
