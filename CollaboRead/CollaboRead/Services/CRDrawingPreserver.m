@@ -37,7 +37,9 @@
 
 - (void)setDrawingHistory:(CRUndoStack *)drawing forCaseID:(NSString *)caseID
 {
-    [self.drawings setObject:drawing forKey:caseID];
+	if (drawing) {
+		[self.drawings setObject:drawing forKey:caseID];
+	}
 }
 
 - (void)clearDrawings
