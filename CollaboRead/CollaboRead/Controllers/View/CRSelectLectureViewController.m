@@ -59,6 +59,17 @@ static NSString * const reuseIdentifier = @"LectureCell";
     self.collectionView.userInteractionEnabled = YES;
 }
 
+/*!
+ Dismiss view controller
+ @param sender
+ UIElement that triggered method, unused
+ */
+- (IBAction)dismiss:(id)sender
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
+	[[CRAccountService sharedInstance] logout];
+}
+
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

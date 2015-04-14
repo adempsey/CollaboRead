@@ -562,13 +562,7 @@
                             <outlet property="delegate" destination="CoA-IA-OLj" id="xqU-zC-NOz"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="3vQ-nK-qYO">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="sSL-Tx-4NI">
-                            <connections>
-                                <action selector="dismiss:" destination="CoA-IA-OLj" id="9Ud-Xf-yVg"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="3vQ-nK-qYO"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="activityIndicator" destination="oEE-qP-ZcY" id="Qx9-wv-ndk"/>
@@ -927,7 +921,13 @@
                             <outlet property="delegate" destination="X94-r6-r4W" id="sZ7-BT-oS3"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="RUZ-8S-eok"/>
+                    <navigationItem key="navigationItem" id="RUZ-8S-eok">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="sSL-Tx-4NI">
+                            <connections>
+                                <action selector="dismiss:" destination="X94-r6-r4W" id="amK-1B-zQ8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="CoA-IA-OLj" kind="show" identifier="LecturerSelectedLecture" id="TlT-h7-E23"/>
                     </connections>
