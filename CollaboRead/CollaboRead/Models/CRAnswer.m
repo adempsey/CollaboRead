@@ -48,6 +48,7 @@
 		self.groupName = answerName;
         self.caseID = caseID;
         self.lectureID = lectureID;
+        self.answerColor = [CRAccountService sharedInstance].user.drawColor;
 	}
 	return self;
 }

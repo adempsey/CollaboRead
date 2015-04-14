@@ -190,27 +190,23 @@
     self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID];
     if (!self.undoStack) {
         if ([[CRAccountService sharedInstance].user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
-			
-			NSString *caseID = self.caseChosen.caseID;
-			NSString *lectureID = self.lectureID;
-			NSString *ownerID = [[CRAccountService sharedInstance] user].userID;
-			
-			[[CRAPIClientService sharedInstance] retrieveAnswerForCase:caseID inLecture:lectureID withOwner:ownerID block:^(CRAnswer *answer, NSError *error) {
+			[[CRAPIClientService sharedInstance] retrieveAnswerForCase:self.caseChosen.caseID inLecture:self.lectureID withOwner:[[CRAccountService sharedInstance] user].userID block:^(CRAnswer *answer, NSError *error) {
 				if (!error && answer) {
 					self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
-				} else {
-					self.undoStack = [[CRUndoStack alloc] init];
-                    self.undoStack.lectureID = lectureID;
-                    self.undoStack.caseID = caseID;
 				}
-				
-				[[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
-				
-				CRScan *scan = self.caseChosen.scans[self.scanIndex];
-				self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
-				[self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
 			}];
 		}
+        if(!self.undoStack) {
+            self.undoStack = [[CRUndoStack alloc] init];
+            self.undoStack.lectureID = self.lectureID;
+            self.undoStack.caseID = self.caseChosen.caseID;
+        }
+        
+        [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
+        
+        CRScan *scan = self.caseChosen.scans[self.scanIndex];
+        self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
+        [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
     }
 }
 
