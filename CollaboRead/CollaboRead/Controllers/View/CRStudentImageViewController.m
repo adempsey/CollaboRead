@@ -18,6 +18,7 @@
 #import "CRAnswerLine.h"
 #import "CRScan.h"
 #import "CRDrawingPreserver.h"
+#import "CRNotifications.h"
 
 #define kCR_COLLABORATOR_TOGGLE_SHOW @"Show Collaborators"
 #define kCR_COLLABORATOR_TOGGLE_HIDE @"Hide Collaborators"
@@ -46,6 +47,16 @@
 
 @implementation CRStudentImageViewController
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+	if (self = [super initWithCoder:aDecoder]) {
+		self.submitButton = [[CRSubmitButton alloc] init];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(previousAnswerFound:) name:CR_NOTIFICATION_PREVIOUS_ANSWER_FOUND object:nil];
+	}
+	return self;
+}
+
 - (void)loadView {
     [super loadView];
     
@@ -57,9 +68,7 @@
                                                                     action:nil];
     self.toggleCollaboratorsButton.possibleTitles = [NSSet setWithArray:@[kCR_COLLABORATOR_TOGGLE_SHOW, kCR_COLLABORATOR_TOGGLE_HIDE]];
     self.navigationItem.rightBarButtonItem = self.toggleCollaboratorsButton;
-    
-    
-    self.submitButton = [[CRSubmitButton alloc] init];
+	
     [self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
     [self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
 	
@@ -95,6 +104,11 @@
 			[self presentViewController:alertController animated:YES completion:nil];
 		}
 	}];
+}
+
+- (void)previousAnswerFound:(NSNotification*)notification
+{
+	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
 }
 
 #pragma mark - CRSideBarViewController Delegate Methods

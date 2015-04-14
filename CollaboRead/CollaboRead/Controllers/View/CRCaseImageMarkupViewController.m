@@ -19,6 +19,7 @@
 #import "CRScan.h"
 #import "CRUserKeys.h"
 #import "CRAnswerLine.h"
+#import "CRNotifications.h"
 
 #define kMAX_ZOOM 3
 #define kMIN_ZOOM 1
