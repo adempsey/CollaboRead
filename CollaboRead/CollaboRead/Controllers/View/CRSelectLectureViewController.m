@@ -22,7 +22,7 @@
 }
 
 @property (nonatomic, readwrite, strong) NSArray *lectures;
-//@property (nonatomic, readwrite, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, readwrite, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -39,8 +39,12 @@ static NSString * const reuseIdentifier = @"LectureCell";
 	
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 	self.navigationItem.title = [self.lecturer.name stringByAppendingString:@"'s Lectures"];
+	[self.activityIndicator startAnimating];
 	
 	[[CRAPIClientService sharedInstance] retrieveLecturesWithLecturer:self.lecturer.userID block:^(NSArray *lectures, NSError *error) {
+		[self.activityIndicator stopAnimating];
+		self.activityIndicator.hidden = YES;
+		
 		if (!error) {
 			self.lectures = lectures;
 			dispatch_async(dispatch_get_main_queue(), ^{
