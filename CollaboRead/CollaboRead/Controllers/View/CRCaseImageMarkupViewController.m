@@ -27,6 +27,9 @@
 @interface CRCaseImageMarkupViewController ()
 {
     CRAnswerPoint *lastPoint;//Last point drawn/erased
+    CGFloat lineRedComp;
+    CGFloat lineBlueComp;
+    CGFloat lineGreenComp;
 }
 /*!
  @brief UIImageView to display user's markup of the image
@@ -177,9 +180,9 @@
     self.lastTranslation = CGPointMake(0, 0);
     
     //Set up current drawing
-    self.lineRedComp = 255;
-    self.lineBlueComp = 0;
-    self.lineGreenComp = 0;
+    lineRedComp = [[CRAccountService sharedInstance].user.drawColor[CR_DB_RED_COMP] floatValue];
+    lineBlueComp = [[CRAccountService sharedInstance].user.drawColor[CR_DB_BLUE_COMP] floatValue];
+    lineGreenComp = [[CRAccountService sharedInstance].user.drawColor[CR_DB_GREEN_COMP] floatValue];
     
 	lastPoint = nil;
 
@@ -205,10 +208,17 @@
 				
 				CRScan *scan = self.caseChosen.scans[self.scanIndex];
 				self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
-				[self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+				[self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
 			}];
 		}
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    CRScan *scan = self.caseChosen.scans[self.scanIndex];
+    self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
+    [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
 }
 
 #pragma mark - Image Loading Methods
@@ -220,7 +230,7 @@
         CRScan *scan = self.caseChosen.scans[self.scanIndex];
         [self loadAndScaleImage:((CRSlice *)((CRScan *) scan).slices[self.sliceIndex]).image];
         self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
-        [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+        [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
     }
 }
 
@@ -341,7 +351,7 @@
     self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack removeLayerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID] copyItems:YES];
     if (self.currentDrawing.count > 0) {
         [self wipeDrawing];
-        [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+        [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
     }
     else {
         [self wipeDrawing];
@@ -370,7 +380,7 @@
         //Set up to draw lines
         //Could use drawLineFrom:to:, but is much slower than displaying in one go
         CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 3.0 * self.currZoom);
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), r, g, b, 1.0);
+        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), r/255, g/255, b/255, 1.0);
         CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
         for (int i = 1; i < [ans count]; i++) {
             CRAnswerPoint *beg = ans[i - 1];
@@ -398,7 +408,7 @@
     
     //Set up to draw line
     CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 3.0 * self.currZoom);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), self.lineRedComp, self.lineGreenComp, self.lineBlueComp, 1.0);
+    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), lineRedComp/255, lineGreenComp/255, lineBlueComp/255, 1.0);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
     CGContextMoveToPoint(UIGraphicsGetCurrentContext(), beg.coordinate.x * self.currZoom, beg.coordinate.y * self.currZoom);
     CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), fin.coordinate.x * self.currZoom, fin.coordinate.y * self.currZoom);
@@ -503,7 +513,7 @@
             lastPoint = nil;
         } else if (self.selectedTool == kCR_PANEL_TOOL_POINTER) {
             [self wipeDrawing];
-            [self drawAnswer:self.currentDrawing inRed:self.lineRedComp Green:self.lineGreenComp Blue:self.lineBlueComp];
+            [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
             lastPoint = nil;
         }
     }
@@ -552,7 +562,7 @@
         CRAnswerLine *line = obj;
         for (int i = 1; i < [line.data count]; i++) {
             NSDictionary* color = colors[idx];
-            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), [color[@"red"] floatValue], [color[@"green"] floatValue], [color[@"blue"] floatValue], 1.0);
+            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), [color[@"r"] floatValue]/255, [color[@"g"] floatValue]/255, [color[@"b"] floatValue]/255, 1.0);
             CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
             CRAnswerPoint *beg = [line.data objectAtIndex:i - 1];
             if (!beg.isEndPoint) {

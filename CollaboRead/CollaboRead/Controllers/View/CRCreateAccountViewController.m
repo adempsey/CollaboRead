@@ -187,6 +187,7 @@
 
             [self toggleActivityIndicator];
             if (error) {
+                self.cancelButton.enabled = YES;
                 self.registerButton.hidden = NO;
 				[self.errorLabel animateTransitionToText:@"Registration unsuccessful. Please try again later."];
 
