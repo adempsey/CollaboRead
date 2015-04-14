@@ -32,6 +32,7 @@
 		self.imageURL = dictionary[CR_DB_USER_PICTURE];
 		self.year = dictionary[CR_DB_USER_YEAR];
 		self.caseSetIDs = dictionary[CR_DB_USER_CASE_SETS];
+        self.drawColor = dictionary[CR_DB_USER_COLOR];
 	}
 	return self;
 }

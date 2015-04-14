@@ -17,6 +17,10 @@
 #define CR_DB_USER_PICTURE @"picture"
 #define CR_DB_USER_EMAIL @"email"
 #define CR_DB_USER_PASSWORD @"password"
+#define CR_DB_USER_COLOR @"color"
+#define CR_DB_RED_COMP @"r"
+#define CR_DB_BLUE_COMP @"b"
+#define CR_DB_GREEN_COMP @"g"
 
 //Relevant to Students
 #define CR_DB_USER_YEAR @"year"

@@ -52,6 +52,11 @@ If not explicitly set, default's to the current user's name
 @property (nonatomic, readwrite, strong) NSString *groupName;
 
 /*!
+ @brief Color to draw answer with
+ */
+@property (nonatomic, readwrite, strong) NSDictionary *answerColor;
+
+/*!
  Initializes CRAnswer object with data from the supplied dictionary
  
  @param dictionary

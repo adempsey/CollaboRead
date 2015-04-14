@@ -52,6 +52,11 @@
 @property (nonatomic, readwrite, strong) NSArray *caseSetIDs;
 
 /*!
+ @brief Dictionary of RGB representation of user's drawing color
+ */
+@property (nonatomic, readwrite, strong) NSDictionary *drawColor;
+
+/*!
  @brief URL of the user's avatar
  */
 @property (nonatomic, readwrite, strong) NSString *imageURL;
