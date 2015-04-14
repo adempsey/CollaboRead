@@ -42,7 +42,6 @@
     [[CRAPIClientService sharedInstance] retrieveUsersWithBlock:^(NSArray *users, NSError *error) {
         if (!error) {
             self.users = users;
-            NSLog(@"here");
         }
         else {
             UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:nil];
@@ -90,7 +89,7 @@
     }
     cell.backgroundColor = [UIColor whiteColor];
     cell.textLabel.textColor = [UIColor blackColor];
-    cell.textLabel.text = self.suggestionList[indexPath.row];
+    cell.textLabel.text = [self.suggestionList[indexPath.row] capitalizedString];
     return cell;
 }
 

@@ -75,6 +75,11 @@
     self.view = super.view;
 }
 
+-(void)setScanIndex:(NSUInteger)scanIndex {
+    [super setScanIndex:scanIndex];
+    self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUBMIT;
+}
+
 -(void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;

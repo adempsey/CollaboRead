@@ -96,7 +96,7 @@
         NSString *scan = obj;
         [((NSDictionary *)self.stacks[scan]).allKeys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSString *slice = obj;
-            if([self.stacks[scan][slice] count] > 0) {
+            if([self.stacks[scan][slice] count] > 0 && [self.stacks[scan][slice][0] count] > 0) {
                 CRAnswerLine *line = [[CRAnswerLine alloc] initWithPoints:self.stacks[scan][slice][0] forSlice:slice ofScan:scan];
                 [answerLines addObject:line];
             }

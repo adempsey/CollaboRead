@@ -23,6 +23,8 @@
 #define kCR_SIDE_BAR_TOGGLE_SHOW @"Show Answer Table"
 #define kCR_SIDE_BAR_TOGGLE_HIDE @"Hide Answer Table"
 
+#define SCAN_FILTER [NSPredicate predicateWithFormat:@"SELF ==[c] %@", ((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID]
+
 @interface CRLecturerImageViewController ()
 /*!
  @brief Student answers to display as CRAnswerLines
@@ -46,6 +48,7 @@
 @property (nonatomic, readwrite, strong) CRStudentAnswerTableViewController *studentAnswerTableViewController;
 
 @property (nonatomic, readwrite, strong) NSArray *studentAnswers;
+@property (nonatomic, strong) NSArray *studentAnswerScans;
 
 /*!
  Handles acquistion of new answers
@@ -123,6 +126,12 @@
 - (void)setScanIndex:(NSUInteger)scanIndex
 {
     [super setScanIndex:scanIndex];
+    // Obtain IDs of scans with answers and set highlights
+    if ([self.studentAnswerScans filteredArrayUsingPredicate:SCAN_FILTER].count > 0 && !self.studentAnswerTableViewController.visible) {
+        self.toggleStudentAnswerTableButton.badgeValue = @"!";
+    } else {
+        self.toggleStudentAnswerTableButton.badgeValue = @"";
+    }
     self.studentAnswerTableViewController.scanId = ((CRScan*)self.caseChosen.scans[self.scanIndex]).scanID; //Notify answer table of changes
 }
 
@@ -130,8 +139,18 @@
 - (void)setCaseChosen:(CRCase *)caseChosen
 {
     [super setCaseChosen:caseChosen];
-    NSLog(@"%u", caseChosen.answers.count);
-    self.scansMenuController.highlights = [self.caseChosen answerScans];
+    // Obtain IDs of scans with answers and set highlights
+    NSArray *answerDrawings = [self.studentAnswers valueForKeyPath:@"drawings"];
+    NSMutableArray *answerScans = [[NSMutableArray alloc] init];
+    [answerDrawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[NSArray class]]) {
+            NSArray *answerLines = (NSArray *)obj;
+            
+            NSArray *answerLineScans = [answerLines valueForKeyPath:@"scanID"];
+            [answerScans addObjectsFromArray:answerLineScans];
+        }
+    }];
+    self.scansMenuController.highlights = answerScans;
 }
 
 - (void)drawStudentAnswers
@@ -158,8 +177,6 @@
 {
 	[[CRAPIClientService sharedInstance] retrieveAnswersForCase:self.caseChosen.caseID inLecture:self.lectureID block:^(NSArray *answers, NSError *error) {
 		if (!error) {
-			self.studentAnswers = answers;
-			
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.studentAnswerTableViewController.answerList = answers;
 				
@@ -180,12 +197,15 @@
 				}];
 				self.scansMenuController.highlights = answerScans;
 				self.sliceScroller.highlights = answerSlices;
-				
-                [self drawStudentAnswers];
-                if ([self.caseChosen answerSlicesForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID].count > 0 && !self.studentAnswerTableViewController.visible) {
-                    self.toggleStudentAnswerTableButton.badgeValue = @"!"; //New answers should trigger badge if answer table isn't currently visible
+                if ([answerScans filteredArrayUsingPredicate:SCAN_FILTER].count > [self.studentAnswerScans filteredArrayUsingPredicate:SCAN_FILTER].count) {
+                    //Also check visibility here
+                    if (!self.studentAnswerTableViewController.visible) {
+                        self.toggleStudentAnswerTableButton.badgeValue = @"!"; //New answers should trigger badge if answer table isn't currently visible
+                    }
+                    
                 }
-                
+                self.studentAnswers = answers;
+                [self drawStudentAnswers];
             });
 		} else {
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:^(UIAlertAction* action) {
@@ -207,12 +227,6 @@
 - (void)scansMenuViewControllerDidSelectScan:(NSString *)scanId
 {
 	[super scansMenuViewControllerDidSelectScan:scanId];
-	//Make sure to adjust badge to notify of answers
-	if ([self.caseChosen answerSlicesForScan:scanId].count > 0 && !self.studentAnswerTableViewController.visible) {
-		self.toggleStudentAnswerTableButton.badgeValue = @"!";
-	} else {
-		self.toggleStudentAnswerTableButton.badgeValue = @"";
-	}
 }
 
 #pragma mark - CRToolPanelViewController Delegate Methods

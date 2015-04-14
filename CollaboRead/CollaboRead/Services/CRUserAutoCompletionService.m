@@ -70,6 +70,7 @@
 
 - (NSArray*)itemsWithPrefix:(NSString *)prefix
 {
+    prefix = [prefix lowercaseString];
 	NSArray *words = [[NSArray alloc] initWithArray:[self wordsWithPrefix:prefix forList:self]];
 	
 	NSMutableArray *wordsWithPrefixes = [[NSMutableArray alloc] init];
