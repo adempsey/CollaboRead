@@ -9,6 +9,7 @@
 #import "CRUserSuggestionTableViewController.h"
 #import "CRUserAutoCompletionService.h"
 #import "CRAPIClientService.h"
+#import "CRErrorAlertService.h"
 
 @interface CRUserSuggestionTableViewController ()
 
@@ -41,6 +42,11 @@
     [[CRAPIClientService sharedInstance] retrieveUsersWithBlock:^(NSArray *users, NSError *error) {
         if (!error) {
             self.users = users;
+            NSLog(@"here");
+        }
+        else {
+            UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:nil];
+            [self presentViewController:alertController animated:YES completion:nil];
         }
     }];
 }

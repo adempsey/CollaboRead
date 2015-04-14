@@ -78,22 +78,15 @@
 -(void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
-    NSArray *students = [[CRCollaboratorList sharedInstance] collaboratorIds];
 
     //Prepare and send answer
-	CRAnswer *answer = [self.imageMarkup.undoStack answersFromStackForOwners:students inGroup:[CRCollaboratorList sharedInstance].groupName];
+	CRAnswer *answer = [self.imageMarkup.undoStack answersFromStack];
 
-    [[CRAPIClientService sharedInstance] submitAnswer:answer forCase:self.caseChosen.caseID inLecture:self.lectureID block:^(CRLecture *block, NSError *error) {//Provide submission success feedback
+    [[CRAPIClientService sharedInstance] submitAnswer:answer block:^(CRLecture *block, NSError *error) {//Provide submission success feedback
 		if (!error) {
 			self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUCCESS;
 		} else {
-			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:^(UIAlertAction *action) {
-				if (self != self.navigationController.viewControllers[0]) {
-					[self.navigationController popViewControllerAnimated:YES];
-				} else if (self.presentingViewController) {
-					[self dismissViewControllerAnimated:YES completion:nil];
-				}
-			}];
+			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:nil];
 			[self presentViewController:alertController animated:YES completion:nil];
 		}
 	}];

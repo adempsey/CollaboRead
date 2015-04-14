@@ -10,9 +10,13 @@
 #import "CRAnswer.h"
 #import "CRAnswerLine.h"
 #import "CRAccountService.h"
+#import "CRCollaboratorList.h"
 
 @interface CRUndoStack ()
 
+/*!
+ @brief Dictionary holding stacks for slices via scans
+ */
 @property (nonatomic, strong) NSMutableDictionary *stacks;
 
 @end
@@ -37,6 +41,8 @@
             CRAnswerLine *line = obj;
             [self addLayer:line.data forSlice:line.sliceID ofScan:line.scanID];
         }];
+        self.lectureID = answer.lectureID;
+        self.caseID = answer.caseID;
     }
     return self;
 }
@@ -83,7 +89,7 @@
     return nil;
 }
 
--(CRAnswer *)answersFromStackForOwners:(NSArray *)owners inGroup:(NSString *)group
+-(CRAnswer *)answersFromStack
 {
     NSMutableArray *answerLines = [[NSMutableArray alloc] init];
     [self.stacks.allKeys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -97,9 +103,9 @@
         }];
     }];
 	
-	group = group ? : [[CRAccountService sharedInstance] user].name;
+	NSString *group = [CRCollaboratorList sharedInstance].groupName ? : [[CRAccountService sharedInstance] user].name;
 	
-    return [[CRAnswer alloc] initWithData:answerLines submissionDate:[NSDate dateWithTimeIntervalSinceNow:0] owners:owners answerName:group answerID:@"replace_this"];
+    return [[CRAnswer alloc] initWithData:answerLines submissionDate:[NSDate dateWithTimeIntervalSinceNow:0] owners:[[CRCollaboratorList sharedInstance] collaboratorIds]  answerName:group answerID:@"replace_this" inCase:self.caseID forLecture:self.lectureID];
 }
 
 @end

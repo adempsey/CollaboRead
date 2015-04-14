@@ -30,6 +30,8 @@
 #define CR_DB_ANSWER_GROUP_NAME @"groupName"
 #define CR_DB_ANSWER_DRAWINGS @"drawings"
 #define CR_DB_ANSWER_SUBMISSION_DATE @"submissionDate"
+#define CR_DB_ANSWER_LECTURE @"lectureID"
+#define CR_DB_ANSWER_CASE @"caseID"
 
 //Drawings
 #define CR_DB_DRAWING_SCAN_ID @"scanID"

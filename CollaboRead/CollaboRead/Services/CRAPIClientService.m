@@ -10,6 +10,7 @@
 #import "CRNetworkingService.h"
 #import "CRAccountService.h"
 #import "CRUserKeys.h"
+#import "CRCaseKeys.h"
 
 #import "NSArray+CRAdditions.h"
 #import "NSDictionary+CRAdditions.h"
@@ -335,7 +336,7 @@
 
 #pragma mark - Public Submission Methods
 
-- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inLecture:(NSString*)setID block:(void (^)(CRLecture*, NSError*))block
+- (void)submitAnswer:(CRAnswer*)answer block:(void (^)(CRLecture*, NSError*))block
 {
 	void (^completionBlock)(NSData*, NSError*) = ^void(NSData *json, NSError *error) {
 		CRLecture *caseSet;
@@ -347,12 +348,8 @@
 	};
 	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: answer.jsonDictionary];
-	params[@"drawings"] = ((NSDictionary *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS]).jsonString;
-	params[@"owners"] = ((NSArray *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS]).jsonString;
-	params[@"lectureID"] = setID;
-	params[@"caseID"] = caseID;
-	params[@"groupName"] = @"group name";
-	
+	params[CR_DB_ANSWER_DRAWINGS] = ((NSDictionary *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_DRAWINGS]).jsonString;
+	params[CR_DB_ANSWER_OWNERS] = ((NSArray *)params[kCR_API_QUERY_PARAMETER_CASE_ANSWER_OWNERS]).jsonString;
 	[[CRNetworkingService sharedInstance] performAuthenticatedRequestForResource:kCR_API_ENDPOINT_SUBMIT_ANSWER usingMethod:kHTTP_METHOD_PUT withParams:params completionBlock:completionBlock];
 }
 

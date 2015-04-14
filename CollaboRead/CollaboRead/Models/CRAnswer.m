@@ -17,9 +17,8 @@
 {
 	if (self = [super init]) {
 		self.answerID = dictionary[CR_DB_ANSWER_ID];
-#warning key literals
-		self.lectureID = dictionary[@"lectureID"];
-		self.caseID = dictionary[@"caseID"];
+		self.lectureID = dictionary[CR_DB_ANSWER_LECTURE];
+		self.caseID = dictionary[CR_DB_ANSWER_CASE];
 		self.owners = dictionary[CR_DB_ANSWER_OWNERS];
 		self.groupName = dictionary[CR_DB_ANSWER_GROUP_NAME];
 		self.submissionDate = dictionary[CR_DB_ANSWER_SUBMISSION_DATE];
@@ -34,7 +33,7 @@
 	return self;
 }
 
-- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners answerName:(NSString*)answerName answerID:(NSString*)answerID
+- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners answerName:(NSString*)answerName answerID:(NSString*)answerID inCase:(NSString *)caseID forLecture:(NSString *)lectureID
 {
 	if (self = [super init]) {
 		self.answerID = answerID;
@@ -42,6 +41,8 @@
 		self.submissionDate = date;
 		self.owners = owners;
 		self.groupName = answerName;
+        self.caseID = caseID;
+        self.lectureID = lectureID;
 	}
 	return self;
 }
@@ -57,6 +58,8 @@
 
 	return @{CR_DB_ANSWER_ID: self.answerID,
 			 CR_DB_ANSWER_OWNERS: self.owners,
+             CR_DB_ANSWER_LECTURE: self.lectureID,
+             CR_DB_ANSWER_CASE: self.caseID,
 			 CR_DB_ANSWER_GROUP_NAME: self.groupName,
              CR_DB_ANSWER_SUBMISSION_DATE: [NSString stringWithFormat:@"%@", self.submissionDate],
 			 CR_DB_ANSWER_DRAWINGS: drawingDescriptions};

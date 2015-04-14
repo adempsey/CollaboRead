@@ -69,9 +69,13 @@ If not explicitly set, default's to the current user's name
  @param owners
  Array of users that submitted the answer
  @param answerID
- Answer's ID number
+ Answer's ID
+ @param caseID
+ Answer's case ID
+ @param lectureID
+ Answer's lectureID
  */
-- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners answerName:(NSString*)answerName answerID:(NSString*)answerID;
+- (instancetype)initWithData:(NSArray*)answerData submissionDate:(NSDate*)date owners:(NSArray*)owners answerName:(NSString*)answerName answerID:(NSString*)answerID inCase:(NSString *)caseID forLecture:(NSString *)lectureID;
 
 /*!
  Converts object into a dictionary, i.e. JSON representation

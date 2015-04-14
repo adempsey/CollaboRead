@@ -20,6 +20,16 @@
 @interface CRUndoStack : NSObject
 
 /*!
+ @brief Lecture containing the case of the stack
+ */
+@property (nonatomic, strong) NSString *lectureID;
+
+/*!
+ @brief Case of the stack
+ */
+@property (nonatomic, strong) NSString *caseID;
+
+/*!
  Initializes CRAnswerLine object with data from an already submitted answer
  
  @param answer
@@ -63,16 +73,11 @@
 -(NSArray *)layerForSlice:(NSString *)sliceID ofScan:(NSString *)scanID;
 
 /*!
- Returns a CRAnswer from the drawings on top of the stack, the provided owners, and given group
- 
- @param owners
- Owners of the created answer
- @param group
- Group name for the owners of the answer
- 
+ Creates a CRAnswer from the drawings on top of the stack, using data from the collaborators list
+
  @return
- CRAnswer whose owners are owners, answerName is group, and answer lines are constructed from the top of the undo stack for each image.
+ CRAnswer whose owners and answerName are determined by the collaborator lsit, and answer lines are constructed from the top of the undo stack for each slice of the scan.
  */
--(CRAnswer *)answersFromStackForOwners:(NSArray *)owners inGroup:(NSString *)group;
+-(CRAnswer *)answersFromStack;
 
 @end

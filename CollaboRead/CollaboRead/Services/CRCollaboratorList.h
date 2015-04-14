@@ -16,12 +16,12 @@
  */
 @interface CRCollaboratorList : NSObject
 
++(instancetype)sharedInstance;
+
 /*!
  @brief Custom name for group of collaborators
  */
 @property (nonatomic, strong) NSString *groupName;
-
-+(instancetype)sharedInstance;
 
 /*!
  Adds a collaborator to the list

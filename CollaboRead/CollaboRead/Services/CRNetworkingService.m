@@ -66,7 +66,6 @@
 	} else {
 		authenticatedParams = [[NSMutableDictionary alloc] init];
 	}
-
 	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_EMAIL] = [CRAccountService sharedInstance].user.email;
 	authenticatedParams[kCR_API_QUERY_PARAMETER_USER_PASSWORD] = [CRAccountService sharedInstance].password;
 	
@@ -91,7 +90,6 @@
 		NSString *queryParameter = [NSString stringWithFormat:@"%@=%@&", key, dictionary[key]];
 		queryString = [queryString stringByAppendingString:queryParameter];
 	}
-
 	// Remove trailing '&' character
 	return [queryString substringToIndex:queryString.length-1];
 }

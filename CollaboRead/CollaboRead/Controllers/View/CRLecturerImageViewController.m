@@ -130,6 +130,7 @@
 - (void)setCaseChosen:(CRCase *)caseChosen
 {
     [super setCaseChosen:caseChosen];
+    NSLog(@"%u", caseChosen.answers.count);
     self.scansMenuController.highlights = [self.caseChosen answerScans];
 }
 

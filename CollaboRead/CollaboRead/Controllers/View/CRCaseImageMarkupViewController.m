@@ -197,6 +197,8 @@
 					self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
 				} else {
 					self.undoStack = [[CRUndoStack alloc] init];
+                    self.undoStack.lectureID = lectureID;
+                    self.undoStack.caseID = caseID;
 				}
 				
 				[[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];

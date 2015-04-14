@@ -134,14 +134,10 @@
  Submits an answer object to the API. The updated case set is included in the completion block
  
  @param answer
- The CRAnswer object containing the drawing data and answer owners
- @param caseID
- ID number of the case to submit an answer to
- @param setID
- ID number of the case set containing the current case
+ The CRAnswer object containing the drawing data and answer owners. The answer must have a valid case and lecture id
  @param block
  completion block to execute with updated case set retrieved from the API
  */
-- (void)submitAnswer:(CRAnswer*)answer forCase:(NSString*)caseID inLecture:(NSString*)setID block:(void (^)(CRLecture*, NSError*))block;
+- (void)submitAnswer:(CRAnswer*)answer block:(void (^)(CRLecture*, NSError*))block;
 
 @end
