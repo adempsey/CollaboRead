@@ -102,6 +102,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
     self.selectedAnswers = [NSMutableArray arrayWithArray:[answerList filteredArrayUsingPredicate:predicate]];
     [self setScanAnswers];
     [self.tableView reloadData];
+    [self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedAnswers copy]];
 }
 
 - (void)setScanId:(NSString *)scanId {
