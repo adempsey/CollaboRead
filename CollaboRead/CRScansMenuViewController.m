@@ -160,7 +160,9 @@ static NSString * const reuseIdentifier = @"scanCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedIndex = indexPath;
+    [self.activityIndicator startAnimating];
     [self.delegate scansMenuViewControllerDidSelectScan:((CRScan *)self.scans[indexPath.row]).scanID];
+    [self.activityIndicator stopAnimating];
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout

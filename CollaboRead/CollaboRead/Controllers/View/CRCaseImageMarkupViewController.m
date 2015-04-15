@@ -190,24 +190,23 @@
     //Try to load drawings from previous viewing during session or make new undo stack
     self.undoStack = [[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID];
     if (!self.undoStack) {
+        self.undoStack = [[CRUndoStack alloc] init];
+        self.undoStack.lectureID = self.lectureID;
+        self.undoStack.caseID = self.caseChosen.caseID;
+        [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
+        self.currentDrawing = nil;
         if ([[CRAccountService sharedInstance].user.type isEqualToString:CR_USER_TYPE_STUDENT]) {
 			[[CRAPIClientService sharedInstance] retrieveAnswerForCase:self.caseChosen.caseID inLecture:self.lectureID withOwner:[[CRAccountService sharedInstance] user].userID block:^(CRAnswer *answer, NSError *error) {
 				if (!error && answer) {
 					self.undoStack = [[CRUndoStack alloc] initWithAnswer:answer];
+                    [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:CR_NOTIFICATION_PREVIOUS_ANSWER_FOUND object:nil];
+                    CRScan *scan = self.caseChosen.scans[self.scanIndex];
+                    self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
+                    [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
 				}
 			}];
 		}
-        if(!self.undoStack) {
-            self.undoStack = [[CRUndoStack alloc] init];
-            self.undoStack.lectureID = self.lectureID;
-            self.undoStack.caseID = self.caseChosen.caseID;
-        }
-        
-        [[CRDrawingPreserver sharedInstance] setDrawingHistory:self.undoStack forCaseID:self.caseChosen.caseID];
-        
-        CRScan *scan = self.caseChosen.scans[self.scanIndex];
-        self.currentDrawing = [[NSMutableArray alloc] initWithArray:[self.undoStack layerForSlice: ((CRSlice *)scan.slices[self.sliceIndex]).sliceID ofScan:scan.scanID]];
-        [self drawAnswer:self.currentDrawing inRed:lineRedComp Green:lineGreenComp Blue:lineBlueComp];
     }
 }
 

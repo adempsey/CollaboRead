@@ -49,12 +49,12 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-	if (self = [super initWithCoder:aDecoder]) {
-		self.submitButton = [[CRSubmitButton alloc] init];
-
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(previousAnswerFound:) name:CR_NOTIFICATION_PREVIOUS_ANSWER_FOUND object:nil];
-	}
-	return self;
+    if (self = [super initWithCoder:aDecoder]) {
+        self.submitButton = [[CRSubmitButton alloc] init];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(previousAnswerFound:) name:CR_NOTIFICATION_PREVIOUS_ANSWER_FOUND object:nil];
+    }
+    return self;
 }
 
 - (void)loadView {
@@ -69,6 +69,7 @@
     self.toggleCollaboratorsButton.possibleTitles = [NSSet setWithArray:@[kCR_COLLABORATOR_TOGGLE_SHOW, kCR_COLLABORATOR_TOGGLE_HIDE]];
     self.navigationItem.rightBarButtonItem = self.toggleCollaboratorsButton;
 	
+    self.submitButton = [[CRSubmitButton alloc] init];
     [self.submitButton setFrame:CGRectMake(frame.size.width - 205, frame.size.height - 70, 180.0, 40.0)];
     [self.submitButton addTarget:self action:@selector(submitAnswer:) forControlEvents:UIControlEventTouchUpInside];
 	
@@ -84,12 +85,22 @@
     self.view = super.view;
 }
 
--(void)setScanIndex:(NSUInteger)scanIndex {
-    [super setScanIndex:scanIndex];
-    self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUBMIT;
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.submitButton.buttonState = [[[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID] answerSubmittedForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID] ? CR_SUBMIT_BUTTON_STATE_RESUBMIT : CR_SUBMIT_BUTTON_STATE_SUBMIT;
 }
 
--(void)submitAnswer:(UIButton *)submitButton
+- (void)setScanIndex:(NSUInteger)scanIndex {
+    [super setScanIndex:scanIndex];
+    self.submitButton.buttonState = [[[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID] answerSubmittedForScan:((CRScan *)self.caseChosen.scans[scanIndex]).scanID] ? CR_SUBMIT_BUTTON_STATE_RESUBMIT : CR_SUBMIT_BUTTON_STATE_SUBMIT;
+}
+
+- (void)previousAnswerFound:(NSNotification*)notification
+{
+    self.submitButton.buttonState = [[[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID] answerSubmittedForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID] ? CR_SUBMIT_BUTTON_STATE_RESUBMIT : CR_SUBMIT_BUTTON_STATE_SUBMIT;
+}
+
+- (void)submitAnswer:(UIButton *)submitButton
 {
 	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_PENDING;
 
@@ -99,16 +110,13 @@
     [[CRAPIClientService sharedInstance] submitAnswer:answer block:^(CRLecture *block, NSError *error) {//Provide submission success feedback
 		if (!error) {
 			self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUCCESS;
+            [[[CRDrawingPreserver sharedInstance] drawingHistoryForCaseID:self.caseChosen.caseID] submitAnswerForScan:((CRScan *)self.caseChosen.scans[self.scanIndex]).scanID];
 		} else {
+            self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_SUBMIT;
 			UIAlertController *alertController = [[CRErrorAlertService sharedInstance] networkErrorAlertForItem:@"case" completionBlock:nil];
 			[self presentViewController:alertController animated:YES completion:nil];
 		}
 	}];
-}
-
-- (void)previousAnswerFound:(NSNotification*)notification
-{
-	self.submitButton.buttonState = CR_SUBMIT_BUTTON_STATE_RESUBMIT;
 }
 
 #pragma mark - CRSideBarViewController Delegate Methods

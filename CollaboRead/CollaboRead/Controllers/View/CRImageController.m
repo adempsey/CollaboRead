@@ -147,6 +147,7 @@
         self.scansMenuController.highlights = [[NSArray alloc] init];
         self.scansMenuController.scans = self.caseChosen.scans;
     }
+#pragma warning - removed async
     [caseChosen loadImagesAsync];//Load images as efficiently as possible
     self.scanIndex = 0;
 }

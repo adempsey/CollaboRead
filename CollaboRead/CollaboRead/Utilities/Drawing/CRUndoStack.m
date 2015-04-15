@@ -19,6 +19,10 @@
  */
 @property (nonatomic, strong) NSMutableDictionary *stacks;
 
+/*!
+ @brief Whether a submission has been made from this undostack by scan at some point
+ */
+@property (nonatomic, strong) NSDictionary *submitted;
 @end
 
 @implementation CRUndoStack
@@ -28,6 +32,7 @@
     self = [super init];
     if (self) {
         self.stacks = [[NSMutableDictionary alloc] init];
+        self.submitted = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -37,9 +42,11 @@
     self = [super init];
     if (self) {
         self.stacks = [[NSMutableDictionary alloc] init];
+        self.submitted = [[NSMutableDictionary alloc] init];
         [answer.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             CRAnswerLine *line = obj;
             [self addLayer:line.data forSlice:line.sliceID ofScan:line.scanID];
+            [self.submitted setValue:[NSNumber numberWithBool:YES] forKey:line.scanID];
         }];
         self.lectureID = answer.lectureID;
         self.caseID = answer.caseID;
@@ -47,7 +54,7 @@
     return self;
 }
 
--(void)addLayer:(NSArray *)layer forSlice:(NSString *)sliceID ofScan:(NSString *)scanID
+- (void)addLayer:(NSArray *)layer forSlice:(NSString *)sliceID ofScan:(NSString *)scanID
 {
     if (self.stacks[scanID]) {
         if (self.stacks[scanID][sliceID]) {
@@ -62,7 +69,7 @@
     }
 }
 
--(NSArray *)removeLayerForSlice:(NSString *)sliceID ofScan:(NSString *)scanID
+- (NSArray *)removeLayerForSlice:(NSString *)sliceID ofScan:(NSString *)scanID
 {
     if (self.stacks[scanID]) {
         if (self.stacks[scanID][sliceID]) {
@@ -77,7 +84,7 @@
     return nil;
 }
 
--(NSArray *)layerForSlice:(NSString *)sliceID ofScan:(NSString *)scanID
+- (NSArray *)layerForSlice:(NSString *)sliceID ofScan:(NSString *)scanID
 {
     if (self.stacks[scanID]) {
         if (self.stacks[scanID][sliceID]) {
@@ -89,7 +96,7 @@
     return nil;
 }
 
--(CRAnswer *)answersFromStack
+- (CRAnswer *)answersFromStack
 {
     NSMutableArray *answerLines = [[NSMutableArray alloc] init];
     [self.stacks.allKeys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -106,6 +113,14 @@
 	NSString *group = [CRCollaboratorList sharedInstance].groupName ? : [[CRAccountService sharedInstance] user].name;
 	
     return [[CRAnswer alloc] initWithData:answerLines submissionDate:[NSDate dateWithTimeIntervalSinceNow:0] owners:[[CRCollaboratorList sharedInstance] collaboratorIds]  answerName:group answerID:@"replace_this" inCase:self.caseID forLecture:self.lectureID];
+}
+
+- (void)submitAnswerForScan:(NSString *)scanID {
+    [self.submitted setValue:[NSNumber numberWithBool:YES] forKey:scanID];
+}
+
+- (BOOL)answerSubmittedForScan:(NSString *)scanID {
+    return [self.submitted[scanID] boolValue] ? YES : NO;
 }
 
 @end

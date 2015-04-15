@@ -45,7 +45,7 @@
         CRSlice *slice = obj;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             if(!slice.image) {
-                NSLog(@"loading error"); //Replace with a network error?
+                NSLog(@"loading error-%@", slice.sliceID); //Replace with a network error?
             }
         });
     }];

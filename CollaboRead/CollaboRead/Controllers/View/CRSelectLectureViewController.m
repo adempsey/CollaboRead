@@ -42,13 +42,13 @@ static NSString * const reuseIdentifier = @"LectureCell";
 	[self.activityIndicator startAnimating];
 	
 	[[CRAPIClientService sharedInstance] retrieveLecturesWithLecturer:self.lecturer.userID block:^(NSArray *lectures, NSError *error) {
-		[self.activityIndicator stopAnimating];
-		self.activityIndicator.hidden = YES;
 		
 		if (!error) {
 			self.lectures = lectures;
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[self.collectionView reloadData];
+                [self.activityIndicator stopAnimating];
+                self.activityIndicator.hidden = YES;
 			});
 		} else {
 			NSLog(@"%@", error);

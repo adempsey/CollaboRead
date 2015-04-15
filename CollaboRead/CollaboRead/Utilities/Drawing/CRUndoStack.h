@@ -80,4 +80,7 @@
  */
 -(CRAnswer *)answersFromStack;
 
+-(BOOL)answerSubmittedForScan:(NSString *)scanID;
+-(void)submitAnswerForScan:(NSString *)scanID;
+
 @end
