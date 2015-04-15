@@ -57,8 +57,13 @@
 -(void)setImage:(UIImage *)image
 {
     self.imgView.image = image;
-    self.imgView.frame = CGRectMake(0, 0, image.size.width * kCR_CAROUSEL_CELL_HEIGHT / image.size.height, kCR_CAROUSEL_CELL_HEIGHT);
-    self.frame = self.imgView.frame;
+    if (image.size.width > image.size.height) {
+        CGFloat height = image.size.height * kCR_CAROUSEL_CELL_HEIGHT / image.size.width;
+        self.imgView.frame = CGRectMake(0, (kCR_CAROUSEL_CELL_HEIGHT - height)/2,  kCR_CAROUSEL_CELL_HEIGHT, height);
+    } else {
+        CGFloat width = image.size.width * kCR_CAROUSEL_CELL_HEIGHT / image.size.height;
+        self.imgView.frame = CGRectMake((kCR_CAROUSEL_CELL_HEIGHT - width)/2, 0, width, kCR_CAROUSEL_CELL_HEIGHT);
+    }
 }
 
 
