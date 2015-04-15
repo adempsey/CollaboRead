@@ -550,6 +550,11 @@
     }
 }
 
+- (void)clearPermanentAnswers {
+    self.permanentDrawView.image = [[UIImage alloc] init];
+    self.permanentDrawView.frame = self.caseImage.frame;
+}
+
 #pragma mark - Permanent Drawings
 - (void)drawPermanentAnswers:(NSArray *)answers inColors:(NSArray *)colors {
     UIGraphicsBeginImageContext(self.imgFrame.size);//Draw only in image

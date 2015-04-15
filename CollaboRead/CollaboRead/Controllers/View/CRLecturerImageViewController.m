@@ -167,6 +167,7 @@
             }
         }];
     }];
+    [self.imageMarkup clearPermanentAnswers];
     [self.imageMarkup drawPermanentAnswers:answerLines inColors:answerColors];
 }
 

@@ -71,6 +71,8 @@
  */
 - (void)drawPermanentAnswers:(NSArray *)answers inColors:(NSArray *)colors;
 
+-(void)clearPermanentAnswers;
+
 /*!
  Completely zooms out current image in an animated manner
  */
