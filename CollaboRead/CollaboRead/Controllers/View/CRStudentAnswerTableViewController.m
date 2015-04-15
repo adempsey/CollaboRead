@@ -97,6 +97,9 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 - (void)setAnswerList:(NSArray *)answerList
 {
     _answerList = answerList;
+    NSArray *oldSelection = [self.selectedAnswers valueForKeyPath:@"answerID"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"answerID IN %@", oldSelection];
+    self.selectedAnswers = [NSMutableArray arrayWithArray:[answerList filteredArrayUsingPredicate:predicate]];
     [self setScanAnswers];
     [self.tableView reloadData];
 }
