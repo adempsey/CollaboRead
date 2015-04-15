@@ -161,6 +161,7 @@ static NSString * const reuseIdentifier = @"scanCell";
 {
     self.selectedIndex = indexPath;
     [self.activityIndicator startAnimating];
+    self.collectionView.userInteractionEnabled = NO;
     [self performSelector:@selector(selectedScanActivityHelper:) withObject:((CRScan *)self.scans[indexPath.row]).scanID afterDelay:0.0];
 }
 
@@ -168,6 +169,7 @@ static NSString * const reuseIdentifier = @"scanCell";
 - (void)selectedScanActivityHelper:(NSString *)scanID {
     [self.delegate scansMenuViewControllerDidSelectScan:scanID];
     [self.activityIndicator stopAnimating];
+    self.collectionView.userInteractionEnabled = YES;
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout
