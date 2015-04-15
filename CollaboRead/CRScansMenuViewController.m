@@ -161,7 +161,12 @@ static NSString * const reuseIdentifier = @"scanCell";
 {
     self.selectedIndex = indexPath;
     [self.activityIndicator startAnimating];
-    [self.delegate scansMenuViewControllerDidSelectScan:((CRScan *)self.scans[indexPath.row]).scanID];
+    [self performSelector:@selector(selectedScanActivityHelper:) withObject:((CRScan *)self.scans[indexPath.row]).scanID afterDelay:0.0];
+}
+
+//Helps display activity indicator after selecting scan if it needs to wait for image load
+- (void)selectedScanActivityHelper:(NSString *)scanID {
+    [self.delegate scansMenuViewControllerDidSelectScan:scanID];
     [self.activityIndicator stopAnimating];
 }
 
