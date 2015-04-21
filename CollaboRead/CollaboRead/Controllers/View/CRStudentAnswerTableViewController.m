@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
         self.shouldShowStudentNames = NO;
 		self.selectedAnswers = [[NSMutableArray alloc] init];
         _scanList = [[NSMutableArray alloc] init];
-        _answerList = [[NSArray alloc] initWithArray:answerList];
+        self.answerList = [[NSArray alloc] initWithArray:answerList];
         self.scanId = scanId;
 		self.side = CR_SIDE_BAR_SIDE_RIGHT;
 		self.width = kTableViewWidth;
@@ -242,7 +242,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 		
 	} else if (indexPath.section == kSECTION_STUDENTS) {
 		
-		BOOL isSelected = [self.selectedAnswers containsObject:self.answerList[indexPath.row]];
+		BOOL isSelected = [self.selectedAnswers containsObject:self.scanList[indexPath.row]];
 		return isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 		
 	}
