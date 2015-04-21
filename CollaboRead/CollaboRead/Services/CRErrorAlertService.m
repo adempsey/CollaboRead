@@ -24,6 +24,9 @@
 - (UIAlertController*)networkErrorAlertForItem:(NSString*)item completionBlock:(void (^)(UIAlertAction*))block;
 {
 	NSString *message = [NSString stringWithFormat:@"Unable to load %@. Please try again in a few minutes.", item];
+    if (!block) {
+        block = ^(UIAlertAction *action) {};
+    }
 	UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:block];
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error"
 																			 message:message

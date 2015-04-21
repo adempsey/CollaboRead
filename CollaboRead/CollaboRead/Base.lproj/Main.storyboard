@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aTb-68-nBh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aTb-68-nBh">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
@@ -380,7 +380,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="riy-XN-EbZ">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="riy-XN-EbZ">
                                 <rect key="frame" x="171" y="295" width="258" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="258" id="Low-RC-ZvY"/>
@@ -394,7 +394,7 @@
                                     <outlet property="delegate" destination="aTb-68-nBh" id="IC0-Y3-7bT"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wEI-KF-4qq">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wEI-KF-4qq">
                                 <rect key="frame" x="171" y="339" width="258" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" secureTextEntry="YES"/>
@@ -405,7 +405,7 @@
                                     <outlet property="delegate" destination="aTb-68-nBh" id="RLb-bf-0zU"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yos-ON-6fb">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yos-ON-6fb">
                                 <rect key="frame" x="277" y="377" width="46" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="46" id="7wD-zz-zFq"/>
@@ -462,12 +462,16 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="riy-XN-EbZ" secondAttribute="centerX" id="31A-oY-eQt"/>
+                            <constraint firstItem="riy-XN-EbZ" firstAttribute="top" secondItem="8Mf-Dt-Hi5" secondAttribute="bottom" constant="10" id="C70-Xb-1DD"/>
+                            <constraint firstItem="wEI-KF-4qq" firstAttribute="top" secondItem="riy-XN-EbZ" secondAttribute="bottom" constant="14" id="GMt-sW-aGb"/>
                             <constraint firstAttribute="centerX" secondItem="KeV-2O-um4" secondAttribute="centerX" id="VR4-Av-K3Z"/>
                             <constraint firstAttribute="centerX" secondItem="yos-ON-6fb" secondAttribute="centerX" id="Vem-TT-ILT"/>
                             <constraint firstItem="8Mf-Dt-Hi5" firstAttribute="top" secondItem="rUL-K3-HMX" secondAttribute="bottom" constant="6" id="Z0v-Sr-Fdj"/>
                             <constraint firstAttribute="centerX" secondItem="rUL-K3-HMX" secondAttribute="centerX" constant="-0.5" id="gru-MT-9A4"/>
                             <constraint firstAttribute="centerX" secondItem="wEI-KF-4qq" secondAttribute="centerX" id="hAM-xa-wrY"/>
+                            <constraint firstItem="yos-ON-6fb" firstAttribute="top" secondItem="wEI-KF-4qq" secondAttribute="bottom" constant="8" symbolic="YES" id="iU3-Fj-SOo"/>
                             <constraint firstAttribute="centerX" secondItem="4Yx-65-4wr" secondAttribute="centerX" id="ivu-4s-C6t"/>
+                            <constraint firstItem="riy-XN-EbZ" firstAttribute="leading" secondItem="wEI-KF-4qq" secondAttribute="leading" id="jxc-Gy-ugC"/>
                             <constraint firstItem="rUL-K3-HMX" firstAttribute="top" secondItem="TdW-jK-dRP" secondAttribute="bottom" constant="38" id="oRM-44-geh"/>
                             <constraint firstAttribute="centerX" secondItem="8Mf-Dt-Hi5" secondAttribute="centerX" id="sHC-BU-CER"/>
                         </constraints>
