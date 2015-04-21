@@ -155,7 +155,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
     //Correspond identifier to color of the drawing
 	if (indexPath.section == kSECTION_STUDENTS) {
-		NSDictionary *color = ((CRAnswer*)self.answerList[indexPath.row]).answerColor;
+		NSDictionary *color = ((CRAnswer*)self.scanList[indexPath.row]).answerColor;
 		UIImage *dot = [UIImage imageNamed:@"dot.png"];
 		dot = [dot imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		cell.imageView.image = dot;
@@ -176,7 +176,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	if (indexPath.section == kSECTION_OPTIONS) {
 		
 		if (indexPath.row == kOPTION_SHOW_ALL) {
-			self.selectedAnswers = [self.answerList mutableCopy];
+			self.selectedAnswers = [self.scanList mutableCopy];
 			[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedAnswers copy]];
 		} else if (indexPath.row == kOPTION_HIDE_ALL) {
 			[self.selectedAnswers removeAllObjects];
@@ -222,7 +222,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	} else if (indexPath.section == kSECTION_STUDENTS) {
 
 		if (self.shouldShowStudentNames) {
-			return ((CRAnswer*)self.answerList[indexPath.row]).groupName;
+			return ((CRAnswer*)self.scanList[indexPath.row]).groupName;
 
 		} else {
 			return [NSString stringWithFormat:@"Answer %ld", (long) indexPath.row + 1];
