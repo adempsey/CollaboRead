@@ -29,7 +29,9 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 #define kTableViewMargin (kTableViewWidth/8)
 
 @interface CRStudentAnswerTableViewController ()
-
+{
+    dispatch_semaphore_t refreshMutex;
+}
 /*!
  @brief Table view to display options and submitted answers' identifiers
  */
@@ -54,6 +56,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 - (instancetype)initWithAnswerList:(NSArray*)answerList andScanID:(NSString *)scanId;
 {
 	if (self = [super init]) {
+        refreshMutex = dispatch_semaphore_create(1);//Semaphore initialized to 1 for use as mutex;
         self.shouldShowStudentNames = NO;
 		self.selectedAnswers = [[NSMutableArray alloc] init];
         _scanList = [[NSMutableArray alloc] init];
@@ -88,6 +91,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
         [ans.drawings enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if ([((CRAnswerLine *)obj).scanID isEqualToString:self.scanId]) {
                 [self.scanList addObject:ans];
+                *stop = YES;
             }
         }];
     }];
@@ -96,6 +100,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 //Setting the list of answers should cause the table to update
 - (void)setAnswerList:(NSArray *)answerList
 {
+    dispatch_semaphore_wait(refreshMutex, DISPATCH_TIME_FOREVER);
     _answerList = answerList;
     NSArray *oldSelection = [self.selectedAnswers valueForKeyPath:@"answerID"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"answerID IN %@", oldSelection];
@@ -103,6 +108,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
     [self setScanAnswers];
     [self.tableView reloadData];
     [self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedAnswers copy]];
+    dispatch_semaphore_signal(refreshMutex);
 }
 
 - (void)setScanId:(NSString *)scanId {
@@ -173,6 +179,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    dispatch_semaphore_wait(refreshMutex, DISPATCH_TIME_FOREVER);
 	if (indexPath.section == kSECTION_OPTIONS) {
 		
 		if (indexPath.row == kOPTION_SHOW_ALL) {
@@ -190,7 +197,6 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 			[self.selectedAnswers removeObject:selectedStudent];
 		} else {
 			[self.selectedAnswers addObject:selectedStudent];
-			
 		}
 		
 		[self.delegate studentAnswerTableView:self didChangeAnswerSelection:[self.selectedAnswers copy]];
@@ -198,6 +204,7 @@ typedef NS_ENUM(NSUInteger, kStudentAnswerTableViewOptions) {
 	
 	[self.tableView reloadData];
 	[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    dispatch_semaphore_signal(refreshMutex);
 }
 
 #pragma mark - Extra TableView Methods
