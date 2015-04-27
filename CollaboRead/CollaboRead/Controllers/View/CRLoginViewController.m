@@ -20,7 +20,8 @@
 
 #define kActivityIndicatorSize 30.0
 typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
-	kCR_LOGIN_ERROR_CREDENTIALS = 0,
+    kCR_LOGIN_ERROR_EMPTY = 0,
+	kCR_LOGIN_ERROR_CREDENTIALS,
 	kCR_LOGIN_ERROR_NETWORK
 };
 
@@ -78,12 +79,12 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	[super viewWillAppear:animated];
 	self.loginButton.titleLabel.text = @"Login";
 	self.loginButton.userInteractionEnabled = YES;
-	
+    self.activityIndicator.frame = CGRectMake(((CR_LANDSCAPE_FRAME).size.width - kActivityIndicatorSize)/2, self.loginButton.frame.origin.y, kActivityIndicatorSize,kActivityIndicatorSize);
 	self.emailField.text = @"";
 	self.passwordField.text = @"";
 }
 
--(void)attemptLogin {
+- (void)attemptLogin {
 	[[CRAPIClientService sharedInstance] loginUserWithEmail:self.emailField.text password:self.passwordField.text block:^(CRUser *user, NSError *error) {
 		if (error || !user || !user.userID) {
             if (error.code == -1012) {//error for bad auth, should be made more reliable
@@ -123,24 +124,27 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	}];
 }
 
--(IBAction)loginPressed:(id)sender {
+- (IBAction)loginPressed:(id)sender {
     [self exitTextField:sender];
 	self.loginButton.userInteractionEnabled = NO;
 	self.loginButton.hidden = YES;
 
 	[self.activityIndicator startAnimating];
 	self.activityIndicator.hidden = NO;
-
-	[self attemptLogin];
+    if ([self.emailField.text isEqualToString:@""] || [self.passwordField.text isEqualToString:@""]) {
+        [self showError:kCR_LOGIN_ERROR_EMPTY];
+    } else {
+        [self attemptLogin];
+    }
 }
 
 //Dismiss keyboard from a tap outside text fields or end of editting
--(IBAction)exitTextField:(id)sender {
+- (IBAction)exitTextField:(id)sender {
     [self.emailField resignFirstResponder];
     [self.passwordField resignFirstResponder];
 }
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     if ([textField isEqual:self.emailField]) {
         [self.passwordField becomeFirstResponder];
@@ -165,7 +169,7 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 	self.loginButton.hidden = NO;
 }
 
--(void)showError:(NSUInteger)error {
+- (void)showError:(NSUInteger)error {
 	if (self.errorLabel.alpha > 0.0) {
 		[UIView animateWithDuration:0.25 animations:^{
 			self.errorLabel.alpha = 0.0;
@@ -174,6 +178,9 @@ typedef NS_ENUM(NSUInteger, kCR_LOGIN_ERRORS) {
 
 	NSString *errorString = @"Error: ";
 	switch (error) {
+        case kCR_LOGIN_ERROR_EMPTY:
+            errorString = [errorString stringByAppendingString:@"Username and password cannot be empty."];
+            break;
 		case kCR_LOGIN_ERROR_CREDENTIALS:
 			errorString = [errorString stringByAppendingString:@"Incorrect username or password."];
 			break;
