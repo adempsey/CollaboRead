@@ -6,14 +6,15 @@ Along with the web application (https://github.com/adempsey/CollaboRead-API), le
 
 ##Requirements
 * Latest version of Xcode
+* Developer license to run on device when testing gestures
 * iPad with iOS 7.0 or greater
 * Access to our server and database, or your own with running our Node.js backend with a MongoDB database set up based on the schema in the Node app.
 	* API repo: https://github.com/adempsey/CollaboRead-API
 
 ##Build Instructions
-* Clone repository
+* Clone repository or download zip
 * Open in Xcode
-* Run
+* Run in Xcode
 
 ## Thanks To
 Shiwan Zou
