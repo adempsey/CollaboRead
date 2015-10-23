@@ -58,7 +58,6 @@
 		BB4D35C81A882F9A00F4EA57 /* CRToolPanelZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4D35C71A882F9A00F4EA57 /* CRToolPanelZoom.png */; };
 		BB5017891AA74716000E9021 /* CRCollaboratorList.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5017881AA74716000E9021 /* CRCollaboratorList.m */; };
 		BB6278C31A79480D002391FB /* CRUndoStack.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6278C21A79480D002391FB /* CRUndoStack.m */; };
-		BB632CCD1AD48FC7000E4F54 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB632CCB1AD48FC7000E4F54 /* Crashlytics.framework */; };
 		BB632CCE1AD48FC7000E4F54 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB632CCC1AD48FC7000E4F54 /* Fabric.framework */; };
 		BB86F5CB1AAE274D004DB6DF /* CRToolPanelPatientInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = BB86F5CA1AAE274D004DB6DF /* CRToolPanelPatientInfo.png */; };
 		BB86F5CD1AAE276A004DB6DF /* CRToolPanelPointer.png in Resources */ = {isa = PBXBuildFile; fileRef = BB86F5CC1AAE276A004DB6DF /* CRToolPanelPointer.png */; };
@@ -237,7 +236,6 @@
 				8DCF9CAF1A2BF07B000D42C5 /* Foundation.framework in Frameworks */,
 				8DCF9CAD1A2BF076000D42C5 /* Security.framework in Frameworks */,
 				8DCF9CAB1A2BF071000D42C5 /* CFNetwork.framework in Frameworks */,
-				BB632CCD1AD48FC7000E4F54 /* Crashlytics.framework in Frameworks */,
 				8DCF9CA91A2BF06A000D42C5 /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -665,7 +663,7 @@
 				TargetAttributes = {
 					8DA5DE1B19E6064A002EA706 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 9QL6K4MK7J;
+						DevelopmentTeam = SMEUFVNQEF;
 					};
 					8DA5DE3419E6064B002EA706 = {
 						CreatedOnToolsVersion = 6.0;
@@ -871,6 +869,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_OWNER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -907,6 +906,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_OWNER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
